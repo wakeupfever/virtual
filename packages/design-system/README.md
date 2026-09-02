@@ -74,6 +74,7 @@ app.use(ElementPlus).use(DesignSystemUI)
 | 组件 | 说明 |
 |---|---|
 | `ElButton` | 操作 |
+| `ElScrollbar` | **所有滚动区域**（列表容器、横向条、抽屉内容）；禁止原生 overflow 滚动 |
 | `ElInput`、`ElInputNumber` | 文本 / 数字输入 |
 | `ElSelect` / `ElOption` | 下拉 |
 | `ElCheckbox` / `ElCheckboxGroup`、`ElRadio` / `ElRadioGroup`、`ElSwitch` | 选择 |
@@ -108,7 +109,7 @@ app.use(ElementPlus).use(DesignSystemUI)
 
 ### `UiShell`
 
-页面外壳：顶栏 + 可折叠侧栏（小屏自动变抽屉）。尺寸全部来自 `--layout-*`。
+页面外壳：顶栏 + 可折叠侧栏（小屏自动变抽屉）。尺寸全部来自 `--layout-*`。外壳固定为视口高，侧栏与主内容区各自在 `ElScrollbar` 内滚动，window 不滚动。
 
 | prop / event | 类型 | 说明 |
 |---|---|---|

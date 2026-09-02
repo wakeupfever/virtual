@@ -22,17 +22,23 @@ var DesignSystemUI = (function(exports, vue, element_plus) {
 				default: false
 			}
 		},
-		emits: ["update:collapsed", "select"],
-		setup(__props, { emit: __emit }) {
+		emits: [
+			"update:collapsed",
+			"select",
+			"scroll"
+		],
+		setup(__props, { expose: __expose, emit: __emit }) {
 			/**
 			* UiShell · 第二层 · 页面外壳
 			* 侧边栏折叠 / 当前菜单高亮 / 小屏下侧边栏变抽屉。
+			* 滚动模型（R-043）：外壳固定为视口高，侧栏与主内容区各自在 ElScrollbar 内滚动，window 不滚动。
 			* 所有尺寸取自 tokens.css 的 --layout-*，本文件不写任何数值。
 			*/
 			const props = __props;
 			const emit = __emit;
 			const isMobile = (0, vue.ref)(false);
 			const drawerOpen = (0, vue.ref)(false);
+			const mainScroll = (0, vue.ref)(null);
 			let mql = null;
 			function syncMedia() {
 				if (!mql) return;
@@ -55,6 +61,14 @@ var DesignSystemUI = (function(exports, vue, element_plus) {
 				emit("select", key);
 				if (isMobile.value) drawerOpen.value = false;
 			}
+			/** 供第三层调用：滚动主区到顶 / 指定位置（如路由切换、锚点） */
+			function scrollTo(options) {
+				mainScroll.value?.scrollTo(typeof options === "number" ? { top: options } : options);
+			}
+			__expose({
+				scrollTo,
+				wrapEl: (0, vue.computed)(() => mainScroll.value?.wrapRef ?? null)
+			});
 			return (_ctx, _cache) => {
 				return (0, vue.openBlock)(), (0, vue.createElementBlock)("div", { class: (0, vue.normalizeClass)(["ui-shell", {
 					"is-collapsed": __props.collapsed,
@@ -67,7 +81,7 @@ var DesignSystemUI = (function(exports, vue, element_plus) {
 						"aria-label": "切换侧边栏",
 						onClick: toggle
 					}, {
-						default: (0, vue.withCtx)(() => [..._cache[1] || (_cache[1] = [(0, vue.createElementVNode)("svg", {
+						default: (0, vue.withCtx)(() => [..._cache[2] || (_cache[2] = [(0, vue.createElementVNode)("svg", {
 							viewBox: "0 0 24 24",
 							width: "18",
 							height: "18",
@@ -82,35 +96,11 @@ var DesignSystemUI = (function(exports, vue, element_plus) {
 						key: 0,
 						class: "ui-shell__sidebar",
 						style: (0, vue.normalizeStyle)({ width: sidebarWidth.value })
-					}, [(0, vue.createVNode)((0, vue.unref)(element_plus.ElMenu), {
-						"default-active": __props.activeKey,
-						collapse: __props.collapsed,
-						"collapse-transition": false,
-						class: "ui-shell__menu",
-						onSelect
-					}, {
-						default: (0, vue.withCtx)(() => [((0, vue.openBlock)(true), (0, vue.createElementBlock)(vue.Fragment, null, (0, vue.renderList)(__props.menu, (item) => {
-							return (0, vue.openBlock)(), (0, vue.createBlock)((0, vue.unref)(element_plus.ElMenuItem), {
-								key: item.key,
-								index: item.key,
-								disabled: item.disabled
-							}, {
-								default: (0, vue.withCtx)(() => [(0, vue.createElementVNode)("span", null, (0, vue.toDisplayString)(item.label), 1)]),
-								_: 2
-							}, 1032, ["index", "disabled"]);
-						}), 128))]),
-						_: 1
-					}, 8, ["default-active", "collapse"])], 4)) : ((0, vue.openBlock)(), (0, vue.createBlock)((0, vue.unref)(element_plus.ElDrawer), {
-						key: 1,
-						modelValue: drawerOpen.value,
-						"onUpdate:modelValue": _cache[0] || (_cache[0] = ($event) => drawerOpen.value = $event),
-						direction: "ltr",
-						"with-header": false,
-						size: "var(--layout-sidebar-w)",
-						class: "ui-shell__drawer"
-					}, {
+					}, [(0, vue.createVNode)((0, vue.unref)(element_plus.ElScrollbar), null, {
 						default: (0, vue.withCtx)(() => [(0, vue.createVNode)((0, vue.unref)(element_plus.ElMenu), {
 							"default-active": __props.activeKey,
+							collapse: __props.collapsed,
+							"collapse-transition": false,
 							class: "ui-shell__menu",
 							onSelect
 						}, {
@@ -125,10 +115,48 @@ var DesignSystemUI = (function(exports, vue, element_plus) {
 								}, 1032, ["index", "disabled"]);
 							}), 128))]),
 							_: 1
-						}, 8, ["default-active"])]),
+						}, 8, ["default-active", "collapse"])]),
+						_: 1
+					})], 4)) : ((0, vue.openBlock)(), (0, vue.createBlock)((0, vue.unref)(element_plus.ElDrawer), {
+						key: 1,
+						modelValue: drawerOpen.value,
+						"onUpdate:modelValue": _cache[0] || (_cache[0] = ($event) => drawerOpen.value = $event),
+						direction: "ltr",
+						"with-header": false,
+						size: "var(--layout-sidebar-w)",
+						class: "ui-shell__drawer"
+					}, {
+						default: (0, vue.withCtx)(() => [(0, vue.createVNode)((0, vue.unref)(element_plus.ElScrollbar), null, {
+							default: (0, vue.withCtx)(() => [(0, vue.createVNode)((0, vue.unref)(element_plus.ElMenu), {
+								"default-active": __props.activeKey,
+								class: "ui-shell__menu",
+								onSelect
+							}, {
+								default: (0, vue.withCtx)(() => [((0, vue.openBlock)(true), (0, vue.createElementBlock)(vue.Fragment, null, (0, vue.renderList)(__props.menu, (item) => {
+									return (0, vue.openBlock)(), (0, vue.createBlock)((0, vue.unref)(element_plus.ElMenuItem), {
+										key: item.key,
+										index: item.key,
+										disabled: item.disabled
+									}, {
+										default: (0, vue.withCtx)(() => [(0, vue.createElementVNode)("span", null, (0, vue.toDisplayString)(item.label), 1)]),
+										_: 2
+									}, 1032, ["index", "disabled"]);
+								}), 128))]),
+								_: 1
+							}, 8, ["default-active"])]),
+							_: 1
+						})]),
 						_: 1
 					}, 8, ["modelValue"])),
-					(0, vue.createElementVNode)("main", _hoisted_5$2, [(0, vue.renderSlot)(_ctx.$slots, "default")])
+					(0, vue.createElementVNode)("main", _hoisted_5$2, [(0, vue.createVNode)((0, vue.unref)(element_plus.ElScrollbar), {
+						ref_key: "mainScroll",
+						ref: mainScroll,
+						class: "ui-shell__scroll",
+						onScroll: _cache[1] || (_cache[1] = (p) => emit("scroll", p))
+					}, {
+						default: (0, vue.withCtx)(() => [(0, vue.renderSlot)(_ctx.$slots, "default")]),
+						_: 3
+					}, 512)])
 				], 2);
 			};
 		}

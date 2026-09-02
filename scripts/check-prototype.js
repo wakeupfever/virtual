@@ -20,6 +20,7 @@ const RULES = [
   { id: 'no-raw-hex', re: /#[0-9a-fA-F]{3,8}(?![0-9a-zA-Z_-])/, msg: '禁止裸色值，使用 --color-* token' },
   { id: 'no-raw-rgb', re: /\b(rgba?|hsla?)\(/i, msg: '禁止裸色值，使用 --color-* token' },
   { id: 'no-flex-grid', re: /display\s*:\s*(flex|grid)/i, msg: '禁止手写 flex/grid，使用 .l-* 布局类' },
+  { id: 'no-overflow-scroll', re: /overflow(-[xy])?\s*:\s*(auto|scroll)/i, msg: '禁止原生滚动，滚动区域必须用 <el-scrollbar>（R-043）' },
   { id: 'no-arbitrary-class', re: /class\s*=\s*"[^"]*\[[^"]*"/, msg: '禁止任意值 class（如 w-[137px]）' },
   { id: 'no-el-var-override', re: /--el-[a-z-]+\s*:/, msg: '禁止直接改 --el-* 变量，改 tokens.css 语义 token' },
   { id: 'no-self-closing-custom', re: /<(el-[a-z-]+|ui-[a-z-]+)\b[^>]*\/>/i, msg: 'in-DOM 模板中自定义标签不能自闭合，必须显式 </标签>' },

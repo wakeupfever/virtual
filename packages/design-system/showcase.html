@@ -41,8 +41,13 @@
   .ds-primary { display: flex; align-items: center; gap: var(--space-inline-gap); padding: 0 var(--space-inline-gap) 0 var(--space-inline-pad); border: var(--border-w) solid var(--color-border-default); border-radius: var(--radius-md); height: 28px; font-family: var(--font-family-mono); }
   .ds-primary .el-color-picker { --el-color-picker-size: 20px; }
 
-  .ds-body { display: flex; min-height: calc(100vh - var(--layout-header-h)); }
-  .ds-side { width: var(--ds-side-w); flex: none; position: sticky; top: var(--layout-header-h); height: calc(100vh - var(--layout-header-h)); overflow-y: auto; background: transparent; border-right: var(--border-w) solid var(--color-border-muted); padding: var(--space-module-pad) var(--space-3); display: flex; flex-direction: column; gap: 2px; font-size: 13px; }
+  /* 滚动模型（R-043）：body 不滚，侧栏与主区各自 ElScrollbar 内滚 */
+  html, body { height: 100%; overflow: hidden; }
+  .ds-body { display: flex; height: calc(100vh - var(--layout-header-h)); height: calc(100dvh - var(--layout-header-h)); }
+  .ds-side { width: var(--ds-side-w); flex: none; min-height: 0; background: transparent; border-right: var(--border-w) solid var(--color-border-muted); font-size: 13px; }
+  .ds-side .el-scrollbar { height: 100%; }
+  .ds-side__view { padding: var(--space-module-pad) var(--space-3); display: flex; flex-direction: column; gap: 2px; }
+  .ds-scroll { flex: 1; min-width: 0; height: 100%; }
   .ds-side__label { font-size: 11px; color: var(--color-text-muted); padding: 0 var(--space-3) var(--space-2); letter-spacing: 0.5px; }
   .ds-side__item { padding: 7px var(--space-3); border-radius: var(--radius-md); color: var(--color-text-secondary); cursor: pointer; display: flex; justify-content: space-between; align-items: center; }
   .ds-side__item:hover { background: var(--color-bg-subtle); color: var(--color-text-default); }
@@ -52,10 +57,10 @@
   .ds-side__sep { height: var(--border-w); background: var(--color-border-muted); margin: var(--space-3); }
   .ds-side__hint { margin-top: var(--space-4); padding: var(--space-3); border-radius: var(--radius-lg); background: var(--color-bg-page); font-size: 11px; color: var(--color-text-muted); line-height: var(--line-height-body); }
 
-  .ds-main { flex: 1; min-width: 0; display: flex; justify-content: center; padding: var(--space-12) clamp(var(--space-4), 3vw, var(--space-12)) var(--space-16); }
+  .ds-main { min-width: 0; display: flex; justify-content: center; padding: var(--space-12) clamp(var(--space-4), 3vw, var(--space-12)) var(--space-16); }
   .ds-content { width: 100%; max-width: var(--ds-content-max); display: flex; flex-direction: column; gap: var(--space-14, 56px); }
   .ds-content--wide { max-width: var(--ds-content-max-wide); }
-  .ds-toc { width: var(--ds-toc-w); flex: none; position: sticky; top: var(--layout-header-h); height: calc(100vh - var(--layout-header-h)); padding: var(--space-12) var(--space-6) 0 0; display: flex; flex-direction: column; gap: var(--space-2); font-size: var(--font-size-caption); color: var(--color-text-muted); }
+  .ds-toc { width: var(--ds-toc-w); flex: none; position: sticky; top: 0; align-self: flex-start; padding: 0 var(--space-6) 0 0; display: flex; flex-direction: column; gap: var(--space-2); font-size: var(--font-size-caption); color: var(--color-text-muted); }
   .ds-toc__label { font-size: 11px; letter-spacing: 0.5px; margin-bottom: var(--space-1); }
   .ds-toc__item { border-left: var(--border-w-thick) solid var(--color-border-muted); padding-left: var(--space-2); cursor: pointer; line-height: 1.5; }
   .ds-toc__item:hover { color: var(--color-text-default); }
@@ -158,7 +163,9 @@
   }
   @media (max-width: 960px) {
     .ds-body { flex-direction: column; }
-    .ds-side { position: sticky; top: var(--layout-header-h); width: 100%; height: auto; flex-direction: row; flex-wrap: nowrap; overflow-x: auto; gap: var(--space-2); padding: var(--space-2) var(--space-4); border-right: none; border-bottom: var(--border-w) solid var(--color-border-muted); background: color-mix(in srgb, var(--color-bg-page) 92%, transparent); backdrop-filter: blur(10px); z-index: var(--z-sidebar); }
+    .ds-side { width: 100%; height: auto; flex: none; border-right: none; border-bottom: var(--border-w) solid var(--color-border-muted); }
+    .ds-side .el-scrollbar { height: auto; }
+    .ds-side__view { flex-direction: row; flex-wrap: nowrap; gap: var(--space-2); padding: var(--space-2) var(--space-4); width: max-content; min-width: 100%; }
     .ds-side__label, .ds-side__sep, .ds-side__hint { display: none; }
     .ds-side__item { white-space: nowrap; padding: 5px var(--space-3); }
     .ds-side__count { display: none; }
@@ -211,13 +218,17 @@
   <div class="ds-body">
     <!-- 左侧：当前路由的分组锚点 -->
     <aside class="ds-side">
+      <el-scrollbar><div class="ds-side__view">
       <div class="ds-side__label">{{ currentRoute.label }}</div>
       <div v-for="a in anchors" :key="a.id" class="ds-side__item" :class="{ 'is-active': state.anchor === a.id, 'is-dim': a.dim }" @click="jump(a.id)"><span>{{ a.label }}</span><span v-if="a.count" class="ds-side__count">{{ a.count }}</span></div>
       <template v-if="state.route === 'materials'">
         <div class="ds-side__sep"></div>
         <div class="ds-side__hint">带 <span class="ds-badge ds-badge--wl">白名单</span> 的组件第三层可直接使用；其余需先提议。命令式 API（Message 等）同样在白名单内。</div>
       </template>
+      </div></el-scrollbar>
     </aside>
+
+    <el-scrollbar ref="mainScroll" class="ds-scroll" @scroll="onScroll">
 
     <!-- ===================== 设计变量 ===================== -->
     <main v-if="state.route === 'tokens'" class="ds-main">
@@ -377,6 +388,7 @@
         </section>
       </div>
     </main>
+    </el-scrollbar>
   </div>
   <div class="sc-probe" ref="probe"></div>
 </div>
@@ -455,22 +467,31 @@ const app = Vue.createApp({
       if (state.route === 'materials') return [...CATEGORIES.map(c => ({ id: 'cat-' + c.key, label: c.label, count: compsOf(c.key).length })), { id: 'cat-custom', label: '自研复合组件', count: CUSTOM.length }]
       return LAYOUTS.map(l => ({ id: 'l-' + l.key, label: l.title }))
     })
-    const jump = id => { const el = document.getElementById(id); if (el) { el.scrollIntoView({ behavior: 'smooth', block: 'start' }); state.anchor = id } }
+    /* 主区滚动容器：ElScrollbar（R-043），锚点定位与高亮都基于它 */
+    const mainScroll = Vue.ref(null)
+    const wrap = () => mainScroll.value?.wrapRef
+    const jump = id => {
+      const el = document.getElementById(id), w = wrap()
+      if (!el || !w) return
+      const top = el.getBoundingClientRect().top - w.getBoundingClientRect().top + w.scrollTop - 24
+      mainScroll.value.scrollTo({ top, behavior: 'smooth' }); state.anchor = id
+    }
     let ticking = false
-    window.addEventListener('scroll', () => {
+    function onScroll() {
       if (ticking) return; ticking = true
       requestAnimationFrame(() => {
         ticking = false
-        const top = 56 + 40
+        const w = wrap(); if (!w) return
+        const base = w.getBoundingClientRect().top + 40
         let cur = anchors.value[0]?.id
-        for (const a of anchors.value) { const el = document.getElementById(a.id); if (el && el.getBoundingClientRect().top <= top) cur = a.id }
+        for (const a of anchors.value) { const el = document.getElementById(a.id); if (el && el.getBoundingClientRect().top <= base) cur = a.id }
         state.anchor = cur
       })
-    }, { passive: true })
+    }
 
     /* ---------- 路由 ---------- */
-    const go = key => { if (location.hash !== `#/${key}`) location.hash = `#/${key}`; state.route = key; window.scrollTo(0, 0); Vue.nextTick(() => { state.anchor = anchors.value[0]?.id }) }
-    window.addEventListener('hashchange', () => { state.route = routeFromHash(); Vue.nextTick(() => { state.anchor = anchors.value[0]?.id }) })
+    const go = key => { if (location.hash !== `#/${key}`) location.hash = `#/${key}`; state.route = key; Vue.nextTick(() => { mainScroll.value?.setScrollTop(0); state.anchor = anchors.value[0]?.id }) }
+    window.addEventListener('hashchange', () => { state.route = routeFromHash(); Vue.nextTick(() => { mainScroll.value?.setScrollTop(0); state.anchor = anchors.value[0]?.id }) })
 
     /* ---------- 主题 ---------- */
     function applyMode() {
@@ -501,7 +522,7 @@ const app = Vue.createApp({
       state.tick++
     })
 
-    return { T, ROUTES, CATEGORIES, COMPONENTS, CUSTOM, LAYOUTS, PRESETS, state, probe, currentRoute, anchors, resolved, group, colorGroup, functionalColors, colorsByScope, spaceTokens, fontSizes, fontOthers, fontWeightFor, fontSampleText, describe, shortColor, isWhite, compsOf, demoComp, jump, go, applyMode, applyPrimary, applyPreset, copy }
+    return { T, ROUTES, CATEGORIES, COMPONENTS, CUSTOM, LAYOUTS, PRESETS, state, probe, mainScroll, onScroll, currentRoute, anchors, resolved, group, colorGroup, functionalColors, colorsByScope, spaceTokens, fontSizes, fontOthers, fontWeightFor, fontSampleText, describe, shortColor, isWhite, compsOf, demoComp, jump, go, applyMode, applyPrimary, applyPreset, copy }
   },
 })
 app.use(ElementPlus, { locale: ElementPlusLocaleZhCn }).use(DesignSystemUI)

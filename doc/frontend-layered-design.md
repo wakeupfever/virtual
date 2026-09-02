@@ -1,7 +1,7 @@
 # 前端三层分层设计说明
 
 > 本文档描述 `virtual` 项目前端的三层分层模型：每一层包含什么、由谁修改、如何约束 AI 在各层的行为，以及"提示词 → 可交互原型 → 正式页面"的流转方式。
-> 对应需求台账见 `doc/frontend-layered-design.md.rai.md`（当前 RV-006）；需求 ID、状态与验收标准以台账为准。
+> 对应需求台账见 `doc/frontend-layered-design.md.rai.md`（当前 RV-007）；需求 ID、状态与验收标准以台账为准。
 > 技术栈：Vue 3 + Element Plus 2.14 + Vite 8 + Tailwind CSS 4，pnpm monorepo。
 
 ## 1. 目标与问题
@@ -99,7 +99,7 @@ reset、字体、页面底色。正式项目关闭 Tailwind preflight，全局 r
 
 ### 5.2 自研复合组件
 
-只做 Element Plus 未覆盖的外壳与页面级组件：`UiShell`（顶栏 + 可折叠侧栏，小屏变抽屉，尺寸全取 `--layout-*`）、`UiPageHeader`（标题、副标题、操作区）、`UiState`（`ready | loading | empty | error` 四态容器）。每个组件"定义完成"的条件：props 有 TypeScript 类型且导出；不含业务词汇；README 有用法示例。
+只做 Element Plus 未覆盖的外壳与页面级组件：`UiShell`（顶栏 + 可折叠侧栏，小屏变抽屉，尺寸全取 `--layout-*`；外壳固定视口高，侧栏与主区各自在 `ElScrollbar` 内滚动，window 不滚）、`UiPageHeader`（标题、副标题、操作区）、`UiState`（`ready | loading | empty | error` 四态容器）。每个组件"定义完成"的条件：props 有 TypeScript 类型且导出；不含业务词汇；README 有用法示例。
 
 ### 5.3 共用方式
 
@@ -125,7 +125,7 @@ reset、字体、页面底色。正式项目关闭 Tailwind preflight，全局 r
 
 `apps/prototypes/` 下每个功能一个 HTML，从 `_template.html` 复制起步，单文件可独立打开（依赖 CDN 与 `../../packages/design-system/`）。模板固定四个区块：① `DATA`（mock 数据，必须含常规、长文本、大数据量三类样本）② `state`（`Vue.reactive`，含 `view: ready | loading | empty | error`）③ `<div id="app">` 模板（只能用白名单标签与 `.l-*` 类，必须套 `<ui-shell>`）④ `methods`（`setup()` 内，只读 `DATA`、改 `state`）。
 
-规则：禁止 `<style>`、inline style、裸数值、裸色值、原生表单/表格元素、手写 flex/grid、非白名单标签；in-DOM 模板中自定义标签必须显式闭合。路由：hash 路由 `#/<key>`，`<key>` 与 `UiShell` 菜单 key 一致，直达、前进后退、刷新保留；正式项目同一批 key 映射为 vue-router `/<key>`，promote 时机械转换。`scripts/check-prototype.js` 在提交前扫描并对违规返回非零。
+规则：禁止 `<style>`、inline style、裸数值、裸色值、原生表单/表格元素、手写 flex/grid、原生 overflow 滚动（滚动区域一律 `el-scrollbar`）、非白名单标签；in-DOM 模板中自定义标签必须显式闭合。路由：hash 路由 `#/<key>`，`<key>` 与 `UiShell` 菜单 key 一致，直达、前进后退、刷新保留；正式项目同一批 key 映射为 vue-router `/<key>`，promote 时机械转换。`scripts/check-prototype.js` 在提交前扫描并对违规返回非零。
 
 ## 7. 第三层·正式功能
 

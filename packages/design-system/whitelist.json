@@ -3,6 +3,7 @@
   "elementPlus": [
     "el-button",
     "el-button-group",
+    "el-scrollbar",
     "el-input",
     "el-input-number",
     "el-select",

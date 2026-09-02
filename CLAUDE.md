@@ -20,6 +20,7 @@
 - 禁止引用原始刻度 `--space-N` `--palette-*`；禁止改 `--el-*` 变量
 - 禁止手写 `display: flex / grid` 和 Tailwind 布局 / 任意值类（`flex` `grid` `w-[..]` `p-4` …），只用 `.l-*` 布局类
 - 白名单外的 Element Plus 组件不能用；需要时先提议
+- **滚动只用 `<el-scrollbar>`**：任何会滚动的区域（列表容器、侧栏、抽屉内容、横向条）都包在 `el-scrollbar` 里，禁止 `overflow: auto/scroll`；外壳主区与侧栏由 `UiShell` 内部的 `ElScrollbar` 负责，页面本身（window）不滚动。表格、虚拟列表、下拉等 Element Plus 自带滚动的组件除外
 - 组件内部间距不在第三层设置；第三层可用的间距只有 `--space-page-*`、`--space-module-*`、`--space-component-gap`
 - 同一 UI 模式在 features 内出现第二次 → 下沉为该模块 `components/` 下的业务组件，不复制
 

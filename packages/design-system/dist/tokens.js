@@ -1,6 +1,6 @@
 /* 由 scripts/build-tokens.mjs 自动生成，勿手改；真值在 tokens.css */
 window.DS_TOKENS = {
-  "generatedAt": "2026-09-02T10:19:37.985Z",
+  "generatedAt": "2026-09-02T10:27:42.322Z",
   "source": "tokens.css",
   "groups": [
     {
@@ -1053,6 +1053,7 @@ window.DS_TOKENS = {
     "elementPlus": [
       "el-button",
       "el-button-group",
+      "el-scrollbar",
       "el-input",
       "el-input-number",
       "el-select",
