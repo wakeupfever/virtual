@@ -2,7 +2,9 @@
 /**
  * scripts/check-prototype.js · 原型合规检查（R-019）
  * 扫描 apps/prototypes/*.html，违反第三层规则即报错并以非零退出。
- * 用法：node scripts/check-prototype.js [文件或目录...]   默认扫描 apps/prototypes
+ * 用法：node scripts/check-prototype.js [--strict] [文件或目录...]   默认扫描 apps/prototypes
+ *   --strict：promote 前使用；存在 data-placeholder 占位即失败
+ * 另外统计 data-composite 候选结构（出现 ≥2 次提示下沉为复合组件）。
  */
 import { readFileSync, readdirSync, statSync } from 'node:fs'
 import { join, resolve, dirname } from 'node:path'
@@ -36,10 +38,21 @@ function stripScripts(html) {
   return html.replace(/<script\b[\s\S]*?<\/script>/gi, keep => keep.replace(/[^\n]/g, ''))
 }
 
-function checkFile(file) {
+const composites = new Map()   // 候选结构名 → [文件...]
+const placeholders = []        // { file, name, line }
+
+function checkFile(file, strict) {
   const raw = stripComments(readFileSync(file, 'utf8'))
   const markup = stripScripts(raw)
   const errors = []
+
+  // 候选结构与占位标记（R-040）
+  for (const m of markup.matchAll(/data-composite="([^"]+)"/g)) { const arr = composites.get(m[1]) || []; arr.push(file); composites.set(m[1], arr) }
+  for (const m of markup.matchAll(/data-placeholder="([^"]+)"/g)) {
+    const line = markup.slice(0, m.index).split('\n').length
+    placeholders.push({ file, name: m[1], line })
+    if (strict) errors.push(`placeholder (line ${line}): 占位组件 "${m[1]}" 未消除，promote 前必须先在第二层实现（见 requests/）`)
+  }
 
   for (const rule of RULES) {
     const target = rule.id === 'no-raw-hex' || rule.id === 'no-raw-rgb' || rule.id === 'no-el-var-override' ? raw : markup
@@ -86,11 +99,13 @@ function collect(paths) {
   return files
 }
 
-const targets = process.argv.slice(2)
+const argv = process.argv.slice(2)
+const strict = argv.includes('--strict')
+const targets = argv.filter(a => a !== '--strict')
 const files = collect(targets.length ? targets : [join(ROOT, 'apps/prototypes')])
 let failed = 0
 for (const f of files) {
-  const errs = checkFile(f)
+  const errs = checkFile(f, strict)
   if (errs.length) {
     failed++
     console.error(`✖ ${f}`)
@@ -98,6 +113,18 @@ for (const f of files) {
   } else {
     console.log(`✔ ${f}`)
   }
+}
+// 候选结构统计
+if (composites.size) {
+  console.log('\n候选结构（data-composite）：')
+  for (const [name, list] of [...composites.entries()].sort((a, b) => b[1].length - a[1].length)) {
+    const uniq = [...new Set(list)]
+    console.log(`  ${list.length >= 2 ? '↓' : ' '} ${name} × ${list.length}（${uniq.length} 个文件）${list.length >= 2 ? '  → 出现 ≥2 次，建议下沉为 ui/composites/ 复合组件' : ''}`)
+  }
+}
+if (placeholders.length) {
+  console[strict ? 'error' : 'warn'](`\n占位组件（data-placeholder）${strict ? '' : '，promote 前需消除'}：`)
+  for (const p of placeholders) console[strict ? 'error' : 'warn'](`  ${strict ? '✖' : '!'} ${p.name}  ${p.file}:${p.line}`)
 }
 if (failed) {
   console.error(`\n${failed} 个原型不合规`)

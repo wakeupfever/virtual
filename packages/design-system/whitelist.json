@@ -30,7 +30,10 @@
   "custom": [
     "ui-shell",
     "ui-page-header",
-    "ui-state"
+    "ui-state",
+    "ui-list-item",
+    "ui-filter-bar",
+    "ui-stat-card"
   ],
   "html": [
     "div",

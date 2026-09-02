@@ -1,0 +1,6 @@
+/* skins/input.css · 输入类皮肤：圆角与聚焦描边跟随 token */
+.el-input, .el-select, .el-textarea {
+  --el-input-border-radius: var(--radius-md);
+  --el-input-focus-border-color: var(--color-primary);
+  --el-input-hover-border-color: var(--color-border-default);
+}

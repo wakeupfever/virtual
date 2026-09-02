@@ -1,6 +1,6 @@
 /* 由 scripts/build-tokens.mjs 自动生成，勿手改；真值在 tokens.css */
 window.DS_TOKENS = {
-  "generatedAt": "2026-09-02T09:33:33.967Z",
+  "generatedAt": "2026-09-02T10:19:37.985Z",
   "source": "tokens.css",
   "groups": [
     {
@@ -1080,7 +1080,10 @@ window.DS_TOKENS = {
     "custom": [
       "ui-shell",
       "ui-page-header",
-      "ui-state"
+      "ui-state",
+      "ui-list-item",
+      "ui-filter-bar",
+      "ui-stat-card"
     ],
     "html": [
       "div",

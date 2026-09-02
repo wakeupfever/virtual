@@ -4,11 +4,11 @@ var DesignSystemUI = (function(exports, vue, element_plus) {
 		[Symbol.toStringTag]: { value: "Module" }
 	});
 	//#region ui/UiShell.vue?vue&type=script&setup=true&lang.ts
-	var _hoisted_1$2 = { class: "ui-shell__header" };
-	var _hoisted_2$2 = { class: "ui-shell__header-left l-inline" };
-	var _hoisted_3$1 = { class: "ui-shell__title" };
-	var _hoisted_4$1 = { class: "ui-shell__header-right l-cluster" };
-	var _hoisted_5 = { class: "ui-shell__main" };
+	var _hoisted_1$5 = { class: "ui-shell__header" };
+	var _hoisted_2$5 = { class: "ui-shell__header-left l-inline" };
+	var _hoisted_3$4 = { class: "ui-shell__title" };
+	var _hoisted_4$3 = { class: "ui-shell__header-right l-cluster" };
+	var _hoisted_5$2 = { class: "ui-shell__main" };
 	//#endregion
 	//#region ui/UiShell.vue
 	var UiShell_default = /* @__PURE__ */ (0, vue.defineComponent)({
@@ -60,7 +60,7 @@ var DesignSystemUI = (function(exports, vue, element_plus) {
 					"is-collapsed": __props.collapsed,
 					"is-mobile": isMobile.value
 				}]) }, [
-					(0, vue.createElementVNode)("header", _hoisted_1$2, [(0, vue.createElementVNode)("div", _hoisted_2$2, [(0, vue.createVNode)((0, vue.unref)(element_plus.ElButton), {
+					(0, vue.createElementVNode)("header", _hoisted_1$5, [(0, vue.createElementVNode)("div", _hoisted_2$5, [(0, vue.createVNode)((0, vue.unref)(element_plus.ElButton), {
 						text: "",
 						circle: "",
 						class: "ui-shell__toggle",
@@ -77,7 +77,7 @@ var DesignSystemUI = (function(exports, vue, element_plus) {
 							"stroke-linecap": "round"
 						}, [(0, vue.createElementVNode)("path", { d: "M4 6h16M4 12h16M4 18h16" })], -1)])]),
 						_: 1
-					}), (0, vue.renderSlot)(_ctx.$slots, "logo", {}, () => [(0, vue.createElementVNode)("span", _hoisted_3$1, (0, vue.toDisplayString)(__props.title), 1)])]), (0, vue.createElementVNode)("div", _hoisted_4$1, [(0, vue.renderSlot)(_ctx.$slots, "header-actions")])]),
+					}), (0, vue.renderSlot)(_ctx.$slots, "logo", {}, () => [(0, vue.createElementVNode)("span", _hoisted_3$4, (0, vue.toDisplayString)(__props.title), 1)])]), (0, vue.createElementVNode)("div", _hoisted_4$3, [(0, vue.renderSlot)(_ctx.$slots, "header-actions")])]),
 					!isMobile.value ? ((0, vue.openBlock)(), (0, vue.createElementBlock)("aside", {
 						key: 0,
 						class: "ui-shell__sidebar",
@@ -128,17 +128,17 @@ var DesignSystemUI = (function(exports, vue, element_plus) {
 						}, 8, ["default-active"])]),
 						_: 1
 					}, 8, ["modelValue"])),
-					(0, vue.createElementVNode)("main", _hoisted_5, [(0, vue.renderSlot)(_ctx.$slots, "default")])
+					(0, vue.createElementVNode)("main", _hoisted_5$2, [(0, vue.renderSlot)(_ctx.$slots, "default")])
 				], 2);
 			};
 		}
 	});
 	//#endregion
 	//#region ui/UiPageHeader.vue?vue&type=script&setup=true&lang.ts
-	var _hoisted_1$1 = { class: "ui-page-header l-page-header" };
-	var _hoisted_2$1 = { class: "ui-page-header__text" };
-	var _hoisted_3 = { key: 0 };
-	var _hoisted_4 = { class: "l-cluster l-cluster--end" };
+	var _hoisted_1$4 = { class: "ui-page-header l-page-header" };
+	var _hoisted_2$4 = { class: "ui-page-header__text" };
+	var _hoisted_3$3 = { key: 0 };
+	var _hoisted_4$2 = { class: "l-cluster l-cluster--end" };
 	//#endregion
 	//#region ui/UiPageHeader.vue
 	var UiPageHeader_default = /* @__PURE__ */ (0, vue.defineComponent)({
@@ -153,14 +153,14 @@ var DesignSystemUI = (function(exports, vue, element_plus) {
 			* 标题 + 副标题 + 右侧操作区。间距由 .l-page-header（第一层）决定。
 			*/
 			return (_ctx, _cache) => {
-				return (0, vue.openBlock)(), (0, vue.createElementBlock)("div", _hoisted_1$1, [(0, vue.createElementVNode)("div", _hoisted_2$1, [(0, vue.createElementVNode)("h1", null, (0, vue.toDisplayString)(__props.title), 1), __props.subtitle ? ((0, vue.openBlock)(), (0, vue.createElementBlock)("small", _hoisted_3, (0, vue.toDisplayString)(__props.subtitle), 1)) : (0, vue.createCommentVNode)("", true)]), (0, vue.createElementVNode)("div", _hoisted_4, [(0, vue.renderSlot)(_ctx.$slots, "actions")])]);
+				return (0, vue.openBlock)(), (0, vue.createElementBlock)("div", _hoisted_1$4, [(0, vue.createElementVNode)("div", _hoisted_2$4, [(0, vue.createElementVNode)("h1", null, (0, vue.toDisplayString)(__props.title), 1), __props.subtitle ? ((0, vue.openBlock)(), (0, vue.createElementBlock)("small", _hoisted_3$3, (0, vue.toDisplayString)(__props.subtitle), 1)) : (0, vue.createCommentVNode)("", true)]), (0, vue.createElementVNode)("div", _hoisted_4$2, [(0, vue.renderSlot)(_ctx.$slots, "actions")])]);
 			};
 		}
 	});
 	//#endregion
 	//#region ui/UiState.vue?vue&type=script&setup=true&lang.ts
-	var _hoisted_1 = { class: "ui-state" };
-	var _hoisted_2 = {
+	var _hoisted_1$3 = { class: "ui-state" };
+	var _hoisted_2$3 = {
 		key: 2,
 		class: "l-state"
 	};
@@ -183,14 +183,14 @@ var DesignSystemUI = (function(exports, vue, element_plus) {
 			*/
 			const emit = __emit;
 			return (_ctx, _cache) => {
-				return (0, vue.openBlock)(), (0, vue.createElementBlock)("div", _hoisted_1, [__props.state === "loading" ? ((0, vue.openBlock)(), (0, vue.createBlock)((0, vue.unref)(element_plus.ElSkeleton), {
+				return (0, vue.openBlock)(), (0, vue.createElementBlock)("div", _hoisted_1$3, [__props.state === "loading" ? ((0, vue.openBlock)(), (0, vue.createBlock)((0, vue.unref)(element_plus.ElSkeleton), {
 					key: 0,
 					rows: __props.rows,
 					animated: ""
 				}, null, 8, ["rows"])) : __props.state === "empty" ? ((0, vue.openBlock)(), (0, vue.createBlock)((0, vue.unref)(element_plus.ElEmpty), {
 					key: 1,
 					description: __props.emptyText
-				}, null, 8, ["description"])) : __props.state === "error" ? ((0, vue.openBlock)(), (0, vue.createElementBlock)("div", _hoisted_2, [(0, vue.createElementVNode)("span", null, (0, vue.toDisplayString)(__props.errorText), 1), (0, vue.createVNode)((0, vue.unref)(element_plus.ElButton), {
+				}, null, 8, ["description"])) : __props.state === "error" ? ((0, vue.openBlock)(), (0, vue.createElementBlock)("div", _hoisted_2$3, [(0, vue.createElementVNode)("span", null, (0, vue.toDisplayString)(__props.errorText), 1), (0, vue.createVNode)((0, vue.unref)(element_plus.ElButton), {
 					size: "small",
 					onClick: _cache[0] || (_cache[0] = ($event) => emit("retry"))
 				}, {
@@ -201,20 +201,172 @@ var DesignSystemUI = (function(exports, vue, element_plus) {
 		}
 	});
 	//#endregion
+	//#region ui/composites/UiListItem.vue?vue&type=script&setup=true&lang.ts
+	var _hoisted_1$2 = { class: "ui-list-item__main l-inline" };
+	var _hoisted_2$2 = { class: "ui-list-item__text l-stack l-stack--tight" };
+	var _hoisted_3$2 = { class: "ui-list-item__title" };
+	var _hoisted_4$1 = {
+		key: 0,
+		class: "ui-list-item__subtitle"
+	};
+	var _hoisted_5$1 = { class: "ui-list-item__trailing l-cluster" };
+	//#endregion
+	//#region ui/composites/UiListItem.vue
+	var UiListItem_default = /* @__PURE__ */ (0, vue.defineComponent)({
+		__name: "UiListItem",
+		props: {
+			title: {},
+			subtitle: { default: "" },
+			avatar: { default: "" },
+			status: { default: void 0 },
+			clickable: {
+				type: Boolean,
+				default: false
+			}
+		},
+		emits: ["click"],
+		setup(__props, { emit: __emit }) {
+			/**
+			* UiListItem · 第二层 · 复合组件（结构级下沉范例）
+			* 结构：[leading: 头像] [标题 / 副标题] …… [trailing: 状态 + 操作]
+			* 由白名单原语 + .l-* 布局类拼成；本文件不写数值，只引用 token。
+			* 来源：原型中 data-composite="list-item" 出现第二次后下沉。
+			*/
+			const emit = __emit;
+			return (_ctx, _cache) => {
+				return (0, vue.openBlock)(), (0, vue.createElementBlock)("div", {
+					class: (0, vue.normalizeClass)(["ui-list-item l-cluster l-cluster--between", { "is-clickable": __props.clickable }]),
+					onClick: _cache[0] || (_cache[0] = ($event) => __props.clickable && emit("click"))
+				}, [(0, vue.createElementVNode)("span", _hoisted_1$2, [(0, vue.renderSlot)(_ctx.$slots, "leading", {}, () => [__props.avatar ? ((0, vue.openBlock)(), (0, vue.createBlock)((0, vue.unref)(element_plus.ElAvatar), {
+					key: 0,
+					class: "ui-list-item__avatar"
+				}, {
+					default: (0, vue.withCtx)(() => [(0, vue.createTextVNode)((0, vue.toDisplayString)(__props.avatar.slice(0, 1)), 1)]),
+					_: 1
+				})) : (0, vue.createCommentVNode)("", true)]), (0, vue.createElementVNode)("span", _hoisted_2$2, [(0, vue.createElementVNode)("strong", _hoisted_3$2, (0, vue.toDisplayString)(__props.title), 1), __props.subtitle ? ((0, vue.openBlock)(), (0, vue.createElementBlock)("small", _hoisted_4$1, (0, vue.toDisplayString)(__props.subtitle), 1)) : (0, vue.createCommentVNode)("", true)])]), (0, vue.createElementVNode)("span", _hoisted_5$1, [__props.status ? ((0, vue.openBlock)(), (0, vue.createBlock)((0, vue.unref)(element_plus.ElTag), {
+					key: 0,
+					type: __props.status.type || "info",
+					size: "small"
+				}, {
+					default: (0, vue.withCtx)(() => [(0, vue.createTextVNode)((0, vue.toDisplayString)(__props.status.label), 1)]),
+					_: 1
+				}, 8, ["type"])) : (0, vue.createCommentVNode)("", true), (0, vue.renderSlot)(_ctx.$slots, "trailing")])], 2);
+			};
+		}
+	});
+	//#endregion
+	//#region ui/composites/UiFilterBar.vue?vue&type=script&setup=true&lang.ts
+	var _hoisted_1$1 = { class: "ui-filter-bar l-toolbar" };
+	var _hoisted_2$1 = { class: "ui-filter-bar__filters l-cluster" };
+	var _hoisted_3$1 = { class: "ui-filter-bar__actions l-cluster l-cluster--end" };
+	//#endregion
+	//#region ui/composites/UiFilterBar.vue
+	var UiFilterBar_default = /* @__PURE__ */ (0, vue.defineComponent)({
+		__name: "UiFilterBar",
+		props: {
+			resettable: {
+				type: Boolean,
+				default: true
+			},
+			resetText: { default: "重置" }
+		},
+		emits: ["reset"],
+		setup(__props, { emit: __emit }) {
+			/**
+			* UiFilterBar · 第二层 · 复合组件
+			* 表格 / 列表上方工具条：左侧筛选控件（默认插槽），右侧操作（actions 插槽），可选「重置」。
+			* 基于 .l-toolbar / .l-cluster，控件宽度由 --layout-control-w 决定。
+			*/
+			const emit = __emit;
+			return (_ctx, _cache) => {
+				return (0, vue.openBlock)(), (0, vue.createElementBlock)("div", _hoisted_1$1, [(0, vue.createElementVNode)("span", _hoisted_2$1, [(0, vue.renderSlot)(_ctx.$slots, "default"), __props.resettable ? ((0, vue.openBlock)(), (0, vue.createBlock)((0, vue.unref)(element_plus.ElButton), {
+					key: 0,
+					onClick: _cache[0] || (_cache[0] = ($event) => emit("reset"))
+				}, {
+					default: (0, vue.withCtx)(() => [(0, vue.createTextVNode)((0, vue.toDisplayString)(__props.resetText), 1)]),
+					_: 1
+				})) : (0, vue.createCommentVNode)("", true)]), (0, vue.createElementVNode)("span", _hoisted_3$1, [(0, vue.renderSlot)(_ctx.$slots, "actions")])]);
+			};
+		}
+	});
+	//#endregion
+	//#region ui/composites/UiStatCard.vue?vue&type=script&setup=true&lang.ts
+	var _hoisted_1 = { class: "ui-stat-card l-module" };
+	var _hoisted_2 = { class: "ui-stat-card__label" };
+	var _hoisted_3 = { class: "ui-stat-card__value l-inline" };
+	var _hoisted_4 = { class: "ui-stat-card__num" };
+	var _hoisted_5 = {
+		key: 0,
+		class: "ui-stat-card__unit"
+	};
+	var _hoisted_6 = {
+		key: 0,
+		class: "ui-stat-card__hint"
+	};
+	//#endregion
+	//#region ui/composites/UiStatCard.vue
+	var UiStatCard_default = /* @__PURE__ */ (0, vue.defineComponent)({
+		__name: "UiStatCard",
+		props: {
+			label: {},
+			value: {},
+			unit: { default: "" },
+			trend: { default: void 0 },
+			hint: { default: "" },
+			upIsGood: {
+				type: Boolean,
+				default: true
+			}
+		},
+		setup(__props) {
+			/**
+			* UiStatCard · 第二层 · 复合组件
+			* 统计卡片：标签 / 数值 / 单位 / 趋势 / 说明。基于 .l-module；字号与颜色只引用 token。
+			*/
+			const props = __props;
+			const display = (0, vue.computed)(() => typeof props.value === "number" ? props.value.toLocaleString("zh-CN") : props.value);
+			const trendClass = (0, vue.computed)(() => {
+				if (props.trend === void 0 || props.trend === 0) return "is-flat";
+				return (props.trend > 0 ? props.upIsGood : !props.upIsGood) ? "is-good" : "is-bad";
+			});
+			return (_ctx, _cache) => {
+				return (0, vue.openBlock)(), (0, vue.createElementBlock)("section", _hoisted_1, [
+					(0, vue.createElementVNode)("div", _hoisted_2, (0, vue.toDisplayString)(__props.label), 1),
+					(0, vue.createElementVNode)("div", _hoisted_3, [
+						(0, vue.createElementVNode)("span", _hoisted_4, (0, vue.toDisplayString)(display.value), 1),
+						__props.unit ? ((0, vue.openBlock)(), (0, vue.createElementBlock)("span", _hoisted_5, (0, vue.toDisplayString)(__props.unit), 1)) : (0, vue.createCommentVNode)("", true),
+						__props.trend !== void 0 ? ((0, vue.openBlock)(), (0, vue.createElementBlock)("span", {
+							key: 1,
+							class: (0, vue.normalizeClass)(["ui-stat-card__trend", trendClass.value])
+						}, (0, vue.toDisplayString)(__props.trend > 0 ? "+" : "") + (0, vue.toDisplayString)(__props.trend) + "%", 3)) : (0, vue.createCommentVNode)("", true)
+					]),
+					__props.hint ? ((0, vue.openBlock)(), (0, vue.createElementBlock)("small", _hoisted_6, (0, vue.toDisplayString)(__props.hint), 1)) : (0, vue.createCommentVNode)("", true),
+					(0, vue.renderSlot)(_ctx.$slots, "default")
+				]);
+			};
+		}
+	});
+	//#endregion
 	//#region ui/index.ts
-	/** 自研复合组件清单：新增组件必须同时登记到 README.md */
+	/** 自研组件清单：新增组件必须同时登记到 README.md、whitelist.json（custom）与 showcase.data.js（CUSTOM） */
 	var components = {
 		UiShell: UiShell_default,
 		UiPageHeader: UiPageHeader_default,
-		UiState: UiState_default
+		UiState: UiState_default,
+		UiListItem: UiListItem_default,
+		UiFilterBar: UiFilterBar_default,
+		UiStatCard: UiStatCard_default
 	};
 	function install(app) {
 		for (const [name, comp] of Object.entries(components)) app.component(name, comp);
 	}
 	var DesignSystemUI = { install };
 	//#endregion
+	exports.UiFilterBar = UiFilterBar_default;
+	exports.UiListItem = UiListItem_default;
 	exports.UiPageHeader = UiPageHeader_default;
 	exports.UiShell = UiShell_default;
+	exports.UiStatCard = UiStatCard_default;
 	exports.UiState = UiState_default;
 	exports.components = components;
 	exports.default = DesignSystemUI;

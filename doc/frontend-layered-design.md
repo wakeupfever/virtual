@@ -1,7 +1,7 @@
 # 前端三层分层设计说明
 
 > 本文档描述 `virtual` 项目前端的三层分层模型：每一层包含什么、由谁修改、如何约束 AI 在各层的行为，以及"提示词 → 可交互原型 → 正式页面"的流转方式。
-> 对应需求台账见 `doc/frontend-layered-design.md.rai.md`（当前 RV-005）；需求 ID、状态与验收标准以台账为准。
+> 对应需求台账见 `doc/frontend-layered-design.md.rai.md`（当前 RV-006）；需求 ID、状态与验收标准以台账为准。
 > 技术栈：Vue 3 + Element Plus 2.14 + Vite 8 + Tailwind CSS 4，pnpm monorepo。
 
 ## 1. 目标与问题
@@ -32,6 +32,9 @@ virtual/
 │   ├── design-system/            # 第一、二层
 │   │   ├── tokens.css  layout.css  base.css
 │   │   ├── ui/  UiShell.vue · UiPageHeader.vue · UiState.vue · index.ts
+│   │   │   └── composites/  UiListItem · UiFilterBar · UiStatCard   # 结构级下沉
+│   │   ├── skins/  index.css · table.css · input.css   # 样式级皮肤
+│   │   ├── requests/  _template.md   # 组件需求单
 │   │   ├── whitelist.json        # 第三层可用标签白名单（check 脚本与 ESLint 共用）
 │   │   ├── showcase.html         # 展示页：模块一变量 · 模块二物料（零构建，双击打开）
 │   │   ├── scripts/build-tokens.mjs   # tokens.css → dist/tokens.js
@@ -102,9 +105,21 @@ reset、字体、页面底色。正式项目关闭 Tailwind preflight，全局 r
 
 正式项目：`import DesignSystemUI from '@virtual/design-system'`，`app.use(ElementPlus).use(DesignSystemUI)`。原型：Vite 库模式把 `ui/` 打包为 `dist/ui.iife.js`（Vue 与 Element Plus 设为 external，运行时用 CDN 全局对象），原型一行 `<script>` 引入，`app.use(DesignSystemUI)`。原型 CDN 版本必须与 `packages/design-system/package.json` 一致。
 
-### 5.4 冻结与演进
+### 5.3b 皮肤层
 
-第二层建成后冻结。演进路径：AI 开发功能时发现缺组件 → 停下提议 → 判定是通用能力（进 `ui/` 或白名单）还是业务组件（留 `features/`）→ 通用的单独一次对话、单独一次提交完成，重新 `pnpm build:ds`，并更新 README 与 `whitelist.json`。
+`skins/<component>.css` 是样式级偏差的唯一落点：只允许 `--el-<component>-*` 变量与 Element Plus BEM 类，值只引用 token。加载顺序固定为 element-plus → tokens → skins → layout → base，原型与正式项目一致。
+
+### 5.4 冻结与演进：三级偏差
+
+第二层建成后冻结，但会随原型需求生长。原型需要 Element Plus 默认之外的 UI 时按三级归类，全部落在第二层，第三层永不写样式：
+
+| 级别 | 含义 | 落点 | 消费时 AI 的动作 |
+|---|---|---|---|
+| 样式级 | 结构行为不变，长相不同 | `skins/` | 占位 + 需求单 |
+| 结构级 | 由白名单原语 + `.l-*` 拼出的新形态 | `ui/composites/` | 就地拼装并打 `data-composite`；同一候选出现 ≥2 次下沉为复合组件 |
+| 行为级 | Element Plus 没有的交互 | 封装外部库或自研进 `ui/` | 白名单组件占位并打 `data-placeholder`，写 `requests/` 需求单 |
+
+闭环：原型阶段发现缺口 → 需求单 → 第二层负责人判定 → 单独实施并 `pnpm build:ds`、登记 README / whitelist / showcase → 回填原型占位 → promote。`check-prototype.js` 统计候选结构与占位，`--strict` 下占位即失败。首批复合组件 `UiListItem` / `UiFilterBar` / `UiStatCard` 即结构级下沉的范例。若设计稿的视觉语言与 Element Plus 差距很大，要么把皮肤层做厚，要么让设计稿服从设计系统；不允许第三条路——每个原型各自 hack 样式。
 
 ## 6. 第三层·原型
 

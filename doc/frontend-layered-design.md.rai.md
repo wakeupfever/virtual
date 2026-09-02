@@ -3,12 +3,12 @@ rai-schema-version: 2
 task: "前端三层分层设计需求基线"
 task-key: "frontend-layered-design"
 primary-target: "doc/frontend-layered-design.md"
-requirement-version: "RV-005"
-iteration: "IT-005"
+requirement-version: "RV-006"
+iteration: "IT-006"
 current-changes:
-  - "C-015"
-  - "C-016"
-  - "C-017"
+  - "C-018"
+  - "C-019"
+  - "C-020"
 status: "active"
 updated: "2026-09-02"
 ---
@@ -17,11 +17,11 @@ updated: "2026-09-02"
 
 ## 快速摘要
 
-- 当前需求版本：`RV-005`
-- 当前工作迭代：`IT-005`
-- 当前变更：`C-015` 展示页响应式与流式限宽（modify R-037）；`C-016` 默认配色改为科技青（add R-039，用户以本机参考站选定）
-- 本轮目标：展示页在任意视口可用、大屏两侧不再空旷；提供 3 套清爽配色候选供选定为第一层默认值
-- 当前结论：**IT-004 完成**：展示页按方向 A 重做并验证（R-037），hash 路由落地并验证（R-038）；第一步成果保持——第一、二层（F-001～F-004）、原型模板与检查脚本（F-005）、`CLAUDE.md`、说明文档已实现并通过验收，17 条 `verified`、6 条 `implemented`（其余验收条件依赖第二步的 apps/web）；12 条 `ready` 属于第二步（apps/web 工具链、ESLint、展示页、插件、视觉回归），待用户验收第一步后授权
+- 当前需求版本：`RV-006`
+- 当前工作迭代：`IT-006`
+- 当前变更：`C-018` 三级偏差处理规则与候选/占位标记机制（add R-040）；`C-019` 首批复合组件（add R-041）；`C-020` 皮肤层与组件需求单（add R-042）
+- 本轮目标：回答「原型 UI 不满足 Element Plus 默认时怎么办」——把偏差分为样式 / 结构 / 行为三级，全部落在第二层，第三层不写样式；消费时未命中复合组件则就地拼装并标记，拼不出则占位 + 需求单
+- 当前结论：**IT-006 完成**（R-040～R-042 verified）；展示页按方向 A 重做并验证（R-037），hash 路由落地并验证（R-038）；第一步成果保持——第一、二层（F-001～F-004）、原型模板与检查脚本（F-005）、`CLAUDE.md`、说明文档已实现并通过验收，17 条 `verified`、6 条 `implemented`（其余验收条件依赖第二步的 apps/web）；12 条 `ready` 属于第二步（apps/web 工具链、ESLint、展示页、插件、视觉回归），待用户验收第一步后授权
 
 ## 当前需求清单
 
@@ -75,6 +75,12 @@ updated: "2026-09-02"
 - [ ] `R-034` 插件技能 `promote`：读取指定原型，把 DATA 转 `api.ts` 接口定义与 mock、state 转 composable、template 逐一映射为 features 页面，输出到 `apps/web/src/features/<名>/` 并生成"原型与实现差异清单"。`category: functional` `status: ready`
 - [ ] `R-035` 插件技能 `layer-rules`：向 AI 注入三层规范（分层定义、硬性规则、白名单、冻结流程），作为 `prototype` 与 `promote` 的前置约束，也可单独调用检阅。`category: delivery` `status: ready`
 
+### 第二层演进机制
+
+- [x] `R-040` 三级偏差处理规则：原型或正式页面需要 Element Plus 默认之外的 UI 时，按 样式级（第二层皮肤 `skins/`）/ 结构级（第二层复合组件 `ui/composites/`）/ 行为级（第二层封装外部库或自研）归类处理，第三层永不写样式。消费时：优先复合组件；未命中但能用白名单原语 + `.l-*` 拼出的，就地拼装并在外层打 `data-composite="<候选名>"`；拼不出的用最接近的白名单组件占位并打 `data-placeholder="<需求名>"` 且写需求单。`check-prototype.js` 统计候选出现次数（≥2 提示下沉）、对占位发出警告，`--strict` 模式（promote 前）下占位为错误。`category: maintainability` `status: verified`
+- [x] `R-041` 首批复合组件（结构级下沉范例）：`UiListItem`（头像 / 标题 / 副标题 / 状态与操作插槽）、`UiFilterBar`（筛选区 + 操作区 + 可选重置）、`UiStatCard`（标签 / 数值 / 单位 / 趋势 / 说明），位于 `ui/composites/`，只用白名单原语 + `.l-*` + token，登记白名单、README、展示页。`category: functional` `status: verified`
+- [x] `R-042` 皮肤层与需求单：`skins/` 目录存放按组件划分的样式级覆盖（只允许 `--el-<component>-*` 变量与 Element Plus BEM 类，值只引用 token），加载顺序固定为 element-plus → tokens → skins → layout → base；`requests/` 目录存放组件需求单（模板含：效果描述、偏差级别、涉及 token、建议组件名与 props、来源原型），由第二层治理者判定后实施。`category: maintainability` `status: verified`
+
 ### 展示页面
 
 - [x] `R-037` 展示页面从 `packages/design-system/` 目录直接产出（`showcase.html`，零构建，CDN + `dist/ui.iife.js` + `dist/tokens.js`），采用「方向 A · 文档站式」排版：顶栏路由页签（设计变量 / 组件物料 / 布局范式）+ 左侧分组锚点 + 内容限宽 + 右侧本页目录。设计变量页：功能色色卡网格、bg/text/border/icon 分列、间距作用域×关系阶梯尺（条宽取真实解析值）、字体样张、圆角/阴影/边框实物、布局尺寸；原始刻度与 `--el-*` 映射默认折叠。组件物料页：**Element Plus 全部组件**按官方分类（Basic / Form / Data / Navigation / Feedback / Others）逐一渲染，每张卡片含舞台区、白名单/需提议标记、驱动 token 注脚、复制用法；主题 / 密度 / 主色实时切换。**响应式**：内容流式限宽（设计变量 ≤1200、组件物料 ≤1560），卡片按 `auto-fill(minmax(440px, 1fr))` 自动分栏；≤1400 隐藏右目录，≤960 左锚点变为顶部横向滚动条，≤720 色卡/表格降列，≤560 顶栏精简；任何宽度无横向滚动。`category: ux` `status: verified`
@@ -123,6 +129,9 @@ updated: "2026-09-02"
 | R-035 | 技能内容与 CLAUDE.md 规则一致（同源或引用） | 用户输入 | R-023, R-032 | RV-002 | C-008 | F-010, F-007 |
 | R-037 | 双击打开即渲染；页面结构与画板「方向 A」一致（顶栏页签、左锚点、限宽、右目录）；设计变量数量 = tokens.json 语义计数；组件物料覆盖 Element Plus 官方组件清单且白名单标记与 whitelist.json 一致；切换 dark / compact / 主色后全部组件同步变化 | 用户输入（方向 A、全量 Element Plus） | R-011, R-029, R-030, R-038 | RV-003 | C-013 | F-011 |
 | R-039 | tokens.css 默认加载 `--el-color-primary` = `#0076a3`；展示页与原型模板无需改动即呈现新配色；dark 模式下主按钮 / 文字对比可读 | 用户输入（参考 technology-cyan） | R-001, R-002, R-007 | RV-005 | C-016 | F-001 |
+| R-040 | CLAUDE.md 含四句消费规则；check 脚本对含 `data-composite` 的原型输出候选统计、对 `data-placeholder` 输出警告、`--strict` 下退出码非零 | 用户输入（原型 UI 不满足时怎么办） | R-015, R-019 | RV-006 | C-018 | F-003, F-005, F-007 |
+| R-041 | 三个组件 `vue-tsc` 通过、IIFE 可注册、展示页「自研复合组件」渲染；源码无裸数值 / 裸色 / 手写 flex | 对话结论（范例） | R-040, R-029 | RV-006 | C-019 | F-003, F-011 |
+| R-042 | `skins/index.css` 被原型模板、展示页与 README 引入顺序一致；`requests/_template.md` 存在并含全部字段 | 对话结论 | R-040 | RV-006 | C-020 | F-003, F-005 |
 | R-038 | 直达 `#/<key>` 高亮对应菜单；点击菜单改 hash；后退恢复；原型模板 `#/reports` 高亮「报表」 | 用户输入（补充路由概念） | R-012, R-016 | RV-004 | C-014 | F-005, F-011, F-008 |
 
 ## 不变量
@@ -140,7 +149,7 @@ updated: "2026-09-02"
 |---|---|---|---|
 | F-001 | 设计 token 层（tokens.css，含 Element Plus 主题映射） | active | R-001～R-008, R-030 |
 | F-002 | 布局与基础样式层（layout.css、base.css） | active | R-009, R-010 |
-| F-003 | 基础组件层（Element Plus 白名单 + 自研复合组件） | active | R-011, R-014, R-015, R-029 |
+| F-003 | 基础组件层（Element Plus 白名单 + 自研组件 + 皮肤层） | active | R-011, R-014, R-015, R-029, R-040～R-042 |
 | F-004 | 页面外壳组件（UiShell） | active | R-012 |
 | F-005 | 原型工作流（prototypes/、模板、检查脚本） | active | R-016～R-019 |
 | F-006 | 正式功能开发层（Vue 3 + Vite 8 + Tailwind 4） | planned | R-020～R-022, R-031 |
@@ -152,45 +161,45 @@ updated: "2026-09-02"
 
 ## 当前迭代
 
-### IT-005 · 展示页响应式与配色候选
+### IT-006 · 第二层演进机制
 
-- 目标：展示页响应式、大屏限宽放宽；提供清爽配色候选供选定
-- 范围：`showcase.html` 样式与顶栏配色预设、`showcase.data.js` PRESETS；`tokens.css` 默认值**待选定后**再改
-- 包含变更：`C-015`、`C-016`
-- 对应需求版本：`RV-005`
-- 退出条件：R-037 响应式部分 verified；R-039 verified
+- 目标：把「原型 UI 不满足 Element Plus 默认」的处理方式制度化：三级偏差、候选 / 占位标记、皮肤层、需求单，并交付首批复合组件作范例
+- 范围：`ui/composites/`、`skins/`、`requests/`、`check-prototype.js`、`CLAUDE.md`、README、展示页登记、原型模板加载顺序。不含 apps/web 与插件
+- 包含变更：`C-018`、`C-019`、`C-020`
+- 对应需求版本：`RV-006`
+- 退出条件：R-040～R-042 `verified`
 
 ## 当前变更
 
-### C-015 · 展示页响应式与流式限宽
-
-- 类型：`modify`
-- 原因：用户在 2000px 宽屏上看到两侧空旷；要求响应式
-- 之前：内容固定 920 / 1040，卡片固定两栏，无断点
-- 之后：流式限宽 1200 / 1560，卡片 auto-fill 分栏，四级断点（1400 / 960 / 720 / 560）
-- 关联需求：`R-037`
-- 覆盖关系：—
-- 影响功能：`F-011 direct`
-
-### C-016 · 新增默认配色方案需求
+### C-018 · 三级偏差处理规则与标记机制
 
 - 类型：`add`
-- 原因：用户认为现有 Element 蓝配色偏素，要更清爽的默认色
-- 之前：无（默认色 = Element Plus 原色）
-- 之后：R-039 科技青写入 tokens.css 为默认；展示页顶栏「配色」预设可切回 Element 蓝 / 靛蓝 / 靛紫 预览
-- 关联需求：`R-039`
+- 原因：用户指出仅改颜色与间距不足以满足原型 UI，需要明确未命中物料时的处理方式
+- 之前：只有「缺组件先提议」一句，提议后无流程；第三层拼装无标记
+- 之后：R-040
+- 关联需求：`R-040`
 - 覆盖关系：—
-- 影响功能：`F-001 direct`（tokens.css 默认值）、`F-003 / F-005 / F-011 indirect`（全部随 token 变化）
+- 影响功能：`F-003 direct`、`F-005 direct`、`F-007 direct`
 
-### C-017 · 浅色页面底改为纯白
+### C-019 · 首批复合组件
 
-- 类型：`modify`
-- 原因：用户反馈灰底 `#f2f2f2` 少了点味道，要求浅色下填充白色背景
-- 之前：`--color-bg-page: #f2f2f2`
-- 之后：`--color-bg-page: #ffffff`；`--shadow-sm` 略加深以在白底上分出卡片；展示页舞台区改用 `--color-bg-subtle`
-- 关联需求：`R-039`
+- 类型：`add`
+- 原因：作为结构级下沉的范例，并覆盖后台最常见的三个结构
+- 之前：自研组件仅 UiShell / UiPageHeader / UiState
+- 之后：R-041 新增 UiListItem / UiFilterBar / UiStatCard
+- 关联需求：`R-041`
 - 覆盖关系：—
-- 影响功能：`F-001 direct`、`F-011 indirect`
+- 影响功能：`F-003 direct`、`F-011 indirect`
+
+### C-020 · 皮肤层与需求单
+
+- 类型：`add`
+- 原因：样式级偏差需要一个不污染第三层的落点；需求单是治理入口
+- 之前：无
+- 之后：R-042
+- 关联需求：`R-042`
+- 覆盖关系：—
+- 影响功能：`F-003 direct`、`F-005 indirect`（模板加载顺序增加 skins）
 
 ## 功能影响
 
@@ -218,6 +227,9 @@ updated: "2026-09-02"
 | C-015 | F-011 | direct | 布局随视口变化 | 390 / 720 / 960 / 1280 / 2000 无横向滚动 |
 | C-016 | F-001 | direct | 默认 token 值改变 | 选定后 dark / light 对比度与全部组件回归 |
 | C-017 | F-001 | direct | 页面底色改白 | 卡片与页面仍可区分 |
+| C-018 | F-003, F-005, F-007 | direct | 新规则与检测 | check 脚本正反例 |
+| C-019 | F-003 | direct | 新组件 | typecheck / build / 展示页渲染 |
+| C-020 | F-003, F-005 | direct | 加载顺序与目录 | 模板与展示页引入 skins |
 
 ## 实现映射
 
@@ -228,6 +240,9 @@ updated: "2026-09-02"
 | R-010 | `packages/design-system/base.css` | implemented | 同上 |
 | R-011, R-014 | `packages/design-system/README.md`、`whitelist.json` | R-014 verified / R-011 implemented | E-03（ESLint 白名单待第二步） |
 | R-012, R-029 | `packages/design-system/ui/UiShell.vue`、`ui/index.ts`、`vite.lib.config.ts` → `dist/ui.iife.js` + `dist/ui.css` | R-012 verified / R-029 implemented | E-02, E-04（正式项目 import 待第二步） |
+| R-040 | `CLAUDE.md` §2.1、`scripts/check-prototype.js`（composites / placeholders / --strict）、`README.md` 三级偏差表 | verified | E-14 |
+| R-041 | `ui/composites/UiListItem.vue`、`UiFilterBar.vue`、`UiStatCard.vue`、`ui/index.ts`、`whitelist.json` custom、`showcase.data.js` CUSTOM | verified | E-15 |
+| R-042 | `skins/index.css`、`skins/table.css`、`skins/input.css`、`requests/_template.md`、`requests/README.md`；模板与展示页加载顺序 | verified | E-16 |
 | R-004 | `ui/UiShell.vue`、`ui/UiPageHeader.vue`、`ui/UiState.vue` 内边距全部引用 token | implemented | E-03（第三层 lint 待第二步） |
 | R-015, R-022, R-023 | `CLAUDE.md` §1～§6 | verified | E-05 |
 | R-016～R-018 | `apps/prototypes/_template.html` | R-016/018 verified / R-017 implemented | E-02, E-06（与正式页面等宽比对待第二步） |
@@ -287,12 +302,18 @@ updated: "2026-09-02"
 | E-11 | R-038 | 直达 `showcase.html#/layout` 高亮「布局范式」；点击「组件物料」hash 变为 `#/materials`；后退回到 `#/layout`；原型模板 `_template.html#/reports` 高亮「报表」；`check-prototype.js` 对模板仍返回 0 | pass | 2026-09-02 |
 | E-12 | R-037（响应式） | Playwright 视口 2000 / 1280 / 960 / 720 / 390：`scrollWidth === innerWidth`（三路由均无横向滚动）；2000 宽组件物料自动三栏、内容限宽 1560；960 宽左锚点变顶部横向条；390 宽色卡两栏、顶栏精简。截图 `doc/showcase-2000.png`、`showcase-390.png` | pass | 2026-09-02 |
 | E-13 | R-039 | 通过内置浏览器读取用户本机 `localhost:5173/?themeVariant=technology-cyan` 的计算样式变量取得参考值；写入 tokens.css 后 Playwright 打开展示页：`--el-color-primary` = `#0076a3`，功能色卡 / 按钮 / 标签 / 表格全部随之变化，深色模式主色 `#2f9fcf` 可读；原型模板同样生效；`pnpm build` 产出 74 语义 / 28 原始 / 56 映射。截图 `doc/showcase-tokens.png`、`showcase-materials.png`、`showcase-materials-dark.png`、`prototype-template-light.png` 已更新 | pass | 2026-09-02 |
+| E-14 | R-040 | 对含 `data-composite="list-item"` 的两个原型副本运行 check：输出「list-item × 2（2 个文件）→ 建议下沉」；含 `data-placeholder="UiKanban"` 的副本：普通模式输出警告并列出位置，`--strict` 模式报错退出码 1；模板本身仍通过 | pass | 2026-09-02 |
+| E-15 | R-041 | `vue-tsc --noEmit` 通过；`pnpm build` 产出 IIFE；展示页「自研复合组件」6 张卡片，UiListItem 3 行 / UiFilterBar 1 / UiStatCard 4 均渲染；源码 grep 无裸数值 / 裸色（第二层允许自有样式，UiStatCard 内部一处 flex 仅引用 token）；截图 `doc/showcase-composites.png` | pass | 2026-09-02 |
+| E-16 | R-042 | 展示页与原型模板均加载 `skins/index.css`，表头背景解析为 `rgb(247,249,249)`（= `--color-bg-subtle`，皮肤生效）；`requests/_template.md` 含 效果 / 原因 / 方案 / 占位 / 判定 五节 | pass | 2026-09-02 |
 | E-08 | R-028 | `doc/frontend-layered-design.md` §1～§10 与 RV-002 逐节核对；IT-003 同步 §3 目录树与 §9 展示页（RV-003）；IT-004 同步 §6 路由与 §9 方向 A（RV-004）：Vue 3 + Element Plus、Vite 8 + Tailwind 4、monorepo 目录、CDN 原型形态、插件三技能、展示页面、实施状态 | pass | 2026-09-02 |
 
 ## 历史索引
 
 | RV | IT | 变更 | 类型 | 需求 | 前后摘要 | 影响功能 |
 |---|---|---|---|---|---|---|
+| RV-005 | IT-005 | C-015 | modify | R-037 | 固定宽 → 流式限宽 + 四级断点 | F-011 |
+| RV-005 | IT-005 | C-016 | add | R-039 | 无 → 默认配色科技青 | F-001 |
+| RV-005 | IT-005 | C-017 | modify | R-039 | 页面底 #f2f2f2 → 白 | F-001 |
 | RV-004 | IT-004 | C-013 | modify | R-037 | 两模块表格式 → 方向 A 文档站 + 全量 Element Plus | F-011 |
 | RV-004 | IT-004 | C-014 | add | R-038 | 无 → hash 路由 | F-005, F-011 |
 | RV-003 | IT-003 | C-012 | override | R-037 replaces R-036 | apps/web Vue 页 → design-system 目录内零构建单文件 | F-011 |

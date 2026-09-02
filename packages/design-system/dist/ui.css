@@ -49,4 +49,49 @@
 
 .ui-page-header__text { display: flex; flex-direction: column; gap: var(--space-component-title);
 }
+
+.ui-list-item { padding: var(--space-component-pad-y) var(--space-component-pad-x); border-radius: var(--radius-md); flex-wrap: nowrap;
+}
+.ui-list-item.is-clickable { cursor: pointer;
+}
+.ui-list-item.is-clickable:hover { background: var(--color-bg-subtle);
+}
+.ui-list-item__main { flex: 1 1 auto; min-width: 0; white-space: normal;
+}
+.ui-list-item__avatar { flex: none; background: var(--color-bg-accent); color: var(--color-primary); font-weight: var(--font-weight-medium);
+}
+.ui-list-item__text { flex: 1 1 auto; gap: var(--space-component-title); min-width: 0;
+}
+.ui-list-item__title { font-weight: var(--font-weight-medium); color: var(--color-text-default); overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+}
+.ui-list-item__subtitle { overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+}
+.ui-list-item__trailing { flex: none;
+}
+
+.ui-filter-bar__filters { flex: 1; min-width: 0;
+}
+.ui-filter-bar__actions { flex: none;
+}
+
+.ui-stat-card { display: flex; flex-direction: column; gap: var(--space-component-title);
+}
+.ui-stat-card__label { font-size: var(--font-size-caption); color: var(--color-text-muted);
+}
+.ui-stat-card__value { align-items: baseline;
+}
+.ui-stat-card__num { font-size: var(--font-size-page-title); font-weight: var(--font-weight-bold); line-height: var(--line-height-tight); color: var(--color-text-default);
+}
+.ui-stat-card__unit { font-size: var(--font-size-caption); color: var(--color-text-secondary);
+}
+.ui-stat-card__trend { font-size: var(--font-size-caption); font-weight: var(--font-weight-medium); padding: 0 var(--space-inline-pad); border-radius: var(--radius-sm);
+}
+.ui-stat-card__trend.is-good { color: var(--color-success); background: color-mix(in srgb, var(--color-success) 12%, var(--color-bg-surface));
+}
+.ui-stat-card__trend.is-bad { color: var(--color-danger); background: color-mix(in srgb, var(--color-danger) 12%, var(--color-bg-surface));
+}
+.ui-stat-card__trend.is-flat { color: var(--color-text-muted); background: var(--color-bg-muted);
+}
+.ui-stat-card__hint { color: var(--color-text-muted);
+}
 /*$vite$:1*/
