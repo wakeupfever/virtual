@@ -1,0 +1,36 @@
+/* =====================================================================
+ * design-system/base.css · 第一层 · 全局基础样式
+ * ---------------------------------------------------------------------
+ * reset + 字体 + 页面底色。原型与正式项目引用同一文件，保证基线一致。
+ * 注意：正式项目中 Tailwind 的 preflight 被关闭（见 apps/web/src/style.css），
+ * 全局 reset 只以本文件为准，避免覆盖 Element Plus 样式。
+ * ===================================================================== */
+
+*, *::before, *::after { box-sizing: border-box; }
+
+html {
+  font-family: var(--font-family);
+  font-size: var(--font-size-body);
+  line-height: var(--line-height-body);
+  color: var(--color-text-default);
+  background: var(--color-bg-page);
+  -webkit-font-smoothing: antialiased;
+  text-size-adjust: 100%;
+}
+
+body { margin: 0; min-height: 100vh; }
+
+h1, h2, h3, h4, p { margin: 0; font-weight: var(--font-weight-regular); }
+
+h1 { font-size: var(--font-size-page-title); font-weight: var(--font-weight-bold); line-height: var(--line-height-tight); }
+h2 { font-size: var(--font-size-module-title); font-weight: var(--font-weight-medium); line-height: var(--line-height-tight); }
+h3 { font-size: var(--font-size-body); font-weight: var(--font-weight-medium); }
+
+small, .text-caption { font-size: var(--font-size-caption); color: var(--color-text-muted); }
+
+a { color: var(--color-primary); text-decoration: none; }
+a:hover { color: var(--color-primary-hover); }
+
+img, svg { display: block; max-width: 100%; }
+
+code, pre { font-family: var(--font-family-mono); }

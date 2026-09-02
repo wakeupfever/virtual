@@ -1,0 +1,9 @@
+node_modules/
+.pnpm-store/
+*.log
+.DS_Store
+# dist/ui.iife.js 与 dist/ui.css 需提交：原型直接引用，不依赖本地构建
+apps/*/dist/
+
+# 待删除的临时备份包
+_to_delete/

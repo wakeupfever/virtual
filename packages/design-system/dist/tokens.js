@@ -1,0 +1,1157 @@
+/* 由 scripts/build-tokens.mjs 自动生成，勿手改；真值在 tokens.css */
+window.DS_TOKENS = {
+  "generatedAt": "2026-09-02T09:33:33.967Z",
+  "source": "tokens.css",
+  "groups": [
+    {
+      "id": "color",
+      "title": "颜色 · 语义",
+      "kind": "color",
+      "layer": "semantic",
+      "tokens": [
+        {
+          "name": "--color-bg-page",
+          "value": "var(--palette-white)",
+          "comment": "浅色下页面底为纯白，靠卡片边框 / 轻阴影分层",
+          "dark": "var(--palette-gray-950)"
+        },
+        {
+          "name": "--color-bg-surface",
+          "value": "var(--palette-white)",
+          "comment": "",
+          "dark": "var(--palette-gray-900)"
+        },
+        {
+          "name": "--color-bg-subtle",
+          "value": "var(--palette-gray-50)",
+          "comment": "斑马纹、hover 行",
+          "dark": "#1b2b32"
+        },
+        {
+          "name": "--color-bg-muted",
+          "value": "var(--palette-gray-100)",
+          "comment": "禁用、次级填充",
+          "dark": "#22353d"
+        },
+        {
+          "name": "--color-bg-accent",
+          "value": "var(--palette-cyan-50)",
+          "comment": "主色柔和底：选中行、强调面板",
+          "dark": "#0f3040"
+        },
+        {
+          "name": "--color-bg-overlay",
+          "value": "var(--palette-white)",
+          "comment": "",
+          "dark": "var(--palette-gray-900)"
+        },
+        {
+          "name": "--color-bg-mask",
+          "value": "rgba(0, 0, 0, 0.5)",
+          "comment": "",
+          "dark": "rgba(0, 0, 0, 0.7)"
+        },
+        {
+          "name": "--color-text-default",
+          "value": "var(--palette-gray-800)",
+          "comment": "",
+          "dark": "#e3edf0"
+        },
+        {
+          "name": "--color-text-secondary",
+          "value": "var(--palette-gray-600)",
+          "comment": "",
+          "dark": "#c3d3d9"
+        },
+        {
+          "name": "--color-text-muted",
+          "value": "var(--palette-gray-500)",
+          "comment": "",
+          "dark": "#8fa6ae"
+        },
+        {
+          "name": "--color-text-placeholder",
+          "value": "var(--palette-gray-400)",
+          "comment": "",
+          "dark": "#6b8590"
+        },
+        {
+          "name": "--color-text-inverse",
+          "value": "var(--palette-white)",
+          "comment": "",
+          "dark": "var(--palette-gray-900)"
+        },
+        {
+          "name": "--color-border-default",
+          "value": "var(--palette-gray-300)",
+          "comment": "",
+          "dark": "#2f454e"
+        },
+        {
+          "name": "--color-border-muted",
+          "value": "var(--palette-gray-200)",
+          "comment": "",
+          "dark": "#263a42"
+        },
+        {
+          "name": "--color-icon-default",
+          "value": "var(--palette-gray-600)",
+          "comment": "",
+          "dark": "#c3d3d9"
+        },
+        {
+          "name": "--color-icon-muted",
+          "value": "var(--palette-gray-500)",
+          "comment": "",
+          "dark": "#8fa6ae"
+        },
+        {
+          "name": "--color-primary",
+          "value": "var(--palette-cyan-500)",
+          "comment": "",
+          "dark": "#2f9fcf"
+        },
+        {
+          "name": "--color-primary-hover",
+          "value": "var(--palette-cyan-700)",
+          "comment": "",
+          "dark": "#5fb8de"
+        },
+        {
+          "name": "--color-success",
+          "value": "var(--palette-green-500)",
+          "comment": "",
+          "dark": null
+        },
+        {
+          "name": "--color-warning",
+          "value": "var(--palette-amber-500)",
+          "comment": "",
+          "dark": null
+        },
+        {
+          "name": "--color-danger",
+          "value": "var(--palette-red-500)",
+          "comment": "",
+          "dark": null
+        },
+        {
+          "name": "--color-danger-hover",
+          "value": "var(--palette-red-600)",
+          "comment": "",
+          "dark": null
+        },
+        {
+          "name": "--color-info",
+          "value": "var(--palette-gray-600)",
+          "comment": "",
+          "dark": null
+        }
+      ]
+    },
+    {
+      "id": "space",
+      "title": "间距 · 作用域 × 关系",
+      "kind": "length",
+      "layer": "semantic",
+      "tokens": [
+        {
+          "name": "--space-page-gap",
+          "value": "calc(var(--space-10) * var(--density))",
+          "comment": "",
+          "dark": null
+        },
+        {
+          "name": "--space-page-pad-x",
+          "value": "calc(var(--space-8) * var(--density))",
+          "comment": "",
+          "dark": null
+        },
+        {
+          "name": "--space-page-pad-y",
+          "value": "calc(var(--space-6) * var(--density))",
+          "comment": "",
+          "dark": null
+        },
+        {
+          "name": "--space-page-title",
+          "value": "calc(var(--space-6) * var(--density))",
+          "comment": "",
+          "dark": null
+        },
+        {
+          "name": "--space-module-gap",
+          "value": "calc(var(--space-6) * var(--density))",
+          "comment": "",
+          "dark": null
+        },
+        {
+          "name": "--space-module-pad",
+          "value": "calc(var(--space-6) * var(--density))",
+          "comment": "",
+          "dark": null
+        },
+        {
+          "name": "--space-module-title",
+          "value": "calc(var(--space-4) * var(--density))",
+          "comment": "",
+          "dark": null
+        },
+        {
+          "name": "--space-component-gap",
+          "value": "calc(var(--space-3) * var(--density))",
+          "comment": "",
+          "dark": null
+        },
+        {
+          "name": "--space-component-pad-x",
+          "value": "calc(var(--space-4) * var(--density))",
+          "comment": "",
+          "dark": null
+        },
+        {
+          "name": "--space-component-pad-y",
+          "value": "calc(var(--space-2) * var(--density))",
+          "comment": "",
+          "dark": null
+        },
+        {
+          "name": "--space-component-title",
+          "value": "calc(var(--space-2) * var(--density))",
+          "comment": "",
+          "dark": null
+        },
+        {
+          "name": "--space-inline-gap",
+          "value": "var(--space-2)",
+          "comment": "",
+          "dark": null
+        },
+        {
+          "name": "--space-inline-pad",
+          "value": "var(--space-1)",
+          "comment": "",
+          "dark": null
+        }
+      ]
+    },
+    {
+      "id": "layout",
+      "title": "布局尺寸",
+      "kind": "length",
+      "layer": "semantic",
+      "tokens": [
+        {
+          "name": "--layout-sidebar-w",
+          "value": "240px",
+          "comment": "",
+          "dark": null
+        },
+        {
+          "name": "--layout-sidebar-w-collapsed",
+          "value": "64px",
+          "comment": "",
+          "dark": null
+        },
+        {
+          "name": "--layout-header-h",
+          "value": "56px",
+          "comment": "",
+          "dark": null
+        },
+        {
+          "name": "--layout-content-max",
+          "value": "1440px",
+          "comment": "",
+          "dark": null
+        },
+        {
+          "name": "--layout-content-pad",
+          "value": "var(--space-page-pad-x)",
+          "comment": "",
+          "dark": null
+        },
+        {
+          "name": "--layout-form-label-w",
+          "value": "120px",
+          "comment": "",
+          "dark": null
+        },
+        {
+          "name": "--layout-control-w",
+          "value": "200px",
+          "comment": "工具条中输入框 / 下拉的默认宽",
+          "dark": null
+        },
+        {
+          "name": "--layout-control-w-sm",
+          "value": "120px",
+          "comment": "",
+          "dark": null
+        },
+        {
+          "name": "--grid-cols",
+          "value": "12",
+          "comment": "",
+          "dark": null
+        },
+        {
+          "name": "--grid-gap",
+          "value": "var(--space-module-gap)",
+          "comment": "",
+          "dark": null
+        },
+        {
+          "name": "--breakpoint-md",
+          "value": "768px",
+          "comment": "",
+          "dark": null
+        },
+        {
+          "name": "--breakpoint-lg",
+          "value": "1200px",
+          "comment": "",
+          "dark": null
+        }
+      ]
+    },
+    {
+      "id": "z",
+      "title": "层级",
+      "kind": "number",
+      "layer": "semantic",
+      "tokens": [
+        {
+          "name": "--z-header",
+          "value": "100",
+          "comment": "",
+          "dark": null
+        },
+        {
+          "name": "--z-sidebar",
+          "value": "110",
+          "comment": "",
+          "dark": null
+        },
+        {
+          "name": "--z-drawer",
+          "value": "200",
+          "comment": "",
+          "dark": null
+        },
+        {
+          "name": "--z-dialog",
+          "value": "300",
+          "comment": "",
+          "dark": null
+        },
+        {
+          "name": "--z-toast",
+          "value": "400",
+          "comment": "",
+          "dark": null
+        }
+      ]
+    },
+    {
+      "id": "font",
+      "title": "字体",
+      "kind": "font",
+      "layer": "semantic",
+      "tokens": [
+        {
+          "name": "--font-family",
+          "value": "\"Helvetica Neue\", Helvetica, \"PingFang SC\", \"Hiragino Sans GB\",\n    \"Microsoft YaHei\", \"微软雅黑\", Arial, sans-serif",
+          "comment": "",
+          "dark": null
+        },
+        {
+          "name": "--font-family-mono",
+          "value": "ui-monospace, SFMono-Regular, Menlo, Consolas, monospace",
+          "comment": "",
+          "dark": null
+        },
+        {
+          "name": "--font-size-page-title",
+          "value": "20px",
+          "comment": "",
+          "dark": null
+        },
+        {
+          "name": "--font-size-module-title",
+          "value": "16px",
+          "comment": "",
+          "dark": null
+        },
+        {
+          "name": "--font-size-body",
+          "value": "14px",
+          "comment": "",
+          "dark": null
+        },
+        {
+          "name": "--font-size-caption",
+          "value": "12px",
+          "comment": "",
+          "dark": null
+        },
+        {
+          "name": "--line-height-tight",
+          "value": "1.3",
+          "comment": "",
+          "dark": null
+        },
+        {
+          "name": "--line-height-body",
+          "value": "1.6",
+          "comment": "",
+          "dark": null
+        },
+        {
+          "name": "--font-weight-regular",
+          "value": "400",
+          "comment": "",
+          "dark": null
+        },
+        {
+          "name": "--font-weight-medium",
+          "value": "500",
+          "comment": "",
+          "dark": null
+        },
+        {
+          "name": "--font-weight-bold",
+          "value": "600",
+          "comment": "",
+          "dark": null
+        }
+      ]
+    },
+    {
+      "id": "radius",
+      "title": "圆角",
+      "kind": "radius",
+      "layer": "semantic",
+      "tokens": [
+        {
+          "name": "--radius-sm",
+          "value": "3px",
+          "comment": "",
+          "dark": null
+        },
+        {
+          "name": "--radius-md",
+          "value": "6px",
+          "comment": "",
+          "dark": null
+        },
+        {
+          "name": "--radius-lg",
+          "value": "10px",
+          "comment": "",
+          "dark": null
+        },
+        {
+          "name": "--radius-full",
+          "value": "9999px",
+          "comment": "",
+          "dark": null
+        }
+      ]
+    },
+    {
+      "id": "shadow",
+      "title": "阴影",
+      "kind": "shadow",
+      "layer": "semantic",
+      "tokens": [
+        {
+          "name": "--shadow-sm",
+          "value": "0 1px 3px rgba(48, 72, 83, 0.08)",
+          "comment": "",
+          "dark": "0 1px 2px rgba(0, 0, 0, 0.4)"
+        },
+        {
+          "name": "--shadow-md",
+          "value": "0 6px 16px rgba(48, 72, 83, 0.08)",
+          "comment": "",
+          "dark": "0 6px 16px rgba(0, 0, 0, 0.5)"
+        },
+        {
+          "name": "--shadow-lg",
+          "value": "0 12px 32px rgba(48, 72, 83, 0.12)",
+          "comment": "",
+          "dark": "0 12px 32px rgba(0, 0, 0, 0.6)"
+        }
+      ]
+    },
+    {
+      "id": "border",
+      "title": "边框",
+      "kind": "length",
+      "layer": "semantic",
+      "tokens": [
+        {
+          "name": "--border-w",
+          "value": "1px",
+          "comment": "",
+          "dark": null
+        },
+        {
+          "name": "--border-w-thick",
+          "value": "2px",
+          "comment": "",
+          "dark": null
+        }
+      ]
+    },
+    {
+      "id": "density",
+      "title": "密度系数",
+      "kind": "number",
+      "layer": "semantic",
+      "tokens": [
+        {
+          "name": "--density",
+          "value": "1",
+          "comment": "",
+          "dark": null
+        }
+      ]
+    },
+    {
+      "id": "raw-space",
+      "title": "原始刻度 · 间距（禁止直接引用）",
+      "kind": "length",
+      "layer": "raw",
+      "tokens": [
+        {
+          "name": "--space-1",
+          "value": "4px",
+          "comment": "",
+          "dark": null
+        },
+        {
+          "name": "--space-2",
+          "value": "8px",
+          "comment": "",
+          "dark": null
+        },
+        {
+          "name": "--space-3",
+          "value": "12px",
+          "comment": "",
+          "dark": null
+        },
+        {
+          "name": "--space-4",
+          "value": "16px",
+          "comment": "",
+          "dark": null
+        },
+        {
+          "name": "--space-5",
+          "value": "20px",
+          "comment": "",
+          "dark": null
+        },
+        {
+          "name": "--space-6",
+          "value": "24px",
+          "comment": "",
+          "dark": null
+        },
+        {
+          "name": "--space-8",
+          "value": "32px",
+          "comment": "",
+          "dark": null
+        },
+        {
+          "name": "--space-10",
+          "value": "40px",
+          "comment": "",
+          "dark": null
+        },
+        {
+          "name": "--space-12",
+          "value": "48px",
+          "comment": "",
+          "dark": null
+        },
+        {
+          "name": "--space-16",
+          "value": "64px",
+          "comment": "",
+          "dark": null
+        }
+      ]
+    },
+    {
+      "id": "raw-palette",
+      "title": "原始刻度 · 色板（禁止直接引用）",
+      "kind": "color",
+      "layer": "raw",
+      "tokens": [
+        {
+          "name": "--palette-white",
+          "value": "#ffffff",
+          "comment": "",
+          "dark": null
+        },
+        {
+          "name": "--palette-gray-50",
+          "value": "#f7f9f9",
+          "comment": "",
+          "dark": null
+        },
+        {
+          "name": "--palette-gray-100",
+          "value": "#f0f3f4",
+          "comment": "",
+          "dark": null
+        },
+        {
+          "name": "--palette-gray-200",
+          "value": "#e6e8e8",
+          "comment": "",
+          "dark": null
+        },
+        {
+          "name": "--palette-gray-300",
+          "value": "#d5dcdf",
+          "comment": "",
+          "dark": null
+        },
+        {
+          "name": "--palette-gray-400",
+          "value": "#b9c7cc",
+          "comment": "",
+          "dark": null
+        },
+        {
+          "name": "--palette-gray-500",
+          "value": "#7c858a",
+          "comment": "",
+          "dark": null
+        },
+        {
+          "name": "--palette-gray-600",
+          "value": "#4e6d7b",
+          "comment": "",
+          "dark": null
+        },
+        {
+          "name": "--palette-gray-800",
+          "value": "#304853",
+          "comment": "",
+          "dark": null
+        },
+        {
+          "name": "--palette-gray-900",
+          "value": "#16242a",
+          "comment": "",
+          "dark": null
+        },
+        {
+          "name": "--palette-gray-950",
+          "value": "#0f1a1e",
+          "comment": "",
+          "dark": null
+        },
+        {
+          "name": "--palette-cyan-500",
+          "value": "#0076a3",
+          "comment": "科技青 · 主色（参考 HY Compiler Studio technology-cyan）",
+          "dark": null
+        },
+        {
+          "name": "--palette-cyan-700",
+          "value": "#00486a",
+          "comment": "科技青 · 强调 / hover",
+          "dark": null
+        },
+        {
+          "name": "--palette-cyan-50",
+          "value": "#e8f4f7",
+          "comment": "科技青 · 柔和底",
+          "dark": null
+        },
+        {
+          "name": "--palette-green-500",
+          "value": "#0cc778",
+          "comment": "",
+          "dark": null
+        },
+        {
+          "name": "--palette-amber-500",
+          "value": "#f7ba2a",
+          "comment": "",
+          "dark": null
+        },
+        {
+          "name": "--palette-red-500",
+          "value": "#e0464b",
+          "comment": "",
+          "dark": null
+        },
+        {
+          "name": "--palette-red-600",
+          "value": "#b93338",
+          "comment": "",
+          "dark": null
+        }
+      ]
+    },
+    {
+      "id": "el",
+      "title": "Element Plus 变量映射（由第一层驱动，禁止在第三层修改）",
+      "kind": "mapping",
+      "layer": "mapping",
+      "tokens": [
+        {
+          "name": "--el-color-primary",
+          "value": "var(--color-primary)",
+          "comment": "",
+          "dark": null
+        },
+        {
+          "name": "--el-color-primary-light-3",
+          "value": "color-mix(in srgb, var(--color-primary) 70%, var(--color-bg-surface))",
+          "comment": "",
+          "dark": null
+        },
+        {
+          "name": "--el-color-primary-light-5",
+          "value": "color-mix(in srgb, var(--color-primary) 50%, var(--color-bg-surface))",
+          "comment": "",
+          "dark": null
+        },
+        {
+          "name": "--el-color-primary-light-7",
+          "value": "color-mix(in srgb, var(--color-primary) 30%, var(--color-bg-surface))",
+          "comment": "",
+          "dark": null
+        },
+        {
+          "name": "--el-color-primary-light-8",
+          "value": "color-mix(in srgb, var(--color-primary) 20%, var(--color-bg-surface))",
+          "comment": "",
+          "dark": null
+        },
+        {
+          "name": "--el-color-primary-light-9",
+          "value": "color-mix(in srgb, var(--color-bg-accent) 85%, var(--color-bg-surface))",
+          "comment": "",
+          "dark": null
+        },
+        {
+          "name": "--el-color-primary-dark-2",
+          "value": "var(--color-primary-hover)",
+          "comment": "",
+          "dark": null
+        },
+        {
+          "name": "--el-color-success",
+          "value": "var(--color-success)",
+          "comment": "",
+          "dark": null
+        },
+        {
+          "name": "--el-color-warning",
+          "value": "var(--color-warning)",
+          "comment": "",
+          "dark": null
+        },
+        {
+          "name": "--el-color-danger",
+          "value": "var(--color-danger)",
+          "comment": "",
+          "dark": null
+        },
+        {
+          "name": "--el-color-error",
+          "value": "var(--color-danger)",
+          "comment": "",
+          "dark": null
+        },
+        {
+          "name": "--el-color-info",
+          "value": "var(--color-info)",
+          "comment": "",
+          "dark": null
+        },
+        {
+          "name": "--el-color-white",
+          "value": "var(--color-bg-surface)",
+          "comment": "",
+          "dark": null
+        },
+        {
+          "name": "--el-color-black",
+          "value": "var(--color-text-default)",
+          "comment": "",
+          "dark": null
+        },
+        {
+          "name": "--el-bg-color",
+          "value": "var(--color-bg-surface)",
+          "comment": "",
+          "dark": null
+        },
+        {
+          "name": "--el-bg-color-page",
+          "value": "var(--color-bg-page)",
+          "comment": "",
+          "dark": null
+        },
+        {
+          "name": "--el-bg-color-overlay",
+          "value": "var(--color-bg-overlay)",
+          "comment": "",
+          "dark": null
+        },
+        {
+          "name": "--el-fill-color",
+          "value": "var(--color-bg-muted)",
+          "comment": "",
+          "dark": null
+        },
+        {
+          "name": "--el-fill-color-light",
+          "value": "var(--color-bg-subtle)",
+          "comment": "",
+          "dark": null
+        },
+        {
+          "name": "--el-fill-color-lighter",
+          "value": "var(--color-bg-subtle)",
+          "comment": "",
+          "dark": null
+        },
+        {
+          "name": "--el-fill-color-extra-light",
+          "value": "var(--color-bg-subtle)",
+          "comment": "",
+          "dark": null
+        },
+        {
+          "name": "--el-fill-color-dark",
+          "value": "var(--color-bg-muted)",
+          "comment": "",
+          "dark": null
+        },
+        {
+          "name": "--el-fill-color-darker",
+          "value": "var(--color-border-muted)",
+          "comment": "",
+          "dark": null
+        },
+        {
+          "name": "--el-fill-color-blank",
+          "value": "var(--color-bg-surface)",
+          "comment": "",
+          "dark": null
+        },
+        {
+          "name": "--el-mask-color",
+          "value": "var(--color-bg-mask)",
+          "comment": "",
+          "dark": null
+        },
+        {
+          "name": "--el-overlay-color-lighter",
+          "value": "var(--color-bg-mask)",
+          "comment": "",
+          "dark": null
+        },
+        {
+          "name": "--el-text-color-primary",
+          "value": "var(--color-text-default)",
+          "comment": "",
+          "dark": null
+        },
+        {
+          "name": "--el-text-color-regular",
+          "value": "var(--color-text-secondary)",
+          "comment": "",
+          "dark": null
+        },
+        {
+          "name": "--el-text-color-secondary",
+          "value": "var(--color-text-muted)",
+          "comment": "",
+          "dark": null
+        },
+        {
+          "name": "--el-text-color-placeholder",
+          "value": "var(--color-text-placeholder)",
+          "comment": "",
+          "dark": null
+        },
+        {
+          "name": "--el-text-color-disabled",
+          "value": "var(--color-text-placeholder)",
+          "comment": "",
+          "dark": null
+        },
+        {
+          "name": "--el-border-color",
+          "value": "var(--color-border-default)",
+          "comment": "",
+          "dark": null
+        },
+        {
+          "name": "--el-border-color-light",
+          "value": "var(--color-border-muted)",
+          "comment": "",
+          "dark": null
+        },
+        {
+          "name": "--el-border-color-lighter",
+          "value": "var(--color-border-muted)",
+          "comment": "",
+          "dark": null
+        },
+        {
+          "name": "--el-border-color-extra-light",
+          "value": "var(--color-border-muted)",
+          "comment": "",
+          "dark": null
+        },
+        {
+          "name": "--el-border-color-dark",
+          "value": "var(--color-border-default)",
+          "comment": "",
+          "dark": null
+        },
+        {
+          "name": "--el-border-color-darker",
+          "value": "var(--color-border-default)",
+          "comment": "",
+          "dark": null
+        },
+        {
+          "name": "--el-disabled-bg-color",
+          "value": "var(--color-bg-muted)",
+          "comment": "",
+          "dark": null
+        },
+        {
+          "name": "--el-disabled-text-color",
+          "value": "var(--color-text-placeholder)",
+          "comment": "",
+          "dark": null
+        },
+        {
+          "name": "--el-disabled-border-color",
+          "value": "var(--color-border-muted)",
+          "comment": "",
+          "dark": null
+        },
+        {
+          "name": "--el-border-width",
+          "value": "var(--border-w)",
+          "comment": "",
+          "dark": null
+        },
+        {
+          "name": "--el-border-radius-base",
+          "value": "var(--radius-md)",
+          "comment": "",
+          "dark": null
+        },
+        {
+          "name": "--el-border-radius-small",
+          "value": "var(--radius-sm)",
+          "comment": "",
+          "dark": null
+        },
+        {
+          "name": "--el-border-radius-round",
+          "value": "var(--radius-full)",
+          "comment": "",
+          "dark": null
+        },
+        {
+          "name": "--el-font-family",
+          "value": "var(--font-family)",
+          "comment": "",
+          "dark": null
+        },
+        {
+          "name": "--el-font-size-base",
+          "value": "var(--font-size-body)",
+          "comment": "",
+          "dark": null
+        },
+        {
+          "name": "--el-font-size-small",
+          "value": "var(--font-size-caption)",
+          "comment": "",
+          "dark": null
+        },
+        {
+          "name": "--el-font-size-medium",
+          "value": "var(--font-size-module-title)",
+          "comment": "",
+          "dark": null
+        },
+        {
+          "name": "--el-font-size-large",
+          "value": "var(--font-size-page-title)",
+          "comment": "",
+          "dark": null
+        },
+        {
+          "name": "--el-font-weight-primary",
+          "value": "var(--font-weight-medium)",
+          "comment": "",
+          "dark": null
+        },
+        {
+          "name": "--el-box-shadow",
+          "value": "var(--shadow-md)",
+          "comment": "",
+          "dark": null
+        },
+        {
+          "name": "--el-box-shadow-light",
+          "value": "var(--shadow-sm)",
+          "comment": "",
+          "dark": null
+        },
+        {
+          "name": "--el-box-shadow-dark",
+          "value": "var(--shadow-lg)",
+          "comment": "",
+          "dark": null
+        },
+        {
+          "name": "--el-index-normal",
+          "value": "1",
+          "comment": "",
+          "dark": null
+        },
+        {
+          "name": "--el-index-top",
+          "value": "var(--z-header)",
+          "comment": "",
+          "dark": null
+        },
+        {
+          "name": "--el-index-popper",
+          "value": "var(--z-dialog)",
+          "comment": "",
+          "dark": null
+        }
+      ]
+    }
+  ],
+  "whitelist": {
+    "$comment": "第二层白名单：第三层（原型、正式页面、展示页）只能使用以下标签。check-prototype.js 与 ESLint 共用本文件。修改需先提议。",
+    "elementPlus": [
+      "el-button",
+      "el-button-group",
+      "el-input",
+      "el-input-number",
+      "el-select",
+      "el-option",
+      "el-checkbox",
+      "el-checkbox-group",
+      "el-radio",
+      "el-radio-group",
+      "el-switch",
+      "el-date-picker",
+      "el-form",
+      "el-form-item",
+      "el-table",
+      "el-table-column",
+      "el-pagination",
+      "el-dialog",
+      "el-drawer",
+      "el-tabs",
+      "el-tab-pane",
+      "el-tag",
+      "el-badge",
+      "el-skeleton",
+      "el-empty"
+    ],
+    "custom": [
+      "ui-shell",
+      "ui-page-header",
+      "ui-state"
+    ],
+    "html": [
+      "div",
+      "span",
+      "section",
+      "main",
+      "header",
+      "footer",
+      "nav",
+      "aside",
+      "h1",
+      "h2",
+      "h3",
+      "p",
+      "small",
+      "strong",
+      "em",
+      "a",
+      "ul",
+      "ol",
+      "li",
+      "img",
+      "svg",
+      "path",
+      "template",
+      "code",
+      "pre",
+      "label"
+    ],
+    "commands": [
+      "ElMessage",
+      "ElMessageBox",
+      "ElNotification",
+      "ElLoading"
+    ]
+  },
+  "unassigned": [],
+  "overrides": {
+    "[data-density=\"compact\"]": {
+      "--density": "0.75"
+    },
+    "[data-density=\"loose\"]": {
+      "--density": "1.25"
+    },
+    "[data-theme=\"dark\"]": {
+      "--color-bg-page": "var(--palette-gray-950)",
+      "--color-bg-surface": "var(--palette-gray-900)",
+      "--color-bg-subtle": "#1b2b32",
+      "--color-bg-muted": "#22353d",
+      "--color-bg-accent": "#0f3040",
+      "--color-bg-overlay": "var(--palette-gray-900)",
+      "--color-bg-mask": "rgba(0, 0, 0, 0.7)",
+      "--color-primary": "#2f9fcf",
+      "--color-primary-hover": "#5fb8de",
+      "--color-text-default": "#e3edf0",
+      "--color-text-secondary": "#c3d3d9",
+      "--color-text-muted": "#8fa6ae",
+      "--color-text-placeholder": "#6b8590",
+      "--color-text-inverse": "var(--palette-gray-900)",
+      "--color-border-default": "#2f454e",
+      "--color-border-muted": "#263a42",
+      "--color-icon-default": "#c3d3d9",
+      "--color-icon-muted": "#8fa6ae",
+      "--shadow-sm": "0 1px 2px rgba(0, 0, 0, 0.4)",
+      "--shadow-md": "0 6px 16px rgba(0, 0, 0, 0.5)",
+      "--shadow-lg": "0 12px 32px rgba(0, 0, 0, 0.6)"
+    }
+  },
+  "counts": {
+    "semantic": 74,
+    "raw": 28,
+    "mapping": 56
+  }
+};

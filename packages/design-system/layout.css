@@ -1,0 +1,144 @@
+/* =====================================================================
+ * design-system/layout.css · 第一层 · 无行为布局类
+ * ---------------------------------------------------------------------
+ * 纯 CSS，无 JS。只引用 tokens.css 的语义 token，不写任何数值。
+ * 第三层禁止手写 display:flex / grid，只能组合下列 .l-* 类。
+ * 冻结级别与第二层相同：改动需先提议确认。
+ * ===================================================================== */
+
+/* ---- 页面级 ---- */
+
+/* 内容区容器：最大宽度 + 页面内边距，居中 */
+.l-page {
+  max-width: var(--layout-content-max);
+  margin-inline: auto;
+  padding: var(--space-page-pad-y) var(--space-page-pad-x);
+}
+
+/* 页面级区块：区块之间用 page-gap */
+.l-page > * + * { margin-top: var(--space-page-gap); }
+
+/* 页头：标题与操作区左右分布，下方留 page-title 间距 */
+.l-page-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-component-gap);
+  margin-bottom: var(--space-page-title);
+}
+
+/* ---- 模块级 ---- */
+
+/* 模块容器（卡片/面板）：表面色 + 模块内边距 */
+.l-module {
+  background: var(--color-bg-surface);
+  border: var(--border-w) solid var(--color-border-muted);
+  border-radius: var(--radius-lg);
+  padding: var(--space-module-pad);
+}
+
+/* 模块标题行：标题到内容留 module-title 间距 */
+.l-module-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-component-gap);
+  margin-bottom: var(--space-module-title);
+}
+
+/* 纵向堆叠：默认模块间距 */
+.l-stack { display: flex; flex-direction: column; gap: var(--space-module-gap); }
+.l-stack--tight { gap: var(--space-component-gap); }
+.l-stack--loose { gap: var(--space-page-gap); }
+
+/* 栅格：默认 12 列，或指定列数 */
+.l-grid {
+  display: grid;
+  grid-template-columns: repeat(var(--grid-cols), minmax(0, 1fr));
+  gap: var(--grid-gap);
+}
+.l-grid--cols-2 { --grid-cols: 2; }
+.l-grid--cols-3 { --grid-cols: 3; }
+.l-grid--cols-4 { --grid-cols: 4; }
+.l-grid--tight { --grid-gap: var(--space-component-gap); }
+
+/* 栅格子项跨列 */
+.l-span-2 { grid-column: span 2; }
+.l-span-3 { grid-column: span 3; }
+.l-span-4 { grid-column: span 4; }
+.l-span-6 { grid-column: span 6; }
+.l-span-8 { grid-column: span 8; }
+.l-span-12 { grid-column: span 12; }
+
+/* 左右分栏：侧栏固定宽 + 主区自适应 */
+.l-split {
+  display: grid;
+  grid-template-columns: var(--layout-sidebar-w) minmax(0, 1fr);
+  gap: var(--space-module-gap);
+}
+.l-split--reverse { grid-template-columns: minmax(0, 1fr) var(--layout-sidebar-w); }
+
+/* ---- 组件级 ---- */
+
+/* 横向排列、可换行：按钮组、标签组、筛选条 */
+.l-cluster {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-component-gap);
+}
+.l-cluster--end { justify-content: flex-end; }
+.l-cluster--between { justify-content: space-between; }
+
+/* 工具条：左侧筛选 / 右侧操作 */
+.l-toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-component-gap);
+  margin-bottom: var(--space-module-title);
+}
+
+/* 表单区块：label 列宽由 token 决定 */
+.l-form { --el-form-label-width: var(--layout-form-label-w); }
+
+/* 工具条 / 横向组内的输入控件：固定默认宽，避免在 flex 中撑满或塌陷 */
+.l-cluster > .el-input,
+.l-cluster > .el-select,
+.l-cluster > .el-date-editor,
+.l-toolbar > .el-input,
+.l-toolbar > .el-select { width: var(--layout-control-w); flex: none; }
+
+/* ---- 行内级 ---- */
+
+/* 图标 + 文字、标签 + 值 */
+.l-inline {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-inline-gap);
+  white-space: nowrap;
+}
+.l-inline > * { flex: none; }
+.l-inline > .el-select,
+.l-inline > .el-input { width: var(--layout-control-w-sm); }
+
+/* ---- 状态容器（loading / empty / error 占位） ---- */
+.l-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-component-gap);
+  padding: var(--space-page-gap) var(--space-module-pad);
+  color: var(--color-text-muted);
+  text-align: center;
+}
+
+/* ---- 响应式：中屏以下栅格与分栏降级为单列 ---- */
+@media (max-width: 768px) {
+  .l-grid,
+  .l-split,
+  .l-split--reverse { grid-template-columns: minmax(0, 1fr); }
+  .l-span-2, .l-span-3, .l-span-4, .l-span-6, .l-span-8, .l-span-12 { grid-column: auto; }
+  .l-page { padding-inline: var(--space-module-pad); }
+}

@@ -1,0 +1,511 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>设计系统 · 设计变量 / 组件物料 / 布局范式</title>
+
+<!-- 依赖顺序与原型模板一致；版本必须与 package.json 一致 -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/element-plus@2.14.5/dist/index.css">
+<link rel="stylesheet" href="./tokens.css">
+<link rel="stylesheet" href="./layout.css">
+<link rel="stylesheet" href="./base.css">
+<link rel="stylesheet" href="./dist/ui.css">
+<script src="https://cdn.jsdelivr.net/npm/vue@3.5.42/dist/vue.global.prod.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/element-plus@2.14.5/dist/index.full.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/element-plus@2.14.5/dist/locale/zh-cn.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@element-plus/icons-vue@2.3.2/dist/index.iife.min.js"></script>
+<script src="./dist/ui.iife.js"></script>
+<script src="./dist/tokens.js"></script>
+
+<!-- 本页是 design-system 包内部的文档站，允许 <style> 与 :style；所有值仍只引用 token -->
+<style>
+  :root { --ds-content-max: 1200px; --ds-content-max-wide: 1560px; --ds-side-w: 220px; --ds-toc-w: 200px; --ds-card-min: 440px; }
+
+  /* 外壳 */
+  .ds-top { position: sticky; top: 0; z-index: var(--z-header); height: var(--layout-header-h); background: color-mix(in srgb, var(--color-bg-surface) 88%, transparent); backdrop-filter: saturate(1.4) blur(10px); border-bottom: var(--border-w) solid var(--color-border-muted); display: flex; align-items: center; gap: var(--space-page-gap); padding: 0 var(--space-page-pad-x); }
+  .ds-brand { display: flex; align-items: center; gap: var(--space-inline-gap); flex: none; white-space: nowrap; }
+  .ds-brand__mark { width: 22px; height: 22px; border-radius: var(--radius-md); background: var(--color-primary); }
+  .ds-brand__name { font-size: 15px; font-weight: var(--font-weight-bold); letter-spacing: 0.2px; }
+  .ds-brand__ver { font-size: var(--font-size-caption); color: var(--color-text-muted); margin-left: var(--space-inline-pad); }
+  .ds-tabs { display: flex; gap: var(--space-6); height: 100%; }
+  .ds-tab { display: flex; align-items: center; height: 100%; white-space: nowrap; font-size: var(--font-size-body); color: var(--color-text-secondary); border-bottom: var(--border-w-thick) solid transparent; cursor: pointer; }
+  .ds-tab:hover { color: var(--color-text-default); }
+  .ds-tab.is-active { color: var(--color-text-default); font-weight: var(--font-weight-medium); border-bottom-color: var(--color-primary); }
+  .ds-controls { margin-left: auto; display: flex; align-items: center; gap: var(--space-inline-gap); font-size: var(--font-size-caption); color: var(--color-text-secondary); }
+  .ds-seg { display: flex; border: var(--border-w) solid var(--color-border-default); border-radius: var(--radius-md); overflow: hidden; }
+  .ds-seg__item { padding: 5px 12px; cursor: pointer; user-select: none; white-space: nowrap; }
+  .ds-seg__item:hover { background: var(--color-bg-subtle); }
+  .ds-seg__item.is-active { background: var(--color-bg-muted); color: var(--color-text-default); }
+  .ds-primary { display: flex; align-items: center; gap: var(--space-inline-gap); padding: 0 var(--space-inline-gap) 0 var(--space-inline-pad); border: var(--border-w) solid var(--color-border-default); border-radius: var(--radius-md); height: 28px; font-family: var(--font-family-mono); }
+  .ds-primary .el-color-picker { --el-color-picker-size: 20px; }
+
+  .ds-body { display: flex; min-height: calc(100vh - var(--layout-header-h)); }
+  .ds-side { width: var(--ds-side-w); flex: none; position: sticky; top: var(--layout-header-h); height: calc(100vh - var(--layout-header-h)); overflow-y: auto; background: transparent; border-right: var(--border-w) solid var(--color-border-muted); padding: var(--space-module-pad) var(--space-3); display: flex; flex-direction: column; gap: 2px; font-size: 13px; }
+  .ds-side__label { font-size: 11px; color: var(--color-text-muted); padding: 0 var(--space-3) var(--space-2); letter-spacing: 0.5px; }
+  .ds-side__item { padding: 7px var(--space-3); border-radius: var(--radius-md); color: var(--color-text-secondary); cursor: pointer; display: flex; justify-content: space-between; align-items: center; }
+  .ds-side__item:hover { background: var(--color-bg-subtle); color: var(--color-text-default); }
+  .ds-side__item.is-active { background: color-mix(in srgb, var(--color-primary) 10%, var(--color-bg-surface)); color: var(--color-primary); font-weight: var(--font-weight-medium); }
+  .ds-side__item.is-dim { color: var(--color-text-muted); }
+  .ds-side__count { font-size: 11px; color: var(--color-text-placeholder); }
+  .ds-side__sep { height: var(--border-w); background: var(--color-border-muted); margin: var(--space-3); }
+  .ds-side__hint { margin-top: var(--space-4); padding: var(--space-3); border-radius: var(--radius-lg); background: var(--color-bg-page); font-size: 11px; color: var(--color-text-muted); line-height: var(--line-height-body); }
+
+  .ds-main { flex: 1; min-width: 0; display: flex; justify-content: center; padding: var(--space-12) clamp(var(--space-4), 3vw, var(--space-12)) var(--space-16); }
+  .ds-content { width: 100%; max-width: var(--ds-content-max); display: flex; flex-direction: column; gap: var(--space-14, 56px); }
+  .ds-content--wide { max-width: var(--ds-content-max-wide); }
+  .ds-toc { width: var(--ds-toc-w); flex: none; position: sticky; top: var(--layout-header-h); height: calc(100vh - var(--layout-header-h)); padding: var(--space-12) var(--space-6) 0 0; display: flex; flex-direction: column; gap: var(--space-2); font-size: var(--font-size-caption); color: var(--color-text-muted); }
+  .ds-toc__label { font-size: 11px; letter-spacing: 0.5px; margin-bottom: var(--space-1); }
+  .ds-toc__item { border-left: var(--border-w-thick) solid var(--color-border-muted); padding-left: var(--space-2); cursor: pointer; line-height: 1.5; }
+  .ds-toc__item:hover { color: var(--color-text-default); }
+  .ds-toc__item.is-active { color: var(--color-primary); border-left-color: var(--color-primary); }
+
+  /* 页头与分组 */
+  .ds-hero { display: flex; flex-direction: column; gap: var(--space-2); }
+  .ds-hero__title { font-size: 28px; font-weight: var(--font-weight-bold); letter-spacing: -0.2px; line-height: var(--line-height-tight); }
+  .ds-hero__desc { font-size: var(--font-size-body); color: var(--color-text-secondary); line-height: 1.7; max-width: 640px; }
+  .ds-hero__meta { display: flex; gap: var(--space-4); font-size: var(--font-size-caption); color: var(--color-text-muted); margin-top: var(--space-1); }
+  .ds-group { display: flex; flex-direction: column; gap: var(--space-5); scroll-margin-top: calc(var(--layout-header-h) + var(--space-6)); }
+  .ds-group__head { display: flex; align-items: baseline; gap: var(--space-3); }
+  .ds-group__title { font-size: 18px; font-weight: var(--font-weight-bold); }
+  .ds-group__sub { font-size: var(--font-size-caption); color: var(--color-text-muted); }
+  .ds-label { font-size: var(--font-size-caption); color: var(--color-text-muted); }
+  .ds-mono { font-family: var(--font-family-mono); }
+  .ds-copy { cursor: pointer; }
+  .ds-copy:hover { color: var(--color-primary); }
+
+  /* 卡片 */
+  .ds-card { background: var(--color-bg-surface); border: var(--border-w) solid var(--color-border-muted); border-radius: var(--radius-lg); box-shadow: var(--shadow-sm); }
+  .ds-card--pad { padding: var(--space-module-pad) var(--space-7, 28px); }
+
+  /* 颜色 */
+  .ds-swatches { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: var(--space-3); }
+  .ds-swatch { display: flex; flex-direction: column; overflow: hidden; cursor: pointer; }
+  .ds-swatch__plate { height: 88px; }
+  .ds-swatch__meta { padding: var(--space-2) var(--space-3); display: flex; flex-direction: column; gap: 2px; }
+  .ds-swatch__name { font-size: var(--font-size-caption); font-family: var(--font-family-mono); }
+  .ds-swatch__val { font-size: 11px; color: var(--color-text-muted); }
+  .ds-colcols { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: var(--space-6); margin-top: var(--space-2); }
+  .ds-colcol { display: flex; flex-direction: column; gap: var(--space-2); }
+  .ds-chip { display: flex; align-items: center; gap: var(--space-2); padding: var(--space-2) var(--space-2); cursor: pointer; }
+  .ds-chip__dot { width: 28px; height: 28px; border-radius: var(--radius-md); border: var(--border-w) solid var(--color-border-muted); flex: none; }
+  .ds-chip__name { font-size: var(--font-size-caption); font-family: var(--font-family-mono); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .ds-chip__val { margin-left: auto; font-size: 11px; color: var(--color-text-muted); font-family: var(--font-family-mono); white-space: nowrap; }
+
+  /* 间距矩阵 */
+  .ds-matrix { display: grid; grid-template-columns: 96px 1fr 1fr 1fr; gap: var(--space-4); align-items: center; }
+  .ds-matrix__head { font-size: 11px; color: var(--color-text-muted); }
+  .ds-matrix__scope { font-size: 13px; font-weight: var(--font-weight-medium); }
+  .ds-bar { display: flex; align-items: center; gap: var(--space-2); cursor: pointer; }
+  .ds-bar__fill { height: 12px; border-radius: 2px; background: var(--color-primary); }
+  .ds-bar--l2 .ds-bar__fill { background: color-mix(in srgb, var(--color-primary) 70%, var(--color-bg-surface)); }
+  .ds-bar--l3 .ds-bar__fill { background: color-mix(in srgb, var(--color-primary) 45%, var(--color-bg-surface)); }
+  .ds-bar--l4 .ds-bar__fill { background: color-mix(in srgb, var(--color-primary) 25%, var(--color-bg-surface)); }
+  .ds-bar__val { font-size: 11px; color: var(--color-text-secondary); font-family: var(--font-family-mono); }
+  .ds-bar__stack { display: flex; flex-direction: column; gap: 3px; }
+  .ds-matrix__foot { grid-column: 1 / -1; font-size: var(--font-size-caption); color: var(--color-text-muted); border-top: var(--border-w) solid var(--color-bg-muted); padding-top: var(--space-3); }
+
+  /* 字体 */
+  .ds-type { display: grid; grid-template-columns: 200px 1fr 140px; align-items: center; padding: 18px 0; border-bottom: var(--border-w) solid var(--color-bg-muted); }
+  .ds-type:last-child { border-bottom: none; }
+  .ds-type__name { font-size: var(--font-size-caption); font-family: var(--font-family-mono); color: var(--color-text-secondary); cursor: pointer; }
+  .ds-type__meta { font-size: 11px; color: var(--color-text-muted); text-align: right; font-family: var(--font-family-mono); }
+
+  /* 圆角阴影 */
+  .ds-shapes { display: grid; grid-template-columns: repeat(7, minmax(0, 1fr)); gap: var(--space-3); }
+  .ds-shape { display: flex; flex-direction: column; align-items: center; gap: var(--space-2); cursor: pointer; }
+  .ds-shape__box { width: 100%; height: 72px; background: var(--color-bg-surface); border: var(--border-w) solid var(--color-border-default); }
+  .ds-shape__box--shadow { border: none; border-radius: var(--radius-lg); }
+  .ds-shape__name { font-size: 11px; color: var(--color-text-secondary); }
+
+  /* 尺寸 / 紧凑表 */
+  .ds-table { width: 100%; border-collapse: collapse; font-size: var(--font-size-caption); }
+  .ds-table th, .ds-table td { text-align: left; padding: 7px var(--space-2); border-bottom: var(--border-w) solid var(--color-bg-muted); vertical-align: middle; }
+  .ds-table th { color: var(--color-text-muted); font-weight: var(--font-weight-medium); }
+  .ds-table--sub td { color: var(--color-text-secondary); }
+  .ds-dim { color: var(--color-text-muted); }
+
+  /* 组件卡片 */
+  .ds-comps { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(var(--ds-card-min), 100%), 1fr)); gap: var(--space-5); }
+  .ds-comp { display: flex; flex-direction: column; overflow: hidden; }
+  .ds-comp--wide { grid-column: 1 / -1; }
+  .ds-comp__head { display: flex; align-items: center; justify-content: space-between; padding: 14px var(--space-5); border-bottom: var(--border-w) solid var(--color-bg-muted); }
+  .ds-comp__name { display: flex; align-items: center; gap: var(--space-2); font-size: var(--font-size-body); font-weight: var(--font-weight-medium); }
+  .ds-badge { font-size: 11px; padding: 1px 6px; border-radius: 3px; background: var(--color-bg-muted); color: var(--color-text-muted); }
+  .ds-badge--wl { background: color-mix(in srgb, var(--color-primary) 12%, var(--color-bg-surface)); color: var(--color-primary); }
+  .ds-comp__copy { font-size: var(--font-size-caption); color: var(--color-primary); cursor: pointer; }
+  .ds-comp__stage { padding: var(--space-6) var(--space-5); background: var(--color-bg-subtle); display: flex; flex-direction: column; gap: var(--space-component-gap); min-height: 96px; }
+  .ds-comp__foot { display: flex; flex-wrap: wrap; gap: 6px; padding: var(--space-3) var(--space-5); border-top: var(--border-w) solid var(--color-bg-muted); font-size: 11px; font-family: var(--font-family-mono); color: var(--color-text-muted); }
+  .ds-comp__foot span { cursor: pointer; }
+  .ds-comp__foot span:hover { color: var(--color-primary); }
+  .ds-row { display: flex; flex-wrap: wrap; align-items: center; gap: var(--space-component-gap); }
+  .ds-stage-note { font-size: var(--font-size-caption); color: var(--color-text-muted); }
+
+  /* 布局范式示意块 */
+  .ds-block { background: color-mix(in srgb, var(--color-primary) 12%, var(--color-bg-surface)); border: var(--border-w) dashed var(--color-primary); border-radius: var(--radius-md); padding: var(--space-component-pad-y) var(--space-component-pad-x); color: var(--color-text-secondary); font-size: var(--font-size-caption); text-align: center; }
+  .ds-outline { outline: var(--border-w) dashed var(--color-border-default); outline-offset: calc(var(--space-1) * -1); }
+
+  .sc-probe { position: absolute; visibility: hidden; pointer-events: none; }
+
+  /* ---------- 响应式 ---------- */
+  @media (max-width: 1400px) { .ds-toc { display: none; } }
+  @media (max-width: 1100px) {
+    .ds-swatches { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+    .ds-colcols { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .ds-shapes { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+    .ds-type { grid-template-columns: 140px 1fr 110px; }
+  }
+  @media (max-width: 960px) {
+    .ds-body { flex-direction: column; }
+    .ds-side { position: sticky; top: var(--layout-header-h); width: 100%; height: auto; flex-direction: row; flex-wrap: nowrap; overflow-x: auto; gap: var(--space-2); padding: var(--space-2) var(--space-4); border-right: none; border-bottom: var(--border-w) solid var(--color-border-muted); background: color-mix(in srgb, var(--color-bg-page) 92%, transparent); backdrop-filter: blur(10px); z-index: var(--z-sidebar); }
+    .ds-side__label, .ds-side__sep, .ds-side__hint { display: none; }
+    .ds-side__item { white-space: nowrap; padding: 5px var(--space-3); }
+    .ds-side__count { display: none; }
+    .ds-main { padding-top: var(--space-6); }
+    .ds-content { gap: var(--space-10); }
+    .ds-hero__title { font-size: 24px; }
+    .ds-matrix { grid-template-columns: 72px 1fr 1fr 1fr; gap: var(--space-2); }
+    .ds-comp--wide { grid-column: auto; }
+  }
+  @media (max-width: 720px) {
+    .ds-top { gap: var(--space-4); padding: 0 var(--space-4); }
+    .ds-brand__ver, .ds-primary span { display: none; }
+    .ds-tabs { gap: var(--space-4); }
+    .ds-controls { gap: 4px; }
+    .ds-seg__item { padding: 4px 8px; }
+    .ds-swatches { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .ds-colcols { grid-template-columns: 1fr; }
+    .ds-shapes { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+    .ds-type { grid-template-columns: 1fr; gap: var(--space-1); padding: var(--space-3) 0; }
+    .ds-type__meta { text-align: left; }
+    .ds-matrix { grid-template-columns: 1fr; }
+    .ds-matrix__head { display: none; }
+    .ds-matrix__scope { margin-top: var(--space-3); }
+  }
+  @media (max-width: 560px) {
+    .ds-top { gap: var(--space-3); padding: 0 var(--space-3); }
+    .ds-brand__name, .ds-primary, .ds-controls .el-select { display: none; }
+    .ds-tabs { gap: var(--space-3); }
+    .ds-tab { font-size: 13px; }
+    .ds-controls { flex: none; }
+  }
+</style>
+</head>
+<body>
+<div id="app">
+  <!-- 顶栏：品牌 + 路由页签 + 主题控制 -->
+  <header class="ds-top">
+    <div class="ds-brand"><div class="ds-brand__mark"></div><div class="ds-brand__name">设计系统</div><div class="ds-brand__ver">v0.1 · Element Plus 2.14</div></div>
+    <nav class="ds-tabs">
+      <div v-for="r in ROUTES" :key="r.key" class="ds-tab" :class="{ 'is-active': state.route === r.key }" @click="go(r.key)">{{ r.label }}</div>
+    </nav>
+    <div class="ds-controls">
+      <div class="ds-seg"><div class="ds-seg__item" :class="{ 'is-active': !state.dark }" @click="state.dark = false; applyMode()">浅色</div><div class="ds-seg__item" :class="{ 'is-active': state.dark }" @click="state.dark = true; applyMode()">深色</div></div>
+      <div class="ds-seg"><div v-for="d in ['compact','default','loose']" :key="d" class="ds-seg__item" :class="{ 'is-active': state.density === d }" @click="state.density = d; applyMode()">{{ { compact: '紧凑', default: '默认', loose: '宽松' }[d] }}</div></div>
+      <el-select v-model="state.preset" size="small" style="width: 128px;" @change="applyPreset"><el-option v-for="p in PRESETS" :key="p.key" :label="p.label" :value="p.key"></el-option></el-select>
+      <div class="ds-primary"><el-color-picker v-model="state.primary" size="small" @change="applyPrimary"></el-color-picker><span>{{ state.primary }}</span></div>
+    </div>
+  </header>
+
+  <div class="ds-body">
+    <!-- 左侧：当前路由的分组锚点 -->
+    <aside class="ds-side">
+      <div class="ds-side__label">{{ currentRoute.label }}</div>
+      <div v-for="a in anchors" :key="a.id" class="ds-side__item" :class="{ 'is-active': state.anchor === a.id, 'is-dim': a.dim }" @click="jump(a.id)"><span>{{ a.label }}</span><span v-if="a.count" class="ds-side__count">{{ a.count }}</span></div>
+      <template v-if="state.route === 'materials'">
+        <div class="ds-side__sep"></div>
+        <div class="ds-side__hint">带 <span class="ds-badge ds-badge--wl">白名单</span> 的组件第三层可直接使用；其余需先提议。命令式 API（Message 等）同样在白名单内。</div>
+      </template>
+    </aside>
+
+    <!-- ===================== 设计变量 ===================== -->
+    <main v-if="state.route === 'tokens'" class="ds-main">
+      <div class="ds-content">
+        <div class="ds-hero">
+          <div class="ds-hero__title">设计变量</div>
+          <div class="ds-hero__desc">第一层 tokens.css 抽离出的语义变量。第二、三层只能引用这里的名字；改一处，原型与正式页面同时生效。点击任意名称复制。</div>
+          <div class="ds-hero__meta"><span>{{ T.counts.semantic }} 个语义 token</span><span>·</span><span>{{ T.counts.raw }} 个原始刻度</span><span>·</span><span>{{ T.counts.mapping }} 个 Element Plus 映射</span><span>·</span><span>当前 {{ state.dark ? 'dark' : 'light' }} / {{ state.density }}</span></div>
+        </div>
+
+        <!-- 颜色 -->
+        <section id="color" class="ds-group">
+          <div class="ds-group__head"><div class="ds-group__title">颜色</div><div class="ds-group__sub">作用域 × 语义 · {{ colorGroup.tokens.length }} 个</div></div>
+          <div class="ds-label">功能色</div>
+          <div class="ds-swatches">
+            <div v-for="t in functionalColors" :key="t.name" class="ds-card ds-swatch" @click="copy(t.name)">
+              <div class="ds-swatch__plate" :style="{ background: `var(${t.name})` }"></div>
+              <div class="ds-swatch__meta"><div class="ds-swatch__name">{{ t.name }}</div><div class="ds-swatch__val">{{ shortColor(resolved[t.name]) }} · {{ describe(t.name) }}</div></div>
+            </div>
+          </div>
+          <div class="ds-colcols">
+            <div v-for="scope in ['bg','text','border','icon']" :key="scope" class="ds-colcol">
+              <div class="ds-label">{{ scope }} · {{ { bg: '背景', text: '文字', border: '边框', icon: '图标' }[scope] }}</div>
+              <div v-for="t in colorsByScope(scope)" :key="t.name" class="ds-card ds-chip" @click="copy(t.name)" :title="describe(t.name)">
+                <div class="ds-chip__dot" :style="{ background: `var(${t.name})` }"></div>
+                <div class="ds-chip__name">{{ t.name.replace('--color-', '') }}</div>
+                <div class="ds-chip__val">{{ shortColor(resolved[t.name]) }}</div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- 间距 -->
+        <section id="space" class="ds-group">
+          <div class="ds-group__head"><div class="ds-group__title">间距</div><div class="ds-group__sub">作用域 × 关系 · 13 个 · 随密度系数缩放，条宽即真实值</div></div>
+          <div class="ds-card ds-card--pad ds-matrix">
+            <div></div><div class="ds-matrix__head">gap · 同级之间</div><div class="ds-matrix__head">pad · 容器内边距</div><div class="ds-matrix__head">title · 标题到内容</div>
+            <template v-for="(scope, i) in ['page','module','component','inline']" :key="scope">
+              <div class="ds-matrix__scope">{{ scope }}</div>
+              <div v-for="rel in ['gap','pad','title']" :key="rel" class="ds-bar__stack">
+                <div v-for="t in spaceTokens(scope, rel)" :key="t.name" class="ds-bar" :class="'ds-bar--l' + (i + 1)" :title="t.name" @click="copy(t.name)">
+                  <div class="ds-bar__fill" :style="{ width: `var(${t.name})` }"></div><div class="ds-bar__val">{{ resolved[t.name] }}<span v-if="t.name.endsWith('-x')" class="ds-dim"> x</span><span v-if="t.name.endsWith('-y')" class="ds-dim"> y</span></div>
+                </div>
+                <div v-if="!spaceTokens(scope, rel).length" class="ds-dim">—</div>
+              </div>
+            </template>
+            <div class="ds-matrix__foot">第三层只允许使用 page、module 两行与 --space-component-gap；组件内部间距由第二层固定。密度系数 --density：紧凑 0.75 / 默认 1 / 宽松 1.25。</div>
+          </div>
+        </section>
+
+        <!-- 字体 -->
+        <section id="font" class="ds-group">
+          <div class="ds-group__head"><div class="ds-group__title">字体</div><div class="ds-group__sub">四级字号 · 两级行高 · 三级字重</div></div>
+          <div class="ds-card" style="padding: 8px 28px;">
+            <div v-for="t in fontSizes" :key="t.name" class="ds-type">
+              <div class="ds-type__name" @click="copy(t.name)">{{ t.name.replace('--', '') }}</div>
+              <div :style="{ fontSize: `var(${t.name})`, fontWeight: fontWeightFor(t.name), lineHeight: 'var(--line-height-tight)' }">{{ fontSampleText(t.name) }}</div>
+              <div class="ds-type__meta">{{ resolved[t.name] }} / {{ fontWeightFor(t.name) }}</div>
+            </div>
+          </div>
+          <table class="ds-card ds-table ds-table--sub" style="padding: 0 12px;">
+            <tbody><tr v-for="t in fontOthers" :key="t.name"><td class="ds-mono ds-copy" @click="copy(t.name)">{{ t.name }}</td><td class="ds-mono">{{ t.value }}</td><td class="ds-dim">{{ describe(t.name) }}</td></tr></tbody>
+          </table>
+        </section>
+
+        <!-- 圆角 阴影 边框 -->
+        <section id="shape" class="ds-group">
+          <div class="ds-group__head"><div class="ds-group__title">圆角 · 阴影 · 边框</div></div>
+          <div class="ds-shapes">
+            <div v-for="t in group('radius')" :key="t.name" class="ds-shape" @click="copy(t.name)"><div class="ds-shape__box" :style="{ borderRadius: `var(${t.name})` }"></div><div class="ds-shape__name">{{ t.name.replace('--', '') }} · {{ resolved[t.name] }}</div></div>
+            <div v-for="t in group('shadow')" :key="t.name" class="ds-shape" @click="copy(t.name)"><div class="ds-shape__box ds-shape__box--shadow" :style="{ boxShadow: `var(${t.name})` }"></div><div class="ds-shape__name">{{ t.name.replace('--', '') }}</div></div>
+          </div>
+          <div class="ds-row">
+            <div v-for="t in group('border')" :key="t.name" class="ds-shape" style="width: 160px;" @click="copy(t.name)"><div style="width: 100%; background: var(--color-text-default);" :style="{ height: `var(${t.name})` }"></div><div class="ds-shape__name">{{ t.name.replace('--', '') }} · {{ resolved[t.name] }}</div></div>
+          </div>
+        </section>
+
+        <!-- 布局尺寸 -->
+        <section id="layout-size" class="ds-group">
+          <div class="ds-group__head"><div class="ds-group__title">布局尺寸 · 层级</div><div class="ds-group__sub">尺寸不是间距，单独命名 --layout-* · --z-*</div></div>
+          <table class="ds-card ds-table" style="padding: 0 12px;">
+            <thead><tr><th>变量</th><th>值</th><th>说明</th></tr></thead>
+            <tbody><tr v-for="t in [...group('layout'), ...group('z')]" :key="t.name"><td class="ds-mono ds-copy" @click="copy(t.name)">{{ t.name }}</td><td class="ds-mono">{{ resolved[t.name] }}</td><td class="ds-dim">{{ describe(t.name) }}</td></tr></tbody>
+          </table>
+        </section>
+
+        <!-- 原始刻度 -->
+        <section id="raw" class="ds-group">
+          <div class="ds-group__head"><div class="ds-group__title" style="color: var(--color-text-muted);">原始刻度</div><el-tag type="danger" size="small">禁止直接引用</el-tag><el-button link type="primary" size="small" @click="state.showRaw = !state.showRaw">{{ state.showRaw ? '收起' : '展开' }}</el-button></div>
+          <div v-if="state.showRaw" class="ds-colcols" style="grid-template-columns: 1fr 1fr;">
+            <table class="ds-card ds-table ds-table--sub" style="padding: 0 12px;"><thead><tr><th>间距刻度</th><th>值</th></tr></thead><tbody><tr v-for="t in group('raw-space')" :key="t.name"><td class="ds-mono">{{ t.name }}</td><td class="ds-mono">{{ t.value }}</td></tr></tbody></table>
+            <table class="ds-card ds-table ds-table--sub" style="padding: 0 12px;"><thead><tr><th>色板</th><th>值</th></tr></thead><tbody><tr v-for="t in group('raw-palette')" :key="t.name"><td><span class="ds-chip__dot" style="display: inline-block; width: 14px; height: 14px; vertical-align: middle; margin-right: 8px;" :style="{ background: t.value }"></span><span class="ds-mono">{{ t.name }}</span></td><td class="ds-mono">{{ t.value }}</td></tr></tbody></table>
+          </div>
+        </section>
+
+        <!-- Element Plus 映射 -->
+        <section id="el-map" class="ds-group">
+          <div class="ds-group__head"><div class="ds-group__title" style="color: var(--color-text-muted);">Element Plus 映射</div><el-tag type="warning" size="small">由第一层驱动，禁止在第三层修改</el-tag><el-button link type="primary" size="small" @click="state.showEl = !state.showEl">{{ state.showEl ? '收起' : '展开' }}</el-button></div>
+          <table v-if="state.showEl" class="ds-card ds-table ds-table--sub" style="padding: 0 12px;">
+            <thead><tr><th>--el-*</th><th>映射到</th><th>当前值</th></tr></thead>
+            <tbody><tr v-for="t in group('el')" :key="t.name"><td class="ds-mono">{{ t.name }}</td><td class="ds-mono">{{ t.value }}</td><td class="ds-mono">{{ resolved[t.name] }}</td></tr></tbody>
+          </table>
+        </section>
+      </div>
+      <aside class="ds-toc">
+        <div class="ds-toc__label">本页</div>
+        <div v-for="a in anchors" :key="a.id" class="ds-toc__item" :class="{ 'is-active': state.anchor === a.id }" @click="jump(a.id)">{{ a.label }}</div>
+      </aside>
+    </main>
+
+    <!-- ===================== 组件物料 ===================== -->
+    <main v-else-if="state.route === 'materials'" class="ds-main">
+      <div class="ds-content ds-content--wide">
+        <div class="ds-hero">
+          <div class="ds-hero__title">组件物料</div>
+          <div class="ds-hero__desc">Element Plus 全部 {{ COMPONENTS.length }} 个组件在当前 token 下的真实渲染，加上 {{ CUSTOM.length }} 个自研复合组件。切换右上角主题，所有组件同步变化；每张卡片下方标注驱动它的变量，点击可复制。</div>
+        </div>
+        <section v-for="cat in CATEGORIES" :key="cat.key" :id="'cat-' + cat.key" class="ds-group">
+          <div class="ds-group__head"><div class="ds-group__title">{{ cat.label }}</div><div class="ds-group__sub">{{ compsOf(cat.key).map(c => c.name).join(' · ') }}</div></div>
+          <div class="ds-comps">
+            <div v-for="c in compsOf(cat.key)" :key="c.key" class="ds-card ds-comp" :class="{ 'ds-comp--wide': c.wide }">
+              <div class="ds-comp__head">
+                <div class="ds-comp__name"><span>{{ c.name }} {{ c.cn }}</span><span class="ds-badge" :class="{ 'ds-badge--wl': isWhite(c) }">{{ isWhite(c) ? '白名单' : (c.note || '需提议') }}</span></div>
+                <div class="ds-comp__copy" @click="copy(c.usage)">复制用法</div>
+              </div>
+              <div class="ds-comp__stage"><component :is="demoComp(c)"></component></div>
+              <div class="ds-comp__foot"><template v-for="(n, i) in c.tokens" :key="n"><span v-if="i" class="ds-dim">·</span><span @click="copy(n)">{{ n }}</span></template></div>
+            </div>
+          </div>
+        </section>
+        <section id="cat-custom" class="ds-group">
+          <div class="ds-group__head"><div class="ds-group__title">自研复合组件</div><div class="ds-group__sub">Element Plus 未覆盖的外壳与页面级组件 · ui/</div></div>
+          <div class="ds-comps">
+            <div v-for="c in CUSTOM" :key="c.key" class="ds-card ds-comp" :class="{ 'ds-comp--wide': c.wide }">
+              <div class="ds-comp__head"><div class="ds-comp__name"><span>{{ c.name }} {{ c.cn }}</span><span class="ds-badge ds-badge--wl">白名单</span></div><div class="ds-comp__copy" @click="copy(c.usage)">复制用法</div></div>
+              <div class="ds-comp__stage"><component :is="demoComp(c)"></component></div>
+              <div class="ds-comp__foot"><template v-for="(n, i) in c.tokens" :key="n"><span v-if="i" class="ds-dim">·</span><span @click="copy(n)">{{ n }}</span></template></div>
+            </div>
+          </div>
+        </section>
+      </div>
+    </main>
+
+    <!-- ===================== 布局范式 ===================== -->
+    <main v-else class="ds-main">
+      <div class="ds-content">
+        <div class="ds-hero">
+          <div class="ds-hero__title">布局范式</div>
+          <div class="ds-hero__desc">第一层 layout.css 的 .l-* 布局类。第三层禁止手写 flex / grid，只能组合这些类；原型与正式项目引用同一份文件，布局一致性是文件级别的。</div>
+        </div>
+        <section v-for="l in LAYOUTS" :key="l.key" :id="'l-' + l.key" class="ds-group">
+          <div class="ds-group__head"><div class="ds-group__title ds-mono" style="font-size: 16px;">{{ l.title }}</div><div class="ds-group__sub">{{ l.desc }}</div></div>
+          <div class="ds-card ds-comp">
+            <div class="ds-comp__stage"><component :is="demoComp(l)"></component></div>
+            <div class="ds-comp__foot"><template v-for="(n, i) in l.tokens" :key="n"><span v-if="i" class="ds-dim">·</span><span @click="copy(n)">{{ n }}</span></template></div>
+          </div>
+        </section>
+      </div>
+    </main>
+  </div>
+  <div class="sc-probe" ref="probe"></div>
+</div>
+
+<script src="./showcase.data.js"></script>
+<script>
+const T = window.DS_TOKENS
+const { ROUTES, CATEGORIES, COMPONENTS, CUSTOM, LAYOUTS, DESC, SAMPLE, PRESETS } = window.DS_SHOWCASE
+
+const app = Vue.createApp({
+  setup() {
+    const routeFromHash = () => { const k = location.hash.replace(/^#\/?/, '').split(/[?/]/)[0]; return ROUTES.some(r => r.key === k) ? k : ROUTES[0].key }
+    const state = Vue.reactive({ route: routeFromHash(), anchor: '', dark: false, density: 'default', primary: '', preset: PRESETS[0].key, showRaw: false, showEl: false, tick: 0 })
+    const probe = Vue.ref(null)
+    const currentRoute = Vue.computed(() => ROUTES.find(r => r.key === state.route))
+
+    /* ---------- token 读取 ---------- */
+    const group = id => (T.groups.find(g => g.id === id) || { tokens: [] }).tokens
+    const colorGroup = Vue.computed(() => T.groups.find(g => g.id === 'color'))
+    const functionalColors = Vue.computed(() => colorGroup.value.tokens.filter(t => /^--color-(primary|success|warning|danger|info)$/.test(t.name)))
+    const colorsByScope = scope => colorGroup.value.tokens.filter(t => t.name.startsWith(`--color-${scope}-`))
+    const spaceTokens = (scope, rel) => group('space').filter(t => t.name.startsWith(`--space-${scope}-${rel}`))
+    const fontSizes = Vue.computed(() => group('font').filter(t => t.name.startsWith('--font-size')))
+    const fontOthers = Vue.computed(() => group('font').filter(t => !t.name.startsWith('--font-size')))
+    const fontWeightFor = n => n.includes('page-title') ? 600 : n.includes('module-title') ? 500 : 400
+    const fontSampleText = n => ({ '--font-size-page-title': '页面标题 Page title', '--font-size-module-title': '模块标题 Module title', '--font-size-body': '正文 底层固定给 AI 使用，上层由 AI 自由开发。', '--font-size-caption': '说明 表格辅助信息、表单提示、时间戳' })[n] || '示例 Aa 123'
+    const describe = n => DESC[n] || ''
+    const shortColor = v => { const m = /^rgb\((\d+), (\d+), (\d+)\)$/.exec(v || ''); return m ? '#' + [m[1], m[2], m[3]].map(x => (+x).toString(16).padStart(2, '0')).join('') : v }
+
+    function resolveOne(t, kind) {
+      const el = probe.value
+      const raw = getComputedStyle(document.documentElement).getPropertyValue(t.name).trim()
+      if (!el) return raw
+      el.removeAttribute('style')
+      if (kind === 'color') { el.style.backgroundColor = `var(${t.name})`; return getComputedStyle(el).backgroundColor }
+      if (kind === 'length' || kind === 'radius' || t.name.startsWith('--border-w')) {
+        if (/^--(grid-cols|breakpoint)/.test(t.name)) return raw
+        el.style.width = `var(${t.name})`; const w = getComputedStyle(el).width; return w === 'auto' ? raw : w
+      }
+      if (kind === 'mapping') { el.style.backgroundColor = `var(${t.name})`; const c = getComputedStyle(el).backgroundColor; if (c !== 'rgba(0, 0, 0, 0)') return c; el.removeAttribute('style'); el.style.width = `var(${t.name})`; const w = getComputedStyle(el).width; return w === 'auto' ? raw : w }
+      return raw
+    }
+    const resolved = Vue.computed(() => { state.tick; const out = {}; for (const g of T.groups) for (const t of g.tokens) out[t.name] = resolveOne(t, g.kind); return out })
+
+    /* ---------- 组件物料 ---------- */
+    const WL = new Set([...T.whitelist.elementPlus, ...T.whitelist.custom])
+    const WLC = new Set(T.whitelist.commands || [])
+    const isWhite = c => c.tags ? c.tags.some(t => WL.has(t)) : (c.command ? WLC.has(c.command) : WL.has('el-' + c.key))
+    const compsOf = key => COMPONENTS.filter(c => c.cat === key)
+    const cache = new Map()
+    const demoComp = c => {
+      const ck = (c.cat || (c.title ? 'layout' : 'custom')) + ':' + c.key
+      if (!cache.has(ck)) cache.set(ck, {
+        template: c.demo,
+        data: () => ({ v: c.init !== undefined ? JSON.parse(JSON.stringify(c.init)) : null, v2: null, open: false, open2: false, n: 3, s: '', active: 'a', step: 1, ...JSON.parse(JSON.stringify(SAMPLE)) }),
+        methods: {
+          msg: (type = 'success') => ElementPlus.ElMessage({ type, message: `这是一条 ${type} 消息` }),
+          box: () => ElementPlus.ElMessageBox.confirm('确认执行该操作？', '确认').catch(() => {}),
+          notify: () => ElementPlus.ElNotification({ title: '通知', message: '背景、阴影、圆角来自第一层 token', type: 'info' }),
+          loading: () => { const l = ElementPlus.ElLoading.service({ text: '加载中…' }); setTimeout(() => l.close(), 800) },
+          alert: () => ElementPlus.ElMessageBox.alert('这是一条提示', '提示').catch(() => {}),
+          prompt: () => ElementPlus.ElMessageBox.prompt('请输入名称', '输入').catch(() => {}),
+          notifyBR: () => ElementPlus.ElNotification({ title: '成功', message: '订单已提交', type: 'success', position: 'bottom-right' }),
+        },
+      })
+      return cache.get(ck)
+    }
+
+    /* ---------- 锚点 ---------- */
+    const anchors = Vue.computed(() => {
+      if (state.route === 'tokens') return [
+        { id: 'color', label: '颜色', count: colorGroup.value.tokens.length }, { id: 'space', label: '间距', count: 13 }, { id: 'font', label: '字体', count: group('font').length },
+        { id: 'shape', label: '圆角 · 阴影 · 边框', count: group('radius').length + group('shadow').length + group('border').length }, { id: 'layout-size', label: '布局尺寸 · 层级', count: group('layout').length + group('z').length },
+        { id: 'raw', label: '原始刻度', count: T.counts.raw, dim: true }, { id: 'el-map', label: 'Element Plus 映射', count: T.counts.mapping, dim: true },
+      ]
+      if (state.route === 'materials') return [...CATEGORIES.map(c => ({ id: 'cat-' + c.key, label: c.label, count: compsOf(c.key).length })), { id: 'cat-custom', label: '自研复合组件', count: CUSTOM.length }]
+      return LAYOUTS.map(l => ({ id: 'l-' + l.key, label: l.title }))
+    })
+    const jump = id => { const el = document.getElementById(id); if (el) { el.scrollIntoView({ behavior: 'smooth', block: 'start' }); state.anchor = id } }
+    let ticking = false
+    window.addEventListener('scroll', () => {
+      if (ticking) return; ticking = true
+      requestAnimationFrame(() => {
+        ticking = false
+        const top = 56 + 40
+        let cur = anchors.value[0]?.id
+        for (const a of anchors.value) { const el = document.getElementById(a.id); if (el && el.getBoundingClientRect().top <= top) cur = a.id }
+        state.anchor = cur
+      })
+    }, { passive: true })
+
+    /* ---------- 路由 ---------- */
+    const go = key => { if (location.hash !== `#/${key}`) location.hash = `#/${key}`; state.route = key; window.scrollTo(0, 0); Vue.nextTick(() => { state.anchor = anchors.value[0]?.id }) }
+    window.addEventListener('hashchange', () => { state.route = routeFromHash(); Vue.nextTick(() => { state.anchor = anchors.value[0]?.id }) })
+
+    /* ---------- 主题 ---------- */
+    function applyMode() {
+      const html = document.documentElement
+      if (state.dark) html.dataset.theme = 'dark'; else delete html.dataset.theme
+      if (state.density !== 'default') html.dataset.density = state.density; else delete html.dataset.density
+      Vue.nextTick(() => state.tick++)
+    }
+    /** 配色预设：仅预览（在 html 上覆盖 token）；选定后应写入 tokens.css 成为默认 */
+    function applyPreset(key) {
+      const html = document.documentElement
+      for (const p of PRESETS) for (const n of Object.keys(p.vars)) html.style.removeProperty(n)
+      const p = PRESETS.find(x => x.key === key)
+      for (const [n, v] of Object.entries(p.vars)) html.style.setProperty(n, v)
+      Vue.nextTick(() => { state.primary = shortColor(getComputedStyle(html).getPropertyValue('--color-primary').trim()); state.tick++ })
+    }
+    function applyPrimary(v) { if (v) document.documentElement.style.setProperty('--color-primary', v); else document.documentElement.style.removeProperty('--color-primary'); Vue.nextTick(() => state.tick++) }
+
+    async function copy(text) {
+      try { await navigator.clipboard.writeText(text) } catch { const ta = document.createElement('textarea'); ta.value = text; document.body.appendChild(ta); ta.select(); document.execCommand('copy'); ta.remove() }
+      ElementPlus.ElMessage.success(`已复制 ${text.length > 48 ? text.slice(0, 48) + '…' : text}`)
+    }
+
+    Vue.onMounted(() => {
+      if (!location.hash) history.replaceState(null, '', `#/${state.route}`)
+      state.primary = shortColor(getComputedStyle(document.body).getPropertyValue('--color-primary').trim()) || getComputedStyle(document.documentElement).getPropertyValue('--color-primary').trim()
+      state.anchor = anchors.value[0]?.id
+      state.tick++
+    })
+
+    return { T, ROUTES, CATEGORIES, COMPONENTS, CUSTOM, LAYOUTS, PRESETS, state, probe, currentRoute, anchors, resolved, group, colorGroup, functionalColors, colorsByScope, spaceTokens, fontSizes, fontOthers, fontWeightFor, fontSampleText, describe, shortColor, isWhite, compsOf, demoComp, jump, go, applyMode, applyPrimary, applyPreset, copy }
+  },
+})
+app.use(ElementPlus, { locale: ElementPlusLocaleZhCn }).use(DesignSystemUI)
+for (const [name, comp] of Object.entries(ElementPlusIconsVue)) app.component(name, comp)
+app.mount('#app')
+</script>
+</body>
+</html>

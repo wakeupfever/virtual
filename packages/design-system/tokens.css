@@ -1,0 +1,260 @@
+/* =====================================================================
+ * design-system/tokens.css · 第一层 · 设计 token
+ * ---------------------------------------------------------------------
+ * 只有值，没有行为。原型与正式项目引用同一文件。
+ * 结构：① 原始刻度（禁止在第二、三层直接引用）
+ *       ② 语义 token（第二、三层唯一允许引用的层）
+ *       ③ Element Plus 主题变量映射（外观只由本文件驱动）
+ *       ④ 深色模式重映射
+ * 命名：--color-{scope}-{semantic}   --space-{scope}-{relation}[-{axis}]
+ *       --layout-*   --z-*   --font-*   --radius-*   --shadow-*   --border-*
+ * ===================================================================== */
+
+/* ---------- ① 原始刻度 ---------- */
+:root {
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-5: 20px;
+  --space-6: 24px;
+  --space-8: 32px;
+  --space-10: 40px;
+  --space-12: 48px;
+  --space-16: 64px;
+
+  --palette-white: #ffffff;
+  --palette-gray-50: #f7f9f9;
+  --palette-gray-100: #f0f3f4;
+  --palette-gray-200: #e6e8e8;
+  --palette-gray-300: #d5dcdf;
+  --palette-gray-400: #b9c7cc;
+  --palette-gray-500: #7c858a;
+  --palette-gray-600: #4e6d7b;
+  --palette-gray-800: #304853;
+  --palette-gray-900: #16242a;
+  --palette-gray-950: #0f1a1e;
+
+  --palette-cyan-500: #0076a3;   /* 科技青 · 主色（参考 HY Compiler Studio technology-cyan） */
+  --palette-cyan-700: #00486a;   /* 科技青 · 强调 / hover */
+  --palette-cyan-50: #e8f4f7;    /* 科技青 · 柔和底 */
+  --palette-green-500: #0cc778;
+  --palette-amber-500: #f7ba2a;
+  --palette-red-500: #e0464b;
+  --palette-red-600: #b93338;
+
+  /* 密度系数：1 = 默认；[data-density="compact"] 时缩小 */
+  --density: 1;
+}
+
+[data-density="compact"] { --density: 0.75; }
+[data-density="loose"]   { --density: 1.25; }
+
+/* ---------- ② 语义 token ---------- */
+:root {
+  /* 颜色 · bg */
+  --color-bg-page: var(--palette-white);      /* 浅色下页面底为纯白，靠卡片边框 / 轻阴影分层 */
+  --color-bg-surface: var(--palette-white);
+  --color-bg-subtle: var(--palette-gray-50);   /* 斑马纹、hover 行 */
+  --color-bg-muted: var(--palette-gray-100);   /* 禁用、次级填充 */
+  --color-bg-accent: var(--palette-cyan-50);   /* 主色柔和底：选中行、强调面板 */
+  --color-bg-overlay: var(--palette-white);
+  --color-bg-mask: rgba(0, 0, 0, 0.5);
+
+  /* 颜色 · text */
+  --color-text-default: var(--palette-gray-800);
+  --color-text-secondary: var(--palette-gray-600);
+  --color-text-muted: var(--palette-gray-500);
+  --color-text-placeholder: var(--palette-gray-400);
+  --color-text-inverse: var(--palette-white);
+
+  /* 颜色 · border */
+  --color-border-default: var(--palette-gray-300);
+  --color-border-muted: var(--palette-gray-200);
+
+  /* 颜色 · icon */
+  --color-icon-default: var(--palette-gray-600);
+  --color-icon-muted: var(--palette-gray-500);
+
+  /* 颜色 · 功能色（scope 省略时表示品牌/状态主色） */
+  --color-primary: var(--palette-cyan-500);
+  --color-primary-hover: var(--palette-cyan-700);
+  --color-success: var(--palette-green-500);
+  --color-warning: var(--palette-amber-500);
+  --color-danger: var(--palette-red-500);
+  --color-danger-hover: var(--palette-red-600);
+  --color-info: var(--palette-gray-600);
+
+  /* 间距 · page（内容区与外壳、页面主要区块之间） */
+  --space-page-gap: calc(var(--space-10) * var(--density));
+  --space-page-pad-x: calc(var(--space-8) * var(--density));
+  --space-page-pad-y: calc(var(--space-6) * var(--density));
+  --space-page-title: calc(var(--space-6) * var(--density));
+
+  /* 间距 · module（卡片、面板、表单区块） */
+  --space-module-gap: calc(var(--space-6) * var(--density));
+  --space-module-pad: calc(var(--space-6) * var(--density));
+  --space-module-title: calc(var(--space-4) * var(--density));
+
+  /* 间距 · component（组件之间与组件内部） */
+  --space-component-gap: calc(var(--space-3) * var(--density));
+  --space-component-pad-x: calc(var(--space-4) * var(--density));
+  --space-component-pad-y: calc(var(--space-2) * var(--density));
+  --space-component-title: calc(var(--space-2) * var(--density));
+
+  /* 间距 · inline（图标与文字、标签与值） */
+  --space-inline-gap: var(--space-2);
+  --space-inline-pad: var(--space-1);
+
+  /* 布局尺寸（不是间距） */
+  --layout-sidebar-w: 240px;
+  --layout-sidebar-w-collapsed: 64px;
+  --layout-header-h: 56px;
+  --layout-content-max: 1440px;
+  --layout-content-pad: var(--space-page-pad-x);
+  --layout-form-label-w: 120px;
+  --layout-control-w: 200px;        /* 工具条中输入框 / 下拉的默认宽 */
+  --layout-control-w-sm: 120px;
+  --grid-cols: 12;
+  --grid-gap: var(--space-module-gap);
+  --breakpoint-md: 768px;
+  --breakpoint-lg: 1200px;
+
+  /* 层级 */
+  --z-header: 100;
+  --z-sidebar: 110;
+  --z-drawer: 200;
+  --z-dialog: 300;
+  --z-toast: 400;
+
+  /* 字体 */
+  --font-family: "Helvetica Neue", Helvetica, "PingFang SC", "Hiragino Sans GB",
+    "Microsoft YaHei", "微软雅黑", Arial, sans-serif;
+  --font-family-mono: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  --font-size-page-title: 20px;
+  --font-size-module-title: 16px;
+  --font-size-body: 14px;
+  --font-size-caption: 12px;
+  --line-height-tight: 1.3;
+  --line-height-body: 1.6;
+  --font-weight-regular: 400;
+  --font-weight-medium: 500;
+  --font-weight-bold: 600;
+
+  /* 圆角 */
+  --radius-sm: 3px;
+  --radius-md: 6px;
+  --radius-lg: 10px;
+  --radius-full: 9999px;
+
+  /* 阴影 */
+  --shadow-sm: 0 1px 3px rgba(48, 72, 83, 0.08);
+  --shadow-md: 0 6px 16px rgba(48, 72, 83, 0.08);
+  --shadow-lg: 0 12px 32px rgba(48, 72, 83, 0.12);
+
+  /* 边框 */
+  --border-w: 1px;
+  --border-w-thick: 2px;
+}
+
+/* ---------- ③ Element Plus 主题变量映射 ----------
+ * 使用 html:root 提高优先级，保证无论 element-plus 的 css 先后加载都以本文件为准。 */
+html:root {
+  --el-color-primary: var(--color-primary);
+  --el-color-primary-light-3: color-mix(in srgb, var(--color-primary) 70%, var(--color-bg-surface));
+  --el-color-primary-light-5: color-mix(in srgb, var(--color-primary) 50%, var(--color-bg-surface));
+  --el-color-primary-light-7: color-mix(in srgb, var(--color-primary) 30%, var(--color-bg-surface));
+  --el-color-primary-light-8: color-mix(in srgb, var(--color-primary) 20%, var(--color-bg-surface));
+  --el-color-primary-light-9: color-mix(in srgb, var(--color-bg-accent) 85%, var(--color-bg-surface));
+  --el-color-primary-dark-2: var(--color-primary-hover);
+
+  --el-color-success: var(--color-success);
+  --el-color-warning: var(--color-warning);
+  --el-color-danger: var(--color-danger);
+  --el-color-error: var(--color-danger);
+  --el-color-info: var(--color-info);
+
+  --el-color-white: var(--color-bg-surface);
+  --el-color-black: var(--color-text-default);
+
+  --el-bg-color: var(--color-bg-surface);
+  --el-bg-color-page: var(--color-bg-page);
+  --el-bg-color-overlay: var(--color-bg-overlay);
+  --el-fill-color: var(--color-bg-muted);
+  --el-fill-color-light: var(--color-bg-subtle);
+  --el-fill-color-lighter: var(--color-bg-subtle);
+  --el-fill-color-extra-light: var(--color-bg-subtle);
+  --el-fill-color-dark: var(--color-bg-muted);
+  --el-fill-color-darker: var(--color-border-muted);
+  --el-fill-color-blank: var(--color-bg-surface);
+  --el-mask-color: var(--color-bg-mask);
+  --el-overlay-color-lighter: var(--color-bg-mask);
+
+  --el-text-color-primary: var(--color-text-default);
+  --el-text-color-regular: var(--color-text-secondary);
+  --el-text-color-secondary: var(--color-text-muted);
+  --el-text-color-placeholder: var(--color-text-placeholder);
+  --el-text-color-disabled: var(--color-text-placeholder);
+
+  --el-border-color: var(--color-border-default);
+  --el-border-color-light: var(--color-border-muted);
+  --el-border-color-lighter: var(--color-border-muted);
+  --el-border-color-extra-light: var(--color-border-muted);
+  --el-border-color-dark: var(--color-border-default);
+  --el-border-color-darker: var(--color-border-default);
+  --el-disabled-bg-color: var(--color-bg-muted);
+  --el-disabled-text-color: var(--color-text-placeholder);
+  --el-disabled-border-color: var(--color-border-muted);
+  --el-border-width: var(--border-w);
+  --el-border-radius-base: var(--radius-md);
+  --el-border-radius-small: var(--radius-sm);
+  --el-border-radius-round: var(--radius-full);
+
+  --el-font-family: var(--font-family);
+  --el-font-size-base: var(--font-size-body);
+  --el-font-size-small: var(--font-size-caption);
+  --el-font-size-medium: var(--font-size-module-title);
+  --el-font-size-large: var(--font-size-page-title);
+  --el-font-weight-primary: var(--font-weight-medium);
+
+  --el-box-shadow: var(--shadow-md);
+  --el-box-shadow-light: var(--shadow-sm);
+  --el-box-shadow-dark: var(--shadow-lg);
+
+  --el-index-normal: 1;
+  --el-index-top: var(--z-header);
+  --el-index-popper: var(--z-dialog);
+}
+
+/* ---------- ④ 深色模式重映射 ----------
+ * 只重映射语义层与 Element Plus 变量，组件代码不感知主题。 */
+[data-theme="dark"] {
+  --color-bg-page: var(--palette-gray-950);
+  --color-bg-surface: var(--palette-gray-900);
+  --color-bg-subtle: #1b2b32;
+  --color-bg-muted: #22353d;
+  --color-bg-accent: #0f3040;
+  --color-bg-overlay: var(--palette-gray-900);
+  --color-bg-mask: rgba(0, 0, 0, 0.7);
+
+  --color-primary: #2f9fcf;
+  --color-primary-hover: #5fb8de;
+
+  --color-text-default: #e3edf0;
+  --color-text-secondary: #c3d3d9;
+  --color-text-muted: #8fa6ae;
+  --color-text-placeholder: #6b8590;
+  --color-text-inverse: var(--palette-gray-900);
+
+  --color-border-default: #2f454e;
+  --color-border-muted: #263a42;
+
+  --color-icon-default: #c3d3d9;
+  --color-icon-muted: #8fa6ae;
+
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.4);
+  --shadow-md: 0 6px 16px rgba(0, 0, 0, 0.5);
+  --shadow-lg: 0 12px 32px rgba(0, 0, 0, 0.6);
+
+  color-scheme: dark;
+}
