@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>设计系统 · 设计变量 / 组件物料 / 布局范式 / 布局配置</title>
+<title>设计系统 · 设计变量 / 组件物料 / 自研组件 / 布局范式 / 布局配置</title>
 
 <!-- 依赖顺序与原型模板一致；版本必须与 package.json 一致 -->
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/element-plus@2.14.5/dist/index.css">
@@ -180,6 +180,23 @@
   .ds-cfg__code:hover { color: var(--color-text-default); }
   .ds-cfg__label { font-weight: var(--font-weight-medium); color: var(--color-text-default); }
   @media (max-width: 1100px) { .ds-cfg__body { grid-template-columns: 1fr; } .ds-cfg__stage { border-right: none; border-bottom: var(--border-w) solid var(--color-bg-muted); } .ds-cfg__foot { grid-template-columns: 1fr; } .ds-cfg__props { border-right: none; border-bottom: var(--border-w) solid var(--color-bg-muted); } }
+
+  /* 布局配置 · 页面排版模板 */
+  .ds-tpl__bar { display: flex; align-items: center; justify-content: space-between; gap: var(--space-4); flex-wrap: wrap; }
+  .ds-tpl__tabs { display: flex; border: var(--border-w) solid var(--color-border-default); border-radius: var(--radius-md); overflow: hidden; }
+  .ds-tpl__tab { padding: 6px 14px; font-size: 13px; color: var(--color-text-secondary); cursor: pointer; white-space: nowrap; border-right: var(--border-w) solid var(--color-border-muted); }
+  .ds-tpl__tab:last-child { border-right: none; }
+  .ds-tpl__tab:hover { background: var(--color-bg-subtle); }
+  .ds-tpl__tab.is-active { background: var(--color-primary); color: var(--color-text-inverse); }
+  .ds-tpl__meta { display: flex; gap: var(--space-2); flex-wrap: wrap; }
+  .ds-tpl__chip { font-family: var(--font-family-mono); font-size: 11px; padding: 2px 8px; border-radius: var(--radius-sm); background: var(--color-bg-muted); color: var(--color-text-secondary); cursor: pointer; }
+  .ds-tpl__chip:hover { color: var(--color-primary); }
+  .ds-tpl__desc { display: flex; align-items: baseline; gap: var(--space-3); font-size: var(--font-size-caption); color: var(--color-text-muted); }
+  .ds-tpl__desc strong { font-size: var(--font-size-body); color: var(--color-text-default); }
+  .ds-tpl__stage { height: 720px; border: var(--border-w) solid var(--color-border-muted); border-radius: var(--radius-lg); overflow: hidden; box-shadow: var(--shadow-sm); background: var(--color-bg-page); }
+  .ds-tpl__stage .ui-shell { height: 100%; }
+  .ds-tpl__foot { display: flex; align-items: center; justify-content: space-between; gap: var(--space-4); flex-wrap: wrap; }
+  @media (max-width: 960px) { .ds-tpl__stage { height: 560px; } }
 
   /* 布局范式示意块 */
   .ds-block { background: color-mix(in srgb, var(--color-primary) 12%, var(--color-bg-surface)); border: var(--border-w) dashed var(--color-primary); border-radius: var(--radius-md); padding: var(--space-component-pad-y) var(--space-component-pad-x); color: var(--color-text-secondary); font-size: var(--font-size-caption); text-align: center; }
@@ -394,8 +411,8 @@
           </div>
         </section>
         <section id="cat-custom" class="ds-group">
-          <div class="ds-group__head"><div class="ds-group__title">自研组件</div><div class="ds-group__sub">已迁移到「布局配置」页签：外壳 / 页面级 / 复合组件，含"脱胎第一层"配置面板</div></div>
-          <div class="ds-card" style="padding: var(--space-module-pad); display: flex; align-items: center; justify-content: space-between; gap: var(--space-4);"><span style="color: var(--color-text-secondary);">{{ CUSTOM.length }} 个自研组件（UiShell、UiPageHeader、UiState、UiListItem、UiFilterBar、UiStatCard）在「布局配置」页签，每个组件可实时调整它消费的 token 验证联动。</span><el-button type="primary" plain @click="go('custom')">前往布局配置</el-button></div>
+          <div class="ds-group__head"><div class="ds-group__title">自研组件</div><div class="ds-group__sub">已独立为「自研组件」页签：外壳 / 页面级 / 复合组件，含"脱胎第一层"配置面板</div></div>
+          <div class="ds-card" style="padding: var(--space-module-pad); display: flex; align-items: center; justify-content: space-between; gap: var(--space-4);"><span style="color: var(--color-text-secondary);">{{ CUSTOM.length }} 个自研组件（UiShell、UiPageHeader、UiState、UiListItem、UiFilterBar、UiStatCard）在「自研组件」页签，每个组件可实时调整它消费的 token 验证联动。</span><el-button type="primary" plain @click="go('custom')">前往自研组件</el-button></div>
         </section>
       </div>
     </main>
@@ -404,7 +421,7 @@
     <main v-else-if="state.route === 'custom'" class="ds-main">
       <div class="ds-content ds-content--wide">
         <div class="ds-hero">
-          <div class="ds-hero__title">布局配置 · 自研组件</div>
+          <div class="ds-hero__title">自研组件</div>
           <div class="ds-hero__desc">Element Plus 未覆盖的外壳、页面级与复合组件。它们不是新画的：每一个都由白名单原语 + .l-* 布局类拼成，每一处尺寸与颜色都来自第一层 token —— 改变量，组件跟着变。右侧「脱胎第一层」面板可临时调整该组件消费的 token（只作用于本卡舞台）验证联动。</div>
         </div>
         <section v-for="g in CUSTOM_GROUPS" :key="g.key" :id="'cg-' + g.key" class="ds-group">
@@ -461,6 +478,29 @@
       </div>
     </main>
 
+    <!-- ===================== 布局配置 · 页面排版模板 ===================== -->
+    <main v-else-if="state.route === 'templates'" class="ds-main">
+      <div class="ds-content ds-content--wide">
+        <div class="ds-hero">
+          <div class="ds-hero__title">布局配置 · 页面排版模板</div>
+          <div class="ds-hero__desc">五种多菜单业务布局：同一个 UiShell 应用壳承载统计、表格、统计 + 表格、左树 + 表格与 TabBar + 表格五套页面骨架，验证模块组合后的间距效果。骨架全部由第一层 .l-* 与第二层组件拼成，可直接复制进原型的 .l-page。</div>
+        </div>
+        <section :id="'tpl-' + currentTemplate.key" class="ds-group">
+          <div class="ds-tpl__bar">
+            <div class="ds-tpl__tabs"><div v-for="t in TEMPLATES" :key="t.key" class="ds-tpl__tab" :class="{ 'is-active': state.template === t.key }" @click="pickTemplate(t.key)">{{ t.no }} {{ t.label }}</div></div>
+            <div class="ds-tpl__meta"><span v-for="m in layoutMeta" :key="m.k" class="ds-tpl__chip" :title="m.n" @click="copy(m.n)">{{ m.k }} {{ m.v }}</span></div>
+          </div>
+          <div class="ds-tpl__desc"><strong>{{ currentTemplate.no }} {{ currentTemplate.label }}</strong><span>{{ currentTemplate.desc }}</span></div>
+          <div class="ds-tpl__stage"><component :is="demoComp(currentTemplate)" :key="currentTemplate.key"></component></div>
+          <div class="ds-tpl__foot">
+            <div class="ds-cfg__anatomy"><span>结构</span><span v-for="a in currentTemplate.anatomy" :key="a" class="ds-pill">{{ a }}</span></div>
+            <div class="l-cluster"><el-button size="small" @click="copy(currentTemplate.skeleton)">复制页面骨架（.l-page 内容）</el-button><el-button size="small" type="primary" plain @click="copy(currentTemplate.demo)">复制含外壳的完整模板</el-button></div>
+          </div>
+          <div class="ds-card" style="padding: var(--space-module-pad); font-size: var(--font-size-caption); color: var(--color-text-secondary); line-height: var(--line-height-body);">间距来源：page 用 <span class="ds-mono">--space-page-pad-x/y</span>，模块之间用 <span class="ds-mono">--space-module-gap</span>（.l-page 直接子元素自动 page-gap，栅格内用 --grid-gap），模块内标题到内容用 <span class="ds-mono">--space-module-title</span>，顶栏高 <span class="ds-mono">--layout-header-h</span>，侧栏宽 <span class="ds-mono">--layout-sidebar-w / -collapsed</span>。切换右上角密度可看到整套模板同步收放。</div>
+        </section>
+      </div>
+    </main>
+
     <!-- ===================== 布局范式 ===================== -->
     <main v-else class="ds-main">
       <div class="ds-content">
@@ -485,12 +525,12 @@
 <script src="./showcase.data.js"></script>
 <script>
 const T = window.DS_TOKENS
-const { ROUTES, CATEGORIES, CUSTOM_GROUPS, COMPONENTS, CUSTOM, LAYOUTS, DESC, SAMPLE, PRESETS } = window.DS_SHOWCASE
+const { ROUTES, CATEGORIES, CUSTOM_GROUPS, COMPONENTS, CUSTOM, LAYOUTS, DESC, SAMPLE, PRESETS, TEMPLATES } = window.DS_SHOWCASE
 
 const app = Vue.createApp({
   setup() {
     const routeFromHash = () => { const k = location.hash.replace(/^#\/?/, '').split(/[?/]/)[0]; return ROUTES.some(r => r.key === k) ? k : ROUTES[0].key }
-    const state = Vue.reactive({ route: routeFromHash(), anchor: '', dark: false, density: 'default', primary: '', preset: PRESETS[0].key, showRaw: false, showEl: false, tick: 0, tweaks: {} })
+    const state = Vue.reactive({ route: routeFromHash(), anchor: '', dark: false, density: 'default', primary: '', preset: PRESETS[0].key, showRaw: false, showEl: false, tick: 0, tweaks: {}, template: 'stat' })
     const probe = Vue.ref(null)
     const currentRoute = Vue.computed(() => ROUTES.find(r => r.key === state.route))
 
@@ -538,12 +578,19 @@ const app = Vue.createApp({
     const resetTweak = c => { delete state.tweaks[c.key] }
     const hasTweak = c => !!state.tweaks[c.key] && Object.keys(state.tweaks[c.key]).length > 0
     const tweakStyle = c => state.tweaks[c.key] || {}
+
+    /* ---------- 布局配置 · 页面排版模板 ---------- */
+    const currentTemplate = Vue.computed(() => TEMPLATES.find(t => t.key === state.template) || TEMPLATES[0])
+    const pickTemplate = key => { state.template = key; state.anchor = 'tpl-' + key }
+    const layoutMeta = Vue.computed(() => { state.tick; return [
+      ['page', '--space-page-pad-x'], ['module', '--space-module-gap'], ['header', '--layout-header-h'], ['sidebar', '--layout-sidebar-w'], ['collapsed', '--layout-sidebar-w-collapsed'],
+    ].map(([k, n]) => ({ k, n, v: resolved.value[n] })) })
     const cache = new Map()
     const demoComp = c => {
       const ck = (c.cat || (c.title ? 'layout' : 'custom')) + ':' + c.key
       if (!cache.has(ck)) cache.set(ck, {
         template: c.demo,
-        data: () => ({ v: c.init !== undefined ? JSON.parse(JSON.stringify(c.init)) : null, v2: null, open: false, open2: false, n: 3, s: '', active: 'a', step: 1, ...JSON.parse(JSON.stringify(SAMPLE)) }),
+        data: () => ({ v: c.init !== undefined ? JSON.parse(JSON.stringify(c.init)) : null, v2: null, open: false, open2: false, n: 3, s: '', active: c.initActive ?? 'a', step: 1, page: 1, pageSize: 10, ...JSON.parse(JSON.stringify(SAMPLE)) }),
         methods: {
           msg: (type = 'success') => ElementPlus.ElMessage({ type, message: `这是一条 ${type} 消息` }),
           box: () => ElementPlus.ElMessageBox.confirm('确认执行该操作？', '确认').catch(() => {}),
@@ -566,12 +613,14 @@ const app = Vue.createApp({
       ]
       if (state.route === 'materials') return [...CATEGORIES.map(c => ({ id: 'cat-' + c.key, label: c.label, count: compsOf(c.key).length })), { id: 'cat-custom', label: '自研组件 →', dim: true }]
       if (state.route === 'custom') return [...CUSTOM_GROUPS.map(g => ({ id: 'cg-' + g.key, label: g.label, count: customOf(g.key).length })), { id: 'cg-candidates', label: '候选结构（原型统计）', dim: true }]
+      if (state.route === 'templates') return TEMPLATES.map(t => ({ id: 'tpl-' + t.key, label: t.no + ' ' + t.label }))
       return LAYOUTS.map(l => ({ id: 'l-' + l.key, label: l.title }))
     })
     /* 主区滚动容器：ElScrollbar（R-043），锚点定位与高亮都基于它 */
     const mainScroll = Vue.ref(null)
     const wrap = () => mainScroll.value?.wrapRef
     const jump = id => {
+      if (id.startsWith('tpl-')) { state.template = id.slice(4); state.anchor = id; mainScroll.value?.setScrollTop(0); return }
       const el = document.getElementById(id), w = wrap()
       if (!el || !w) return
       const top = el.getBoundingClientRect().top - w.getBoundingClientRect().top + w.scrollTop - 24
@@ -582,7 +631,7 @@ const app = Vue.createApp({
       if (ticking) return; ticking = true
       requestAnimationFrame(() => {
         ticking = false
-        const w = wrap(); if (!w) return
+        const w = wrap(); if (!w || state.route === 'templates') return
         const base = w.getBoundingClientRect().top + 40
         let cur = anchors.value[0]?.id
         for (const a of anchors.value) { const el = document.getElementById(a.id); if (el && el.getBoundingClientRect().top <= base) cur = a.id }
@@ -591,8 +640,8 @@ const app = Vue.createApp({
     }
 
     /* ---------- 路由 ---------- */
-    const go = key => { if (location.hash !== `#/${key}`) location.hash = `#/${key}`; state.route = key; Vue.nextTick(() => { mainScroll.value?.setScrollTop(0); state.anchor = anchors.value[0]?.id }) }
-    window.addEventListener('hashchange', () => { state.route = routeFromHash(); Vue.nextTick(() => { mainScroll.value?.setScrollTop(0); state.anchor = anchors.value[0]?.id }) })
+    const go = key => { if (location.hash !== `#/${key}`) location.hash = `#/${key}`; state.route = key; Vue.nextTick(() => { mainScroll.value?.setScrollTop(0); state.anchor = key === 'templates' ? 'tpl-' + state.template : anchors.value[0]?.id }) }
+    window.addEventListener('hashchange', () => { state.route = routeFromHash(); Vue.nextTick(() => { mainScroll.value?.setScrollTop(0); state.anchor = state.route === 'templates' ? 'tpl-' + state.template : anchors.value[0]?.id }) })
 
     /* ---------- 主题 ---------- */
     function applyMode() {
@@ -619,11 +668,11 @@ const app = Vue.createApp({
     Vue.onMounted(() => {
       if (!location.hash) history.replaceState(null, '', `#/${state.route}`)
       state.primary = shortColor(getComputedStyle(document.body).getPropertyValue('--color-primary').trim()) || getComputedStyle(document.documentElement).getPropertyValue('--color-primary').trim()
-      state.anchor = anchors.value[0]?.id
+      state.anchor = state.route === 'templates' ? 'tpl-' + state.template : anchors.value[0]?.id
       state.tick++
     })
 
-    return { T, ROUTES, CATEGORIES, CUSTOM_GROUPS, COMPONENTS, CUSTOM, LAYOUTS, PRESETS, state, probe, mainScroll, onScroll, customOf, tokenKind, sliderRange, pxOf, tweakValue, setTweak, resetTweak, hasTweak, tweakStyle, currentRoute, anchors, resolved, group, colorGroup, functionalColors, colorsByScope, spaceTokens, fontSizes, fontOthers, fontWeightFor, fontSampleText, describe, shortColor, isWhite, compsOf, demoComp, jump, go, applyMode, applyPrimary, applyPreset, copy }
+    return { T, ROUTES, CATEGORIES, CUSTOM_GROUPS, COMPONENTS, CUSTOM, LAYOUTS, PRESETS, state, probe, mainScroll, onScroll, customOf, tokenKind, sliderRange, pxOf, tweakValue, setTweak, resetTweak, hasTweak, tweakStyle, TEMPLATES, currentTemplate, pickTemplate, layoutMeta, currentRoute, anchors, resolved, group, colorGroup, functionalColors, colorsByScope, spaceTokens, fontSizes, fontOthers, fontWeightFor, fontSampleText, describe, shortColor, isWhite, compsOf, demoComp, jump, go, applyMode, applyPrimary, applyPreset, copy }
   },
 })
 app.use(ElementPlus, { locale: ElementPlusLocaleZhCn }).use(DesignSystemUI)

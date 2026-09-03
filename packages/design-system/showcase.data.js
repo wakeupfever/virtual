@@ -4,8 +4,9 @@ window.DS_SHOWCASE = (() => {
   const ROUTES = [
     { key: 'tokens', label: '设计变量' },
     { key: 'materials', label: '组件物料' },
+    { key: 'custom', label: '自研组件' },
     { key: 'layout', label: '布局范式' },
-    { key: 'custom', label: '布局配置' },
+    { key: 'templates', label: '布局配置' },
   ]
 
   /* 自研组件分组：外壳 / 页面级 / 复合组件 */
@@ -38,6 +39,11 @@ window.DS_SHOWCASE = (() => {
     transfer: Array.from({ length: 8 }, (_, i) => ({ key: i, label: `客户 ${i + 1}` })),
     steps: ['提交订单', '审核', '发货', '完成'],
     tags: ['标签一', '标签二', '标签三'],
+    menu: [
+      { key: 'dashboard', label: '运营工作台' }, { key: 'monitor', label: '运行监测' }, { key: 'company', label: '企业档案' },
+      { key: 'device', label: '设备台账' }, { key: 'org', label: '组织与片区' }, { key: 'env', label: '环境监测' }, { key: 'risk', label: '风险预警' },
+    ],
+    history: ['运营工作台', '企业档案', '运行监测', '组织与片区', '环境监测'],
     big: Array.from({ length: 200 }, (_, i) => ({ id: i, no: `SO-${String(i + 1).padStart(4, '0')}`, customer: `批量客户 ${i + 1}`, amount: (i * 37) % 10000 })),
     cols: [{ key: 'no', dataKey: 'no', title: '单号', width: 160 }, { key: 'customer', dataKey: 'customer', title: '客户', width: 200 }, { key: 'amount', dataKey: 'amount', title: '金额', width: 120, align: 'right' }],
   }
@@ -142,8 +148,8 @@ window.DS_SHOWCASE = (() => {
       demo: `<div class="ds-row"><el-image style="width: 120px; height: 80px; border-radius: var(--radius-md);" src="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='120' height='80'><rect width='120' height='80' fill='%23409eff'/></svg>" fit="cover" /><el-image style="width: 120px; height: 80px; border-radius: var(--radius-md);" src="https://invalid.example/x.png"><template #error><div style="height: 100%; display: flex; align-items: center; justify-content: center; background: var(--color-bg-muted); color: var(--color-text-placeholder); font-size: 12px;">加载失败</div></template></el-image><el-image style="width: 120px; height: 80px; border-radius: var(--radius-md);"><template #placeholder><div style="height: 100%; background: var(--color-bg-muted);"></div></template></el-image></div>` },
     { key: 'infinite-scroll', cat: 'data', name: 'Infinite Scroll', cn: '无限滚动', tags: [], note: '指令', tokens: ['--color-bg-subtle', '--space-component-gap'], usage: '<ul v-infinite-scroll="load">…</ul>',
       demo: `<el-scrollbar height="120px"><ul v-infinite-scroll="() => { n = Math.min(n + 3, 30) }" class="l-stack l-stack--tight" style="margin: 0; padding: 0; list-style: none;"><li v-for="i in n" :key="i" style="padding: 8px 12px; border-radius: var(--radius-md); background: var(--el-color-primary-light-9); color: var(--color-primary); font-size: 12px;">滚动加载 {{ i }}</li></ul></el-scrollbar><div class="ds-stage-note">滚动容器是 el-scrollbar（R-043），指令自动找到它。</div>` },
-    { key: 'pagination', cat: 'data', name: 'Pagination', cn: '分页', wide: true, tokens: ['--color-primary', '--color-bg-muted', '--radius-sm', '--font-size-body'], usage: '<el-pagination layout="total, prev, pager, next, sizes" :total="128" />',
-      demo: `<div class="l-stack l-stack--tight"><el-pagination layout="total, prev, pager, next, sizes" :total="128" :page-size="10" /><el-pagination background layout="prev, pager, next" :total="128" /><el-pagination layout="prev, pager, next, jumper" :total="1000" small /></div>` },
+    { key: 'pagination', cat: 'data', name: 'Pagination', cn: '分页', wide: true, tokens: ['--color-primary', '--color-bg-muted', '--radius-sm', '--font-size-body'], usage: '<el-pagination layout="total, prev, pager, next, sizes" :total="total" v-model:current-page="page" v-model:page-size="pageSize" />（含 sizes 时必须 v-model:page-size，否则不渲染）',
+      demo: `<div class="l-stack l-stack--tight"><el-pagination layout="total, prev, pager, next, sizes" :total="128" v-model:current-page="page" v-model:page-size="pageSize" :page-sizes="[10, 20, 50]" /><el-pagination background layout="prev, pager, next" :total="128" /><el-pagination layout="prev, pager, next, jumper" :total="1000" small /></div>` },
     { key: 'progress', cat: 'data', name: 'Progress', cn: '进度条', tokens: ['--color-primary', '--color-success', '--color-bg-muted', '--radius-full'], usage: '<el-progress :percentage="60" />',
       demo: `<div class="l-stack l-stack--tight"><el-progress :percentage="40" /><el-progress :percentage="100" status="success" /><el-progress :percentage="70" status="warning" /><el-progress :percentage="30" status="exception" /><div class="ds-row" style="gap: var(--space-6);"><el-progress type="circle" :percentage="65" :width="64" /><el-progress type="dashboard" :percentage="80" :width="64" /><el-progress :percentage="50" :stroke-width="14" text-inside style="width: 200px;" /></div></div>` },
     { key: 'result', cat: 'data', name: 'Result', cn: '结果', tokens: ['--color-success', '--color-warning', '--color-danger', '--color-text-secondary'], usage: '<el-result icon="success" title="提交成功" />',
@@ -282,5 +288,54 @@ window.DS_SHOWCASE = (() => {
       '--color-text-default': '#221f3a', '--color-text-secondary': '#4a4766', '--color-text-muted': '#8b88a3', '--color-text-placeholder': '#b8b5cc', '--color-icon-default': '#4a4766', '--color-icon-muted': '#8b88a3' } },
   ]
 
-  return { ROUTES, CATEGORIES, CUSTOM_GROUPS, COMPONENTS, CUSTOM, LAYOUTS, DESC, SAMPLE, PRESETS }
+  /* ---------------- 布局配置 · 五套页面排版模板（参考 HY Compiler Studio · 页面排版模板） ----------------
+   * 每套模板 = 在同一个 UiShell 应用壳内，用第一层 .l-* + 第二层白名单 / 自研组件拼出的页面骨架。
+   * skeleton 即可直接复制进原型 .l-page 内的内容；stage 只是加了应用壳的预览。 */
+  const APP_MENU = [
+    { key: 'dashboard', label: '运营工作台' }, { key: 'monitor', label: '运行监测' }, { key: 'company', label: '企业档案' },
+    { key: 'device', label: '设备台账' }, { key: 'org', label: '组织与片区' }, { key: 'env', label: '环境监测' }, { key: 'risk', label: '风险预警' },
+  ]
+  const STAT_ROW = `<div class="l-grid l-grid--cols-4"><ui-stat-card label="园区企业" :value="286" :trend="12.5" hint="较上月变化"><template #icon><el-icon><OfficeBuilding /></el-icon></template></ui-stat-card><ui-stat-card label="在建项目" :value="38" :trend="6.2" hint="较上月变化"><template #icon><el-icon><Document /></el-icon></template></ui-stat-card><ui-stat-card label="待办事项" :value="19" :trend="-3.8" :up-is-good="false" hint="较上月变化"><template #icon><el-icon><Clock /></el-icon></template></ui-stat-card><ui-stat-card label="风险预警" :value="6" :trend="-16.7" :up-is-good="false" hint="较上月变化"><template #icon><el-icon><Warning /></el-icon></template></ui-stat-card></div>`
+  const TABLE_MODULE = (title, cols) => `<section class="l-module"><ui-filter-bar @reset="s = ''"><el-input v-model="s" placeholder="${cols[0]}" clearable style="width: var(--layout-control-w);" /><el-select v-model="v" placeholder="${cols[2]}" clearable><el-option v-for="o in opts" :key="o.value" :label="o.label" :value="o.value" /></el-select><el-button type="primary" plain>搜索</el-button><el-button link type="primary" @click="open = !open">高级搜索</el-button><template #actions><el-button>导出</el-button><el-button type="primary"><el-icon class="el-icon--left"><Plus /></el-icon>${title}</el-button></template></ui-filter-bar><div v-if="open" class="l-cluster" style="margin-top: var(--space-component-gap);"><el-select v-model="v2" placeholder="所属片区" clearable><el-option label="东区" value="e" /><el-option label="西区" value="w" /></el-select><el-select placeholder="行业类型" clearable><el-option label="生产制造" value="m" /></el-select></div><div style="margin-top: var(--space-module-title);"><el-table :data="rows" stripe><el-table-column type="index" label="序号" width="64" /><el-table-column prop="customer" label="${cols[0]}" min-width="180" show-overflow-tooltip /><el-table-column prop="no" label="${cols[1]}" width="160" /><el-table-column label="${cols[2]}" width="110"><template #default="{ row }"><el-tag size="small" round :type="{ pending: 'warning', done: 'success', cancelled: 'info' }[row.status]">{{ opts.find(o => o.value === row.status).label }}</el-tag></template></el-table-column><el-table-column prop="date" label="更新时间" width="120" /><el-table-column label="操作" width="140" fixed="right"><template #default><el-button text type="primary" size="small">查看</el-button><el-button text type="primary" size="small">编辑</el-button></template></el-table-column></el-table><div class="l-cluster l-cluster--end" style="margin-top: var(--space-module-title);"><el-pagination layout="total, prev, pager, next, sizes" :total="128" v-model:current-page="page" v-model:page-size="pageSize" :page-sizes="[10, 20, 50]" /></div></div></section>`
+  const CRUMB = (a, b) => `<ui-page-header title="${b}"><template #breadcrumb><span>${a}</span><span class="ui-page-header__sep">/</span><span>${b}</span></template></ui-page-header>`
+
+  const TEMPLATES = [
+    { key: 'stat', no: '01', label: '统计模板', route: 'dashboard', crumb: ['园区运营', '运营工作台'], desc: '只展示统计与分析模块之间的间距：统计卡行 → 趋势 / 分布 → 概况 → 进度',
+      anatomy: ['UiPageHeader', '.l-grid--cols-4', 'UiStatCard ×4', '.l-grid--cols-2', '.l-module', 'ElProgress', '.l-stack--tight'],
+      skeleton: `${CRUMB('园区运营', '运营工作台')}
+${STAT_ROW}
+<div class="l-grid l-grid--cols-2">
+  <section class="l-module"><div class="l-module-header"><div class="l-stack l-stack--tight"><h2>企业服务趋势</h2><small>近七日服务请求数量</small></div><el-tag type="info" size="small" round>本周 434</el-tag></div><div class="l-stack l-stack--tight"><div v-for="(d, i) in ['周一','周二','周三','周四','周五','周六','周日']" :key="d" class="l-inline" style="width: 100%;"><small style="width: 36px;">{{ d }}</small><el-progress :percentage="[52, 68, 44, 80, 73, 30, 22][i]" :show-text="false" :stroke-width="10" style="flex: 1;" /></div></div></section>
+  <section class="l-module"><div class="l-module-header"><div class="l-stack l-stack--tight"><h2>企业类型分布</h2><small>当前入驻企业构成</small></div></div><div class="l-stack l-stack--tight"><div v-for="(d, i) in [['生产制造', 82], ['仓储物流', 64], ['研发办公', 48], ['园区服务', 32]]" :key="d[0]" class="l-cluster l-cluster--between"><span>{{ d[0] }}</span><el-progress :percentage="d[1]" :show-text="false" :stroke-width="8" style="width: 60%;" /><strong>{{ d[1] }}</strong></div></div></section>
+</div>
+<section class="l-module"><div class="l-module-header"><div class="l-stack l-stack--tight"><h2>园区运营概况</h2><small>招商、服务、巡检与能耗关键结果</small></div><el-tag size="small" round>今日更新</el-tag></div><div class="l-grid l-grid--cols-4"><div v-for="c in [['招商签约', '推进中', '18 家', '年度目标完成 72%'], ['企业服务', '运行平稳', '46 项', '本月按期办结 43 项'], ['设备巡检', '已闭环', '128 次', '发现并闭环隐患 11 项'], ['能耗优化', '优于目标', '8.6%', '综合能耗同比下降']]" :key="c[0]" class="l-stack l-stack--tight"><div class="l-cluster l-cluster--between"><strong>{{ c[0] }}</strong><el-tag size="small" type="success" effect="plain" round>{{ c[1] }}</el-tag></div><span style="font-size: var(--font-size-page-title); font-weight: var(--font-weight-bold);">{{ c[2] }}</span><small>{{ c[3] }}</small></div></div></section>
+<section class="l-module"><div class="l-module-header"><div class="l-stack l-stack--tight"><h2>年度任务进度</h2><small>重点经营目标完成情况</small></div></div><div class="l-grid l-grid--cols-2"><div v-for="t in [['年度招商任务', 36, 50, '家'], ['重点项目建设', 16, 25, '项'], ['企业诉求办结', 188, 200, '件'], ['风险隐患闭环', 44, 50, '项']]" :key="t[0]" class="l-stack l-stack--tight"><div class="l-cluster l-cluster--between"><span>{{ t[0] }}</span><small>{{ t[1] }} / {{ t[2] }} {{ t[3] }}</small></div><el-progress :percentage="Math.round(t[1] / t[2] * 100)" :stroke-width="8" /></div></div></section>` },
+    { key: 'table', no: '02', label: '纯表格页', route: 'company', crumb: ['资产运营', '企业档案'], desc: '标准查询 + 表格结构：页头操作 → 筛选条（可展开高级搜索）→ 表格 → 分页',
+      anatomy: ['UiPageHeader', '.l-module', 'UiFilterBar', 'ElTable', 'ElPagination'],
+      skeleton: `${CRUMB('资产运营', '企业档案')}
+${TABLE_MODULE('新增企业', ['企业名称', '统一编码', '运行状态'])}` },
+    { key: 'stat-table', no: '03', label: '统计 + 表格', route: 'monitor', crumb: ['园区运营', '运行监测'], desc: '统计模块与列表模块上下组合：统计卡行 → 表格模块',
+      anatomy: ['UiPageHeader', '.l-grid--cols-4', 'UiStatCard ×4', '.l-module', 'UiFilterBar', 'ElTable', 'ElPagination'],
+      skeleton: `${CRUMB('园区运营', '运行监测')}
+${STAT_ROW}
+${TABLE_MODULE('新增设备', ['设备名称', '设备编号', '设备状态'])}` },
+    { key: 'tree-table', no: '04', label: '左树 + 表格', route: 'org', crumb: ['安全环保', '组织与片区'], desc: '左侧组织树与列表模块左右组合：.l-split 左树右表',
+      anatomy: ['UiPageHeader', '.l-split', '.l-module', 'ElTree', 'UiFilterBar', 'ElTable', 'ElPagination'],
+      skeleton: `${CRUMB('安全环保', '组织与片区')}
+<div class="l-split">
+  <section class="l-module"><div class="l-module-header"><h2>园区组织树</h2><el-tag size="small" type="info" round>全部</el-tag></div><el-input placeholder="搜索节点" clearable style="margin-bottom: var(--space-module-title);"><template #prefix><el-icon><Search /></el-icon></template></el-input><el-tree :data="[{ id: 0, label: '全部园区', children: [{ id: 1, label: '东区', children: [{ id: 11, label: 'A 栋' }, { id: 12, label: 'B 栋' }] }, { id: 2, label: '西区', children: [{ id: 21, label: 'C 栋' }] }, { id: 3, label: '南区' }] }]" node-key="id" default-expand-all highlight-current :current-node-key="0" /></section>
+  ${TABLE_MODULE('新增企业', ['企业名称', '统一编码', '运行状态'])}
+</div>` },
+    { key: 'tabs-table', no: '05', label: 'TabBar + 表格', route: 'env', crumb: ['安全环保', '环境监测'], desc: '线性页签导航与表格页上下组合：ElTabs → 表格模块',
+      anatomy: ['UiPageHeader', 'ElTabs', '.l-module', 'UiFilterBar', 'ElTable', 'ElPagination'],
+      skeleton: `${CRUMB('安全环保', '环境监测')}
+<el-tabs v-model="active"><el-tab-pane label="企业档案" name="a" /><el-tab-pane label="设备台账" name="b" /><el-tab-pane label="环境监测" name="c" /><el-tab-pane label="风险预警" name="d" /></el-tabs>
+${TABLE_MODULE('新增监测点位', ['监测点位', '点位编号', '数据状态'])}` },
+  ]
+  for (const t of TEMPLATES) {
+    t.demo = `<ui-shell title="智慧园区运营平台" :menu="menu" :active-key="'${t.route}'" v-model:collapsed="open2" style="height: 100%; min-height: 0;"><template #header-actions><el-tag v-for="h in history" :key="h" size="small" :effect="h === '${t.crumb[1]}' ? 'dark' : 'plain'" closable>{{ h }}</el-tag><el-button text circle><el-icon><Bell /></el-icon></el-button><el-tag effect="plain" round><el-icon class="el-icon--left"><User /></el-icon>园区管理员</el-tag></template><div class="l-page">${t.skeleton}</div></ui-shell>`
+    t.initActive = 'c'
+  }
+
+  return { ROUTES, CATEGORIES, CUSTOM_GROUPS, COMPONENTS, CUSTOM, LAYOUTS, DESC, SAMPLE, PRESETS, TEMPLATES, APP_MENU }
 })()

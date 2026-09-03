@@ -81,7 +81,7 @@ app.use(ElementPlus).use(DesignSystemUI)
 | `ElDatePicker` | 日期 |
 | `ElForm` / `ElFormItem` | 表单与校验（外层加 `.l-form`） |
 | `ElTable` / `ElTableColumn` | 表格 |
-| `ElPagination` | 分页 |
+| `ElPagination` | 分页；layout 含 `sizes` 时必须 `v-model:page-size`（否则 Element Plus 直接不渲染） |
 | `ElDialog`、`ElDrawer` | 弹层 |
 | `ElMessage`、`ElMessageBox`、`ElNotification` | 反馈（命令式） |
 | `ElTabs` / `ElTabPane` | 页签 |
@@ -184,6 +184,20 @@ app.use(ElementPlus).use(DesignSystemUI)
 | `upIsGood` | `boolean` | 上升是否为好（决定颜色），默认 true |
 | `hint` | `string?` | 说明 |
 
+## 页面排版模板（布局配置）
+
+原型开发第一步是**选模板**，五套骨架覆盖后台绝大多数页面：
+
+| 编号 | 模板 | 结构 |
+|---|---|---|
+| 01 | 统计模板 | UiPageHeader → `.l-grid--cols-4` × UiStatCard → `.l-grid--cols-2` 分析模块 → 概况模块 → 进度模块 |
+| 02 | 纯表格页 | UiPageHeader → `.l-module`（UiFilterBar → ElTable → ElPagination） |
+| 03 | 统计 + 表格 | 01 的统计行 + 02 的表格模块上下组合 |
+| 04 | 左树 + 表格 | UiPageHeader → `.l-split`（左 `.l-module` ElTree，右 02 的表格模块） |
+| 05 | TabBar + 表格 | UiPageHeader → ElTabs → 02 的表格模块 |
+
+骨架定义在 `showcase.data.js` 的 `TEMPLATES`（单一来源），展示页「布局配置」可预览并复制。模板内只有 `.l-*` 与白名单 / 自研组件，间距全部来自 token：page 用 `--space-page-pad-*`，模块之间 `--space-module-gap`，模块内标题到内容 `--space-module-title`。
+
 ## 组件需求单（`requests/`）
 
 原型阶段做不出来的 UI，复制 `requests/_template.md` 为 `<日期>-<name>.md`，由第二层负责人判定级别后实施。流程见 `requests/README.md`。
@@ -197,7 +211,8 @@ app.use(ElementPlus).use(DesignSystemUI)
 | `#/tokens` 设计变量 | 功能色色卡、bg / text / border / icon 分列、间距作用域×关系阶梯尺（条宽即真实值）、字体样张、圆角 / 阴影 / 边框、布局尺寸；原始刻度与 `--el-*` 映射默认折叠 |
 | `#/materials` 组件物料 | **Element Plus 全部组件**按官方分类逐一渲染；每张卡片：舞台区、白名单 / 需提议标记、驱动 token 注脚（点击复制）、复制用法 |
 | `#/layout` 布局范式 | `.l-*` 布局类逐一示意 |
-| `#/custom` 布局配置 | 自研组件（外壳 / 页面级 / 复合组件）的**配置卡**：舞台 + 结构标签 + 「脱胎第一层」面板（可临时调整该组件消费的 token 验证联动）+ Props / Slots / Events + 用法 |
+| `#/custom` 自研组件 | 自研组件（外壳 / 页面级 / 复合组件）的**配置卡**：舞台 + 结构标签 + 「脱胎第一层」面板（可临时调整该组件消费的 token 验证联动）+ Props / Slots / Events + 用法 |
+| `#/templates` 布局配置 | **五套页面排版模板**（参考 HY Compiler Studio 页面排版模板）：01 统计 / 02 纯表格 / 03 统计 + 表格 / 04 左树 + 表格 / 05 TabBar + 表格，在同一个 UiShell 应用壳内切换预览；右上角芯片显示 page / module / header / sidebar 当前值；「复制页面骨架」得到可直接放进原型 `.l-page` 的内容 |
 
 数据来源：`scripts/build-tokens.mjs` 解析 `tokens.css` + `whitelist.json` 生成 `dist/tokens.js`（file:// 下无法读样式表规则，故预抽取）；组件清单与演示模板在 `showcase.data.js`。**改了 tokens.css 或 whitelist.json 后必须重新 `pnpm build`**，否则展示页的变量清单 / 白名单标记会过期（解析值仍是实时的）。新增第二层组件时同步在 `showcase.data.js` 的 `CUSTOM` 登记。
 

@@ -1,6 +1,6 @@
 /* 由 scripts/build-tokens.mjs 自动生成，勿手改；真值在 tokens.css */
 window.DS_TOKENS = {
-  "generatedAt": "2026-09-03T03:37:57.307Z",
+  "generatedAt": "2026-09-03T04:00:01.503Z",
   "source": "tokens.css",
   "groups": [
     {

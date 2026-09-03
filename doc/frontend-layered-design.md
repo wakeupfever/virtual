@@ -1,7 +1,7 @@
 # 前端三层分层设计说明
 
 > 本文档描述 `virtual` 项目前端的三层分层模型：每一层包含什么、由谁修改、如何约束 AI 在各层的行为，以及"提示词 → 可交互原型 → 正式页面"的流转方式。
-> 对应需求台账见 `doc/frontend-layered-design.md.rai.md`（当前 RV-008）；需求 ID、状态与验收标准以台账为准。
+> 对应需求台账见 `doc/frontend-layered-design.md.rai.md`（当前 RV-009）；需求 ID、状态与验收标准以台账为准。
 > 技术栈：Vue 3 + Element Plus 2.14 + Vite 8 + Tailwind CSS 4，pnpm monorepo。
 
 ## 1. 目标与问题
@@ -123,7 +123,7 @@ reset、字体、页面底色。正式项目关闭 Tailwind preflight，全局 r
 
 ## 6. 第三层·原型
 
-`apps/prototypes/` 下每个功能一个 HTML，从 `_template.html` 复制起步，单文件可独立打开（依赖 CDN 与 `../../packages/design-system/`）。模板固定四个区块：① `DATA`（mock 数据，必须含常规、长文本、大数据量三类样本）② `state`（`Vue.reactive`，含 `view: ready | loading | empty | error`）③ `<div id="app">` 模板（只能用白名单标签与 `.l-*` 类，必须套 `<ui-shell>`）④ `methods`（`setup()` 内，只读 `DATA`、改 `state`）。
+`apps/prototypes/` 下每个功能一个 HTML，先从五套页面排版模板中选一套骨架，再从 `_template.html` 复制起步，单文件可独立打开（依赖 CDN 与 `../../packages/design-system/`）。模板固定四个区块：① `DATA`（mock 数据，必须含常规、长文本、大数据量三类样本）② `state`（`Vue.reactive`，含 `view: ready | loading | empty | error`）③ `<div id="app">` 模板（只能用白名单标签与 `.l-*` 类，必须套 `<ui-shell>`）④ `methods`（`setup()` 内，只读 `DATA`、改 `state`）。
 
 规则：禁止 `<style>`、inline style、裸数值、裸色值、原生表单/表格元素、手写 flex/grid、原生 overflow 滚动（滚动区域一律 `el-scrollbar`）、非白名单标签；in-DOM 模板中自定义标签必须显式闭合。路由：hash 路由 `#/<key>`，`<key>` 与 `UiShell` 菜单 key 一致，直达、前进后退、刷新保留；正式项目同一批 key 映射为 vue-router `/<key>`，promote 时机械转换。`scripts/check-prototype.js` 在提交前扫描并对违规返回非零。
 
@@ -147,7 +147,7 @@ reset、字体、页面底色。正式项目关闭 Tailwind preflight，全局 r
 
 ## 9. 展示页面
 
-`packages/design-system/showcase.html`（数据在 `showcase.data.js`），从第一、二层所在目录直接产出，零构建、双击打开，与原型同一套 CDN 依赖。排版采用画板确认的「方向 A · 文档站式」：顶栏路由页签（`#/tokens` 设计变量 / `#/materials` 组件物料 / `#/layout` 布局范式 / `#/custom` 布局配置）+ 左侧分组锚点 + 内容限宽 + 右侧本页目录。设计变量页：功能色色卡网格、bg / text / border / icon 分列、间距作用域×关系阶梯尺（条宽即真实解析值，随密度变化）、字体样张、圆角 / 阴影 / 边框实物、布局尺寸与层级；原始刻度与 `--el-*` 映射默认折叠并标注禁止直接引用。组件物料页：Element Plus 全部组件按官方分类（Basic / Config / Form / Data / Navigation / Feedback / Others）逐一渲染；布局配置页：自研组件（外壳 / 页面级 / 复合组件）的配置卡——舞台 + 结构标签 + 「脱胎第一层」面板（临时调整该组件消费的 token，只作用于本卡舞台，验证组件确实随第一层变化）+ Props / Slots / Events + 用法；每张卡片含舞台区、白名单 / 需提议标记（来自 `whitelist.json`）、驱动 token 注脚与复制用法。右上角实时切换主色 / 密度 / 深色 / 配色预设，三页同步变化；内容流式限宽并带四级响应式断点。本页属于设计系统内部工具，允许 `<style>` 与 `:style` 绑定，但所有值仍只引用 token。
+`packages/design-system/showcase.html`（数据在 `showcase.data.js`），从第一、二层所在目录直接产出，零构建、双击打开，与原型同一套 CDN 依赖。排版采用画板确认的「方向 A · 文档站式」：顶栏路由页签（`#/tokens` 设计变量 / `#/materials` 组件物料 / `#/custom` 自研组件 / `#/layout` 布局范式 / `#/templates` 布局配置）+ 左侧分组锚点 + 内容限宽 + 右侧本页目录。设计变量页：功能色色卡网格、bg / text / border / icon 分列、间距作用域×关系阶梯尺（条宽即真实解析值，随密度变化）、字体样张、圆角 / 阴影 / 边框实物、布局尺寸与层级；原始刻度与 `--el-*` 映射默认折叠并标注禁止直接引用。组件物料页：Element Plus 全部组件按官方分类（Basic / Config / Form / Data / Navigation / Feedback / Others）逐一渲染；自研组件页：自研组件（外壳 / 页面级 / 复合组件）的配置卡——舞台 + 结构标签 + 「脱胎第一层」面板（临时调整该组件消费的 token，只作用于本卡舞台，验证组件确实随第一层变化）+ Props / Slots / Events + 用法；布局配置页：五套页面排版模板（统计 / 纯表格 / 统计 + 表格 / 左树 + 表格 / TabBar + 表格，参考 HY Compiler Studio 页面排版模板）在同一 UiShell 应用壳内切换预览，芯片显示 page / module / header / sidebar 当前值，可复制骨架进原型；每张卡片含舞台区、白名单 / 需提议标记（来自 `whitelist.json`）、驱动 token 注脚与复制用法。右上角实时切换主色 / 密度 / 深色 / 配色预设，三页同步变化；内容流式限宽并带四级响应式断点。本页属于设计系统内部工具，允许 `<style>` 与 `:style` 绑定，但所有值仍只引用 token。
 
 ## 10. 实施状态
 
