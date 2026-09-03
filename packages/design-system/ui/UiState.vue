@@ -43,7 +43,7 @@ const emit = defineEmits<{ (e: 'retry'): void }>()
 
 <style>
 .ui-state__error { gap: var(--space-inline-gap); }
-.ui-state__error-icon { display: inline-grid; place-items: center; width: 40px; height: 40px; border-radius: var(--radius-full); background: color-mix(in srgb, var(--color-danger) 12%, var(--color-bg-surface)); color: var(--color-danger); margin-bottom: var(--space-inline-pad); }
+.ui-state__error-icon { display: inline-grid; place-items: center; width: var(--layout-icon-lg); height: var(--layout-icon-lg); border-radius: var(--radius-full); background: color-mix(in srgb, var(--color-danger) 12%, var(--color-bg-surface)); color: var(--color-danger); margin-bottom: var(--space-inline-pad); }
 .ui-state__error-title { color: var(--color-text-default); font-weight: var(--font-weight-medium); }
 .ui-state__error-hint { color: var(--color-text-muted); }
 .ui-state__error .el-button { margin-top: var(--space-inline-pad); }

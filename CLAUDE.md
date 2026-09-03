@@ -60,7 +60,7 @@
 1. 开发第三层任何内容前，先读 `packages/design-system/README.md`
 2. 原型：需求 → 复制模板 → 填 DATA/state/模板/方法 → `check-prototype.js` → 交付
 3. 原型 → 正式：`DATA` → `api.ts`（接口定义 + mock），`state` → `composables/useXxx.ts`，hash 路由 → vue-router 路由表，模板逐一映射为 `Page.vue`（`<el-*>` → `<El*>`，`<ui-*>` → `<Ui*>`），输出"原型与实现差异清单"
-4. 第二层改动（含需求单落地）：单独一次对话、单独一次提交，先改 `ui/` / `ui/composites/` / `skins/` / `whitelist.json`，再 `pnpm build:ds`，再更新 README 与 `showcase.data.js`（自研组件登记在 `CUSTOM`），最后回填原型中的占位
+4. 第二层改动（含需求单落地）：单独一次对话、单独一次提交，先改 `ui/` / `ui/composites/` / `skins/` / `whitelist.json`，再 `pnpm build:ds`（末尾自动跑 `check-layer2`：第二层样式值必须来自 token，有裸值即失败；消费的 token 由脚本扫描生成，不手填），再更新 README 与 `showcase.data.js`（自研组件登记在 `CUSTOM`），最后回填原型中的占位
 5. 改第一层 token 值后无需改组件；改语义名视为第二层级别的变更
 
 ## 6. 命令
@@ -71,6 +71,7 @@ pnpm dev                 # 本地预览：自动打开 design-system 展示页�
 pnpm dev:prototype       # 本地预览：打开原型模板；其他原型改 URL 路径即可
 pnpm build:ds            # 抽取 token + 打包第二层 → dist/tokens.js · ui.iife.js · ui.css（原型与展示页引用，需提交）
 pnpm check:prototype     # 原型合规检查
+pnpm check:layer2        # 第二层 token 约束 + 覆盖度报告（build:ds 已包含）
 ```
 
 展示页与原型都是静态单文件，也可以直接双击打开（需能访问 jsdelivr CDN）；`pnpm dev` 只是起一个静态服务器方便预览与热刷新。

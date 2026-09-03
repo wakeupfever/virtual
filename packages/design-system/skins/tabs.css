@@ -2,7 +2,7 @@
 .el-tabs.is-tabbar { --el-tabs-header-height: auto; }
 .el-tabs.is-tabbar .el-tabs__header { margin: 0; width: fit-content; padding: var(--space-inline-pad) var(--space-inline-pad); background: var(--color-bg-surface); border: var(--border-w) solid var(--color-border-muted); border-radius: var(--radius-md); }
 .el-tabs.is-tabbar .el-tabs__nav-wrap::after, .el-tabs.is-tabbar .el-tabs__active-bar { display: none; }
-.el-tabs.is-tabbar .el-tabs__item { height: auto; padding: var(--space-inline-gap) var(--space-component-pad-x); border-radius: var(--radius-md); font-size: 13px; color: var(--color-text-secondary); }
+.el-tabs.is-tabbar .el-tabs__item { height: auto; padding: var(--space-inline-gap) var(--space-component-pad-x); border-radius: var(--radius-md); font-size: var(--font-size-caption); color: var(--color-text-secondary); }
 .el-tabs.is-tabbar .el-tabs__item + .el-tabs__item { margin-left: var(--space-inline-gap); }
 .el-tabs.is-tabbar .el-tabs__item.is-active { background: var(--color-bg-accent); color: var(--color-primary); font-weight: var(--font-weight-medium); }
 .el-tabs.is-tabbar .el-tabs__content { display: none; }

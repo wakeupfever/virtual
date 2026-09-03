@@ -45,7 +45,7 @@ const emit = defineEmits<{ (e: 'search'): void; (e: 'reset'): void; (e: 'toggle'
 <style>
 .ui-filter-bar { flex-wrap: wrap; padding: var(--space-component-gap) var(--space-component-pad-x); background: var(--color-bg-subtle); border-radius: var(--radius-md); margin-bottom: 0; }
 .ui-filter-bar__filters { flex: 1; min-width: 0; }
-.ui-filter-bar__filters > .l-inline > small { color: var(--color-text-secondary); font-size: 13px; }
+.ui-filter-bar__filters > .l-inline > small { color: var(--color-text-secondary); font-size: var(--font-size-caption); }
 .ui-filter-bar__filters > .l-inline > .el-input,
 .ui-filter-bar__filters > .l-inline > .el-select,
 .ui-filter-bar__filters > .l-inline > .el-date-editor { width: var(--layout-control-w); }

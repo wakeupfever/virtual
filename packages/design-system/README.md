@@ -35,7 +35,7 @@ app.use(ElementPlus).use(DesignSystemUI)
 | 间距 module | `--space-module-{gap\|pad\|title}` | 卡片之间 16 / 卡片内边距 16 / 卡片标题到内容 16 |
 | 间距 component | `--space-component-{gap\|pad-x\|pad-y\|title}` | 按钮组、表单项之间 / 组件内边距 / label 到控件 |
 | 间距 inline | `--space-inline-{gap\|pad}` | 图标与文字 / tag 内边距 |
-| 布局尺寸 | `--layout-{sidebar-w\|sidebar-w-collapsed\|header-h\|aside-w\|content-max\|content-pad\|form-label-w\|control-w\|control-w-sm}`，`--grid-cols`，`--grid-gap` | 默认 230 / 66 / 60 / 320（对齐参考站 park-mgt-web） |
+| 布局尺寸 | `--layout-{sidebar-w\|sidebar-w-collapsed\|header-h\|aside-w\|row-h\|thead-h\|control-h\|menu-item-h\|icon-sm\|icon-md\|icon-lg\|content-max\|content-pad\|form-label-w\|control-w\|control-w-sm}`，`--grid-cols`，`--grid-gap` | 默认 230 / 66 / 60 / 320（对齐参考站 park-mgt-web） |
 | 层级 | `--z-{header\|sidebar\|drawer\|dialog\|toast}` | |
 | 字体 | `--font-family`，`--font-size-{display\|page-title\|module-title\|body\|caption\|micro}`（24 / 20 / 16 / 14 / 12 / 10），`--line-height-{tight\|body}`，`--font-weight-{regular\|medium\|bold}` | |
 | 圆角 | `--radius-{sm\|md\|lg\|full}` | |
@@ -105,6 +105,15 @@ app.use(ElementPlus).use(DesignSystemUI)
 | 行为级 | Element Plus 没有的交互 | 封装外部库或自研进 `ui/` | 最接近的白名单组件占位，打 `data-placeholder="<需求名>"`，写 `requests/` 需求单 |
 
 `node scripts/check-prototype.js` 统计候选结构与占位；`--strict` 下占位即失败（promote 前必跑）。判断标准只有一条：**拼不出来 = 词汇表缺词，缺词只能加在第一、二层，第三层不造词。**
+
+## 第二层 · token 约束与覆盖度（`scripts/check-layer2.mjs`）
+
+第二层可以写样式，但**值必须来自第一层**。`pnpm build` 末尾自动跑 `check-layer2`（也可单独 `pnpm check:layer2`，`--strict` 下警告即失败）：
+
+- 约束（错误）：`ui/**/*.vue` 的 `<style>` 与 `skins/*.css` 中，颜色 / 背景 / 边框 / 内外边距 / gap / 圆角 / 阴影 / 字号 / 宽高等视觉属性（含 `--el-*` 变量的赋值）不得出现裸色、裸长度（0 与视口单位除外）；不得引用 `--palette-*` / `--space-N`；不得在第二层定义 `--color-*` 等语义名（缺词只能提议进第一层）；不得引用 tokens.css 里不存在的名字
+- 覆盖度（警告）：按文件统计消费的 token（`:style` / script 里的 `var()`、模板用到的 `.l-*` 类所消费的 token 都算），输出到 `dist/token-coverage.json` 与 `dist/token-coverage.js`——展示页「自研组件」配置卡的「脱胎第一层」面板就读这份数据，不再手工登记；既无第二层消费也未被 `--el-*` 映射引用的语义 token 列为「未消费」；复合组件至少消费 bg / text / border / space 中的三类（纯文字组件 `UiModuleHeader` 除外）
+
+需要一个新尺寸 / 字号档位时，先看 token 表能否复用（例如 13px 一律用 `--font-size-caption`），复用不了再在 tokens.css 加语义名，并在台账登记。
 
 ## 第二层 · 自研组件（`ui/`）
 
@@ -226,5 +235,5 @@ app.use(ElementPlus).use(DesignSystemUI)
 ## 构建
 
 ```bash
-pnpm --filter @virtual/design-system build   # ① vite → dist/ui.iife.js + ui.css（会清空 dist）② build-tokens → dist/tokens.js(.json)；产物需提交
+pnpm --filter @virtual/design-system build   # ① vite → dist/ui.iife.js + ui.css（会清空 dist）② build-tokens → dist/tokens.js(.json) ③ check-layer2 → dist/token-coverage.js(.json)；产物需提交
 ```

@@ -1,13 +1,13 @@
 /* skins/menu.css · 侧栏菜单皮肤：圆角胶囊高亮，间距与颜色跟随 token（UiShell 内部使用） */
 .ui-shell__menu.el-menu {
-  --el-menu-item-height: 40px;
+  --el-menu-item-height: var(--layout-menu-item-h);
   --el-menu-hover-bg-color: var(--color-bg-subtle);
   --el-menu-active-color: var(--color-primary);
-  padding: var(--space-3) var(--space-2);
+  padding: var(--space-component-gap) var(--space-inline-gap);
 }
 .ui-shell__menu .el-menu-item {
   border-radius: var(--radius-md);
-  margin-bottom: 2px;
+  margin-bottom: calc(var(--space-inline-pad) / 2);
   font-size: var(--font-size-body);
 }
 .ui-shell__menu .el-menu-item.is-active {

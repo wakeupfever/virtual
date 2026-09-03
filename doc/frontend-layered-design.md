@@ -1,7 +1,7 @@
 # 前端三层分层设计说明
 
 > 本文档描述 `virtual` 项目前端的三层分层模型：每一层包含什么、由谁修改、如何约束 AI 在各层的行为，以及"提示词 → 可交互原型 → 正式页面"的流转方式。
-> 对应需求台账见 `doc/frontend-layered-design.md.rai.md`（当前 RV-012）；需求 ID、状态与验收标准以台账为准。
+> 对应需求台账见 `doc/frontend-layered-design.md.rai.md`（当前 RV-013）；需求 ID、状态与验收标准以台账为准。
 > 技术栈：Vue 3 + Element Plus 2.14 + Vite 8 + Tailwind CSS 4，pnpm monorepo。
 
 ## 1. 目标与问题
@@ -104,6 +104,10 @@ reset、字体、页面底色。正式项目关闭 Tailwind preflight，全局 r
 ### 5.3 共用方式
 
 正式项目：`import DesignSystemUI from '@virtual/design-system'`，`app.use(ElementPlus).use(DesignSystemUI)`。原型：Vite 库模式把 `ui/` 打包为 `dist/ui.iife.js`（Vue 与 Element Plus 设为 external，运行时用 CDN 全局对象），原型一行 `<script>` 引入，`app.use(DesignSystemUI)`。原型 CDN 版本必须与 `packages/design-system/package.json` 一致。
+
+### 5.3a 第二层如何保证充分消费第一层
+
+第二层允许写样式，风险是"能引用 token 不等于必然引用"。三道机制：`check-layer2.mjs` 静态约束（视觉属性的值必须是语义 token，裸值 / 原始刻度 / 在第二层定义语义名 / 引用不存在的名字都报错，`pnpm build` 内置）；覆盖度报告（按文件扫描 `var()` 与模板用到的 `.l-*` 类，生成 `dist/token-coverage.json`，展示页配置卡据此列出组件消费的 token，未被第二层与 `--el-*` 映射消费的 token 单列）；变异验证（计划中：Playwright 对每个组件声明的 token 逐个改值并断言 computed style 变化，见 R-049）。
 
 ### 5.3b 皮肤层
 

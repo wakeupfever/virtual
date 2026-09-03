@@ -53,11 +53,11 @@ const trendText = computed(() => (props.trend === undefined ? '' : props.trend =
 .ui-stat-card:hover { box-shadow: var(--shadow-md); }
 .ui-stat-card__head { display: flex; align-items: center; justify-content: space-between; gap: var(--space-component-gap); }
 .ui-stat-card__label { font-size: var(--font-size-caption); color: var(--color-text-secondary); }
-.ui-stat-card__icon { display: inline-grid; place-items: center; width: 28px; height: 28px; border-radius: var(--radius-md); background: var(--color-bg-accent); color: var(--color-primary); font-size: var(--font-size-body); }
+.ui-stat-card__icon { display: inline-grid; place-items: center; width: var(--layout-icon-md); height: var(--layout-icon-md); border-radius: var(--radius-md); background: var(--color-bg-accent); color: var(--color-primary); font-size: var(--font-size-body); }
 .ui-stat-card__value { align-items: baseline; gap: var(--space-inline-pad); }
 .ui-stat-card__num { font-size: var(--font-size-display); font-weight: var(--font-weight-bold); line-height: 1.1; letter-spacing: -0.3px; color: var(--color-text-default); font-variant-numeric: tabular-nums; }
 .ui-stat-card__unit { font-size: var(--font-size-caption); color: var(--color-text-secondary); }
-.ui-stat-card__trend { display: inline-flex; align-items: center; font-size: var(--font-size-micro); font-weight: var(--font-weight-medium); padding: 2px var(--space-inline-gap); border-radius: var(--radius-full); white-space: nowrap; }
+.ui-stat-card__trend { display: inline-flex; align-items: center; font-size: var(--font-size-micro); font-weight: var(--font-weight-medium); padding: calc(var(--space-inline-pad) / 2) var(--space-inline-gap); border-radius: var(--radius-full); white-space: nowrap; }
 .ui-stat-card__trend.is-primary { color: var(--color-primary); background: var(--color-bg-accent); }
 .ui-stat-card__trend.is-good { color: var(--color-success); background: color-mix(in srgb, var(--color-success) 12%, var(--color-bg-surface)); }
 .ui-stat-card__trend.is-bad { color: var(--color-danger); background: color-mix(in srgb, var(--color-danger) 12%, var(--color-bg-surface)); }

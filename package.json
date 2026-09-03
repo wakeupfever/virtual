@@ -5,12 +5,15 @@
   "type": "module",
   "description": "提示词 → 可交互原型 → 正式页面：三层分层前端工作区",
   "packageManager": "pnpm@10.28.0",
-  "engines": { "node": ">=20.19" },
+  "engines": {
+    "node": ">=20.19"
+  },
   "scripts": {
     "dev": "vite --open /packages/design-system/showcase.html",
     "dev:prototype": "vite --open /apps/prototypes/_template.html",
     "build:ds": "pnpm --filter @virtual/design-system build",
-    "check:prototype": "node scripts/check-prototype.js"
+    "check:prototype": "node scripts/check-prototype.js",
+    "check:layer2": "pnpm --filter @virtual/design-system check:layer2"
   },
   "devDependencies": {
     "vite": "^8.2.2"

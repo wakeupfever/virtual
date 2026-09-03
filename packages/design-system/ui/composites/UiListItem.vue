@@ -65,5 +65,5 @@ const emit = defineEmits<{ (e: 'click'): void }>()
 .ui-list-item__title { font-weight: var(--font-weight-medium); color: var(--color-text-default); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .ui-list-item__subtitle { color: var(--color-text-muted); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .ui-list-item__trailing { flex: none; }
-.ui-list-item__chevron { color: var(--color-text-placeholder); }
+.ui-list-item__chevron { color: var(--color-icon-muted); }
 </style>

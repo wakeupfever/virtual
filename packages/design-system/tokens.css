@@ -115,6 +115,11 @@
   --layout-aside-w: 320px;          /* 分析区 / 左树等侧栏面板的最小宽 */
   --layout-row-h: 44px;             /* 表格行高 */
   --layout-thead-h: 40px;           /* 表头高 */
+  --layout-control-h: 32px;         /* 控件 / 树节点 / 列表行标准高（与 Element 默认组件高一致） */
+  --layout-menu-item-h: 40px;       /* 侧栏菜单项高 */
+  --layout-icon-sm: 22px;           /* 图标容器三档：品牌标 */
+  --layout-icon-md: 28px;           /* 卡片图标 */
+  --layout-icon-lg: 40px;           /* 状态 / 空态图标 */
   --layout-content-max: 1440px;
   --layout-content-pad: var(--space-page-pad-x);
   --layout-form-label-w: 120px;
@@ -178,6 +183,7 @@ html:root {
   --el-color-success: var(--color-success);
   --el-color-warning: var(--color-warning);
   --el-color-danger: var(--color-danger);
+  --el-color-danger-dark-2: var(--color-danger-hover);
   --el-color-error: var(--color-danger);
   --el-color-info: var(--color-info);
 

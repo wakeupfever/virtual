@@ -1,6 +1,6 @@
 /* 由 scripts/build-tokens.mjs 自动生成，勿手改；真值在 tokens.css */
 window.DS_TOKENS = {
-  "generatedAt": "2026-09-03T07:44:13.249Z",
+  "generatedAt": "2026-09-03T07:56:50.124Z",
   "source": "tokens.css",
   "groups": [
     {
@@ -281,6 +281,36 @@ window.DS_TOKENS = {
           "name": "--layout-thead-h",
           "value": "40px",
           "comment": "表头高",
+          "dark": null
+        },
+        {
+          "name": "--layout-control-h",
+          "value": "32px",
+          "comment": "控件 / 树节点 / 列表行标准高（与 Element 默认组件高一致）",
+          "dark": null
+        },
+        {
+          "name": "--layout-menu-item-h",
+          "value": "40px",
+          "comment": "侧栏菜单项高",
+          "dark": null
+        },
+        {
+          "name": "--layout-icon-sm",
+          "value": "22px",
+          "comment": "图标容器三档：品牌标",
+          "dark": null
+        },
+        {
+          "name": "--layout-icon-md",
+          "value": "28px",
+          "comment": "卡片图标",
+          "dark": null
+        },
+        {
+          "name": "--layout-icon-lg",
+          "value": "40px",
+          "comment": "状态 / 空态图标",
           "dark": null
         },
         {
@@ -802,6 +832,12 @@ window.DS_TOKENS = {
         {
           "name": "--el-color-danger",
           "value": "var(--color-danger)",
+          "comment": "",
+          "dark": null
+        },
+        {
+          "name": "--el-color-danger-dark-2",
+          "value": "var(--color-danger-hover)",
           "comment": "",
           "dark": null
         },
@@ -1344,8 +1380,8 @@ window.DS_TOKENS = {
     }
   ],
   "counts": {
-    "semantic": 80,
+    "semantic": 85,
     "raw": 28,
-    "mapping": 56
+    "mapping": 57
   }
 };

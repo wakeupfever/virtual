@@ -14,7 +14,8 @@
   },
   "scripts": {
     "dev": "vite --open /showcase.html",
-    "build": "vite build --config vite.lib.config.ts && node scripts/build-tokens.mjs",
+    "build": "vite build --config vite.lib.config.ts && node scripts/build-tokens.mjs && node scripts/check-layer2.mjs",
+    "check:layer2": "node scripts/check-layer2.mjs",
     "typecheck": "vue-tsc --noEmit -p tsconfig.json",
     "build:tokens": "node scripts/build-tokens.mjs"
   },
