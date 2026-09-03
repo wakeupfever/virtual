@@ -6,3 +6,4 @@ node_modules/
 apps/*/dist/
 # Claude 桌面端自动落盘的会话产物，不属于项目
 Claude outputs/
+tests/visual/__output__/

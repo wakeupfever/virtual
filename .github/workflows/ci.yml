@@ -1,0 +1,40 @@
+name: ci
+on:
+  push:
+    branches: [main, master]
+  pull_request:
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - name: lint（三层约束）
+        run: pnpm lint --max-warnings=0
+      - name: typecheck
+        run: pnpm typecheck
+      - name: build design-system（含 check-layer2）
+        run: pnpm build:ds
+      - name: 第二层产物必须已提交
+        run: git diff --exit-code -- packages/design-system/dist
+      - name: check prototypes
+        run: pnpm check:prototype
+      - name: build web
+        run: pnpm build:web
+      - name: playwright chromium
+        run: pnpm exec playwright install --with-deps chromium
+      - name: 视觉回归（原型 vs 正式页面）
+        run: pnpm test:visual
+      - name: 第二层变异验证
+        run: pnpm test:mutation
+      - uses: actions/upload-artifact@v4
+        if: failure()
+        with:
+          name: visual-output
+          path: tests/visual/__output__

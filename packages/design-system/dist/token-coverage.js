@@ -1,13 +1,11 @@
 /* 由 scripts/check-layer2.mjs 自动生成，勿手改 */
 window.DS_COVERAGE = {
-  "generatedAt": "2026-09-03T07:56:50.183Z",
+  "generatedAt": "2026-09-03T09:05:40.143Z",
   "files": {
     "ui/UiPageHeader.vue": [
       "--color-text-muted",
       "--color-text-placeholder",
       "--color-text-secondary",
-      "--layout-control-w",
-      "--layout-control-w-sm",
       "--space-component-gap",
       "--space-component-title",
       "--space-inline-gap",
@@ -24,8 +22,6 @@ window.DS_COVERAGE = {
       "--font-size-module-title",
       "--font-weight-bold",
       "--layout-content-max",
-      "--layout-control-w",
-      "--layout-control-w-sm",
       "--layout-header-h",
       "--layout-icon-sm",
       "--layout-sidebar-w",
@@ -35,7 +31,6 @@ window.DS_COVERAGE = {
       "--space-component-pad-x",
       "--space-inline-gap",
       "--space-module-pad",
-      "--space-page-gap",
       "--space-page-pad-x",
       "--space-page-pad-y",
       "--z-header",
@@ -61,7 +56,6 @@ window.DS_COVERAGE = {
       "--color-text-secondary",
       "--font-size-caption",
       "--layout-control-w",
-      "--layout-control-w-sm",
       "--radius-md",
       "--space-component-gap",
       "--space-component-pad-x",
@@ -79,8 +73,6 @@ window.DS_COVERAGE = {
       "--color-text-inverse",
       "--color-text-muted",
       "--font-weight-medium",
-      "--layout-control-w",
-      "--layout-control-w-sm",
       "--radius-md",
       "--space-component-gap",
       "--space-component-pad-x",
@@ -96,7 +88,6 @@ window.DS_COVERAGE = {
       "--font-size-caption",
       "--font-weight-bold",
       "--font-weight-medium",
-      "--layout-control-w",
       "--line-height-tight",
       "--space-component-gap",
       "--space-inline-pad",
@@ -120,7 +111,6 @@ window.DS_COVERAGE = {
       "--font-size-micro",
       "--font-weight-bold",
       "--font-weight-medium",
-      "--layout-control-w-sm",
       "--layout-icon-md",
       "--radius-full",
       "--radius-lg",
@@ -238,8 +228,6 @@ window.DS_COVERAGE = {
       "--color-text-muted",
       "--color-text-placeholder",
       "--color-text-secondary",
-      "--layout-control-w",
-      "--layout-control-w-sm",
       "--space-component-gap",
       "--space-component-title",
       "--space-inline-gap",
@@ -256,8 +244,6 @@ window.DS_COVERAGE = {
       "--font-size-module-title",
       "--font-weight-bold",
       "--layout-content-max",
-      "--layout-control-w",
-      "--layout-control-w-sm",
       "--layout-header-h",
       "--layout-icon-sm",
       "--layout-sidebar-w",
@@ -267,7 +253,6 @@ window.DS_COVERAGE = {
       "--space-component-pad-x",
       "--space-inline-gap",
       "--space-module-pad",
-      "--space-page-gap",
       "--space-page-pad-x",
       "--space-page-pad-y",
       "--z-header",
@@ -293,7 +278,6 @@ window.DS_COVERAGE = {
       "--color-text-secondary",
       "--font-size-caption",
       "--layout-control-w",
-      "--layout-control-w-sm",
       "--radius-md",
       "--space-component-gap",
       "--space-component-pad-x",
@@ -311,8 +295,6 @@ window.DS_COVERAGE = {
       "--color-text-inverse",
       "--color-text-muted",
       "--font-weight-medium",
-      "--layout-control-w",
-      "--layout-control-w-sm",
       "--radius-md",
       "--space-component-gap",
       "--space-component-pad-x",
@@ -328,7 +310,6 @@ window.DS_COVERAGE = {
       "--font-size-caption",
       "--font-weight-bold",
       "--font-weight-medium",
-      "--layout-control-w",
       "--line-height-tight",
       "--space-component-gap",
       "--space-inline-pad",
@@ -352,7 +333,6 @@ window.DS_COVERAGE = {
       "--font-size-micro",
       "--font-weight-bold",
       "--font-weight-medium",
-      "--layout-control-w-sm",
       "--layout-icon-md",
       "--radius-full",
       "--radius-lg",
@@ -479,7 +459,6 @@ window.DS_COVERAGE = {
     "--color-info": [],
     "--space-page-gap": [
       "layout.css",
-      "ui/UiShell.vue (via .l-page)",
       "ui/UiState.vue (via .l-state)"
     ],
     "--space-page-pad-x": [
@@ -605,21 +584,10 @@ window.DS_COVERAGE = {
     ],
     "--layout-control-w": [
       "layout.css",
-      "ui/UiPageHeader.vue (via .l-cluster)",
-      "ui/UiShell.vue (via .l-cluster)",
-      "ui/composites/UiFilterBar.vue",
-      "ui/composites/UiFilterBar.vue (via .l-cluster)",
-      "ui/composites/UiFilterBar.vue (via .l-toolbar)",
-      "ui/composites/UiListItem.vue (via .l-cluster)",
-      "ui/composites/UiModuleHeader.vue (via .l-cluster)"
+      "ui/composites/UiFilterBar.vue"
     ],
     "--layout-control-w-sm": [
-      "layout.css",
-      "ui/UiPageHeader.vue (via .l-inline)",
-      "ui/UiShell.vue (via .l-inline)",
-      "ui/composites/UiFilterBar.vue (via .l-inline)",
-      "ui/composites/UiListItem.vue (via .l-inline)",
-      "ui/composites/UiStatCard.vue (via .l-inline)"
+      "layout.css"
     ],
     "--grid-cols": [
       "layout.css"

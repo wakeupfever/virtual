@@ -571,7 +571,8 @@ const app = Vue.createApp({
     const customOf = key => CUSTOM.filter(c => c.group === key)
 
     /* ---------- 自研组件 · 脱胎第一层：每张卡片可临时覆盖它消费的 token（只作用于舞台） ---------- */
-    const tokenKind = n => /^--color-/.test(n) ? 'color' : /^--(space|radius|layout-(sidebar|header|content-pad|control|form)|font-size|border-w)/.test(n) ? 'length' : 'other'
+    // --radius-full（9999px）不给滑块：el-slider 会把超出 max 的值钳到 32 并回写成 tweak，导致舞台被无声覆盖
+    const tokenKind = n => /^--color-/.test(n) ? 'color' : n === '--radius-full' ? 'other' : /^--(space|radius|layout-(sidebar|header|content-pad|control|form|icon|row|thead|menu)|font-size|border-w)/.test(n) ? 'length' : 'other'
     const sliderRange = n => /^--space/.test(n) ? [0, 64] : /^--radius/.test(n) ? [0, 32] : /^--font-size/.test(n) ? [10, 40] : /^--border-w/.test(n) ? [0, 4] : /^--layout-header/.test(n) ? [40, 96] : [0, 400]
     const pxOf = v => { const m = /^(-?\d+(?:\.\d+)?)px$/.exec(v || ''); return m ? Math.round(+m[1]) : 0 }
     const tweakValue = (c, n) => state.tweaks[c.key]?.[n] ?? resolved.value[n]

@@ -157,7 +157,7 @@ defineExpose({ scrollTo, wrapEl })
 }
 .ui-shell__mark { width: var(--layout-icon-sm); height: var(--layout-icon-sm); border-radius: var(--radius-md); background: var(--color-primary); flex: none; }
 .ui-shell__title { font-size: var(--font-size-module-title); font-weight: var(--font-weight-bold); color: var(--color-text-default); }
-.ui-shell__toggle { color: var(--color-icon-default); }
+.ui-shell__toggle { --el-button-text-color: var(--color-icon-default); color: var(--color-icon-default); }
 
 .ui-shell__sidebar {
   grid-area: sidebar;

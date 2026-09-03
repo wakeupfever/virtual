@@ -61,7 +61,7 @@
 
 1. 开发第三层任何内容前，先读 `packages/design-system/README.md`
 2. 原型：需求 → 复制模板 → 填 DATA/state/模板/方法 → `check-prototype.js` → 交付
-3. 原型 → 正式：`DATA` → `api.ts`（接口定义 + mock），`state` → `composables/useXxx.ts`，hash 路由 → vue-router 路由表，模板逐一映射为 `Page.vue`（`<el-*>` → `<El*>`，`<ui-*>` → `<Ui*>`），输出"原型与实现差异清单"
+3. 原型 → 正式：`DATA` → `api.ts`（接口定义 + mock），`state` → `composables/useXxx.ts`，hash 路由 → vue-router 路由表，模板逐一映射为 `Page.vue`（`<el-*>` → `<El*>`，`<ui-*>` → `<Ui*>`），输出"原型与实现差异清单"（`features/<名>/DIFF.md`），再把用例加进 `tests/visual/compare.mjs` 跑 `pnpm test:visual`，差异 ≤ 1% 才算转换完成
 4. 第二层改动（含需求单落地）：单独一次对话、单独一次提交，先改 `ui/` / `ui/composites/` / `skins/` / `whitelist.json`，再 `pnpm build:ds`（末尾自动跑 `check-layer2`：第二层样式值必须来自 token，有裸值即失败；消费的 token 由脚本扫描生成，不手填），再更新 README 与 `showcase.data.js`（自研组件登记在 `CUSTOM`），最后回填原型中的占位
 5. 改第一层 token 值后无需改组件；改语义名视为第二层级别的变更
 
@@ -78,6 +78,10 @@ pnpm typecheck           # 所有包 vue-tsc
 pnpm build:ds            # 抽取 token + 打包第二层 → dist/tokens.js · ui.iife.js · ui.css（原型与展示页引用，需提交）
 pnpm check:prototype     # 原型合规检查
 pnpm check:layer2        # 第二层 token 约束 + 覆盖度报告（build:ds 已包含）
+pnpm test:visual         # 原型 vs 正式页面 视觉回归（自动起两个 dev server；本机已有 Chromium 可设 PW_CHROMIUM=<路径> 免下载，否则先 pnpm exec playwright install chromium）
+pnpm test:mutation       # 第二层变异验证：逐个 token 改值断言组件真的变了
 ```
 
 展示页与原型都是静态单文件，也可以直接双击打开（需能访问 jsdelivr CDN）；`pnpm dev` 只是起一个静态服务器方便预览与热刷新。
+
+门禁：`git commit` 时 lint-staged 对改动文件跑 ESLint / check-layer2 / check-prototype（`.husky/pre-commit`）；CI（`.github/workflows/ci.yml`）依次 lint → typecheck → build:ds（并校验 `dist/` 已提交）→ check:prototype → build:web → 视觉回归 → 变异验证。新增正式页面时把用例加进 `tests/visual/compare.mjs` 的 `CASES`。

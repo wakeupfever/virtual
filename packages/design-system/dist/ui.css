@@ -28,7 +28,7 @@
 }
 .ui-shell__title { font-size: var(--font-size-module-title); font-weight: var(--font-weight-bold); color: var(--color-text-default);
 }
-.ui-shell__toggle { color: var(--color-icon-default);
+.ui-shell__toggle { --el-button-text-color: var(--color-icon-default); color: var(--color-icon-default);
 }
 .ui-shell__sidebar {
   grid-area: sidebar;

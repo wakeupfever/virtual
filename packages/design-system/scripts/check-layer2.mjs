@@ -14,7 +14,7 @@
  *
  * 用法：node scripts/check-layer2.mjs [--strict]   （--strict 下警告也视为失败）
  */
-import { readFileSync, readdirSync, writeFileSync, mkdirSync, existsSync } from 'node:fs'
+import { readFileSync, readdirSync, writeFileSync, mkdirSync } from 'node:fs'
 import { resolve, dirname, relative, join } from 'node:path'
 import { fileURLToPath } from 'node:url'
 
@@ -59,8 +59,14 @@ const layoutCss = readFileSync(resolve(PKG, 'layout.css'), 'utf8').replace(/\/\*
 const layoutClassTokens = {}
 for (const m of layoutCss.matchAll(/([^{}]+)\{([^{}]*)\}/g)) {
   const toks = [...m[2].matchAll(/var\((--[\w-]+)/g)].map(x => x[1]).filter(t => !t.startsWith('--el-'))
-  for (const cls of m[1].matchAll(/\.(l-[\w-]+)/g)) (layoutClassTokens[cls[1]] ||= new Set()); 
-  for (const cls of m[1].matchAll(/\.(l-[\w-]+)/g)) toks.forEach(t => layoutClassTokens[cls[1]].add(t))
+  // 只认「选择器就是这个类本身」的规则（.l-x / .l-x.l-x--mod / .l-x > *）；
+  // 带后代条件的（.l-cluster > .el-input）依赖组件内是否真有该子元素，不做静态归因
+  for (const sel of m[1].split(',')) {
+    const t = sel.trim().split('\n').pop().trim()
+    const mm = t.match(/^((?:\.l-[\w-]+)+)(\s*>\s*\*)?$/)
+    if (!mm) continue
+    for (const cls of mm[1].matchAll(/\.(l-[\w-]+)/g)) { (layoutClassTokens[cls[1]] ||= new Set()); toks.forEach(x => layoutClassTokens[cls[1]].add(x)) }
+  }
 }
 
 /* ---------- ① 约束 ---------- */

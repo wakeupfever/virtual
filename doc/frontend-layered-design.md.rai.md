@@ -3,10 +3,10 @@ rai-schema-version: 2
 task: "前端三层分层设计需求基线"
 task-key: "frontend-layered-design"
 primary-target: "doc/frontend-layered-design.md"
-requirement-version: "RV-014"
-iteration: "IT-014"
+requirement-version: "RV-015"
+iteration: "IT-015"
 current-changes:
-  - "C-035"
+  - "C-036"
 status: "active"
 updated: "2026-09-03"
 ---
@@ -15,11 +15,11 @@ updated: "2026-09-03"
 
 ## 快速摘要
 
-- 当前需求版本：`RV-014`
-- 当前工作迭代：`IT-014`
-- 当前变更：`C-035` 第二步 A：apps/web 工具链、ESLint 三层约束、首个正式页面（implement R-020 / R-021 / R-024 / R-025 / R-031；clarify R-021 应用层 / 模块隔离、R-024 规则清单）
-- 本轮目标：正式项目落地并跑通「原型 → 正式页面」一次，ESLint 把三层规则变成硬约束
-- 当前结论：**IT-014 完成**（R-020 / R-021 / R-024 / R-025 / R-031 verified）；IT-013 完成（R-047 / R-048 verified，R-049 ready；R-005 / R-037 重新 verified）；IT-012 完成（R-046 verified，R-037 重新 verified）；IT-011 完成（R-042 / R-045 / R-044 / R-041 重新 verified）；IT-010 完成（R-045 verified；R-041 / R-044 重新 verified）；IT-009 完成（R-044 verified，R-037 重新 verified，代码已提交）；IT-008 完成（R-037 / R-041 / R-012 / R-007 / R-042 重新 verified，代码已提交）；展示页按方向 A 重做并验证（R-037），hash 路由落地并验证（R-038）；第一步成果保持——第一、二层（F-001～F-004）、原型模板与检查脚本（F-005）、`CLAUDE.md`、说明文档已实现并通过验收，17 条 `verified`、6 条 `implemented`（其余验收条件依赖第二步的 apps/web）；7 条 `ready` 属于第二步 B 与后续（插件 R-032～R-035、husky/CI R-026、视觉回归 R-027 与变异验证 R-049），待用户验收第一步后授权
+- 当前需求版本：`RV-015`
+- 当前工作迭代：`IT-015`
+- 当前变更：`C-036` 第二步 C + D：pre-commit / CI 门禁、视觉回归、第二层变异验证（implement R-026 / R-027 / R-049；modify R-037 修展示页滑块钳值、R-012 修折叠按钮图标色）
+- 本轮目标：门禁与测量落地——提交与 CI 自动拦截，原型 → 正式一比一由像素差数字说话，第二层「声明的 token 真的在用」由变异测试说话
+- 当前结论：**IT-015 完成**（R-026 / R-027 / R-049 verified）；IT-014 完成（R-020 / R-021 / R-024 / R-025 / R-031 verified）；IT-013 完成（R-047 / R-048 verified，R-049 ready；R-005 / R-037 重新 verified）；IT-012 完成（R-046 verified，R-037 重新 verified）；IT-011 完成（R-042 / R-045 / R-044 / R-041 重新 verified）；IT-010 完成（R-045 verified；R-041 / R-044 重新 verified）；IT-009 完成（R-044 verified，R-037 重新 verified，代码已提交）；IT-008 完成（R-037 / R-041 / R-012 / R-007 / R-042 重新 verified，代码已提交）；展示页按方向 A 重做并验证（R-037），hash 路由落地并验证（R-038）；第一步成果保持——第一、二层（F-001～F-004）、原型模板与检查脚本（F-005）、`CLAUDE.md`、说明文档已实现并通过验收，17 条 `verified`、6 条 `implemented`（其余验收条件依赖第二步的 apps/web）；4 条 `ready` 属于第二步 B（Claude 插件 R-032～R-035），待用户验收第一步后授权
 
 ## 当前需求清单
 
@@ -39,7 +39,7 @@ updated: "2026-09-03"
 
 - [x] `R-047` 第二层 token 约束：`ui/**/*.vue` 的 `<style>` 与 `skins/*.css` 中视觉属性（颜色 / 背景 / 边框 / 内外边距 / gap / 圆角 / 阴影 / 字号 / 宽高，含 `--el-*` 变量赋值）的值必须是第一层语义 token；裸色、裸长度（0 与视口单位除外）、引用 `--palette-*` / `--space-N`、在第二层定义语义名、引用不存在的 token 均为错误；由 `scripts/check-layer2.mjs` 检查并内置于 `pnpm build`。新增尺寸 token：`--layout-control-h` 32 / `--layout-menu-item-h` 40 / `--layout-icon-{sm,md,lg}` 22 / 28 / 40；13px 档位不新增，统一用 `--font-size-caption`。`category: quality` `status: verified`
 - [x] `R-048` 第二层覆盖度报告：按文件统计消费的 token（`<style>`、`:style` / script 的 `var()`、模板用到的 `.l-*` 类间接消费；第一层 layout.css / base.css 计入），输出 `dist/token-coverage.json` 与 `dist/token-coverage.js`（`window.DS_COVERAGE`）；展示页自研组件配置卡的 token 列表改由该数据驱动（`showcase.data.js` 不再手填）；既无第二层消费也未被 `--el-*` 映射引用的语义 token 列为「未消费」警告；复合组件至少消费 bg / text / border / space 中的三类（纯文字组件除外）。`category: maintainability` `status: verified`
-- [ ] `R-049` 第二层变异验证：Playwright 对每个自研组件，按 `token-coverage.json` 声明的 token 逐个改成显著值，断言组件 computed style 随之变化；不变化即报「声明未消费或被硬编码覆盖」。依赖 R-027 的 Playwright 基建。`category: quality` `status: ready`
+- [x] `R-049` 第二层变异验证：`tests/visual/mutate.mjs` 在展示页「自研组件」舞台上，按 `token-coverage.json` 对每个自研组件声明的 token 逐个改成显著值，断言组件内至少一个元素的 computed style 变化；变异前用 `PREP` 把舞台切到 error / hover 态；观察不到但已核实的例外列在 `KNOWN`（必须写原因）；纳入 CI。`category: quality` `status: verified`
 - [x] `R-046` 调色板变体：整套配色以 `[data-palette="<key>"]` 块放在 `tokens.css` ⑤ 段（当前 element / indigo / violet，默认科技青不加属性）；品牌 / 功能色（及圆角）在深浅两种模式都生效，中性色（bg / border / text / icon / canvas）只作用于浅色（`:not([data-theme="dark"])`），深色仍由 ④ 段统一重映射；`build-tokens.mjs` 抽取为 `palettes`（key / label / vars）；展示页 `PRESETS` 只登记 key / label，切换即设 `html[data-palette]`；第三层换肤只能切该属性。`category: ux` `status: verified`
 - [x] `R-045` 第一层默认值对齐参考站 `D:\hy-project\hy-compiler\apps\playground\src\style.css`（`--hy-space-*`）与 LayoutTemplateShowcase：间距 page-gap 24 / page-pad 20 / module-gap 16 / module-pad 16 / component-gap 12 / inline 8；布局 header 60 / sidebar 230 / collapsed 66 / 新增 `--layout-aside-w` 320；圆角 4 / 6 / 12；字号新增 `--font-size-micro` 10，display 改 24；新增 `--color-bg-canvas`（应用壳内容区底 #f0f3f4，UiShell 使用）、subtle 改 #f3f5f5；布局新增 `--layout-row-h` 44（表格行高）与 `--layout-thead-h` 40（表头高），经 `skins/table.css` 生效；`layout.css` 新增 `.l-grid--main-aside`、`.l-split--aside`、`.l-tile`、`.l-bars` / `.l-bar`。`category: ux` `status: verified`
 
@@ -68,8 +68,8 @@ updated: "2026-09-03"
 - [x] `R-023` 项目根 `CLAUDE.md` 包含分层说明、硬性规则、原型规则、开发流程四节。`category: delivery` `status: verified`
 - [ ] `R-024` ESLint（`eslint-plugin-vue` flat config）：`features/**` 禁止原生表单/表格元素（`vue/no-restricted-html-elements`）、inline style（`vue/no-static-inline-styles`）、Tailwind 任意值与布局类、非白名单 `El*` 组件；`ui/**` 禁止 import `features/*`。落地：根目录 `eslint.config.js` 一份配置覆盖 `apps/web/src` 与 `packages/design-system/ui`，白名单从 `whitelist.json` 读取（`vue/restricted-component-names`），另禁 `<style>` 块（`vue/no-restricted-block`）与 Tailwind 布局 / 间距 / 尺寸 / 定位 / 响应式前缀 / 任意值类（`vue/no-restricted-class`）。`category: quality` `status: verified`
 - [x] `R-025` 使用 `eslint-plugin-boundaries`（v7 `boundaries/dependencies`，`checkAllOrigins` + `checkUnknownLocals`）强制单向依赖：feature → 自身 / vue / vue-router / element-plus / `@virtual/design-system`；app → feature / app；ui → ui / vue / element-plus；其余（跨 feature、feature → app、ui → feature、未登记的外部包）一律报错。`category: quality` `status: verified`
-- [ ] `R-026` pre-commit 跑 lint-staged，CI 跑 lint / typecheck / build。`category: delivery` `status: ready`
-- [ ] `R-027` 原型→正式页面转换以 Playwright 对原型与正式页面喂同一份 mock 数据截图对比（初始阈值 1%）作为验收，超出即输出差异清单。`category: quality` `status: ready`
+- [x] `R-026` `.husky/pre-commit` 跑 lint-staged：改动的 `apps/web/src` / `design-system/ui` 文件跑 ESLint（0 警告），改动第一、二层样式跑 `check-layer2`，改动原型跑 `check-prototype`；CI（GitHub Actions，Node 22 + pnpm）依次 lint → typecheck → build:ds 并校验 `dist/` 无 diff → check:prototype → build:web → 视觉回归 → 变异验证，失败时上传 `tests/visual/__output__`。`category: delivery` `status: verified`
+- [x] `R-027` `tests/visual/compare.mjs`：自动起原型与正式页面两个 dev server（jsdelivr 依赖用本地 node_modules 顶替，离线可跑），对 `CASES` 里每个用例喂同一份 mock（`?dataset=`）、同一视口，只截 `.l-page` 内容区做 pixelmatch，差异 > 1%（`--threshold` 可调）即失败并输出 `__output__/<name>-{proto,web,diff}.png` 与差异清单；`PROTO_URL` / `WEB_URL` 可复用已起的服务；纳入 CI。`category: quality` `status: verified`
 - [ ] `R-031` 工具链：Vite 8.x（Rolldown 打包）+ Tailwind CSS 4.x 通过 `@tailwindcss/vite` 插件接入，入口 CSS `@import "tailwindcss"`，Tailwind `@theme` 只引用 `tokens.css` 变量；关闭或隔离 Tailwind preflight 以免覆盖 Element Plus 样式；Node ≥ 20.19。落地：`tailwind.css` 只引 `theme.css` + `utilities.css`，`@theme` 先清空默认再映射 token（颜色 / 字号 / 字重 / 圆角 / 阴影）；根 `pnpm build:web` = vue-tsc + vite build。`category: delivery` `status: verified`
 
 ### Claude 插件
@@ -126,8 +126,8 @@ updated: "2026-09-03"
 | R-023 | CLAUDE.md 四节齐全 | 对话结论 | — | RV-001 | C-001 | F-007 |
 | R-024 | 违规样例 `.vue`（裸 button / table、style=、`<style>`、`flex p-4 w-[200px]`、`<ElCarousel>`）lint 报 10 条错误；现有源码 0 错误 | 对话结论 | R-020 | RV-001 | C-010 | F-007 |
 | R-025 | 样例：feature → 其他 feature、feature → app（相对与 `@/`）、ui → feature、feature → 未登记包（axios）全部报错 | 待确认提案 | R-021 | RV-001 | C-001 | F-007 |
-| R-026 | 违规提交被 pre-commit 拒绝；CI 三步通过 | 对话结论 | R-024 | RV-001 | C-001 | F-007 |
-| R-027 | 截图对比测试可执行并输出差异 | 对话结论 | R-016, R-034 | RV-001 | C-008 | F-008 |
+| R-026 | lint-staged 配置覆盖四类文件；CI 工作流含 lint / typecheck / build:ds / dist 一致性 / check:prototype / build:web / test:visual / test:mutation 八步 | 对话结论 | R-024 | RV-001 | C-001 | F-007 |
+| R-027 | `pnpm test:visual` 三个用例通过并生成截图；人工核对 pixelmatch 对 normal vs long 截图报 1.75%（阈值机制有效） | 对话结论 | R-016, R-034 | RV-001 | C-008 | F-008 |
 | R-028 | 文档与 RV-002 基线逐节一致 | 用户输入 | — | RV-001 | C-011 | F-009 |
 | R-029 | `dist/ui.iife.js` 可在原型 HTML 中直接注册组件；正式项目 import 同一源码 | 用户输入（Element Plus） | R-020 | RV-002 | C-003 | F-003, F-005 |
 | R-030 | 修改 `--color-primary` 后 Element Plus 按钮主色随之变化 | 对话结论 | R-002 | RV-002 | C-005 | F-001, F-003 |
@@ -141,7 +141,7 @@ updated: "2026-09-03"
 | R-043 | grep 第二层源码与展示页无 `overflow: auto/scroll`（Element Plus 内部除外）；展示页与原型页面 `document.scrollingElement.scrollHeight === clientHeight`（window 不滚）而 `.el-scrollbar__wrap` 可滚；check 脚本对含 `overflow:auto` 的原型报错 | 用户输入（滚动套用 Element Plus 滚动组件） | R-011, R-012 | RV-007 | C-021 | F-003, F-004, F-005, F-011 |
 | R-047 | `node scripts/check-layer2.mjs` 对当前第二层 0 错误；人工在 UiStatCard 加 `padding: 2px` 后报错并退出码非零 | 用户输入（怎么保证第二层充分调动第一层） | R-001, R-003, R-042 | RV-013 | C-034 | F-003 |
 | R-048 | `dist/token-coverage.json` 含 7 个自研组件的 token 列表；展示页配置卡 token 面板与该文件一致（UiStatCard 含 `--space-module-pad` via `.l-module`）；报告的「未消费」列表 ≤ 2 且逐项有说明 | 同上 | R-047, R-037 | RV-013 | C-034 | F-003, F-011 |
-| R-049 | 对 7 个组件每个声明 token 的变异测试全部通过 | 同上 | R-048, R-027 | RV-013 | C-034 | F-008 |
+| R-049 | `pnpm test:mutation` 7 个组件全部通过（100 项 ok，6 项 KNOWN 例外各有原因）；首次运行抓到 2 个真问题并已修复 | 同上 | R-048, R-027 | RV-013 | C-034 | F-008 |
 | R-046 | tokens.json `palettes` 长度 3；展示页切换预设后 `html[data-palette]` 变化、`--color-primary` 解析值随之变化且无 inline style；`data-palette` + `data-theme="dark"` 同时存在时主色取变体、中性色取深色 | 用户输入（半成品意图，选 2-A） | R-002, R-005, R-037 | RV-012 | C-033 | F-001, F-011 |
 | R-045 | tokens.json 语义计数 78；展示页布局配置芯片显示 page 20 / module 16 / header 60 / sidebar 230 / collapsed 66；01 统计模板与画板「布局配置精修稿」结构一致 | 用户输入（参考 hy-compiler MaterialCenterPage） | R-003, R-005, R-007 | RV-011 | C-028, C-031 | F-001, F-002, F-004, F-011 |
 | R-040 | CLAUDE.md 含四句消费规则；check 脚本对含 `data-composite` 的原型输出候选统计、对 `data-placeholder` 输出警告、`--strict` 下退出码非零 | 用户输入（原型 UI 不满足时怎么办） | R-015, R-019 | RV-006 | C-018 | F-003, F-005, F-007 |
@@ -169,15 +169,23 @@ updated: "2026-09-03"
 | F-004 | 页面外壳组件（UiShell） | active | R-012 |
 | F-005 | 原型工作流（prototypes/、模板、检查脚本） | active | R-016～R-019 |
 | F-006 | 正式功能开发层（Vue 3 + Vite 8 + Tailwind 4） | active | R-020～R-022, R-031 |
-| F-007 | AI 约束机制（CLAUDE.md、ESLint、依赖检查、hooks/CI） | active（hooks/CI 待做） | R-023～R-026 |
-| F-008 | 原型→正式转换视觉回归 | planned | R-027 |
+| F-007 | AI 约束机制（CLAUDE.md、ESLint、依赖检查、hooks/CI） | active | R-023～R-026 |
+| F-008 | 原型→正式转换视觉回归与第二层变异验证 | active | R-027, R-049 |
 | F-009 | 项目文档（doc/） | active | R-028 |
 | F-010 | Claude 插件（prototype / promote / layer-rules 技能） | planned | R-032～R-035 |
 | F-011 | 设计系统展示页（变量 + 物料） | active | R-037 |
 
 ## 当前迭代
 
-### IT-014 · 第二步 A：apps/web 与 ESLint 三层约束
+### IT-015 · 第二步 C + D：门禁、视觉回归、变异验证
+
+- 目标：提交与 CI 自动拦截违规；原型 → 正式一比一有像素差数字；第二层声明的 token 有变异测试证明真在用
+- 范围：`.husky/pre-commit`、`.github/workflows/ci.yml`、根 `package.json`（husky / lint-staged / playwright / pixelmatch / pngjs、test:* 脚本）、`tests/visual/{_lib,compare,mutate}.mjs`、`.gitignore`；顺带修 `showcase.html` 滑块钳值、`UiShell.vue` 折叠按钮色、`check-layer2.mjs` `.l-*` 归因收窄；CLAUDE.md §5 §6、设计说明 §3 §8 §10；git commit
+- 包含变更：`C-036`
+- 对应需求版本：`RV-015`
+- 退出条件：R-026 / R-027 / R-049 verified；代码已提交
+
+### IT-014 · 第二步 A：apps/web 与 ESLint 三层约束（已完成）
 
 - 目标：正式项目工具链落地；ESLint 把 CLAUDE.md §2 与依赖方向变成硬约束；用 `_template.html` → `features/orders` 跑通一次原型转正式
 - 范围：`apps/web/**`（新）、根 `eslint.config.js`（新）、根 `package.json`、`packages/design-system/package.json`（exports 加 `./skins/*`）、CLAUDE.md §4 §6、设计说明 §3 §7 §10；git commit
@@ -218,6 +226,16 @@ updated: "2026-09-03"
 - 退出条件：R-045 verified；R-041 / R-044 重新 verified；代码已提交
 
 ## 当前变更
+
+### C-036 · 第二步 C + D：门禁、视觉回归、变异验证
+
+- 类型：`implement`
+- 原因：用户「继续」，按 C → D → B 顺序推进
+- 之前：R-026 / R-027 / R-049 为 ready；`.l-*` 间接归因把后代规则（`.l-cluster > .el-input`）的 token 也算给组件，导致变异测试大量误报
+- 之后：R-026 / R-027 / R-049；`check-layer2` 只认选择器即类本身的规则；变异测试暴露并修复两个真问题——展示页 el-slider 把 `--radius-full` 9999px 钳成 32 回写为 tweak 无声覆盖舞台（`tokenKind` 不再给它滑块）、UiShell 折叠按钮 `--color-icon-default` 被 `.el-button` 文字色盖住（改为同时设 `--el-button-text-color`）
+- 关联需求：`R-026`、`R-027`、`R-049`、`R-037`、`R-012`
+- 覆盖关系：—
+- 影响功能：`F-007 direct`、`F-008 direct`、`F-011 indirect`、`F-004 indirect`
 
 ### C-035 · 第二步 A：apps/web 工具链、ESLint 三层约束、首个正式页面
 
@@ -343,6 +361,7 @@ updated: "2026-09-03"
 | C-033 | F-001, F-011 | direct | 新段落与预设机制 | palettes 3；切换验证 |
 | C-034 | F-001, F-003, F-011 | direct | 检查脚本、新 token、配置卡数据源 | check-layer2 0 错误；build 通过；配置卡联动 |
 | C-035 | F-006, F-007 | direct | 新工程与 lint 约束 | lint / typecheck / build；违规样例被拦；截图对比 |
+| C-036 | F-007, F-008 | direct | 门禁与测试基建 | test:visual 0.00%；test:mutation 全过；CI 工作流 |
 | C-027 | F-011 | direct | 页签顺序与命名 | 路由 |
 
 ## 实现映射
@@ -359,7 +378,7 @@ updated: "2026-09-03"
 | R-041 | `ui/composites/UiListItem.vue`、`UiFilterBar.vue`、`UiStatCard.vue`、`ui/index.ts`、`whitelist.json` custom、`showcase.data.js` CUSTOM | verified | E-15, E-21 |
 | R-042 | `skins/index.css`、`skins/{table,input,menu,tabs,tree}.css`、`requests/_template.md`、`requests/README.md`；模板与展示页加载顺序 | verified | E-16, E-21 |
 | R-047, R-048 | `scripts/check-layer2.mjs`、`dist/token-coverage.js(.json)`、`tokens.css`（5 个尺寸 token）、`skins/*`、`ui/*`、`showcase.data.js`（CUSTOM.tokens 由 DS_COVERAGE 注入）、`package.json` | verified | E-23 |
-| R-049 | 待 R-027 Playwright 基建 | ready | — |
+| R-049 | `tests/visual/mutate.mjs`、`tests/visual/_lib.mjs` | verified | E-25 |
 | R-046 | `tokens.css` ⑤ 段、`scripts/build-tokens.mjs`（palettes）、`showcase.html`（applyPreset）、`showcase.data.js`（PRESETS） | verified | E-22 |
 | R-004 | `ui/UiShell.vue`、`ui/UiPageHeader.vue`、`ui/UiState.vue` 内边距全部引用 token | implemented | E-03（第三层 lint 待第二步） |
 | R-015, R-022, R-023 | `CLAUDE.md` §1～§6 | verified | E-05 |
@@ -368,8 +387,8 @@ updated: "2026-09-03"
 | R-028 | `doc/frontend-layered-design.md`（RV-002 版本，§1～§10） | verified | E-08 |
 | R-020, R-021, R-031 | `apps/web/{package.json,vite.config.ts,tsconfig.json,index.html}`、`src/{main.ts,App.vue,tailwind.css,router/index.ts}`、`src/features/orders/*`；根 `package.json`（dev:web / build:web / lint / typecheck） | verified | E-24 |
 | R-024, R-025 | 根 `eslint.config.js`（vue 规则 + boundaries/dependencies） | verified | E-24 |
-| R-026 | `.husky/pre-commit`、`.github/workflows/ci.yml` | planned（后续） | — |
-| R-027 | `apps/web/tests/visual/*.spec.ts` | planned（后续） | — |
+| R-026 | `.husky/pre-commit`、根 `package.json`（lint-staged / prepare / test:*）、`.github/workflows/ci.yml` | verified | E-25 |
+| R-027 | `tests/visual/compare.mjs`、`tests/visual/_lib.mjs`、`.gitignore`（`__output__`） | verified | E-25 |
 | R-032～R-035 | `packages/claude-plugin/.claude-plugin/plugin.json`、`skills/{prototype,promote,layer-rules}/SKILL.md` | planned（第二步） | — |
 | R-037 | `packages/design-system/showcase.html`、`scripts/build-tokens.mjs`、`dist/tokens.js`(.json)、`package.json` build 脚本 | verified | E-09 |
 
@@ -402,7 +421,7 @@ updated: "2026-09-03"
 |---|---|---|
 | 插件形态（H-003）是否符合预期 | R-032 | 第二步实现位置 |
 | 原型 CDN 是否需要离线副本（H-004） | R-016 | 模板依赖引入方式 |
-| 第二步 B 实施授权：插件、husky/CI、视觉回归 | R-026, R-027, R-032～R-036, R-049 | 是否进入下一迭代 |
+| 第二步 B 实施授权：Claude 插件 | R-032～R-036 | 是否进入下一迭代 |
 
 无外部阻塞。
 
@@ -431,6 +450,7 @@ updated: "2026-09-03"
 | E-20 | R-045, R-041, R-044 | 读取参考 `style.css`（`--hy-space-control 8 / content 12 / module-inner 16 / module 16 / page 20 / section 24`、`--hy-surface-muted #f3f5f5`）与 LayoutTemplateShowcase 模板结构；`vue-tsc` 通过、`pnpm build` 78 语义 token；Playwright `#/templates`：芯片 page 20px / module 16px / header 60px / sidebar 230px / collapsed 66px，01 统计模板渲染 4 张统计卡 + 2×2 分析区（柱图 7 柱、分布 4 条、概况 4 格、进度 4 条），02～05 表格 / 树 / 页签渲染正常，无 JS 错误；与画板「布局配置精修稿」逐块对照一致。截图 `doc/showcase-templates-01.png`、`-04.png` | pass | 2026-09-03 |
 | E-21 | R-042, R-045, R-044, R-041 | `vue-tsc` 通过、`pnpm build` 80 语义 token；Playwright `#/templates`：02～05 表格 3 行 + 分页、04 ElTree 7 节点（当前节点 accent）、05 `.is-tabbar` 4 项；筛选条「label + 控件」+ 搜索 / 重置 / 高级搜索渲染，窄栏（04）下筛选项先换行、操作区落到下一行；无 JS 错误；与画板「布局配置精修稿 · 02～05」逐块对照一致。截图 `doc/showcase-templates-02.png`、`-04.png`、`-05.png` | pass | 2026-09-03 |
 | E-22 | R-046, R-037 | `pnpm build` 输出 palettes 3；Playwright 通过右上角下拉依次切换 Element 蓝 / 靛蓝 / 靛紫 / 科技青：`html[data-palette]` 与 `--color-primary` 解析值（#409eff / #4c6fff / #6d5dfc / #0076a3）、`--color-bg-canvas`、`--color-text-default` 均随之变化，html 无 inline style；靛蓝 + 深色：主色 #4c6fff、canvas #131f25、文字 #e3edf0；无 JS 错误 | pass | 2026-09-03 |
+| E-25 | R-026, R-027, R-049, R-037, R-012 | `pnpm test:visual`：orders-normal / orders-long / orders-narrow 差异均 0.00%（截 `.l-page`，1440 与 1024 宽）；pixelmatch 灵敏度核对：normal vs long 截图 1.75%；`pnpm test:mutation`：7 组件 100 项 ok、6 项 KNOWN（各有原因）、0 未消费——首次运行 22 项未消费，经收窄 `.l-*` 归因（后代规则不归因）、PREP 切 error / hover 态、修复滑块钳值与折叠按钮色后归零；`pnpm build:ds` check-layer2 0 错误；lint-staged / CI 配置就绪（容器内无 git，pre-commit 钩子待用户本机首次 `pnpm install` 后由 `prepare` 安装） | pass | 2026-09-03 |
 | E-24 | R-020, R-021, R-024, R-025, R-031 | `pnpm install` 后 `pnpm lint`（0 错误 0 警告）、`pnpm typecheck`、`pnpm build:web`（vue-tsc + vite build 通过，单 chunk 1.0 MB 为全量 Element Plus，待按需引入）；违规样例 Page.vue 报 10 条 vue 规则错误，boundaries 样例报 4 条（跨 feature、feature → app 相对 / `@/`、未登记包 axios）+ ui → feature 1 条；Playwright 1440×900：`/orders` 3 行 / 标题 / 分页 / 侧栏高亮与原型 `_template.html#/orders` 一致，`?dataset=long` 1 行，筛选无结果进 empty 态，新建对话框可开，window 不滚动；与原型截图像素差 0.17%（仅顶栏三态选择器与禁用菜单）；截图 `doc/web-orders.png`、`doc/web-vs-prototype.png` | pass | 2026-09-03 |
 | E-23 | R-047, R-048, R-037 | 首次扫描：14 错误（13px×2、22/28/40px 图标、32px 树、40px 菜单项、2px×2、`--space-3/2`）+ 登记不符 7 条；修复后 `check-layer2` 0 错误 1 警告（未消费 2：`--layout-content-pad`、`--border-w-thick`），语义 token 85 个中第二层消费 69、仅 EP 映射 9；`vue-tsc` / `pnpm build` 通过；Playwright `#/custom`：7 张配置卡、36 滑块 / 35 取色器（数量由扫描结果决定），UiStatCard 调 `--space-module-pad` 16→24 舞台联动、恢复后回 16；`#/templates` 五套无 JS 错误 | pass | 2026-09-03 |
 | E-08 | R-028 | `doc/frontend-layered-design.md` §1～§10 与 RV-002 逐节核对；IT-003 同步 §3 目录树与 §9 展示页（RV-003）；IT-004 同步 §6 路由与 §9 方向 A（RV-004）：Vue 3 + Element Plus、Vite 8 + Tailwind 4、monorepo 目录、CDN 原型形态、插件三技能、展示页面、实施状态 | pass | 2026-09-02 |
@@ -440,6 +460,7 @@ updated: "2026-09-03"
 | RV | IT | 变更 | 类型 | 需求 | 前后摘要 | 影响功能 |
 |---|---|---|---|---|---|---|
 | RV-008 | IT-008 | C-023 | modify | R-037 | 自研组件独立页签 + 配置卡 | F-011 |
+| RV-015 | IT-015 | C-036 | implement | R-026, R-027, R-049, R-037, R-012 | ready → verified；两处缺陷修复 | F-007, F-008 |
 | RV-014 | IT-014 | C-035 | implement | R-020, R-021, R-024, R-025, R-031 | ready → verified；R-021 / R-024 澄清 | F-006, F-007 |
 | RV-013 | IT-013 | C-034 | add | R-047, R-048, R-049, R-005, R-037 | 无 → 第二层约束 / 覆盖度 / 变异验证 | F-001, F-003, F-011 |
 | RV-012 | IT-012 | C-033 | add | R-046, R-037 | 无 → [data-palette] 变体段 | F-001, F-011 |
