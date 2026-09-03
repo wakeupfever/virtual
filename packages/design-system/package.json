@@ -10,6 +10,7 @@
     "./tokens.css": "./tokens.css",
     "./layout.css": "./layout.css",
     "./base.css": "./base.css",
+    "./skins/*": "./skins/*",
     "./whitelist.json": "./whitelist.json"
   },
   "scripts": {

@@ -50,10 +50,12 @@
 
 ## 4. 正式功能（`apps/web/src/features/<模块>/`）
 
-- 结构：`Page.vue`、`components/`、`api.ts`、`composables/`
-- 入口引入顺序固定：`element-plus/dist/index.css` → `tokens.css` → `skins/index.css` → `layout.css` → `base.css` → `app.use(ElementPlus).use(DesignSystemUI)`
-- Tailwind 4 仅用于非布局的原子类且只能引用 `@theme` 中来自 token 的值；preflight 已关闭，reset 只来自 `base.css`
-- 完成后运行 `pnpm lint && pnpm typecheck`，通过后再汇报
+- 结构：`Page.vue`、`components/`、`api.ts`、`composables/`；外壳与路由在应用层（`src/App.vue`、`src/router/index.ts`），feature 只渲染 `.l-page`
+- 新增功能 = `router/index.ts` 的 `MENU` 加一项 `{ key, label }` + 建 `features/<key>/Page.vue`，路由自动对上；feature 之间禁止互相 import，`@/` 别名只给应用层用，feature 内一律相对路径；跨模块共享只能下沉到第二层
+- 入口引入顺序固定（`src/main.ts` 已写好）：`element-plus/dist/index.css` → `tokens.css` → `skins/index.css` → `layout.css` → `base.css` → `tailwind.css` → `app.use(ElementPlus).use(DesignSystemUI).use(router)`
+- Tailwind 4 仅用于非布局的原子类（`text-primary` `rounded-md` 之类），`@theme` 里全是 token 别名；布局 / 间距 / 尺寸 / 任意值类被 ESLint 拦截；preflight 未引入，reset 只来自 `base.css`
+- 模板写 `<ElButton>` / `<UiShell>` PascalCase，`ElMessage` 等命令式 API 从 `element-plus` import
+- 完成后运行 `pnpm lint && pnpm typecheck`（根目录），通过后再汇报；ESLint 会拦截原生表单表格、inline style、`<style>`、Tailwind 布局类、非白名单组件、跨层 / 跨模块 import
 
 ## 5. 开发流程
 
@@ -69,6 +71,10 @@
 pnpm install
 pnpm dev                 # 本地预览：自动打开 design-system 展示页（#/tokens 设计变量 · #/materials 组件物料 · #/custom 自研组件 · #/layout 布局范式 · #/templates 布局配置）
 pnpm dev:prototype       # 本地预览：打开原型模板；其他原型改 URL 路径即可
+pnpm dev:web             # 正式项目 dev server（http://localhost:5174）
+pnpm build:web           # 正式项目 typecheck + build
+pnpm lint                # 根目录 ESLint：apps/web/src 与 packages/design-system/ui（三层约束）
+pnpm typecheck           # 所有包 vue-tsc
 pnpm build:ds            # 抽取 token + 打包第二层 → dist/tokens.js · ui.iife.js · ui.css（原型与展示页引用，需提交）
 pnpm check:prototype     # 原型合规检查
 pnpm check:layer2        # 第二层 token 约束 + 覆盖度报告（build:ds 已包含）

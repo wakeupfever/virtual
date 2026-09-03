@@ -13,9 +13,20 @@
     "dev:prototype": "vite --open /apps/prototypes/_template.html",
     "build:ds": "pnpm --filter @virtual/design-system build",
     "check:prototype": "node scripts/check-prototype.js",
-    "check:layer2": "pnpm --filter @virtual/design-system check:layer2"
+    "check:layer2": "pnpm --filter @virtual/design-system check:layer2",
+    "lint": "eslint",
+    "typecheck": "pnpm -r typecheck",
+    "dev:web": "pnpm --filter @virtual/web dev",
+    "build:web": "pnpm --filter @virtual/web build"
   },
   "devDependencies": {
-    "vite": "^8.2.2"
+    "vite": "^8.2.2",
+    "eslint": "^10.9.1",
+    "eslint-plugin-boundaries": "^7.2.0",
+    "eslint-plugin-vue": "^10.10.0",
+    "typescript": "^5.9.0",
+    "typescript-eslint": "^8.69.0",
+    "vue-eslint-parser": "^10.4.1",
+    "globals": "^17.0.0"
   }
 }

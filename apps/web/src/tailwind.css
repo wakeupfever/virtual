@@ -1,0 +1,44 @@
+/* Tailwind 4 · 只引入 utilities（不引 preflight：reset 由第一层 base.css 提供，避免覆盖 Element Plus）
+ * @theme 只允许引用 tokens.css 的语义变量：Tailwind 原子类是 token 的别名，不是第二套值。
+ * 布局类（flex / grid / p-* / w-*）禁止在第三层使用（ESLint 拦截），只用第一层 .l-*。 */
+@import "tailwindcss/theme.css" layer(theme);
+@import "tailwindcss/utilities.css" layer(utilities);
+
+@theme {
+  --color-*: initial;
+  --color-primary: var(--color-primary);
+  --color-success: var(--color-success);
+  --color-warning: var(--color-warning);
+  --color-danger: var(--color-danger);
+  --color-info: var(--color-info);
+  --color-text-default: var(--color-text-default);
+  --color-text-secondary: var(--color-text-secondary);
+  --color-text-muted: var(--color-text-muted);
+  --color-text-inverse: var(--color-text-inverse);
+  --color-bg-surface: var(--color-bg-surface);
+  --color-bg-subtle: var(--color-bg-subtle);
+  --color-bg-accent: var(--color-bg-accent);
+
+  --font-size-*: initial;
+  --font-size-caption: var(--font-size-caption);
+  --font-size-body: var(--font-size-body);
+  --font-size-module-title: var(--font-size-module-title);
+  --font-size-page-title: var(--font-size-page-title);
+  --font-size-display: var(--font-size-display);
+
+  --font-weight-*: initial;
+  --font-weight-regular: var(--font-weight-regular);
+  --font-weight-medium: var(--font-weight-medium);
+  --font-weight-bold: var(--font-weight-bold);
+
+  --radius-*: initial;
+  --radius-sm: var(--radius-sm);
+  --radius-md: var(--radius-md);
+  --radius-lg: var(--radius-lg);
+  --radius-full: var(--radius-full);
+
+  --shadow-*: initial;
+  --shadow-sm: var(--shadow-sm);
+  --shadow-md: var(--shadow-md);
+  --shadow-lg: var(--shadow-lg);
+}

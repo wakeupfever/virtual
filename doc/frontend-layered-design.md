@@ -1,7 +1,7 @@
 # 前端三层分层设计说明
 
 > 本文档描述 `virtual` 项目前端的三层分层模型：每一层包含什么、由谁修改、如何约束 AI 在各层的行为，以及"提示词 → 可交互原型 → 正式页面"的流转方式。
-> 对应需求台账见 `doc/frontend-layered-design.md.rai.md`（当前 RV-013）；需求 ID、状态与验收标准以台账为准。
+> 对应需求台账见 `doc/frontend-layered-design.md.rai.md`（当前 RV-014）；需求 ID、状态与验收标准以台账为准。
 > 技术栈：Vue 3 + Element Plus 2.14 + Vite 8 + Tailwind CSS 4，pnpm monorepo。
 
 ## 1. 目标与问题
@@ -26,8 +26,12 @@ virtual/
 │   ├── prototypes/               # 第三层·原型（无构建，单文件 HTML）
 │   │   ├── _template.html
 │   │   └── <功能>.html
-│   └── web/                      # 第三层·正式项目（Vue 3 + Vite 8 + Tailwind 4）
-│       └── src/features/<模块>/  # Page.vue · components/ · api.ts · composables/
+│   └── web/                      # 第三层·正式项目（Vue 3 + Vite 8 + Tailwind 4 + vue-router）
+│       ├── vite.config.ts  tsconfig.json  index.html
+│       └── src/
+│           ├── main.ts  App.vue  tailwind.css   # 入口：样式顺序 / UiShell 外壳 / @theme 别名
+│           ├── router/index.ts              # MENU 即路由表：/<key> ↔ features/<key>/Page.vue
+│           └── features/<模块>/  Page.vue · components/ · api.ts · composables/ · DIFF.md
 ├── packages/
 │   ├── design-system/            # 第一、二层
 │   │   ├── tokens.css  layout.css  base.css
@@ -43,6 +47,7 @@ virtual/
 │   │   └── README.md             # 组件索引，AI 开发前必读
 │   └── claude-plugin/            # Claude 插件：prototype / promote / layer-rules 技能
 ├── scripts/check-prototype.js
+├── eslint.config.js              # 三层约束：vue 规则 + boundaries 单向依赖（覆盖 apps/web 与 design-system/ui）
 ├── doc/
 ├── CLAUDE.md
 ├── package.json  pnpm-workspace.yaml
@@ -133,11 +138,13 @@ reset、字体、页面底色。正式项目关闭 Tailwind preflight，全局 r
 
 ## 7. 第三层·正式功能
 
-`apps/web/src/features/<模块>/` 按 `Page.vue`、`components/`、`api.ts`、`composables/` 组织，只能 import 第一、二层；同一 UI 模式出现第二次时下沉为该模块业务组件。
+`apps/web/src/features/<模块>/` 按 `Page.vue`、`components/`、`api.ts`、`composables/` 组织，只能 import 第一、二层；同一 UI 模式出现第二次时下沉为该模块业务组件。外壳与路由属于应用层（`App.vue` + `router/index.ts`）：`MENU` 即路由表，`/<key>` 由 `import.meta.glob('../features/*/Page.vue')` 自动对上 `features/<key>/Page.vue`，新增功能只加一项菜单 + 一个目录。功能模块之间禁止互相 import，`@/` 别名只给应用层，feature 内一律相对路径——跨模块共享的东西只能下沉到第二层。
 
-约束机制（由软到硬）：`CLAUDE.md`（分层说明、硬性规则、原型规则、开发流程）→ ESLint（`eslint-plugin-vue` 禁止原生元素、inline style、任意值与布局类、非白名单组件；`ui/**` 禁止引用 `features/*`）→ `eslint-plugin-boundaries` 强制单向依赖 → pre-commit 与 CI。
+约束机制（由软到硬）：`CLAUDE.md`（分层说明、硬性规则、原型规则、开发流程）→ 根目录 `eslint.config.js`（`eslint-plugin-vue`：`features/**` 禁原生表单 / 表格元素、inline style、`<style>` 块、Tailwind 布局 / 间距 / 尺寸 / 任意值类、非白名单组件——白名单直接读 `whitelist.json`；`eslint-plugin-boundaries`：feature 只能引用自身与 vue / vue-router / element-plus / `@virtual/design-system`，app 可引用 feature，`ui/**` 只能引用自身与 vue / element-plus，反向与跨 feature 一律报错）→ pre-commit 与 CI（待做）。
 
-工具链：Vite 8（Rolldown）+ `@tailwindcss/vite`，入口 CSS `@import "tailwindcss"`，`@theme` 只引用 `tokens.css` 变量，关闭 preflight。
+工具链：Vite 8（Rolldown）+ `@vitejs/plugin-vue` + `@tailwindcss/vite`。入口顺序 `element-plus/dist/index.css → tokens.css → skins/index.css → layout.css → base.css → tailwind.css`；`tailwind.css` 只引 `theme.css` 与 `utilities.css`（不引 preflight，reset 只来自 `base.css`），`@theme` 先 `--color-*: initial` 等清空 Tailwind 默认值，再把颜色 / 字号 / 字重 / 圆角 / 阴影逐个映射为 `var(--token)`，因此 Tailwind 原子类只是 token 的别名，不存在第二套值。
+
+原型 → 正式的第一次实证：`_template.html` → `features/orders/`（`api.ts` 承接 DATA 并给出接口签名 + mock，`useOrders.ts` 承接 state 且 view 随请求自动流转，`Page.vue` 模板逐标签映射），同视口截图像素差 0.17%，差异全部来自原型专有的顶栏三态选择器与未实现菜单的禁用态，见 `features/orders/DIFF.md` 与 `doc/web-vs-prototype.png`。
 
 ## 8. 提示词 → 原型 → 正式页面
 
@@ -159,5 +166,6 @@ reset、字体、页面底色。正式项目关闭 Tailwind preflight，全局 r
 |---|---|---|
 | 第一步 | design-system（第一、二层）、原型模板、检查脚本、`CLAUDE.md`、本文档 | 已完成，见台账验收证据 |
 | 展示页 | `packages/design-system/showcase.html`（设计变量 / 组件物料 / 布局范式，方向 A） | 已完成（IT-004） |
-| 第二步 | `apps/web` 工具链与 ESLint/boundaries、Claude 插件 | 待用户授权后开始 |
-| 后续 | husky/CI、Playwright 视觉回归 | 待排期 |
+| 第二步 · A | `apps/web` 工具链（Vite 8 + Tailwind 4 + vue-router）、根 `eslint.config.js`（vue 规则 + boundaries）、首个正式页面 `features/orders` | 已完成（IT-014） |
+| 第二步 · B | Claude 插件（prototype / promote / layer-rules） | 待排期 |
+| 后续 | husky/CI、Playwright 视觉回归（含第二层变异验证） | 待排期 |
