@@ -273,21 +273,12 @@ window.DS_SHOWCASE = (() => {
   }
 
   /* 配色预设：候选默认色，选定后写入 tokens.css。值只覆盖语义层，dark 重映射仍生效 */
+  /* 配色预设：真值在 tokens.css ⑤ 段（[data-palette]），这里只登记 key / label 供展示页切换 */
   const PRESETS = [
-    { key: 'cyan', label: '科技青（默认）', vars: {} },
-    { key: 'element', label: 'Element 蓝', vars: {
-      '--color-primary': '#409eff', '--color-primary-hover': '#337ecc', '--color-success': '#67c23a', '--color-warning': '#e6a23c', '--color-danger': '#f56c6c', '--color-danger-hover': '#c45656', '--color-info': '#909399',
-      '--color-bg-page': '#ffffff', '--color-bg-subtle': '#f7f8fa', '--color-bg-muted': '#f0f2f5', '--color-bg-accent': '#ecf5ff', '--color-border-default': '#dcdfe6', '--color-border-muted': '#e4e7ed',
-      '--color-text-default': '#303133', '--color-text-secondary': '#606266', '--color-text-muted': '#909399', '--color-text-placeholder': '#c0c4cc', '--color-icon-default': '#606266', '--color-icon-muted': '#909399',
-      '--radius-sm': '2px', '--radius-md': '4px', '--radius-lg': '8px' } },
-    { key: 'indigo', label: '清爽 · 靛蓝', vars: {
-      '--color-primary': '#4c6fff', '--color-primary-hover': '#3b5bdb', '--color-success': '#22c55e', '--color-warning': '#f59e0b', '--color-danger': '#ef4444', '--color-danger-hover': '#dc2626', '--color-info': '#64748b',
-      '--color-bg-page': '#ffffff', '--color-bg-subtle': '#f3f5f9', '--color-bg-muted': '#eceff5', '--color-bg-accent': '#eaeeff', '--color-border-default': '#d9deea', '--color-border-muted': '#e6eaf2',
-      '--color-text-default': '#1f2937', '--color-text-secondary': '#4b5563', '--color-text-muted': '#8a94a6', '--color-text-placeholder': '#b4bccb', '--color-icon-default': '#4b5563', '--color-icon-muted': '#8a94a6' } },
-    { key: 'violet', label: '清爽 · 靛紫', vars: {
-      '--color-primary': '#6d5dfc', '--color-primary-hover': '#5b4be0', '--color-success': '#10b981', '--color-warning': '#f59e0b', '--color-danger': '#ef4444', '--color-danger-hover': '#dc2626', '--color-info': '#6b7280',
-      '--color-bg-page': '#ffffff', '--color-bg-subtle': '#f3f2fa', '--color-bg-muted': '#ebe9f6', '--color-bg-accent': '#eeebff', '--color-border-default': '#dcd9ec', '--color-border-muted': '#e8e6f3',
-      '--color-text-default': '#221f3a', '--color-text-secondary': '#4a4766', '--color-text-muted': '#8b88a3', '--color-text-placeholder': '#b8b5cc', '--color-icon-default': '#4a4766', '--color-icon-muted': '#8b88a3' } },
+    { key: 'cyan', label: '科技青（默认）' },
+    { key: 'element', label: 'Element 蓝' },
+    { key: 'indigo', label: '清爽 · 靛蓝' },
+    { key: 'violet', label: '清爽 · 靛紫' },
   ]
 
   /* ---------------- 布局配置 · 五套页面排版模板（参考 HY Compiler Studio · 页面排版模板） ----------------

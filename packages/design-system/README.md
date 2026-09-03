@@ -46,7 +46,7 @@ app.use(ElementPlus).use(DesignSystemUI)
 
 默认配色「科技青」：主色 `#0076a3`、强调 `#00486a`、柔和底 `#e8f4f7`，中性灰带青灰色相（参考 HY Compiler Studio technology-cyan 主题）。展示页右上角「配色」可切换 Element 蓝 / 靛蓝 / 靛紫 预览，只影响预览，不改文件。
 
-主题开关（挂在 `<html>` 上）：`data-theme="dark"` 深色；`data-density="compact" | "loose"` 密度。Element Plus 的 `--el-*` 变量已由 tokens.css 映射，**禁止**在第三层直接改 `--el-*`。
+主题开关（挂在 `<html>` 上）：`data-theme="dark"` 深色；`data-density="compact" | "loose"` 密度；`data-palette="element" | "indigo" | "violet"` 整套配色变体（真值在 `tokens.css` ⑤ 段，默认科技青不加属性；变体的品牌 / 功能色在深浅两种模式都生效，中性色只作用于浅色）。展示页右上角的「配色预设」切换的就是这个属性；新增一套配色 = 在 ⑤ 段加一个 `[data-palette="<key>"]` 块并在 `showcase.data.js` `PRESETS` 登记 key / label。Element Plus 的 `--el-*` 变量已由 tokens.css 映射，**禁止**在第三层直接改 `--el-*`。
 
 ## 第一层 · 布局类（`layout.css`）
 

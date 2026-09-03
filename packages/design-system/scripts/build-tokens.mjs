@@ -66,6 +66,17 @@ for (const d of base.values()) {
   else groups[g].tokens.push(entry)
 }
 
+/** 调色板变体：⑤ 段 [data-palette="x"] 选择器 → { key, label, vars } */
+const palettes = []
+for (const blk of blocks) {
+  const m = blk.selector.match(/^\[data-palette="([\w-]+)"\]$/)
+  if (!m) continue
+  const key = m[1]
+  const label = (css.match(new RegExp(`\\[data-palette="${key}"\\] \\{ /\\* ([^*]+?) \\*/`)) || [])[1]?.trim() ?? key
+  const vars = { ...(overrides[`[data-palette="${key}"]`] || {}), ...(overrides[`[data-palette="${key}"]:not([data-theme="dark"])`] || {}) }
+  palettes.push({ key, label, vars })
+}
+
 const out = {
   generatedAt: new Date().toISOString(),
   source: 'tokens.css',
@@ -73,6 +84,7 @@ const out = {
   whitelist,
   unassigned,
   overrides,
+  palettes,
   counts: {
     semantic: groups.filter(g => g.layer === 'semantic').reduce((n, g) => n + g.tokens.length, 0),
     raw: groups.filter(g => g.layer === 'raw').reduce((n, g) => n + g.tokens.length, 0),
@@ -83,4 +95,4 @@ const out = {
 mkdirSync(resolve(PKG, 'dist'), { recursive: true })
 writeFileSync(resolve(PKG, 'dist/tokens.js'), `/* 由 scripts/build-tokens.mjs 自动生成，勿手改；真值在 tokens.css */\nwindow.DS_TOKENS = ${JSON.stringify(out, null, 2)};\n`)
 writeFileSync(resolve(PKG, 'dist/tokens.json'), JSON.stringify(out, null, 2) + '\n')
-console.log(`tokens: semantic ${out.counts.semantic} · raw ${out.counts.raw} · el-mapping ${out.counts.mapping}${unassigned.length ? ` · 未归组 ${unassigned.map(u => u.name).join(', ')}` : ''}`)
+console.log(`tokens: semantic ${out.counts.semantic} · raw ${out.counts.raw} · el-mapping ${out.counts.mapping} · palettes ${palettes.length}${unassigned.length ? ` · 未归组 ${unassigned.map(u => u.name).join(', ')}` : ''}`)

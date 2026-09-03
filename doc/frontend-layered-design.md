@@ -1,7 +1,7 @@
 # 前端三层分层设计说明
 
 > 本文档描述 `virtual` 项目前端的三层分层模型：每一层包含什么、由谁修改、如何约束 AI 在各层的行为，以及"提示词 → 可交互原型 → 正式页面"的流转方式。
-> 对应需求台账见 `doc/frontend-layered-design.md.rai.md`（当前 RV-011）；需求 ID、状态与验收标准以台账为准。
+> 对应需求台账见 `doc/frontend-layered-design.md.rai.md`（当前 RV-012）；需求 ID、状态与验收标准以台账为准。
 > 技术栈：Vue 3 + Element Plus 2.14 + Vite 8 + Tailwind CSS 4，pnpm monorepo。
 
 ## 1. 目标与问题
@@ -58,7 +58,7 @@ virtual/
 
 语义颜色按 **作用域 × 语义** 两维组织。作用域：`bg` / `text` / `border` / `icon`；语义：`page` `surface` `subtle` `muted` `overlay` `mask`（bg）、`default` `secondary` `muted` `placeholder` `inverse`（text）等。功能色 `--color-{primary|success|warning|danger|info}` 省略作用域。
 
-默认配色为「科技青」（参考 HY Compiler Studio technology-cyan：主色 `#0076a3`、强调 `#00486a`、柔和底 `#e8f4f7`，中性灰带青灰色相，浅色页面底为纯白），另有 `--color-bg-accent` 作为主色柔和底。深色模式通过 `[data-theme="dark"]` 重映射语义层实现（深色下主色提亮为 `#2f9fcf` 保证对比度），组件代码不感知主题。
+默认配色为「科技青」（参考 HY Compiler Studio technology-cyan：主色 `#0076a3`、强调 `#00486a`、柔和底 `#e8f4f7`，中性灰带青灰色相，浅色页面底为纯白），另有 `--color-bg-accent` 作为主色柔和底。深色模式通过 `[data-theme="dark"]` 重映射语义层实现（深色下主色提亮为 `#2f9fcf` 保证对比度），组件代码不感知主题。整套配色变体（Element 蓝 / 靛蓝 / 靛紫）以 `[data-palette="<key>"]` 块放在 tokens.css ⑤ 段：品牌 / 功能色（及圆角）在深浅两种模式都生效，中性色只在浅色生效（深色仍由 ④ 段统一重映射）；展示页的配色预设切换的就是这个属性，不再运行时覆盖 token。
 
 ### 4.3 间距
 

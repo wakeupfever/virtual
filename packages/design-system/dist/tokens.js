@@ -1,6 +1,6 @@
 /* 由 scripts/build-tokens.mjs 自动生成，勿手改；真值在 tokens.css */
 window.DS_TOKENS = {
-  "generatedAt": "2026-09-03T07:31:39.119Z",
+  "generatedAt": "2026-09-03T07:44:13.249Z",
   "source": "tokens.css",
   "groups": [
     {
@@ -1189,8 +1189,160 @@ window.DS_TOKENS = {
       "--shadow-sm": "0 1px 2px rgba(0, 0, 0, 0.4)",
       "--shadow-md": "0 6px 16px rgba(0, 0, 0, 0.5)",
       "--shadow-lg": "0 12px 32px rgba(0, 0, 0, 0.6)"
+    },
+    "[data-palette=\"element\"]": {
+      "--color-primary": "#409eff",
+      "--color-primary-hover": "#337ecc",
+      "--color-success": "#67c23a",
+      "--color-warning": "#e6a23c",
+      "--color-danger": "#f56c6c",
+      "--color-danger-hover": "#c45656",
+      "--color-info": "#909399",
+      "--radius-sm": "2px",
+      "--radius-md": "4px",
+      "--radius-lg": "8px"
+    },
+    "[data-palette=\"element\"]:not([data-theme=\"dark\"])": {
+      "--color-bg-subtle": "#f7f8fa",
+      "--color-bg-muted": "#f0f2f5",
+      "--color-bg-accent": "#ecf5ff",
+      "--color-border-default": "#dcdfe6",
+      "--color-border-muted": "#e4e7ed",
+      "--color-text-default": "#303133",
+      "--color-text-secondary": "#606266",
+      "--color-text-muted": "#909399",
+      "--color-text-placeholder": "#c0c4cc",
+      "--color-icon-default": "#606266",
+      "--color-icon-muted": "#909399",
+      "--color-bg-canvas": "#f2f3f5"
+    },
+    "[data-palette=\"indigo\"]": {
+      "--color-primary": "#4c6fff",
+      "--color-primary-hover": "#3b5bdb",
+      "--color-success": "#22c55e",
+      "--color-warning": "#f59e0b",
+      "--color-danger": "#ef4444",
+      "--color-danger-hover": "#dc2626",
+      "--color-info": "#64748b"
+    },
+    "[data-palette=\"indigo\"]:not([data-theme=\"dark\"])": {
+      "--color-bg-subtle": "#f3f5f9",
+      "--color-bg-muted": "#eceff5",
+      "--color-bg-accent": "#eaeeff",
+      "--color-border-default": "#d9deea",
+      "--color-border-muted": "#e6eaf2",
+      "--color-text-default": "#1f2937",
+      "--color-text-secondary": "#4b5563",
+      "--color-text-muted": "#8a94a6",
+      "--color-text-placeholder": "#b4bccb",
+      "--color-icon-default": "#4b5563",
+      "--color-icon-muted": "#8a94a6",
+      "--color-bg-canvas": "#eef1f6"
+    },
+    "[data-palette=\"violet\"]": {
+      "--color-primary": "#6d5dfc",
+      "--color-primary-hover": "#5b4be0",
+      "--color-success": "#10b981",
+      "--color-warning": "#f59e0b",
+      "--color-danger": "#ef4444",
+      "--color-danger-hover": "#dc2626",
+      "--color-info": "#6b7280"
+    },
+    "[data-palette=\"violet\"]:not([data-theme=\"dark\"])": {
+      "--color-bg-subtle": "#f3f2fa",
+      "--color-bg-muted": "#ebe9f6",
+      "--color-bg-accent": "#eeebff",
+      "--color-border-default": "#dcd9ec",
+      "--color-border-muted": "#e8e6f3",
+      "--color-text-default": "#221f3a",
+      "--color-text-secondary": "#4a4766",
+      "--color-text-muted": "#8b88a3",
+      "--color-text-placeholder": "#b8b5cc",
+      "--color-icon-default": "#4a4766",
+      "--color-icon-muted": "#8b88a3",
+      "--color-bg-canvas": "#efedf7"
     }
   },
+  "palettes": [
+    {
+      "key": "element",
+      "label": "Element 蓝",
+      "vars": {
+        "--color-primary": "#409eff",
+        "--color-primary-hover": "#337ecc",
+        "--color-success": "#67c23a",
+        "--color-warning": "#e6a23c",
+        "--color-danger": "#f56c6c",
+        "--color-danger-hover": "#c45656",
+        "--color-info": "#909399",
+        "--radius-sm": "2px",
+        "--radius-md": "4px",
+        "--radius-lg": "8px",
+        "--color-bg-subtle": "#f7f8fa",
+        "--color-bg-muted": "#f0f2f5",
+        "--color-bg-accent": "#ecf5ff",
+        "--color-border-default": "#dcdfe6",
+        "--color-border-muted": "#e4e7ed",
+        "--color-text-default": "#303133",
+        "--color-text-secondary": "#606266",
+        "--color-text-muted": "#909399",
+        "--color-text-placeholder": "#c0c4cc",
+        "--color-icon-default": "#606266",
+        "--color-icon-muted": "#909399",
+        "--color-bg-canvas": "#f2f3f5"
+      }
+    },
+    {
+      "key": "indigo",
+      "label": "清爽 · 靛蓝",
+      "vars": {
+        "--color-primary": "#4c6fff",
+        "--color-primary-hover": "#3b5bdb",
+        "--color-success": "#22c55e",
+        "--color-warning": "#f59e0b",
+        "--color-danger": "#ef4444",
+        "--color-danger-hover": "#dc2626",
+        "--color-info": "#64748b",
+        "--color-bg-subtle": "#f3f5f9",
+        "--color-bg-muted": "#eceff5",
+        "--color-bg-accent": "#eaeeff",
+        "--color-border-default": "#d9deea",
+        "--color-border-muted": "#e6eaf2",
+        "--color-text-default": "#1f2937",
+        "--color-text-secondary": "#4b5563",
+        "--color-text-muted": "#8a94a6",
+        "--color-text-placeholder": "#b4bccb",
+        "--color-icon-default": "#4b5563",
+        "--color-icon-muted": "#8a94a6",
+        "--color-bg-canvas": "#eef1f6"
+      }
+    },
+    {
+      "key": "violet",
+      "label": "清爽 · 靛紫",
+      "vars": {
+        "--color-primary": "#6d5dfc",
+        "--color-primary-hover": "#5b4be0",
+        "--color-success": "#10b981",
+        "--color-warning": "#f59e0b",
+        "--color-danger": "#ef4444",
+        "--color-danger-hover": "#dc2626",
+        "--color-info": "#6b7280",
+        "--color-bg-subtle": "#f3f2fa",
+        "--color-bg-muted": "#ebe9f6",
+        "--color-bg-accent": "#eeebff",
+        "--color-border-default": "#dcd9ec",
+        "--color-border-muted": "#e8e6f3",
+        "--color-text-default": "#221f3a",
+        "--color-text-secondary": "#4a4766",
+        "--color-text-muted": "#8b88a3",
+        "--color-text-placeholder": "#b8b5cc",
+        "--color-icon-default": "#4a4766",
+        "--color-icon-muted": "#8b88a3",
+        "--color-bg-canvas": "#efedf7"
+      }
+    }
+  ],
   "counts": {
     "semantic": 80,
     "raw": 28,

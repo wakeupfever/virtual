@@ -650,12 +650,11 @@ const app = Vue.createApp({
       if (state.density !== 'default') html.dataset.density = state.density; else delete html.dataset.density
       Vue.nextTick(() => state.tick++)
     }
-    /** 配色预设：仅预览（在 html 上覆盖 token）；选定后应写入 tokens.css 成为默认 */
+    /** 配色预设：切换 html 上的 data-palette —— 不是预览覆盖，而是 tokens.css ⑤ 段里真实存在的调色板变体。
+     *  要改默认配色，改 tokens.css ② 段的值即可。 */
     function applyPreset(key) {
       const html = document.documentElement
-      for (const p of PRESETS) for (const n of Object.keys(p.vars)) html.style.removeProperty(n)
-      const p = PRESETS.find(x => x.key === key)
-      for (const [n, v] of Object.entries(p.vars)) html.style.setProperty(n, v)
+      if (key === PRESETS[0].key) delete html.dataset.palette; else html.dataset.palette = key
       Vue.nextTick(() => { state.primary = shortColor(getComputedStyle(html).getPropertyValue('--color-primary').trim()); state.tick++ })
     }
     function applyPrimary(v) { if (v) document.documentElement.style.setProperty('--color-primary', v); else document.documentElement.style.removeProperty('--color-primary'); Vue.nextTick(() => state.tick++) }

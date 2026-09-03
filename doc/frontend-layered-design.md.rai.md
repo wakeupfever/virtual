@@ -3,11 +3,10 @@ rai-schema-version: 2
 task: "前端三层分层设计需求基线"
 task-key: "frontend-layered-design"
 primary-target: "doc/frontend-layered-design.md"
-requirement-version: "RV-011"
-iteration: "IT-011"
+requirement-version: "RV-012"
+iteration: "IT-012"
 current-changes:
-  - "C-031"
-  - "C-032"
+  - "C-033"
 status: "active"
 updated: "2026-09-03"
 ---
@@ -16,11 +15,11 @@ updated: "2026-09-03"
 
 ## 快速摘要
 
-- 当前需求版本：`RV-011`
-- 当前工作迭代：`IT-011`
-- 当前变更：`C-031` 表格 / 页签 / 树皮肤与行高 token（modify R-042、R-045）；`C-032` 02～05 模板按精修稿重排、UiFilterBar 改为 label + 控件（modify R-044、R-041）
-- 本轮目标：五套模板（02～05）按画板「布局配置精修稿 · 02～05」落地；第一层新增表格行高 / 表头高 token；皮肤层补 tabs / tree
-- 当前结论：**IT-011 完成**（R-042 / R-045 / R-044 / R-041 重新 verified）；IT-010 完成（R-045 verified；R-041 / R-044 重新 verified）；IT-009 完成（R-044 verified，R-037 重新 verified，代码已提交）；IT-008 完成（R-037 / R-041 / R-012 / R-007 / R-042 重新 verified，代码已提交）；展示页按方向 A 重做并验证（R-037），hash 路由落地并验证（R-038）；第一步成果保持——第一、二层（F-001～F-004）、原型模板与检查脚本（F-005）、`CLAUDE.md`、说明文档已实现并通过验收，17 条 `verified`、6 条 `implemented`（其余验收条件依赖第二步的 apps/web）；12 条 `ready` 属于第二步（apps/web 工具链、ESLint、展示页、插件、视觉回归），待用户验收第一步后授权
+- 当前需求版本：`RV-012`
+- 当前工作迭代：`IT-012`
+- 当前变更：`C-033` 调色板变体进第一层（add R-046；modify R-037 配色预设改为切换 `data-palette`）
+- 本轮目标：配色预设从展示页运行时覆盖改为 tokens.css ⑤ 段真实存在的 `[data-palette]` 变体，原型 / 正式项目可直接换肤
+- 当前结论：**IT-012 完成**（R-046 verified，R-037 重新 verified）；IT-011 完成（R-042 / R-045 / R-044 / R-041 重新 verified）；IT-010 完成（R-045 verified；R-041 / R-044 重新 verified）；IT-009 完成（R-044 verified，R-037 重新 verified，代码已提交）；IT-008 完成（R-037 / R-041 / R-012 / R-007 / R-042 重新 verified，代码已提交）；展示页按方向 A 重做并验证（R-037），hash 路由落地并验证（R-038）；第一步成果保持——第一、二层（F-001～F-004）、原型模板与检查脚本（F-005）、`CLAUDE.md`、说明文档已实现并通过验收，17 条 `verified`、6 条 `implemented`（其余验收条件依赖第二步的 apps/web）；12 条 `ready` 属于第二步（apps/web 工具链、ESLint、展示页、插件、视觉回归），待用户验收第一步后授权
 
 ## 当前需求清单
 
@@ -38,6 +37,7 @@ updated: "2026-09-03"
 - [ ] `R-010` `base.css` 统一 reset 与字体加载，原型与正式项目引用同一文件。`category: quality` `status: implemented`
 - [x] `R-030` `tokens.css` 将语义 token 映射到 Element Plus 主题变量（`--el-color-primary`、`--el-border-color`、`--el-bg-color`、`--el-border-radius-base` 等），Element Plus 外观只由第一层驱动，不单独维护 SCSS 主题。`category: maintainability` `status: verified`
 
+- [x] `R-046` 调色板变体：整套配色以 `[data-palette="<key>"]` 块放在 `tokens.css` ⑤ 段（当前 element / indigo / violet，默认科技青不加属性）；品牌 / 功能色（及圆角）在深浅两种模式都生效，中性色（bg / border / text / icon / canvas）只作用于浅色（`:not([data-theme="dark"])`），深色仍由 ④ 段统一重映射；`build-tokens.mjs` 抽取为 `palettes`（key / label / vars）；展示页 `PRESETS` 只登记 key / label，切换即设 `html[data-palette]`；第三层换肤只能切该属性。`category: ux` `status: verified`
 - [x] `R-045` 第一层默认值对齐参考站 `D:\hy-project\hy-compiler\apps\playground\src\style.css`（`--hy-space-*`）与 LayoutTemplateShowcase：间距 page-gap 24 / page-pad 20 / module-gap 16 / module-pad 16 / component-gap 12 / inline 8；布局 header 60 / sidebar 230 / collapsed 66 / 新增 `--layout-aside-w` 320；圆角 4 / 6 / 12；字号新增 `--font-size-micro` 10，display 改 24；新增 `--color-bg-canvas`（应用壳内容区底 #f0f3f4，UiShell 使用）、subtle 改 #f3f5f5；布局新增 `--layout-row-h` 44（表格行高）与 `--layout-thead-h` 40（表头高），经 `skins/table.css` 生效；`layout.css` 新增 `.l-grid--main-aside`、`.l-split--aside`、`.l-tile`、`.l-bars` / `.l-bar`。`category: ux` `status: verified`
 
 ### 第二层：基础组件与外壳
@@ -136,6 +136,7 @@ updated: "2026-09-03"
 | R-037 | 双击打开即渲染；页面结构与画板「方向 A」一致（顶栏页签、左锚点、限宽、右目录）；设计变量数量 = tokens.json 语义计数；组件物料覆盖 Element Plus 官方组件清单且白名单标记与 whitelist.json 一致；切换 dark / compact / 主色后全部组件同步变化 | 用户输入（方向 A、全量 Element Plus） | R-011, R-029, R-030, R-038 | RV-003 | C-013 | F-011 |
 | R-039 | tokens.css 默认加载 `--el-color-primary` = `#0076a3`；展示页与原型模板无需改动即呈现新配色；dark 模式下主按钮 / 文字对比可读 | 用户输入（参考 technology-cyan） | R-001, R-002, R-007 | RV-005 | C-016 | F-001 |
 | R-043 | grep 第二层源码与展示页无 `overflow: auto/scroll`（Element Plus 内部除外）；展示页与原型页面 `document.scrollingElement.scrollHeight === clientHeight`（window 不滚）而 `.el-scrollbar__wrap` 可滚；check 脚本对含 `overflow:auto` 的原型报错 | 用户输入（滚动套用 Element Plus 滚动组件） | R-011, R-012 | RV-007 | C-021 | F-003, F-004, F-005, F-011 |
+| R-046 | tokens.json `palettes` 长度 3；展示页切换预设后 `html[data-palette]` 变化、`--color-primary` 解析值随之变化且无 inline style；`data-palette` + `data-theme="dark"` 同时存在时主色取变体、中性色取深色 | 用户输入（半成品意图，选 2-A） | R-002, R-005, R-037 | RV-012 | C-033 | F-001, F-011 |
 | R-045 | tokens.json 语义计数 78；展示页布局配置芯片显示 page 20 / module 16 / header 60 / sidebar 230 / collapsed 66；01 统计模板与画板「布局配置精修稿」结构一致 | 用户输入（参考 hy-compiler MaterialCenterPage） | R-003, R-005, R-007 | RV-011 | C-028, C-031 | F-001, F-002, F-004, F-011 |
 | R-040 | CLAUDE.md 含四句消费规则；check 脚本对含 `data-composite` 的原型输出候选统计、对 `data-placeholder` 输出警告、`--strict` 下退出码非零 | 用户输入（原型 UI 不满足时怎么办） | R-015, R-019 | RV-006 | C-018 | F-003, F-005, F-007 |
 | R-041 | 三个组件 `vue-tsc` 通过、IIFE 可注册、展示页「自研复合组件」渲染；源码无裸数值 / 裸色 / 手写 flex | 对话结论（范例） | R-040, R-029 | RV-006 | C-019 | F-003, F-011 |
@@ -170,7 +171,15 @@ updated: "2026-09-03"
 
 ## 当前迭代
 
-### IT-011 · 02～05 模板精修与皮肤补齐
+### IT-012 · 调色板变体进第一层
+
+- 目标：配色预设成为第一层真值（⑤ 段），展示页改为切换 `data-palette`；清理仓库杂项（`Claude outputs/` 入 .gitignore）
+- 范围：`tokens.css`、`scripts/build-tokens.mjs`、`showcase.html`、`showcase.data.js`、`.gitignore`、README / CLAUDE.md / 说明文档；git commit
+- 包含变更：`C-033`
+- 对应需求版本：`RV-012`
+- 退出条件：R-046 verified；R-037 重新 verified；代码已提交
+
+### IT-011 · 02～05 模板精修与皮肤补齐（已完成）
 
 - 目标：五套模板中 02～05 按画板精修稿落地；第一层补表格行高 / 表头高 token；皮肤层补 tabs / tree；UiFilterBar 改为 label + 控件写法
 - 范围：`tokens.css`、`skins/{table,tabs,tree,index}.css`、`ui/composites/UiFilterBar.vue`、`showcase.data.js`、README / CLAUDE.md / 说明文档；git commit
@@ -187,6 +196,16 @@ updated: "2026-09-03"
 - 退出条件：R-045 verified；R-041 / R-044 重新 verified；代码已提交
 
 ## 当前变更
+
+### C-033 · 调色板变体进第一层
+
+- 类型：`add`
+- 原因：仓库中存在未提交的半成品（展示页切 `data-palette`、build-tokens 识别旋钮），其依赖的 tokens.css 段落缺失；用户选择 2-A（变体段，不做 oklch 旋钮派生）
+- 之前：`PRESETS.vars` 在展示页运行时用 inline style 覆盖语义 token，仅预览、原型不可用
+- 之后：R-046；`PRESETS` 只留 key / label；`build-tokens.mjs` 不做旋钮分组，改为抽取 `palettes`；变体补 `--color-bg-canvas`（原预览缺该值）
+- 关联需求：`R-046`、`R-037`
+- 覆盖关系：—
+- 影响功能：`F-001 direct`、`F-011 direct`、`F-005 indirect`
 
 ### C-031 · 表格 / 页签 / 树皮肤与行高 token
 
@@ -279,6 +298,7 @@ updated: "2026-09-03"
 | C-030 | F-011 | direct | 模板重排 | 五套渲染、与画板核对 |
 | C-031 | F-001, F-003 | direct | 新 token 与皮肤 | tokens 计数 80；表格行高 / 页签 / 树渲染 |
 | C-032 | F-003, F-011 | direct | 组件 API 与模板 | typecheck / build / 五套渲染 |
+| C-033 | F-001, F-011 | direct | 新段落与预设机制 | palettes 3；切换验证 |
 | C-027 | F-011 | direct | 页签顺序与命名 | 路由 |
 
 ## 实现映射
@@ -294,6 +314,7 @@ updated: "2026-09-03"
 | R-040 | `CLAUDE.md` §2.1、`scripts/check-prototype.js`（composites / placeholders / --strict）、`README.md` 三级偏差表 | verified | E-14 |
 | R-041 | `ui/composites/UiListItem.vue`、`UiFilterBar.vue`、`UiStatCard.vue`、`ui/index.ts`、`whitelist.json` custom、`showcase.data.js` CUSTOM | verified | E-15, E-21 |
 | R-042 | `skins/index.css`、`skins/{table,input,menu,tabs,tree}.css`、`requests/_template.md`、`requests/README.md`；模板与展示页加载顺序 | verified | E-16, E-21 |
+| R-046 | `tokens.css` ⑤ 段、`scripts/build-tokens.mjs`（palettes）、`showcase.html`（applyPreset）、`showcase.data.js`（PRESETS） | verified | E-22 |
 | R-004 | `ui/UiShell.vue`、`ui/UiPageHeader.vue`、`ui/UiState.vue` 内边距全部引用 token | implemented | E-03（第三层 lint 待第二步） |
 | R-015, R-022, R-023 | `CLAUDE.md` §1～§6 | verified | E-05 |
 | R-016～R-018 | `apps/prototypes/_template.html` | R-016/018 verified / R-017 implemented | E-02, E-06（与正式页面等宽比对待第二步） |
@@ -369,6 +390,7 @@ updated: "2026-09-03"
 | RV | IT | 变更 | 类型 | 需求 | 前后摘要 | 影响功能 |
 |---|---|---|---|---|---|---|
 | RV-008 | IT-008 | C-023 | modify | R-037 | 自研组件独立页签 + 配置卡 | F-011 |
+| RV-012 | IT-012 | C-033 | add | R-046, R-037 | 无 → [data-palette] 变体段 | F-001, F-011 |
 | RV-011 | IT-011 | C-031 | modify | R-042, R-045 | 行高 token；tabs / tree 皮肤 | F-001, F-003 |
 | RV-011 | IT-011 | C-032 | modify | R-044, R-041 | 02～05 模板与 UiFilterBar 改版 | F-003, F-011 |
 | RV-008 | IT-008 | C-024 | modify | R-041, R-012 | 组件按精修稿美化 | F-003, F-004 |
