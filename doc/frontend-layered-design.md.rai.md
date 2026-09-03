@@ -3,24 +3,25 @@ rai-schema-version: 2
 task: "前端三层分层设计需求基线"
 task-key: "frontend-layered-design"
 primary-target: "doc/frontend-layered-design.md"
-requirement-version: "RV-007"
-iteration: "IT-007"
+requirement-version: "RV-008"
+iteration: "IT-008"
 current-changes:
-  - "C-021"
-  - "C-022"
+  - "C-023"
+  - "C-024"
+  - "C-025"
 status: "active"
-updated: "2026-09-02"
+updated: "2026-09-03"
 ---
 
 # 前端三层分层设计需求基线 · 需求台账
 
 ## 快速摘要
 
-- 当前需求版本：`RV-007`
-- 当前工作迭代：`IT-007`
-- 当前变更：`C-021` 滚动区域统一使用 Element Plus `ElScrollbar`（add R-043）；`C-022` UiShell 侧栏与主区改为 ElScrollbar 内滚（modify R-012）
-- 本轮目标：所有滚动效果套用 Element Plus 滚动组件，规则、检查、现有页面一并落地，并提交代码
-- 当前结论：**IT-007 完成**（R-043 verified，R-012 重新 verified，代码已提交）；展示页按方向 A 重做并验证（R-037），hash 路由落地并验证（R-038）；第一步成果保持——第一、二层（F-001～F-004）、原型模板与检查脚本（F-005）、`CLAUDE.md`、说明文档已实现并通过验收，17 条 `verified`、6 条 `implemented`（其余验收条件依赖第二步的 apps/web）；12 条 `ready` 属于第二步（apps/web 工具链、ESLint、展示页、插件、视觉回归），待用户验收第一步后授权
+- 当前需求版本：`RV-008`
+- 当前工作迭代：`IT-008`
+- 当前变更：`C-023` 展示页新增「布局配置」页签（自研组件配置卡，modify R-037）；`C-024` 六个自研组件按精修稿美化（modify R-041 / R-012）；`C-025` 新增 `--font-size-display` 与 `skins/menu.css`（modify R-007 / R-042）
+- 本轮目标：自研组件独立成栏目（放在布局范式之后），每个组件呈现为「脱胎第一层」配置卡；按 /design 精修稿美化组件效果
+- 当前结论：**IT-008 完成**（R-037 / R-041 / R-012 / R-007 / R-042 重新 verified，代码已提交）；展示页按方向 A 重做并验证（R-037），hash 路由落地并验证（R-038）；第一步成果保持——第一、二层（F-001～F-004）、原型模板与检查脚本（F-005）、`CLAUDE.md`、说明文档已实现并通过验收，17 条 `verified`、6 条 `implemented`（其余验收条件依赖第二步的 apps/web）；12 条 `ready` 属于第二步（apps/web 工具链、ESLint、展示页、插件、视觉回归），待用户验收第一步后授权
 
 ## 当前需求清单
 
@@ -32,7 +33,7 @@ updated: "2026-09-02"
 - [ ] `R-004` 组件内部间距由第二层组件写死引用 token，第三层不设置组件内部间距。`category: maintainability` `status: implemented`
 - [x] `R-005` 布局尺寸以 `--layout-*` 命名（侧边栏宽/折叠宽、顶栏高、内容区最大宽与内边距、栅格列数与间隙）并提供 `--z-*` 层级，与 `--space-*` 分开。`category: ux` `status: verified`
 - [x] `R-006` 提供密度系数 `--density`，通过 `[data-density="compact"]` 整体缩放语义间距。`category: functional` `status: verified`
-- [x] `R-007` 字号/行高、圆角、阴影、边框宽纳入第一层语义 token。`category: ux` `status: verified`
+- [x] `R-007` 字号/行高、圆角、阴影、边框宽纳入第一层语义 token；字号五级：display / page-title / module-title / body / caption。`category: ux` `status: verified`
 - [x] `R-008` 语义颜色预留 `[data-theme="dark"]` 重映射入口（含 Element Plus dark 变量同步），第二层不写死白色背景等固定色。`category: ux` `status: verified`
 - [ ] `R-009` `layout.css` 提供无 JS 行为的布局类 `.l-page / .l-section / .l-stack / .l-grid` 及常用变体，只引用语义 token，原型与正式项目引用同一文件。`category: maintainability` `status: implemented`
 - [ ] `R-010` `base.css` 统一 reset 与字体加载，原型与正式项目引用同一文件。`category: quality` `status: implemented`
@@ -41,7 +42,7 @@ updated: "2026-09-02"
 ### 第二层：基础组件与外壳
 
 - [ ] `R-011` 第二层由两部分构成：Element Plus 允许使用的组件白名单（初始：ElButton、ElInput、ElSelect、ElCheckbox、ElSwitch、ElForm/ElFormItem、ElTable、ElDialog、ElDrawer、ElMessage/ElNotification、ElTabs、ElPagination），以及自研复合组件清单（仅限 Element Plus 未覆盖的外壳与页面级组件）；两份清单均写入 README。`category: maintainability` `status: implemented`
-- [x] `R-012` 外壳组件 `UiShell` 实现侧边栏折叠、路由高亮、响应式抽屉，所有尺寸取自 `--layout-*`，自身不写数值；外壳固定为视口高，侧栏与主内容区各自在 `ElScrollbar` 内滚动，页面（window）不滚动。`category: functional` `status: verified`
+- [x] `R-012` 外壳组件 `UiShell` 实现侧边栏折叠、路由高亮、响应式抽屉，所有尺寸取自 `--layout-*`，自身不写数值；外壳固定为视口高，侧栏与主内容区各自在 `ElScrollbar` 内滚动，页面（window）不滚动；顶栏带品牌色块，侧栏菜单经 `skins/menu.css` 呈现圆角胶囊高亮。`category: functional` `status: verified`
 - [ ] `R-029` 第二层技术形态：正式项目通过 npm 引入 Element Plus 2.14.x；原型通过 CDN 引入 Vue 3 全局构建与**同一版本** Element Plus；自研复合组件用 Vite 库模式打包为 `dist/ui.iife.js`（Vue、ElementPlus 设为 external 全局），原型与正式项目共用同一份源码。`category: maintainability` `status: implemented`
 - [x] `R-014` `design-system/README.md` 作为组件索引，列出白名单组件、自研组件、props 与用法示例；AI 开发第三层前必须先读。`category: delivery` `status: verified`
 - [x] `R-015` 第二层建成后冻结；新增或修改须经"提议 → 判定通用/业务 → 单独提交 + 更新 README"流程。`category: maintainability` `status: verified`
@@ -77,13 +78,13 @@ updated: "2026-09-02"
 ### 第二层演进机制
 
 - [x] `R-040` 三级偏差处理规则：原型或正式页面需要 Element Plus 默认之外的 UI 时，按 样式级（第二层皮肤 `skins/`）/ 结构级（第二层复合组件 `ui/composites/`）/ 行为级（第二层封装外部库或自研）归类处理，第三层永不写样式。消费时：优先复合组件；未命中但能用白名单原语 + `.l-*` 拼出的，就地拼装并在外层打 `data-composite="<候选名>"`；拼不出的用最接近的白名单组件占位并打 `data-placeholder="<需求名>"` 且写需求单。`check-prototype.js` 统计候选出现次数（≥2 提示下沉）、对占位发出警告，`--strict` 模式（promote 前）下占位为错误。`category: maintainability` `status: verified`
-- [x] `R-041` 首批复合组件（结构级下沉范例）：`UiListItem`（头像 / 标题 / 副标题 / 状态与操作插槽）、`UiFilterBar`（筛选区 + 操作区 + 可选重置）、`UiStatCard`（标签 / 数值 / 单位 / 趋势 / 说明），位于 `ui/composites/`，只用白名单原语 + `.l-*` + token，登记白名单、README、展示页。`category: functional` `status: verified`
+- [x] `R-041` 首批复合组件（结构级下沉范例）：`UiListItem`（头像 / 标题 / 副标题 / 状态与操作插槽）、`UiFilterBar`（筛选区 + 操作区 + 可选重置）、`UiStatCard`（标签 / 数值 / 单位 / 趋势 / 说明），位于 `ui/composites/`，只用白名单原语 + `.l-*` + token，登记白名单、README、展示页。精修（按画板「自研组件精修稿」）：UiStatCard 数值用 `--font-size-display`、趋势胶囊带箭头、右上角 `icon` 插槽、hover 抬升；UiListItem 头像 36、`active` 高亮、`divided` 分割线、clickable 箭头、状态胶囊；UiFilterBar 包在 subtle 圆角容器、重置为文字链接、`summary` 插槽；UiPageHeader `breadcrumb` 插槽；UiState error 态图标 + 标题 + 描述、empty 态 `action` 插槽。`category: functional` `status: verified`
 - [x] `R-043` 滚动统一：任何需要滚动的区域（外壳主区、侧栏、抽屉内容、列表容器、横向条）必须使用 Element Plus `ElScrollbar`，禁止在第二、三层写 `overflow: auto | scroll`（表格 / 虚拟列表 / 下拉等 Element Plus 内部已自带 ElScrollbar 的组件除外）；`el-scrollbar` 加入白名单；`check-prototype.js` 新增 `no-overflow-scroll` 规则；展示页侧栏、主区、无限滚动演示与 UiShell 全部改为 ElScrollbar。`category: ux` `status: verified`
-- [x] `R-042` 皮肤层与需求单：`skins/` 目录存放按组件划分的样式级覆盖（只允许 `--el-<component>-*` 变量与 Element Plus BEM 类，值只引用 token），加载顺序固定为 element-plus → tokens → skins → layout → base；`requests/` 目录存放组件需求单（模板含：效果描述、偏差级别、涉及 token、建议组件名与 props、来源原型），由第二层治理者判定后实施。`category: maintainability` `status: verified`
+- [x] `R-042` 皮肤层与需求单：`skins/` 目录存放按组件划分的样式级覆盖（只允许 `--el-<component>-*` 变量与 Element Plus BEM 类，值只引用 token），加载顺序固定为 element-plus → tokens → skins → layout → base（当前皮肤：table / input / menu）；`requests/` 目录存放组件需求单（模板含：效果描述、偏差级别、涉及 token、建议组件名与 props、来源原型），由第二层治理者判定后实施。`category: maintainability` `status: verified`
 
 ### 展示页面
 
-- [x] `R-037` 展示页面从 `packages/design-system/` 目录直接产出（`showcase.html`，零构建，CDN + `dist/ui.iife.js` + `dist/tokens.js`），采用「方向 A · 文档站式」排版：顶栏路由页签（设计变量 / 组件物料 / 布局范式）+ 左侧分组锚点 + 内容限宽 + 右侧本页目录。设计变量页：功能色色卡网格、bg/text/border/icon 分列、间距作用域×关系阶梯尺（条宽取真实解析值）、字体样张、圆角/阴影/边框实物、布局尺寸；原始刻度与 `--el-*` 映射默认折叠。组件物料页：**Element Plus 全部组件**按官方分类（Basic / Form / Data / Navigation / Feedback / Others）逐一渲染，每张卡片含舞台区、白名单/需提议标记、驱动 token 注脚、复制用法；主题 / 密度 / 主色实时切换。**响应式**：内容流式限宽（设计变量 ≤1200、组件物料 ≤1560），卡片按 `auto-fill(minmax(440px, 1fr))` 自动分栏；≤1400 隐藏右目录，≤960 左锚点变为顶部横向滚动条，≤720 色卡/表格降列，≤560 顶栏精简；任何宽度无横向滚动。`category: ux` `status: verified`
+- [x] `R-037` 展示页面从 `packages/design-system/` 目录直接产出（`showcase.html`，零构建，CDN + `dist/ui.iife.js` + `dist/tokens.js`），采用「方向 A · 文档站式」排版：顶栏路由页签（设计变量 / 组件物料 / 布局范式）+ 左侧分组锚点 + 内容限宽 + 右侧本页目录。设计变量页：功能色色卡网格、bg/text/border/icon 分列、间距作用域×关系阶梯尺（条宽取真实解析值）、字体样张、圆角/阴影/边框实物、布局尺寸；原始刻度与 `--el-*` 映射默认折叠。组件物料页：**Element Plus 全部组件**按官方分类（Basic / Form / Data / Navigation / Feedback / Others）逐一渲染，每张卡片含舞台区、白名单/需提议标记、驱动 token 注脚、复制用法；主题 / 密度 / 主色实时切换。**响应式**：内容流式限宽（设计变量 ≤1200、组件物料 ≤1560），卡片按 `auto-fill(minmax(440px, 1fr))` 自动分栏；≤1400 隐藏右目录，≤960 左锚点变为顶部横向滚动条，≤720 色卡/表格降列，≤560 顶栏精简；任何宽度无横向滚动。**布局配置页**（`#/custom`，位于布局范式之后）：自研组件按 外壳 / 页面级 / 复合组件 分组，每个组件一张配置卡——舞台（真实渲染 + 结构标签）、「脱胎第一层」面板（列出该组件消费的 token，滑块 / 取色只作用于本卡舞台，可恢复默认）、Props / Slots / Events、用法与源码链接。`category: ux` `status: verified`
 
 ### 文档
 
@@ -162,35 +163,45 @@ updated: "2026-09-02"
 
 ## 当前迭代
 
-### IT-007 · 滚动统一为 ElScrollbar
+### IT-008 · 布局配置页与自研组件精修
 
-- 目标：规则、检查、UiShell、展示页一并改为 Element Plus 滚动组件；提交代码
-- 范围：`CLAUDE.md`、`whitelist.json`、`check-prototype.js`、`ui/UiShell.vue`、`showcase.html`、`showcase.data.js`、README；git commit
-- 包含变更：`C-021`、`C-022`
-- 对应需求版本：`RV-007`
-- 退出条件：R-043 verified，R-012 重新 verified，代码已提交
+- 目标：自研组件独立为「布局配置」页签（布局范式之后），配置卡呈现「脱胎第一层」；按 /design 精修稿美化六个组件
+- 范围：`showcase.html` / `showcase.data.js`、`ui/*.vue`、`ui/composites/*.vue`、`tokens.css`（display 字号）、`skins/menu.css`、README、文档；git commit
+- 包含变更：`C-023`、`C-024`、`C-025`
+- 对应需求版本：`RV-008`
+- 退出条件：R-037 / R-041 / R-012 / R-007 / R-042 verified，代码已提交
 
 ## 当前变更
 
-### C-021 · 滚动统一使用 ElScrollbar
-
-- 类型：`add`
-- 原因：用户要求所有滚动效果套用 Element Plus 滚动组件
-- 之前：展示页侧栏 `overflow-y: auto`、页面用 window 滚动、无限滚动演示用原生 overflow；无规则
-- 之后：R-043
-- 关联需求：`R-043`
-- 覆盖关系：—
-- 影响功能：`F-003 direct`、`F-005 direct`、`F-007 direct`、`F-011 direct`
-
-### C-022 · UiShell 改为内滚
+### C-023 · 展示页新增「布局配置」页签
 
 - 类型：`modify`
-- 原因：R-043 要求外壳主区与侧栏在 ElScrollbar 内滚动
-- 之前：UiShell 顶栏 / 侧栏 sticky，主区随 window 滚动
-- 之后：外壳 100vh 固定，侧栏与主区各自 ElScrollbar，window 不滚
-- 关联需求：`R-012`
+- 原因：用户要求自研组件单开栏目并放在布局范式之后；组件应体现"脱胎第一层"
+- 之前：自研组件是组件物料页末尾的一节，只有舞台与 token 注脚
+- 之后：独立路由 `#/custom`「布局配置」，配置卡含舞台 + 结构标签 + token 配置面板（滑块 / 取色，只作用于本卡）+ Props / Slots / Events + 用法 / 源码
+- 关联需求：`R-037`
 - 覆盖关系：—
-- 影响功能：`F-004 direct`、`F-005 indirect`（原型模板自动获得）
+- 影响功能：`F-011 direct`
+
+### C-024 · 自研组件按精修稿美化
+
+- 类型：`modify`
+- 原因：用户要求用 /design 美化组件效果；画板「自研组件精修稿」已确认
+- 之前：组件为最小实现
+- 之后：见 R-041 / R-012 描述；结构与 props 向后兼容，只新增可选 props / slots
+- 关联需求：`R-041`、`R-012`
+- 覆盖关系：—
+- 影响功能：`F-003 direct`、`F-004 direct`、`F-005 indirect`（原型模板视觉随之变化）
+
+### C-025 · 新增 display 字号与菜单皮肤
+
+- 类型：`modify`
+- 原因：精修需要更大的数值字号与侧栏胶囊高亮，均须落在第一、二层
+- 之前：字号四级；皮肤 table / input
+- 之后：`--font-size-display: 28px`；`skins/menu.css`
+- 关联需求：`R-007`、`R-042`
+- 覆盖关系：—
+- 影响功能：`F-001 direct`、`F-003 direct`
 
 ## 功能影响
 
@@ -223,6 +234,10 @@ updated: "2026-09-02"
 | C-020 | F-003, F-005 | direct | 加载顺序与目录 | 模板与展示页引入 skins |
 | C-021 | F-003, F-005, F-007, F-011 | direct | 滚动容器全部替换 | window 不滚、wrap 可滚、check 规则 |
 | C-022 | F-004 | direct | 外壳滚动模型改变 | 原型模板渲染、侧栏折叠、小屏抽屉 |
+| C-023 | F-011 | direct | 新路由与配置卡 | 路由、配置面板联动、恢复默认 |
+| C-024 | F-003, F-004 | direct | 组件外观精修 | typecheck / build / 展示页渲染 |
+| C-024 | F-005 | indirect | 原型模板外观随之变化 | 模板渲染 |
+| C-025 | F-001, F-003 | direct | 新 token 与皮肤 | tokens.json 计数 75；菜单高亮 |
 
 ## 实现映射
 
@@ -260,6 +275,7 @@ updated: "2026-09-02"
 - `D-007`（已被 D-011 取代）展示页面以 `apps/web` 内的 Vue 路由页面实现。
 - `D-011` 展示页面从 `packages/design-system/` 目录直接产出，零构建单文件（用户要求，2026-09-02）。
 - `D-012` 展示页排版采用画板「方向 A · 文档站式」；菜单为 设计变量 / 组件物料 / 布局范式；组件物料全量展示 Element Plus 并标注白名单（用户选定，2026-09-02）。画板：claude.ai 工件「设计系统展示页」。
+- `D-015` 自研组件独立为「布局配置」页签，位于布局范式之后；配置卡设计与组件精修以画板「方向 A · 自研组件（配置卡）」「自研组件精修稿」为准（用户确认，2026-09-03）。
 - `D-014` 默认配色采用「科技青」，取值来自用户本机 HY Compiler Studio 的 technology-cyan 主题变量（`--app-primary #0076a3`、`--app-primary-strong #00486a`、`--app-primary-soft #e8f4f7`、`--park-text #304853`、`--park-text-secondary #4e6d7b`、`--park-border #e6e8e8`、`--park-canvas #f2f2f2`），2026-09-02。
 - `D-013` 路由约定：原型与展示页 hash 路由 `#/<key>`，正式项目 vue-router `/<key>`，key 同源（用户要求补充路由概念）。
 - `D-008` 第一层纳入字号/行高、圆角、阴影、边框，预留深色模式，启用密度系数；依赖方向检查采用 `eslint-plugin-boundaries`（用户确认）。
@@ -300,12 +316,15 @@ updated: "2026-09-02"
 | E-15 | R-041 | `vue-tsc --noEmit` 通过；`pnpm build` 产出 IIFE；展示页「自研复合组件」6 张卡片，UiListItem 3 行 / UiFilterBar 1 / UiStatCard 4 均渲染；源码 grep 无裸数值 / 裸色（第二层允许自有样式，UiStatCard 内部一处 flex 仅引用 token）；截图 `doc/showcase-composites.png` | pass | 2026-09-02 |
 | E-16 | R-042 | 展示页与原型模板均加载 `skins/index.css`，表头背景解析为 `rgb(247,249,249)`（= `--color-bg-subtle`，皮肤生效）；`requests/_template.md` 含 效果 / 原因 / 方案 / 占位 / 判定 五节 | pass | 2026-09-02 |
 | E-17 | R-043, R-012 | grep 第二层源码与 layout.css 无 `overflow: auto/scroll`；Playwright：展示页 window 不可滚（scrollHeight = clientHeight）、`.ds-scroll .el-scrollbar__wrap` 可滚，侧栏为 ElScrollbar；点击锚点「Feedback」后 wrap.scrollTop = 12593 且高亮同步、window.scrollY = 0；390 宽侧栏横向条可滚且页面无横向溢出；原型模板 500 行数据下 window 不滚、`.ui-shell__scroll` wrap 可滚、侧栏 ElScrollbar 存在；check 脚本对 `overflow:auto` 报错规则已加入；`vue-tsc` 通过 | pass | 2026-09-02 |
+| E-18 | R-037（布局配置）, R-041, R-012, R-007, R-042 | `vue-tsc` 通过、`pnpm build` 产出（tokens 75 语义）；Playwright `#/custom`：页签顺序 设计变量 / 组件物料 / 布局范式 / 布局配置，6 张配置卡、25 个滑块、13 个取色器，锚点 外壳 1 / 页面级 2 / 复合组件 3；UiStatCard 卡片调 `--space-module-pad` 滑块后舞台内 padding 24→32px、数值高亮，恢复默认后回 24px；组件物料页自研一节改为跳转卡；无 JS 错误。截图 `doc/showcase-config.png`。画板新增「自研组件（配置卡）」与「自研组件精修稿」两块 | pass | 2026-09-03 |
 | E-08 | R-028 | `doc/frontend-layered-design.md` §1～§10 与 RV-002 逐节核对；IT-003 同步 §3 目录树与 §9 展示页（RV-003）；IT-004 同步 §6 路由与 §9 方向 A（RV-004）：Vue 3 + Element Plus、Vite 8 + Tailwind 4、monorepo 目录、CDN 原型形态、插件三技能、展示页面、实施状态 | pass | 2026-09-02 |
 
 ## 历史索引
 
 | RV | IT | 变更 | 类型 | 需求 | 前后摘要 | 影响功能 |
 |---|---|---|---|---|---|---|
+| RV-007 | IT-007 | C-021 | add | R-043 | 无 → 滚动统一 ElScrollbar | F-003, F-005, F-007, F-011 |
+| RV-007 | IT-007 | C-022 | modify | R-012 | window 滚动 → UiShell 内滚 | F-004 |
 | RV-006 | IT-006 | C-018 | add | R-040 | 无 → 三级偏差规则与候选/占位标记 | F-003, F-005, F-007 |
 | RV-006 | IT-006 | C-019 | add | R-041 | 无 → UiListItem / UiFilterBar / UiStatCard | F-003 |
 | RV-006 | IT-006 | C-020 | add | R-042 | 无 → skins/ 与 requests/ | F-003, F-005 |

@@ -65,7 +65,7 @@
 
 ```bash
 pnpm install
-pnpm dev                 # 本地预览：自动打开 design-system 展示页（http://localhost:5173/packages/design-system/showcase.html）
+pnpm dev                 # 本地预览：自动打开 design-system 展示页（#/tokens 设计变量 · #/materials 组件物料 · #/layout 布局范式 · #/custom 布局配置）
 pnpm dev:prototype       # 本地预览：打开原型模板；其他原型改 URL 路径即可
 pnpm build:ds            # 抽取 token + 打包第二层 → dist/tokens.js · ui.iife.js · ui.css（原型与展示页引用，需提交）
 pnpm check:prototype     # 原型合规检查

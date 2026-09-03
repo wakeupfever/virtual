@@ -37,7 +37,7 @@ app.use(ElementPlus).use(DesignSystemUI)
 | 间距 inline | `--space-inline-{gap\|pad}` | 图标与文字 / tag 内边距 |
 | 布局尺寸 | `--layout-{sidebar-w\|sidebar-w-collapsed\|header-h\|content-max\|content-pad\|form-label-w\|control-w\|control-w-sm}`，`--grid-cols`，`--grid-gap` | |
 | 层级 | `--z-{header\|sidebar\|drawer\|dialog\|toast}` | |
-| 字体 | `--font-family`，`--font-size-{page-title\|module-title\|body\|caption}`，`--line-height-{tight\|body}`，`--font-weight-{regular\|medium\|bold}` | |
+| 字体 | `--font-family`，`--font-size-{display\|page-title\|module-title\|body\|caption}`，`--line-height-{tight\|body}`，`--font-weight-{regular\|medium\|bold}` | |
 | 圆角 | `--radius-{sm\|md\|lg\|full}` | |
 | 阴影 | `--shadow-{sm\|md\|lg}` | |
 | 边框 | `--border-w`，`--border-w-thick` | |
@@ -91,7 +91,7 @@ app.use(ElementPlus).use(DesignSystemUI)
 
 ## 第二层 · 皮肤层（`skins/`）
 
-样式级偏差的唯一落点：结构与行为不变、只是长得不一样时，在 `skins/<component>.css` 用 `--el-<component>-*` 变量或 Element Plus BEM 类覆盖，值只引用 token。`skins/index.css` 负责 `@import`。当前：`table.css`（表头次级底、行更松、hover 用 accent）、`input.css`（圆角与聚焦描边跟随 token）。第三层禁止出现任何皮肤写法。
+样式级偏差的唯一落点：结构与行为不变、只是长得不一样时，在 `skins/<component>.css` 用 `--el-<component>-*` 变量或 Element Plus BEM 类覆盖，值只引用 token。`skins/index.css` 负责 `@import`。当前：`table.css`（表头次级底、行更松、hover 用 accent）、`input.css`（圆角与聚焦描边跟随 token）、`menu.css`（UiShell 侧栏菜单圆角胶囊高亮）。第三层禁止出现任何皮肤写法。
 
 ## 原型 UI 不满足物料时（三级偏差）
 
@@ -133,7 +133,7 @@ app.use(ElementPlus).use(DesignSystemUI)
 |---|---|
 | `title` | `string` |
 | `subtitle` | `string?` |
-| slot `actions` | 右侧按钮组 |
+| slot `breadcrumb` / `actions` | 标题上方面包屑（用 `.ui-page-header__sep` 作分隔）/ 右侧按钮组 |
 
 ```html
 <UiPageHeader title="订单列表" subtitle="共 128 条">
@@ -146,7 +146,8 @@ app.use(ElementPlus).use(DesignSystemUI)
 | prop / event | 类型 | 说明 |
 |---|---|---|
 | `state` | `'ready' \| 'loading' \| 'empty' \| 'error'` | ready 时渲染默认插槽 |
-| `emptyText` / `errorText` | `string?` | |
+| `emptyText` / `errorText` / `errorHint` | `string?` | |
+| slot `action` | | empty 态的操作按钮 |
 | `rows` | `number?` | 骨架行数 |
 | `@retry` | | error 态点击重试 |
 
@@ -158,26 +159,28 @@ app.use(ElementPlus).use(DesignSystemUI)
 
 ### `UiListItem`（composites）
 
-列表项：头像 / 标题 / 副标题 …… 状态 + 操作。由 `.l-cluster` + `.l-inline` + `.l-stack--tight` + ElAvatar + ElTag 拼成。
+列表项：头像 / 标题 / 副标题 …… 状态胶囊 + 操作 + 箭头。由 `.l-cluster` + `.l-inline` + `.l-stack--tight` + ElAvatar + ElTag 拼成。`active` 用 `--color-bg-accent` 高亮当前项，`divided` 加分割线。
 
 | prop / slot / event | 类型 | 说明 |
 |---|---|---|
 | `title` / `subtitle` | `string` | |
 | `avatar` | `string?` | 取首字；给 `leading` 插槽时忽略 |
 | `status` | `{ label, type? }` | 右侧标签 |
-| `clickable` / `@click` | `boolean` | hover 高亮 |
+| `clickable` / `@click` | `boolean` | hover 高亮 + 右侧箭头 |
+| `active` / `divided` | `boolean` | 当前项高亮 / 底部分割线 |
 | slot `leading` / `trailing` | | 左侧自定义 / 右侧操作 |
 
 ### `UiFilterBar`（composites）
 
-表格上方工具条：默认插槽放筛选控件，`actions` 插槽放右侧按钮，`resettable`（默认 true）显示重置并 `@reset`。控件宽度取 `--layout-control-w`。
+表格上方筛选条，整条包在 `--color-bg-subtle` 圆角容器里：默认插槽放筛选控件，`summary` 插槽放摘要（如已选 N 项），`actions` 插槽放右侧按钮，`resettable`（默认 true）显示重置文字链接并 `@reset`。控件宽度取 `--layout-control-w`。
 
 ### `UiStatCard`（composites）
 
 | prop | 类型 | 说明 |
 |---|---|---|
-| `label` / `value` / `unit` | | 数值为 number 时自动千分位 |
-| `trend` | `number?` | 百分比，正为上升 |
+| `label` / `value` / `unit` | | 数值为 number 时自动千分位；数值字号 `--font-size-display` |
+| slot `icon` | | 右上角图标（accent 圆角底） |
+| `trend` | `number?` | 百分比，正为上升；0 显示「持平」；胶囊带箭头 |
 | `upIsGood` | `boolean` | 上升是否为好（决定颜色），默认 true |
 | `hint` | `string?` | 说明 |
 
@@ -192,8 +195,9 @@ app.use(ElementPlus).use(DesignSystemUI)
 | 路由 | 内容 |
 |---|---|
 | `#/tokens` 设计变量 | 功能色色卡、bg / text / border / icon 分列、间距作用域×关系阶梯尺（条宽即真实值）、字体样张、圆角 / 阴影 / 边框、布局尺寸；原始刻度与 `--el-*` 映射默认折叠 |
-| `#/materials` 组件物料 | **Element Plus 全部组件**按官方分类逐一渲染 + 自研复合组件；每张卡片：舞台区、白名单 / 需提议标记、驱动 token 注脚（点击复制）、复制用法 |
+| `#/materials` 组件物料 | **Element Plus 全部组件**按官方分类逐一渲染；每张卡片：舞台区、白名单 / 需提议标记、驱动 token 注脚（点击复制）、复制用法 |
 | `#/layout` 布局范式 | `.l-*` 布局类逐一示意 |
+| `#/custom` 布局配置 | 自研组件（外壳 / 页面级 / 复合组件）的**配置卡**：舞台 + 结构标签 + 「脱胎第一层」面板（可临时调整该组件消费的 token 验证联动）+ Props / Slots / Events + 用法 |
 
 数据来源：`scripts/build-tokens.mjs` 解析 `tokens.css` + `whitelist.json` 生成 `dist/tokens.js`（file:// 下无法读样式表规则，故预抽取）；组件清单与演示模板在 `showcase.data.js`。**改了 tokens.css 或 whitelist.json 后必须重新 `pnpm build`**，否则展示页的变量清单 / 白名单标记会过期（解析值仍是实时的）。新增第二层组件时同步在 `showcase.data.js` 的 `CUSTOM` 登记。
 

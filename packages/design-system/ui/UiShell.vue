@@ -89,6 +89,7 @@ defineExpose({ scrollTo, wrapEl })
           </svg>
         </ElButton>
         <slot name="logo">
+          <span class="ui-shell__mark"></span>
           <span class="ui-shell__title">{{ title }}</span>
         </slot>
       </div>
@@ -154,6 +155,7 @@ defineExpose({ scrollTo, wrapEl })
   background: var(--color-bg-surface);
   border-bottom: var(--border-w) solid var(--color-border-muted);
 }
+.ui-shell__mark { width: 22px; height: 22px; border-radius: var(--radius-md); background: var(--color-primary); flex: none; }
 .ui-shell__title { font-size: var(--font-size-module-title); font-weight: var(--font-weight-bold); color: var(--color-text-default); }
 .ui-shell__toggle { color: var(--color-icon-default); }
 

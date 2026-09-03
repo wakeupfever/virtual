@@ -1,7 +1,7 @@
 # 前端三层分层设计说明
 
 > 本文档描述 `virtual` 项目前端的三层分层模型：每一层包含什么、由谁修改、如何约束 AI 在各层的行为，以及"提示词 → 可交互原型 → 正式页面"的流转方式。
-> 对应需求台账见 `doc/frontend-layered-design.md.rai.md`（当前 RV-007）；需求 ID、状态与验收标准以台账为准。
+> 对应需求台账见 `doc/frontend-layered-design.md.rai.md`（当前 RV-008）；需求 ID、状态与验收标准以台账为准。
 > 技术栈：Vue 3 + Element Plus 2.14 + Vite 8 + Tailwind CSS 4，pnpm monorepo。
 
 ## 1. 目标与问题
@@ -147,7 +147,7 @@ reset、字体、页面底色。正式项目关闭 Tailwind preflight，全局 r
 
 ## 9. 展示页面
 
-`packages/design-system/showcase.html`（数据在 `showcase.data.js`），从第一、二层所在目录直接产出，零构建、双击打开，与原型同一套 CDN 依赖。排版采用画板确认的「方向 A · 文档站式」：顶栏路由页签（`#/tokens` 设计变量 / `#/materials` 组件物料 / `#/layout` 布局范式）+ 左侧分组锚点 + 内容限宽 + 右侧本页目录。设计变量页：功能色色卡网格、bg / text / border / icon 分列、间距作用域×关系阶梯尺（条宽即真实解析值，随密度变化）、字体样张、圆角 / 阴影 / 边框实物、布局尺寸与层级；原始刻度与 `--el-*` 映射默认折叠并标注禁止直接引用。组件物料页：Element Plus 全部组件按官方分类（Basic / Config / Form / Data / Navigation / Feedback / Others）逐一渲染，加自研复合组件；每张卡片含舞台区、白名单 / 需提议标记（来自 `whitelist.json`）、驱动 token 注脚与复制用法。右上角实时切换主色 / 密度 / 深色 / 配色预设，三页同步变化；内容流式限宽并带四级响应式断点。本页属于设计系统内部工具，允许 `<style>` 与 `:style` 绑定，但所有值仍只引用 token。
+`packages/design-system/showcase.html`（数据在 `showcase.data.js`），从第一、二层所在目录直接产出，零构建、双击打开，与原型同一套 CDN 依赖。排版采用画板确认的「方向 A · 文档站式」：顶栏路由页签（`#/tokens` 设计变量 / `#/materials` 组件物料 / `#/layout` 布局范式 / `#/custom` 布局配置）+ 左侧分组锚点 + 内容限宽 + 右侧本页目录。设计变量页：功能色色卡网格、bg / text / border / icon 分列、间距作用域×关系阶梯尺（条宽即真实解析值，随密度变化）、字体样张、圆角 / 阴影 / 边框实物、布局尺寸与层级；原始刻度与 `--el-*` 映射默认折叠并标注禁止直接引用。组件物料页：Element Plus 全部组件按官方分类（Basic / Config / Form / Data / Navigation / Feedback / Others）逐一渲染；布局配置页：自研组件（外壳 / 页面级 / 复合组件）的配置卡——舞台 + 结构标签 + 「脱胎第一层」面板（临时调整该组件消费的 token，只作用于本卡舞台，验证组件确实随第一层变化）+ Props / Slots / Events + 用法；每张卡片含舞台区、白名单 / 需提议标记（来自 `whitelist.json`）、驱动 token 注脚与复制用法。右上角实时切换主色 / 密度 / 深色 / 配色预设，三页同步变化；内容流式限宽并带四级响应式断点。本页属于设计系统内部工具，允许 `<style>` 与 `:style` 绑定，但所有值仍只引用 token。
 
 ## 10. 实施状态
 

@@ -13,10 +13,11 @@ withDefaults(
     state: UiStateKind
     emptyText?: string
     errorText?: string
+    errorHint?: string
     /** 骨架屏行数 */
     rows?: number
   }>(),
-  { emptyText: '暂无数据', errorText: '加载失败，请重试', rows: 5 },
+  { emptyText: '暂无数据', errorText: '加载失败', errorHint: '网络异常或服务暂不可用，请稍后重试', rows: 5 },
 )
 
 const emit = defineEmits<{ (e: 'retry'): void }>()
@@ -25,11 +26,25 @@ const emit = defineEmits<{ (e: 'retry'): void }>()
 <template>
   <div class="ui-state">
     <ElSkeleton v-if="state === 'loading'" :rows="rows" animated />
-    <ElEmpty v-else-if="state === 'empty'" :description="emptyText" />
-    <div v-else-if="state === 'error'" class="l-state">
-      <span>{{ errorText }}</span>
+    <ElEmpty v-else-if="state === 'empty'" :description="emptyText" :image-size="72">
+      <slot name="action" />
+    </ElEmpty>
+    <div v-else-if="state === 'error'" class="ui-state__error l-state">
+      <span class="ui-state__error-icon">
+        <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="9" /><path d="M12 8v5M12 16h.01" /></svg>
+      </span>
+      <strong class="ui-state__error-title">{{ errorText }}</strong>
+      <small class="ui-state__error-hint">{{ errorHint }}</small>
       <ElButton size="small" @click="emit('retry')">重试</ElButton>
     </div>
     <slot v-else />
   </div>
 </template>
+
+<style>
+.ui-state__error { gap: var(--space-inline-gap); }
+.ui-state__error-icon { display: inline-grid; place-items: center; width: 40px; height: 40px; border-radius: var(--radius-full); background: color-mix(in srgb, var(--color-danger) 12%, var(--color-bg-surface)); color: var(--color-danger); margin-bottom: var(--space-inline-pad); }
+.ui-state__error-title { color: var(--color-text-default); font-weight: var(--font-weight-medium); }
+.ui-state__error-hint { color: var(--color-text-muted); }
+.ui-state__error .el-button { margin-top: var(--space-inline-pad); }
+</style>

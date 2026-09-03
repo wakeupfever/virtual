@@ -131,6 +131,7 @@
   --font-family: "Helvetica Neue", Helvetica, "PingFang SC", "Hiragino Sans GB",
     "Microsoft YaHei", "微软雅黑", Arial, sans-serif;
   --font-family-mono: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  --font-size-display: 28px;      /* 统计数值等强调数字 */
   --font-size-page-title: 20px;
   --font-size-module-title: 16px;
   --font-size-body: 14px;

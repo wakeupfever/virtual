@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>设计系统 · 设计变量 / 组件物料 / 布局范式</title>
+<title>设计系统 · 设计变量 / 组件物料 / 布局范式 / 布局配置</title>
 
 <!-- 依赖顺序与原型模板一致；版本必须与 package.json 一致 -->
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/element-plus@2.14.5/dist/index.css">
@@ -146,6 +146,40 @@
   .ds-comp__foot span:hover { color: var(--color-primary); }
   .ds-row { display: flex; flex-wrap: wrap; align-items: center; gap: var(--space-component-gap); }
   .ds-stage-note { font-size: var(--font-size-caption); color: var(--color-text-muted); }
+
+  /* 自研组件 · 配置卡 */
+  .ds-cfg { display: flex; flex-direction: column; overflow: hidden; }
+  .ds-cfg__head { display: flex; align-items: center; justify-content: space-between; gap: var(--space-3); padding: 14px var(--space-5); border-bottom: var(--border-w) solid var(--color-bg-muted); }
+  .ds-cfg__name { display: flex; align-items: center; gap: var(--space-2); font-size: 15px; font-weight: var(--font-weight-medium); }
+  .ds-cfg__links { display: flex; gap: var(--space-4); font-size: var(--font-size-caption); }
+  .ds-cfg__links a, .ds-cfg__links span { color: var(--color-primary); cursor: pointer; }
+  .ds-cfg__body { display: grid; grid-template-columns: minmax(0, 1fr) 340px; }
+  .ds-cfg__stage { padding: var(--space-6) var(--space-5); background: var(--color-bg-subtle); display: flex; flex-direction: column; gap: var(--space-4); border-right: var(--border-w) solid var(--color-bg-muted); min-width: 0; }
+  .ds-cfg__anatomy { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; font-size: 11px; color: var(--color-text-muted); }
+  .ds-cfg__anatomy .ds-pill { padding: 1px 8px; border-radius: var(--radius-full); border: var(--border-w) solid var(--color-border-default); background: var(--color-bg-surface); font-family: var(--font-family-mono); color: var(--color-text-secondary); }
+  .ds-cfg__panel { padding: var(--space-5); display: flex; flex-direction: column; gap: var(--space-3); font-size: var(--font-size-caption); }
+  .ds-cfg__panel-head { display: flex; align-items: center; justify-content: space-between; font-weight: var(--font-weight-medium); color: var(--color-text-default); }
+  .ds-cfg__panel-head .ds-reset { color: var(--color-primary); cursor: pointer; font-weight: var(--font-weight-regular); }
+  .ds-cfg__panel-head .ds-reset.is-dim { color: var(--color-text-placeholder); cursor: default; }
+  .ds-tk { display: grid; grid-template-columns: minmax(0, 1fr) 72px; gap: var(--space-2); align-items: center; }
+  .ds-tk__name { font-family: var(--font-family-mono); color: var(--color-text-default); cursor: pointer; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .ds-tk__name:hover { color: var(--color-primary); }
+  .ds-tk__ctl { display: flex; flex-direction: column; gap: 2px; min-width: 0; }
+  .ds-tk__ctl .el-slider { --el-slider-height: 4px; --el-slider-button-size: 14px; margin: 0 6px; }
+  .ds-tk__ctl-color { display: flex; align-items: center; gap: var(--space-2); }
+  .ds-tk__ctl-color .el-color-picker { --el-color-picker-size: 20px; }
+  .ds-tk__val { text-align: right; font-family: var(--font-family-mono); color: var(--color-text-secondary); white-space: nowrap; }
+  .ds-tk__val.is-tweaked { color: var(--color-primary); }
+  .ds-cfg__note { font-size: 11px; color: var(--color-text-muted); line-height: var(--line-height-body); border-top: var(--border-w) solid var(--color-bg-muted); padding-top: var(--space-3); }
+  .ds-cfg__foot { display: grid; grid-template-columns: 1fr 1fr; border-top: var(--border-w) solid var(--color-bg-muted); }
+  .ds-cfg__props { padding: var(--space-4) var(--space-5); display: flex; flex-direction: column; gap: var(--space-2); border-right: var(--border-w) solid var(--color-bg-muted); font-size: var(--font-size-caption); }
+  .ds-cfg__props-grid { display: grid; grid-template-columns: 130px 150px 1fr; gap: 6px 12px; color: var(--color-text-secondary); }
+  .ds-cfg__props-grid .ds-mono { color: var(--color-text-default); }
+  .ds-cfg__usage { padding: var(--space-4) var(--space-5); display: flex; flex-direction: column; gap: var(--space-2); font-size: var(--font-size-caption); }
+  .ds-cfg__code { font-family: var(--font-family-mono); color: var(--color-text-secondary); background: var(--color-bg-subtle); border-radius: var(--radius-md); padding: var(--space-3); line-height: 1.7; white-space: pre-wrap; word-break: break-all; cursor: pointer; }
+  .ds-cfg__code:hover { color: var(--color-text-default); }
+  .ds-cfg__label { font-weight: var(--font-weight-medium); color: var(--color-text-default); }
+  @media (max-width: 1100px) { .ds-cfg__body { grid-template-columns: 1fr; } .ds-cfg__stage { border-right: none; border-bottom: var(--border-w) solid var(--color-bg-muted); } .ds-cfg__foot { grid-template-columns: 1fr; } .ds-cfg__props { border-right: none; border-bottom: var(--border-w) solid var(--color-bg-muted); } }
 
   /* 布局范式示意块 */
   .ds-block { background: color-mix(in srgb, var(--color-primary) 12%, var(--color-bg-surface)); border: var(--border-w) dashed var(--color-primary); border-radius: var(--radius-md); padding: var(--space-component-pad-y) var(--space-component-pad-x); color: var(--color-text-secondary); font-size: var(--font-size-caption); text-align: center; }
@@ -360,13 +394,68 @@
           </div>
         </section>
         <section id="cat-custom" class="ds-group">
-          <div class="ds-group__head"><div class="ds-group__title">自研复合组件</div><div class="ds-group__sub">Element Plus 未覆盖的外壳与页面级组件 · ui/</div></div>
-          <div class="ds-comps">
-            <div v-for="c in CUSTOM" :key="c.key" class="ds-card ds-comp" :class="{ 'ds-comp--wide': c.wide }">
-              <div class="ds-comp__head"><div class="ds-comp__name"><span>{{ c.name }} {{ c.cn }}</span><span class="ds-badge ds-badge--wl">白名单</span></div><div class="ds-comp__copy" @click="copy(c.usage)">复制用法</div></div>
-              <div class="ds-comp__stage"><component :is="demoComp(c)"></component></div>
-              <div class="ds-comp__foot"><template v-for="(n, i) in c.tokens" :key="n"><span v-if="i" class="ds-dim">·</span><span @click="copy(n)">{{ n }}</span></template></div>
+          <div class="ds-group__head"><div class="ds-group__title">自研组件</div><div class="ds-group__sub">已迁移到「布局配置」页签：外壳 / 页面级 / 复合组件，含"脱胎第一层"配置面板</div></div>
+          <div class="ds-card" style="padding: var(--space-module-pad); display: flex; align-items: center; justify-content: space-between; gap: var(--space-4);"><span style="color: var(--color-text-secondary);">{{ CUSTOM.length }} 个自研组件（UiShell、UiPageHeader、UiState、UiListItem、UiFilterBar、UiStatCard）在「布局配置」页签，每个组件可实时调整它消费的 token 验证联动。</span><el-button type="primary" plain @click="go('custom')">前往布局配置</el-button></div>
+        </section>
+      </div>
+    </main>
+
+    <!-- ===================== 自研组件 ===================== -->
+    <main v-else-if="state.route === 'custom'" class="ds-main">
+      <div class="ds-content ds-content--wide">
+        <div class="ds-hero">
+          <div class="ds-hero__title">布局配置 · 自研组件</div>
+          <div class="ds-hero__desc">Element Plus 未覆盖的外壳、页面级与复合组件。它们不是新画的：每一个都由白名单原语 + .l-* 布局类拼成，每一处尺寸与颜色都来自第一层 token —— 改变量，组件跟着变。右侧「脱胎第一层」面板可临时调整该组件消费的 token（只作用于本卡舞台）验证联动。</div>
+        </div>
+        <section v-for="g in CUSTOM_GROUPS" :key="g.key" :id="'cg-' + g.key" class="ds-group">
+          <div class="ds-group__head"><div class="ds-group__title">{{ g.label }}</div><div class="ds-group__sub">{{ g.desc }}</div></div>
+          <div class="l-stack">
+            <div v-for="c in customOf(g.key)" :key="c.key" class="ds-card ds-cfg">
+              <div class="ds-cfg__head">
+                <div class="ds-cfg__name"><span>{{ c.name }} {{ c.cn }}</span><span class="ds-badge ds-badge--wl">白名单</span><span class="ds-badge">{{ c.source.replace(/\/[^/]+$/, '') }}</span></div>
+                <div class="ds-cfg__links"><span @click="copy(c.usage)">复制用法</span><a :href="'./' + c.source" target="_blank">查看源码</a></div>
+              </div>
+              <div class="ds-cfg__body">
+                <div class="ds-cfg__stage" :style="tweakStyle(c)">
+                  <component :is="demoComp(c)"></component>
+                  <div class="ds-cfg__anatomy"><span>结构</span><span v-for="a in c.anatomy" :key="a" class="ds-pill">{{ a }}</span></div>
+                </div>
+                <div class="ds-cfg__panel">
+                  <div class="ds-cfg__panel-head"><span>脱胎第一层 · 消费的 token</span><span class="ds-reset" :class="{ 'is-dim': !hasTweak(c) }" @click="resetTweak(c)">恢复默认</span></div>
+                  <div v-for="n in c.tokens" :key="n" class="ds-tk">
+                    <div class="ds-tk__ctl">
+                      <div v-if="tokenKind(n) === 'color'" class="ds-tk__ctl-color"><el-color-picker :model-value="tweakValue(c, n)" size="small" @update:model-value="v => setTweak(c, n, v)"></el-color-picker><span class="ds-tk__name" @click="copy(n)">{{ n }}</span></div>
+                      <template v-else-if="tokenKind(n) === 'length'">
+                        <span class="ds-tk__name" @click="copy(n)">{{ n }}</span>
+                        <el-slider :model-value="pxOf(tweakValue(c, n))" :min="sliderRange(n)[0]" :max="sliderRange(n)[1]" :step="1" :show-tooltip="false" size="small" @update:model-value="v => setTweak(c, n, v + 'px')"></el-slider>
+                      </template>
+                      <span v-else class="ds-tk__name" @click="copy(n)">{{ n }}</span>
+                    </div>
+                    <div class="ds-tk__val" :class="{ 'is-tweaked': state.tweaks[c.key]?.[n] }">{{ tokenKind(n) === 'color' ? shortColor(tweakValue(c, n)) : tweakValue(c, n) }}</div>
+                  </div>
+                  <div class="ds-cfg__note">调整只作用于本卡片的舞台，用于验证联动；要改全局默认值，去「设计变量」或 tokens.css。</div>
+                </div>
+              </div>
+              <div class="ds-cfg__foot">
+                <div class="ds-cfg__props">
+                  <div class="ds-cfg__label">Props</div>
+                  <div class="ds-cfg__props-grid"><template v-for="p in c.props" :key="p[0]"><span class="ds-mono">{{ p[0] }}</span><span class="ds-mono">{{ p[1] }}</span><span>{{ p[2] }}</span></template></div>
+                  <div v-if="c.slots?.length" style="margin-top: var(--space-2);"><span class="ds-cfg__label">Slots</span> <span class="ds-mono" style="color: var(--color-text-secondary);">{{ c.slots.join(' · ') }}</span></div>
+                  <div v-if="c.events?.length"><span class="ds-cfg__label">Events</span> <span class="ds-mono" style="color: var(--color-text-secondary);">{{ c.events.join(' · ') }}</span></div>
+                </div>
+                <div class="ds-cfg__usage">
+                  <div class="ds-cfg__label">用法</div>
+                  <div class="ds-cfg__code" @click="copy(c.usage)">{{ c.usage }}</div>
+                </div>
+              </div>
             </div>
+          </div>
+        </section>
+        <section id="cg-candidates" class="ds-group">
+          <div class="ds-group__head"><div class="ds-group__title" style="color: var(--color-text-muted);">候选结构（原型统计）</div><div class="ds-group__sub">下一批复合组件从这里来</div></div>
+          <div class="ds-card" style="padding: var(--space-module-pad); display: flex; flex-direction: column; gap: var(--space-2); font-size: var(--font-size-caption); color: var(--color-text-secondary); line-height: var(--line-height-body);">
+            <div>原型里用白名单原语 + .l-* 就地拼装的结构会打上 <span class="ds-mono">data-composite="&lt;候选名&gt;"</span>；同一候选出现 ≥2 次即下沉为 <span class="ds-mono">ui/composites/</span> 复合组件并登记到本页。拼不出的用 <span class="ds-mono">data-placeholder</span> 占位并写 <span class="ds-mono">requests/</span> 需求单。</div>
+            <div>统计命令：<span class="ds-cfg__code" style="display: inline; padding: 2px 6px;" @click="copy('pnpm check:prototype')">pnpm check:prototype</span>（输出候选出现次数与占位清单；promote 前加 <span class="ds-mono">--strict</span>）。</div>
           </div>
         </section>
       </div>
@@ -396,12 +485,12 @@
 <script src="./showcase.data.js"></script>
 <script>
 const T = window.DS_TOKENS
-const { ROUTES, CATEGORIES, COMPONENTS, CUSTOM, LAYOUTS, DESC, SAMPLE, PRESETS } = window.DS_SHOWCASE
+const { ROUTES, CATEGORIES, CUSTOM_GROUPS, COMPONENTS, CUSTOM, LAYOUTS, DESC, SAMPLE, PRESETS } = window.DS_SHOWCASE
 
 const app = Vue.createApp({
   setup() {
     const routeFromHash = () => { const k = location.hash.replace(/^#\/?/, '').split(/[?/]/)[0]; return ROUTES.some(r => r.key === k) ? k : ROUTES[0].key }
-    const state = Vue.reactive({ route: routeFromHash(), anchor: '', dark: false, density: 'default', primary: '', preset: PRESETS[0].key, showRaw: false, showEl: false, tick: 0 })
+    const state = Vue.reactive({ route: routeFromHash(), anchor: '', dark: false, density: 'default', primary: '', preset: PRESETS[0].key, showRaw: false, showEl: false, tick: 0, tweaks: {} })
     const probe = Vue.ref(null)
     const currentRoute = Vue.computed(() => ROUTES.find(r => r.key === state.route))
 
@@ -438,6 +527,17 @@ const app = Vue.createApp({
     const WLC = new Set(T.whitelist.commands || [])
     const isWhite = c => c.tags ? c.tags.some(t => WL.has(t)) : (c.command ? WLC.has(c.command) : WL.has('el-' + c.key))
     const compsOf = key => COMPONENTS.filter(c => c.cat === key)
+    const customOf = key => CUSTOM.filter(c => c.group === key)
+
+    /* ---------- 自研组件 · 脱胎第一层：每张卡片可临时覆盖它消费的 token（只作用于舞台） ---------- */
+    const tokenKind = n => /^--color-/.test(n) ? 'color' : /^--(space|radius|layout-(sidebar|header|content-pad|control|form)|font-size|border-w)/.test(n) ? 'length' : 'other'
+    const sliderRange = n => /^--space/.test(n) ? [0, 64] : /^--radius/.test(n) ? [0, 32] : /^--font-size/.test(n) ? [10, 40] : /^--border-w/.test(n) ? [0, 4] : /^--layout-header/.test(n) ? [40, 96] : [0, 400]
+    const pxOf = v => { const m = /^(-?\d+(?:\.\d+)?)px$/.exec(v || ''); return m ? Math.round(+m[1]) : 0 }
+    const tweakValue = (c, n) => state.tweaks[c.key]?.[n] ?? resolved.value[n]
+    const setTweak = (c, n, v) => { if (!state.tweaks[c.key]) state.tweaks[c.key] = {}; state.tweaks[c.key][n] = v }
+    const resetTweak = c => { delete state.tweaks[c.key] }
+    const hasTweak = c => !!state.tweaks[c.key] && Object.keys(state.tweaks[c.key]).length > 0
+    const tweakStyle = c => state.tweaks[c.key] || {}
     const cache = new Map()
     const demoComp = c => {
       const ck = (c.cat || (c.title ? 'layout' : 'custom')) + ':' + c.key
@@ -464,7 +564,8 @@ const app = Vue.createApp({
         { id: 'shape', label: '圆角 · 阴影 · 边框', count: group('radius').length + group('shadow').length + group('border').length }, { id: 'layout-size', label: '布局尺寸 · 层级', count: group('layout').length + group('z').length },
         { id: 'raw', label: '原始刻度', count: T.counts.raw, dim: true }, { id: 'el-map', label: 'Element Plus 映射', count: T.counts.mapping, dim: true },
       ]
-      if (state.route === 'materials') return [...CATEGORIES.map(c => ({ id: 'cat-' + c.key, label: c.label, count: compsOf(c.key).length })), { id: 'cat-custom', label: '自研复合组件', count: CUSTOM.length }]
+      if (state.route === 'materials') return [...CATEGORIES.map(c => ({ id: 'cat-' + c.key, label: c.label, count: compsOf(c.key).length })), { id: 'cat-custom', label: '自研组件 →', dim: true }]
+      if (state.route === 'custom') return [...CUSTOM_GROUPS.map(g => ({ id: 'cg-' + g.key, label: g.label, count: customOf(g.key).length })), { id: 'cg-candidates', label: '候选结构（原型统计）', dim: true }]
       return LAYOUTS.map(l => ({ id: 'l-' + l.key, label: l.title }))
     })
     /* 主区滚动容器：ElScrollbar（R-043），锚点定位与高亮都基于它 */
@@ -522,7 +623,7 @@ const app = Vue.createApp({
       state.tick++
     })
 
-    return { T, ROUTES, CATEGORIES, COMPONENTS, CUSTOM, LAYOUTS, PRESETS, state, probe, mainScroll, onScroll, currentRoute, anchors, resolved, group, colorGroup, functionalColors, colorsByScope, spaceTokens, fontSizes, fontOthers, fontWeightFor, fontSampleText, describe, shortColor, isWhite, compsOf, demoComp, jump, go, applyMode, applyPrimary, applyPreset, copy }
+    return { T, ROUTES, CATEGORIES, CUSTOM_GROUPS, COMPONENTS, CUSTOM, LAYOUTS, PRESETS, state, probe, mainScroll, onScroll, customOf, tokenKind, sliderRange, pxOf, tweakValue, setTweak, resetTweak, hasTweak, tweakStyle, currentRoute, anchors, resolved, group, colorGroup, functionalColors, colorsByScope, spaceTokens, fontSizes, fontOthers, fontWeightFor, fontSampleText, describe, shortColor, isWhite, compsOf, demoComp, jump, go, applyMode, applyPrimary, applyPreset, copy }
   },
 })
 app.use(ElementPlus, { locale: ElementPlusLocaleZhCn }).use(DesignSystemUI)

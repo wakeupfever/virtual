@@ -1,6 +1,6 @@
 /* 由 scripts/build-tokens.mjs 自动生成，勿手改；真值在 tokens.css */
 window.DS_TOKENS = {
-  "generatedAt": "2026-09-02T10:27:42.322Z",
+  "generatedAt": "2026-09-03T03:37:57.307Z",
   "source": "tokens.css",
   "groups": [
     {
@@ -369,6 +369,12 @@ window.DS_TOKENS = {
           "name": "--font-family-mono",
           "value": "ui-monospace, SFMono-Regular, Menlo, Consolas, monospace",
           "comment": "",
+          "dark": null
+        },
+        {
+          "name": "--font-size-display",
+          "value": "28px",
+          "comment": "统计数值等强调数字",
           "dark": null
         },
         {
@@ -1154,7 +1160,7 @@ window.DS_TOKENS = {
     }
   },
   "counts": {
-    "semantic": 74,
+    "semantic": 75,
     "raw": 28,
     "mapping": 56
   }
