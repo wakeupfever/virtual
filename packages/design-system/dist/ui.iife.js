@@ -8,7 +8,7 @@ var DesignSystemUI = (function(exports, vue, element_plus) {
 	var _hoisted_2$6 = { class: "ui-shell__header-left l-inline" };
 	var _hoisted_3$6 = { class: "ui-shell__title" };
 	var _hoisted_4$6 = { class: "ui-shell__header-right l-cluster" };
-	var _hoisted_5$4 = { class: "ui-shell__main" };
+	var _hoisted_5$5 = { class: "ui-shell__main" };
 	//#endregion
 	//#region ui/UiShell.vue
 	var UiShell_default = /* @__PURE__ */ (0, vue.defineComponent)({
@@ -148,7 +148,7 @@ var DesignSystemUI = (function(exports, vue, element_plus) {
 						})]),
 						_: 1
 					}, 8, ["modelValue"])),
-					(0, vue.createElementVNode)("main", _hoisted_5$4, [(0, vue.createVNode)((0, vue.unref)(element_plus.ElScrollbar), {
+					(0, vue.createElementVNode)("main", _hoisted_5$5, [(0, vue.createVNode)((0, vue.unref)(element_plus.ElScrollbar), {
 						ref_key: "mainScroll",
 						ref: mainScroll,
 						class: "ui-shell__scroll",
@@ -170,7 +170,7 @@ var DesignSystemUI = (function(exports, vue, element_plus) {
 		class: "ui-page-header__crumb l-inline"
 	};
 	var _hoisted_4$5 = { key: 1 };
-	var _hoisted_5$3 = { class: "l-cluster l-cluster--end" };
+	var _hoisted_5$4 = { class: "l-cluster l-cluster--end" };
 	//#endregion
 	//#region ui/UiPageHeader.vue
 	var UiPageHeader_default = /* @__PURE__ */ (0, vue.defineComponent)({
@@ -189,7 +189,7 @@ var DesignSystemUI = (function(exports, vue, element_plus) {
 					_ctx.$slots.breadcrumb ? ((0, vue.openBlock)(), (0, vue.createElementBlock)("small", _hoisted_3$5, [(0, vue.renderSlot)(_ctx.$slots, "breadcrumb")])) : (0, vue.createCommentVNode)("", true),
 					(0, vue.createElementVNode)("h1", null, (0, vue.toDisplayString)(__props.title), 1),
 					__props.subtitle ? ((0, vue.openBlock)(), (0, vue.createElementBlock)("small", _hoisted_4$5, (0, vue.toDisplayString)(__props.subtitle), 1)) : (0, vue.createCommentVNode)("", true)
-				]), (0, vue.createElementVNode)("div", _hoisted_5$3, [(0, vue.renderSlot)(_ctx.$slots, "actions")])]);
+				]), (0, vue.createElementVNode)("div", _hoisted_5$4, [(0, vue.renderSlot)(_ctx.$slots, "actions")])]);
 			};
 		}
 	});
@@ -269,7 +269,7 @@ var DesignSystemUI = (function(exports, vue, element_plus) {
 		key: 0,
 		class: "ui-list-item__subtitle"
 	};
-	var _hoisted_5$2 = { class: "ui-list-item__trailing l-cluster" };
+	var _hoisted_5$3 = { class: "ui-list-item__trailing l-cluster" };
 	var _hoisted_6$1 = {
 		key: 1,
 		class: "ui-list-item__chevron",
@@ -326,7 +326,7 @@ var DesignSystemUI = (function(exports, vue, element_plus) {
 				}, {
 					default: (0, vue.withCtx)(() => [(0, vue.createTextVNode)((0, vue.toDisplayString)(__props.avatar.slice(0, 1)), 1)]),
 					_: 1
-				})) : (0, vue.createCommentVNode)("", true)]), (0, vue.createElementVNode)("span", _hoisted_2$3, [(0, vue.createElementVNode)("strong", _hoisted_3$3, (0, vue.toDisplayString)(__props.title), 1), __props.subtitle ? ((0, vue.openBlock)(), (0, vue.createElementBlock)("small", _hoisted_4$3, (0, vue.toDisplayString)(__props.subtitle), 1)) : (0, vue.createCommentVNode)("", true)])]), (0, vue.createElementVNode)("span", _hoisted_5$2, [
+				})) : (0, vue.createCommentVNode)("", true)]), (0, vue.createElementVNode)("span", _hoisted_2$3, [(0, vue.createElementVNode)("strong", _hoisted_3$3, (0, vue.toDisplayString)(__props.title), 1), __props.subtitle ? ((0, vue.openBlock)(), (0, vue.createElementBlock)("small", _hoisted_4$3, (0, vue.toDisplayString)(__props.subtitle), 1)) : (0, vue.createCommentVNode)("", true)])]), (0, vue.createElementVNode)("span", _hoisted_5$3, [
 					__props.status ? ((0, vue.openBlock)(), (0, vue.createBlock)((0, vue.unref)(element_plus.ElTag), {
 						key: 0,
 						type: __props.status.type || "info",
@@ -346,8 +346,9 @@ var DesignSystemUI = (function(exports, vue, element_plus) {
 	//#region ui/composites/UiFilterBar.vue?vue&type=script&setup=true&lang.ts
 	var _hoisted_1$2 = { class: "ui-filter-bar l-toolbar" };
 	var _hoisted_2$2 = { class: "ui-filter-bar__filters l-cluster" };
-	var _hoisted_3$2 = { class: "ui-filter-bar__right l-cluster l-cluster--end" };
-	var _hoisted_4$2 = {
+	var _hoisted_3$2 = { class: "ui-filter-bar__btns l-cluster" };
+	var _hoisted_4$2 = { class: "ui-filter-bar__right l-cluster l-cluster--end" };
+	var _hoisted_5$2 = {
 		key: 0,
 		class: "ui-filter-bar__summary"
 	};
@@ -356,30 +357,62 @@ var DesignSystemUI = (function(exports, vue, element_plus) {
 	var UiFilterBar_default = /* @__PURE__ */ (0, vue.defineComponent)({
 		__name: "UiFilterBar",
 		props: {
+			searchable: {
+				type: Boolean,
+				default: true
+			},
 			resettable: {
 				type: Boolean,
 				default: true
 			},
-			resetText: { default: "重置" }
+			advanced: {
+				type: Boolean,
+				default: false
+			},
+			searchText: { default: "搜索" },
+			resetText: { default: "重置" },
+			advancedText: { default: "高级搜索" }
 		},
-		emits: ["reset"],
+		emits: [
+			"search",
+			"reset",
+			"toggle"
+		],
 		setup(__props, { emit: __emit }) {
 			/**
-			* UiFilterBar · 第二层 · 复合组件
-			* 表格 / 列表上方筛选条：整条包在 --color-bg-subtle 圆角容器里；
-			* 默认插槽放筛选控件，summary 插槽放摘要（如"已选 N 项"），actions 插槽放右侧按钮；可选「重置」文字链接。
+			* UiFilterBar · 第二层 · 复合组件（对齐参考 PuiSearch）
+			* 表格 / 列表上方筛选条：整条包在 --color-bg-subtle 圆角容器里。
+			* 默认插槽放「label + 控件」对（用 <span class="l-inline"><small>标签</small><el-input/></span>），
+			* 右侧依次：搜索（primary）/ 重置 / 高级搜索（文字链接，可选）；summary 摘要；actions 操作按钮。
 			*/
 			const emit = __emit;
 			return (_ctx, _cache) => {
-				return (0, vue.openBlock)(), (0, vue.createElementBlock)("div", _hoisted_1$2, [(0, vue.createElementVNode)("span", _hoisted_2$2, [(0, vue.renderSlot)(_ctx.$slots, "default"), __props.resettable ? ((0, vue.openBlock)(), (0, vue.createBlock)((0, vue.unref)(element_plus.ElButton), {
-					key: 0,
-					link: "",
-					type: "primary",
-					onClick: _cache[0] || (_cache[0] = ($event) => emit("reset"))
-				}, {
-					default: (0, vue.withCtx)(() => [(0, vue.createTextVNode)((0, vue.toDisplayString)(__props.resetText), 1)]),
-					_: 1
-				})) : (0, vue.createCommentVNode)("", true)]), (0, vue.createElementVNode)("span", _hoisted_3$2, [_ctx.$slots.summary ? ((0, vue.openBlock)(), (0, vue.createElementBlock)("small", _hoisted_4$2, [(0, vue.renderSlot)(_ctx.$slots, "summary")])) : (0, vue.createCommentVNode)("", true), (0, vue.renderSlot)(_ctx.$slots, "actions")])]);
+				return (0, vue.openBlock)(), (0, vue.createElementBlock)("div", _hoisted_1$2, [(0, vue.createElementVNode)("span", _hoisted_2$2, [(0, vue.renderSlot)(_ctx.$slots, "default"), (0, vue.createElementVNode)("span", _hoisted_3$2, [
+					__props.searchable ? ((0, vue.openBlock)(), (0, vue.createBlock)((0, vue.unref)(element_plus.ElButton), {
+						key: 0,
+						type: "primary",
+						onClick: _cache[0] || (_cache[0] = ($event) => emit("search"))
+					}, {
+						default: (0, vue.withCtx)(() => [(0, vue.createTextVNode)((0, vue.toDisplayString)(__props.searchText), 1)]),
+						_: 1
+					})) : (0, vue.createCommentVNode)("", true),
+					__props.resettable ? ((0, vue.openBlock)(), (0, vue.createBlock)((0, vue.unref)(element_plus.ElButton), {
+						key: 1,
+						onClick: _cache[1] || (_cache[1] = ($event) => emit("reset"))
+					}, {
+						default: (0, vue.withCtx)(() => [(0, vue.createTextVNode)((0, vue.toDisplayString)(__props.resetText), 1)]),
+						_: 1
+					})) : (0, vue.createCommentVNode)("", true),
+					__props.advanced ? ((0, vue.openBlock)(), (0, vue.createBlock)((0, vue.unref)(element_plus.ElButton), {
+						key: 2,
+						link: "",
+						type: "primary",
+						onClick: _cache[2] || (_cache[2] = ($event) => emit("toggle"))
+					}, {
+						default: (0, vue.withCtx)(() => [(0, vue.createTextVNode)((0, vue.toDisplayString)(__props.advancedText), 1)]),
+						_: 1
+					})) : (0, vue.createCommentVNode)("", true)
+				])]), (0, vue.createElementVNode)("span", _hoisted_4$2, [_ctx.$slots.summary ? ((0, vue.openBlock)(), (0, vue.createElementBlock)("small", _hoisted_5$2, [(0, vue.renderSlot)(_ctx.$slots, "summary")])) : (0, vue.createCommentVNode)("", true), (0, vue.renderSlot)(_ctx.$slots, "actions")])]);
 			};
 		}
 	});

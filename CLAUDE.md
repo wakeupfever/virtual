@@ -22,6 +22,7 @@
 - 白名单外的 Element Plus 组件不能用；需要时先提议
 - **滚动只用 `<el-scrollbar>`**：任何会滚动的区域（列表容器、侧栏、抽屉内容、横向条）都包在 `el-scrollbar` 里，禁止 `overflow: auto/scroll`；外壳主区与侧栏由 `UiShell` 内部的 `ElScrollbar` 负责，页面本身（window）不滚动。表格、虚拟列表、下拉等 Element Plus 自带滚动的组件除外
 - 组件内部间距不在第三层设置；第三层可用的间距只有 `--space-page-*`、`--space-module-*`、`--space-component-gap`
+- 表格行高 / 表头高由第一层 `--layout-row-h` `--layout-thead-h` 经 `skins/table.css` 生效，第三层不设 `row-style` / `header-row-style`；页面级线性页签用 `<el-tabs class="is-tabbar">`（`skins/tabs.css`），筛选条用 `UiFilterBar` 的「label + 控件」写法
 - 同一 UI 模式在 features 内出现第二次 → 下沉为该模块 `components/` 下的业务组件，不复制
 
 ### 2.1 原型 UI 不满足物料时（三级偏差，R-040）

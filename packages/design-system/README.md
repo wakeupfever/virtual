@@ -94,7 +94,7 @@ app.use(ElementPlus).use(DesignSystemUI)
 
 ## 第二层 · 皮肤层（`skins/`）
 
-样式级偏差的唯一落点：结构与行为不变、只是长得不一样时，在 `skins/<component>.css` 用 `--el-<component>-*` 变量或 Element Plus BEM 类覆盖，值只引用 token。`skins/index.css` 负责 `@import`。当前：`table.css`（表头次级底、行更松、hover 用 accent）、`input.css`（圆角与聚焦描边跟随 token）、`menu.css`（UiShell 侧栏菜单圆角胶囊高亮）。第三层禁止出现任何皮肤写法。
+样式级偏差的唯一落点：结构与行为不变、只是长得不一样时，在 `skins/<component>.css` 用 `--el-<component>-*` 变量或 Element Plus BEM 类覆盖，值只引用 token。`skins/index.css` 负责 `@import`。当前：`table.css`（表头 `--layout-thead-h` 40 / 行 `--layout-row-h` 44、表头 subtle 底 12/500、外框圆角、hover 用 accent）、`input.css`（圆角与聚焦描边跟随 token）、`menu.css`（UiShell 侧栏菜单圆角胶囊高亮）、`tabs.css`（`<el-tabs class="is-tabbar">` 胶囊页签条：白卡内 pill，active 用 accent，仅做页面级线性导航，不渲染面板内容）、`tree.css`（节点行高 32、圆角，`highlight-current` 当前节点 accent）。第三层禁止出现任何皮肤写法。
 
 ## 原型 UI 不满足物料时（三级偏差）
 
@@ -179,7 +179,7 @@ app.use(ElementPlus).use(DesignSystemUI)
 
 ### `UiFilterBar`（composites）
 
-表格上方筛选条，整条包在 `--color-bg-subtle` 圆角容器里：默认插槽放筛选控件，`summary` 插槽放摘要（如已选 N 项），`actions` 插槽放右侧按钮，`resettable`（默认 true）显示重置文字链接并 `@reset`。控件宽度取 `--layout-control-w`。
+表格上方筛选条（对齐参考 PuiSearch），整条包在 `--color-bg-subtle` 圆角容器里：默认插槽放「label + 控件」对——`<span class="l-inline"><small>企业名称</small><el-input/></span>`，控件宽度取 `--layout-control-w`；紧跟其后依次是 `searchable`（默认 true，primary「搜索」，`@search`）、`resettable`（默认 true，「重置」，`@reset`）、`advanced`（「高级搜索」文字链接，`@toggle`，展开区由第三层用 `v-if` + `.l-cluster` 自行放在筛选条下方）；`summary` 插槽放摘要，`actions` 插槽放右侧主操作（导出 / 新增）。窄屏时筛选项先换行，右侧操作区落到下一行右对齐。
 
 ### `UiStatCard`（composites）
 
@@ -198,7 +198,7 @@ app.use(ElementPlus).use(DesignSystemUI)
 | 编号 | 模板 | 结构 |
 |---|---|---|
 | 01 | 统计模板 | UiPageHeader → `.l-grid--cols-4` × UiStatCard → `.l-grid--cols-2` 分析模块 → 概况模块 → 进度模块 |
-| 02 | 纯表格页 | UiPageHeader → `.l-module`（UiFilterBar → ElTable → ElPagination） |
+| 02 | 纯表格页 | 面包屑 → `.l-module`（UiFilterBar → 高级搜索展开区 → ElTable → ElPagination 右对齐） |
 | 03 | 统计 + 表格 | 01 的统计行 + 02 的表格模块上下组合 |
 | 04 | 左树 + 表格 | UiPageHeader → `.l-split`（左 `.l-module` ElTree，右 02 的表格模块） |
 | 05 | TabBar + 表格 | UiPageHeader → ElTabs → 02 的表格模块 |

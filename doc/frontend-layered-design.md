@@ -1,7 +1,7 @@
 # 前端三层分层设计说明
 
 > 本文档描述 `virtual` 项目前端的三层分层模型：每一层包含什么、由谁修改、如何约束 AI 在各层的行为，以及"提示词 → 可交互原型 → 正式页面"的流转方式。
-> 对应需求台账见 `doc/frontend-layered-design.md.rai.md`（当前 RV-010）；需求 ID、状态与验收标准以台账为准。
+> 对应需求台账见 `doc/frontend-layered-design.md.rai.md`（当前 RV-011）；需求 ID、状态与验收标准以台账为准。
 > 技术栈：Vue 3 + Element Plus 2.14 + Vite 8 + Tailwind CSS 4，pnpm monorepo。
 
 ## 1. 目标与问题
@@ -33,7 +33,7 @@ virtual/
 │   │   ├── tokens.css  layout.css  base.css
 │   │   ├── ui/  UiShell.vue · UiPageHeader.vue · UiState.vue · index.ts
 │   │   │   └── composites/  UiListItem · UiFilterBar · UiStatCard   # 结构级下沉
-│   │   ├── skins/  index.css · table.css · input.css   # 样式级皮肤
+│   │   ├── skins/  index.css · table · input · menu · tabs · tree   # 样式级皮肤
 │   │   ├── requests/  _template.md   # 组件需求单
 │   │   ├── whitelist.json        # 第三层可用标签白名单（check 脚本与 ESLint 共用）
 │   │   ├── showcase.html         # 展示页：模块一变量 · 模块二物料（零构建，双击打开）
@@ -107,7 +107,7 @@ reset、字体、页面底色。正式项目关闭 Tailwind preflight，全局 r
 
 ### 5.3b 皮肤层
 
-`skins/<component>.css` 是样式级偏差的唯一落点：只允许 `--el-<component>-*` 变量与 Element Plus BEM 类，值只引用 token。加载顺序固定为 element-plus → tokens → skins → layout → base，原型与正式项目一致。
+`skins/<component>.css` 是样式级偏差的唯一落点：只允许 `--el-<component>-*` 变量与 Element Plus BEM 类，值只引用 token。加载顺序固定为 element-plus → tokens → skins → layout → base，原型与正式项目一致。当前皮肤：`table`（表头 `--layout-thead-h` 40 / 行 `--layout-row-h` 44、表头 subtle 底、外框圆角、hover accent）、`input`、`menu`（侧栏胶囊高亮）、`tabs`（`<el-tabs class="is-tabbar">` 页面级胶囊页签条）、`tree`（当前节点 accent）。表格行高这类「看起来是组件属性」的值放在第一层 token，由皮肤消费，第三层不设 `row-style`。
 
 ### 5.4 冻结与演进：三级偏差
 

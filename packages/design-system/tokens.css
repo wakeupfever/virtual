@@ -112,6 +112,8 @@
   --layout-sidebar-w-collapsed: 66px;
   --layout-header-h: 60px;
   --layout-aside-w: 320px;          /* 分析区 / 左树等侧栏面板的最小宽 */
+  --layout-row-h: 44px;             /* 表格行高 */
+  --layout-thead-h: 40px;           /* 表头高 */
   --layout-content-max: 1440px;
   --layout-content-pad: var(--space-page-pad-x);
   --layout-form-label-w: 120px;

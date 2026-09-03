@@ -3,12 +3,11 @@ rai-schema-version: 2
 task: "前端三层分层设计需求基线"
 task-key: "frontend-layered-design"
 primary-target: "doc/frontend-layered-design.md"
-requirement-version: "RV-010"
-iteration: "IT-010"
+requirement-version: "RV-011"
+iteration: "IT-011"
 current-changes:
-  - "C-028"
-  - "C-029"
-  - "C-030"
+  - "C-031"
+  - "C-032"
 status: "active"
 updated: "2026-09-03"
 ---
@@ -17,11 +16,11 @@ updated: "2026-09-03"
 
 ## 快速摘要
 
-- 当前需求版本：`RV-010`
-- 当前工作迭代：`IT-010`
-- 当前变更：`C-028` 第一层默认值对齐参考站（add R-045）；`C-029` 模块标题行复合组件与统计卡重构（modify R-041）；`C-030` 五套模板按精修稿重排（modify R-044，clarify R-040 的 `:style` 例外）
-- 本轮目标：布局配置模块排版与间距达到参考站（hy-compiler MaterialCenterPage / LayoutTemplateShowcase）的审美；第一层颜色与间距随之调校
-- 当前结论：**IT-010 完成**（R-045 verified；R-041 / R-044 重新 verified）；IT-009 完成（R-044 verified，R-037 重新 verified，代码已提交）；IT-008 完成（R-037 / R-041 / R-012 / R-007 / R-042 重新 verified，代码已提交）；展示页按方向 A 重做并验证（R-037），hash 路由落地并验证（R-038）；第一步成果保持——第一、二层（F-001～F-004）、原型模板与检查脚本（F-005）、`CLAUDE.md`、说明文档已实现并通过验收，17 条 `verified`、6 条 `implemented`（其余验收条件依赖第二步的 apps/web）；12 条 `ready` 属于第二步（apps/web 工具链、ESLint、展示页、插件、视觉回归），待用户验收第一步后授权
+- 当前需求版本：`RV-011`
+- 当前工作迭代：`IT-011`
+- 当前变更：`C-031` 表格 / 页签 / 树皮肤与行高 token（modify R-042、R-045）；`C-032` 02～05 模板按精修稿重排、UiFilterBar 改为 label + 控件（modify R-044、R-041）
+- 本轮目标：五套模板（02～05）按画板「布局配置精修稿 · 02～05」落地；第一层新增表格行高 / 表头高 token；皮肤层补 tabs / tree
+- 当前结论：**IT-011 完成**（R-042 / R-045 / R-044 / R-041 重新 verified）；IT-010 完成（R-045 verified；R-041 / R-044 重新 verified）；IT-009 完成（R-044 verified，R-037 重新 verified，代码已提交）；IT-008 完成（R-037 / R-041 / R-012 / R-007 / R-042 重新 verified，代码已提交）；展示页按方向 A 重做并验证（R-037），hash 路由落地并验证（R-038）；第一步成果保持——第一、二层（F-001～F-004）、原型模板与检查脚本（F-005）、`CLAUDE.md`、说明文档已实现并通过验收，17 条 `verified`、6 条 `implemented`（其余验收条件依赖第二步的 apps/web）；12 条 `ready` 属于第二步（apps/web 工具链、ESLint、展示页、插件、视觉回归），待用户验收第一步后授权
 
 ## 当前需求清单
 
@@ -39,7 +38,7 @@ updated: "2026-09-03"
 - [ ] `R-010` `base.css` 统一 reset 与字体加载，原型与正式项目引用同一文件。`category: quality` `status: implemented`
 - [x] `R-030` `tokens.css` 将语义 token 映射到 Element Plus 主题变量（`--el-color-primary`、`--el-border-color`、`--el-bg-color`、`--el-border-radius-base` 等），Element Plus 外观只由第一层驱动，不单独维护 SCSS 主题。`category: maintainability` `status: verified`
 
-- [x] `R-045` 第一层默认值对齐参考站 `D:\hy-project\hy-compiler\apps\playground\src\style.css`（`--hy-space-*`）与 LayoutTemplateShowcase：间距 page-gap 24 / page-pad 20 / module-gap 16 / module-pad 16 / component-gap 12 / inline 8；布局 header 60 / sidebar 230 / collapsed 66 / 新增 `--layout-aside-w` 320；圆角 4 / 6 / 12；字号新增 `--font-size-micro` 10，display 改 24；新增 `--color-bg-canvas`（应用壳内容区底 #f0f3f4，UiShell 使用）、subtle 改 #f3f5f5；`layout.css` 新增 `.l-grid--main-aside`、`.l-split--aside`、`.l-tile`、`.l-bars` / `.l-bar`。`category: ux` `status: verified`
+- [x] `R-045` 第一层默认值对齐参考站 `D:\hy-project\hy-compiler\apps\playground\src\style.css`（`--hy-space-*`）与 LayoutTemplateShowcase：间距 page-gap 24 / page-pad 20 / module-gap 16 / module-pad 16 / component-gap 12 / inline 8；布局 header 60 / sidebar 230 / collapsed 66 / 新增 `--layout-aside-w` 320；圆角 4 / 6 / 12；字号新增 `--font-size-micro` 10，display 改 24；新增 `--color-bg-canvas`（应用壳内容区底 #f0f3f4，UiShell 使用）、subtle 改 #f3f5f5；布局新增 `--layout-row-h` 44（表格行高）与 `--layout-thead-h` 40（表头高），经 `skins/table.css` 生效；`layout.css` 新增 `.l-grid--main-aside`、`.l-split--aside`、`.l-tile`、`.l-bars` / `.l-bar`。`category: ux` `status: verified`
 
 ### 第二层：基础组件与外壳
 
@@ -80,13 +79,13 @@ updated: "2026-09-03"
 ### 第二层演进机制
 
 - [x] `R-040` 三级偏差处理规则：原型或正式页面需要 Element Plus 默认之外的 UI 时，按 样式级（第二层皮肤 `skins/`）/ 结构级（第二层复合组件 `ui/composites/`）/ 行为级（第二层封装外部库或自研）归类处理，第三层永不写样式。消费时：优先复合组件；未命中但能用白名单原语 + `.l-*` 拼出的，就地拼装并在外层打 `data-composite="<候选名>"`；拼不出的用最接近的白名单组件占位并打 `data-placeholder="<需求名>"` 且写需求单。`check-prototype.js` 统计候选出现次数（≥2 提示下沉）、对占位发出警告，`--strict` 模式（promote 前）下占位为错误。`category: maintainability` `status: verified`
-- [x] `R-041` 首批复合组件（结构级下沉范例）：`UiListItem`（头像 / 标题 / 副标题 / 状态与操作插槽）、`UiFilterBar`（筛选区 + 操作区 + 可选重置）、`UiStatCard`（标签 / 数值 / 单位 / 趋势 / 说明），位于 `ui/composites/`，只用白名单原语 + `.l-*` + token，登记白名单、README、展示页。精修（按画板「自研组件精修稿」）：UiStatCard 数值用 `--font-size-display`、趋势胶囊带箭头、右上角 `icon` 插槽、hover 抬升；UiListItem 头像 36、`active` 高亮、`divided` 分割线、clickable 箭头、状态胶囊；UiFilterBar 包在 subtle 圆角容器、重置为文字链接、`summary` 插槽；UiPageHeader `breadcrumb` 插槽；UiState error 态图标 + 标题 + 描述、empty 态 `action` 插槽。`category: functional` `status: verified`
+- [x] `R-041` 首批复合组件（结构级下沉范例）：`UiListItem`（头像 / 标题 / 副标题 / 状态与操作插槽）、`UiFilterBar`（筛选区 + 操作区 + 可选重置）、`UiStatCard`（标签 / 数值 / 单位 / 趋势 / 说明），位于 `ui/composites/`，只用白名单原语 + `.l-*` + token，登记白名单、README、展示页。精修（按画板「自研组件精修稿」）：UiStatCard 数值用 `--font-size-display`、趋势胶囊带箭头、右上角 `icon` 插槽、hover 抬升；UiListItem 头像 36、`active` 高亮、`divided` 分割线、clickable 箭头、状态胶囊；UiFilterBar 包在 subtle 圆角容器、默认插槽为「label + 控件」对（`.l-inline` + `<small>`），搜索（primary）/ 重置 / 高级搜索（`advanced`，`@toggle`）按钮紧随其后，`summary` 与 `actions` 插槽在右，窄屏时先换行筛选项再把操作区落到下一行；UiPageHeader `breadcrumb` 插槽；UiState error 态图标 + 标题 + 描述、empty 态 `action` 插槽。`category: functional` `status: verified`
 - [x] `R-043` 滚动统一：任何需要滚动的区域（外壳主区、侧栏、抽屉内容、列表容器、横向条）必须使用 Element Plus `ElScrollbar`，禁止在第二、三层写 `overflow: auto | scroll`（表格 / 虚拟列表 / 下拉等 Element Plus 内部已自带 ElScrollbar 的组件除外）；`el-scrollbar` 加入白名单；`check-prototype.js` 新增 `no-overflow-scroll` 规则；展示页侧栏、主区、无限滚动演示与 UiShell 全部改为 ElScrollbar。`category: ux` `status: verified`
-- [x] `R-042` 皮肤层与需求单：`skins/` 目录存放按组件划分的样式级覆盖（只允许 `--el-<component>-*` 变量与 Element Plus BEM 类，值只引用 token），加载顺序固定为 element-plus → tokens → skins → layout → base（当前皮肤：table / input / menu）；`requests/` 目录存放组件需求单（模板含：效果描述、偏差级别、涉及 token、建议组件名与 props、来源原型），由第二层治理者判定后实施。`category: maintainability` `status: verified`
+- [x] `R-042` 皮肤层与需求单：`skins/` 目录存放按组件划分的样式级覆盖（只允许 `--el-<component>-*` 变量与 Element Plus BEM 类，值只引用 token），加载顺序固定为 element-plus → tokens → skins → layout → base（当前皮肤：table（表头 subtle 底 12/500、行 44 / 表头 40、外框圆角、hover accent）/ input / menu / tabs（`.is-tabbar` 胶囊页签条）/ tree（行高 32、当前节点 accent））；`requests/` 目录存放组件需求单（模板含：效果描述、偏差级别、涉及 token、建议组件名与 props、来源原型），由第二层治理者判定后实施。`category: maintainability` `status: verified`
 
 ### 页面排版模板
 
-- [x] `R-044` 五套页面排版模板（参考用户本机 HY Compiler Studio「页面排版模板 · 五种多菜单业务布局效果」）：01 统计模板（统计卡行 → 趋势 / 分布 → 概况 → 进度）、02 纯表格页（页头 → 筛选条含高级搜索 → 表格 → 分页）、03 统计 + 表格、04 左树 + 表格（`.l-split`）、05 TabBar + 表格（ElTabs）。骨架只用 `.l-*` + 白名单 / 自研组件，间距全部来自 token；单一来源 `showcase.data.js` `TEMPLATES`；展示页「布局配置」在同一 UiShell 应用壳（侧栏、顶栏历史页签、面包屑）内切换预览，芯片实时显示 page / module / header / sidebar / collapsed 值，可复制骨架或含外壳的完整模板；原型开发第一步为选模板（CLAUDE.md §3）。`category: functional` `status: verified`
+- [x] `R-044` 五套页面排版模板（参考用户本机 HY Compiler Studio「页面排版模板 · 五种多菜单业务布局效果」）：01 统计模板（统计卡行 → 趋势 / 分布 → 概况 → 进度）、02 纯表格页（面包屑 → 筛选条「label + 控件」含高级搜索展开区 → 表格（表头 40 / 行 44、状态圆胶囊、操作列固定右）→ 分页右对齐）、03 统计 + 表格、04 左树 + 表格（`.l-split--aside` 320：UiModuleHeader + 搜索 + ElTree `highlight-current`）、05 TabBar + 表格（`<el-tabs class="is-tabbar">` 胶囊页签条）。骨架只用 `.l-*` + 白名单 / 自研组件，间距全部来自 token；单一来源 `showcase.data.js` `TEMPLATES`；展示页「布局配置」在同一 UiShell 应用壳（侧栏、顶栏历史页签、面包屑）内切换预览，芯片实时显示 page / module / header / sidebar / collapsed 值，可复制骨架或含外壳的完整模板；原型开发第一步为选模板（CLAUDE.md §3）。`category: functional` `status: verified`
 
 ### 展示页面
 
@@ -137,11 +136,11 @@ updated: "2026-09-03"
 | R-037 | 双击打开即渲染；页面结构与画板「方向 A」一致（顶栏页签、左锚点、限宽、右目录）；设计变量数量 = tokens.json 语义计数；组件物料覆盖 Element Plus 官方组件清单且白名单标记与 whitelist.json 一致；切换 dark / compact / 主色后全部组件同步变化 | 用户输入（方向 A、全量 Element Plus） | R-011, R-029, R-030, R-038 | RV-003 | C-013 | F-011 |
 | R-039 | tokens.css 默认加载 `--el-color-primary` = `#0076a3`；展示页与原型模板无需改动即呈现新配色；dark 模式下主按钮 / 文字对比可读 | 用户输入（参考 technology-cyan） | R-001, R-002, R-007 | RV-005 | C-016 | F-001 |
 | R-043 | grep 第二层源码与展示页无 `overflow: auto/scroll`（Element Plus 内部除外）；展示页与原型页面 `document.scrollingElement.scrollHeight === clientHeight`（window 不滚）而 `.el-scrollbar__wrap` 可滚；check 脚本对含 `overflow:auto` 的原型报错 | 用户输入（滚动套用 Element Plus 滚动组件） | R-011, R-012 | RV-007 | C-021 | F-003, F-004, F-005, F-011 |
-| R-045 | tokens.json 语义计数 78；展示页布局配置芯片显示 page 20 / module 16 / header 60 / sidebar 230 / collapsed 66；01 统计模板与画板「布局配置精修稿」结构一致 | 用户输入（参考 hy-compiler MaterialCenterPage） | R-003, R-005, R-007 | RV-010 | C-028 | F-001, F-002, F-004, F-011 |
+| R-045 | tokens.json 语义计数 78；展示页布局配置芯片显示 page 20 / module 16 / header 60 / sidebar 230 / collapsed 66；01 统计模板与画板「布局配置精修稿」结构一致 | 用户输入（参考 hy-compiler MaterialCenterPage） | R-003, R-005, R-007 | RV-011 | C-028, C-031 | F-001, F-002, F-004, F-011 |
 | R-040 | CLAUDE.md 含四句消费规则；check 脚本对含 `data-composite` 的原型输出候选统计、对 `data-placeholder` 输出警告、`--strict` 下退出码非零 | 用户输入（原型 UI 不满足时怎么办） | R-015, R-019 | RV-006 | C-018 | F-003, F-005, F-007 |
 | R-041 | 三个组件 `vue-tsc` 通过、IIFE 可注册、展示页「自研复合组件」渲染；源码无裸数值 / 裸色 / 手写 flex | 对话结论（范例） | R-040, R-029 | RV-006 | C-019 | F-003, F-011 |
-| R-042 | `skins/index.css` 被原型模板、展示页与 README 引入顺序一致；`requests/_template.md` 存在并含全部字段 | 对话结论 | R-040 | RV-006 | C-020 | F-003, F-005 |
-| R-044 | 五个页签各自渲染：01 含 4 张 UiStatCard，02～05 含表格与分页，04 含 ElTree，05 含 ElTabs；侧栏高亮与面包屑随模板切换；芯片值与 tokens 一致；`复制页面骨架` 得到的内容可放入 `_template.html` 的 `.l-page` 并通过 check | 用户输入（127.0.0.1:5173/#/materials/layout 五个菜单） | R-012, R-041, R-009 | RV-009 | C-026 | F-011, F-005 |
+| R-042 | `skins/index.css` 被原型模板、展示页与 README 引入顺序一致；`requests/_template.md` 存在并含全部字段 | 对话结论 | R-040 | RV-011 | C-020, C-031 | F-003, F-005 |
+| R-044 | 五个页签各自渲染：01 含 4 张 UiStatCard，02～05 含表格与分页，04 含 ElTree，05 含 ElTabs；侧栏高亮与面包屑随模板切换；芯片值与 tokens 一致；`复制页面骨架` 得到的内容可放入 `_template.html` 的 `.l-page` 并通过 check | 用户输入（127.0.0.1:5173/#/materials/layout 五个菜单） | R-012, R-041, R-009 | RV-011 | C-026, C-030, C-032 | F-011, F-005 |
 | R-038 | 直达 `#/<key>` 高亮对应菜单；点击菜单改 hash；后退恢复；原型模板 `#/reports` 高亮「报表」 | 用户输入（补充路由概念） | R-012, R-016 | RV-004 | C-014 | F-005, F-011, F-008 |
 
 ## 不变量
@@ -171,7 +170,15 @@ updated: "2026-09-03"
 
 ## 当前迭代
 
-### IT-010 · 布局配置精修与第一层调校
+### IT-011 · 02～05 模板精修与皮肤补齐
+
+- 目标：五套模板中 02～05 按画板精修稿落地；第一层补表格行高 / 表头高 token；皮肤层补 tabs / tree；UiFilterBar 改为 label + 控件写法
+- 范围：`tokens.css`、`skins/{table,tabs,tree,index}.css`、`ui/composites/UiFilterBar.vue`、`showcase.data.js`、README / CLAUDE.md / 说明文档；git commit
+- 包含变更：`C-031`、`C-032`
+- 对应需求版本：`RV-011`
+- 退出条件：R-042 / R-045 / R-044 / R-041 重新 verified；代码已提交
+
+### IT-010 · 布局配置精修与第一层调校（已完成）
 
 - 目标：布局配置五套模板达到参考站审美；第一层间距 / 尺寸 / 圆角 / 字号 / canvas 底色对齐参考；新增 UiModuleHeader
 - 范围：`tokens.css`、`layout.css`、`ui/UiShell.vue`、`ui/composites/UiStatCard.vue`、`ui/composites/UiModuleHeader.vue`、`showcase.data.js`、README / CLAUDE.md / 说明文档；git commit
@@ -180,6 +187,26 @@ updated: "2026-09-03"
 - 退出条件：R-045 verified；R-041 / R-044 重新 verified；代码已提交
 
 ## 当前变更
+
+### C-031 · 表格 / 页签 / 树皮肤与行高 token
+
+- 类型：`modify`
+- 原因：画板「布局配置精修稿 · 02～05」批注：表格行高 44 / 表头 40、状态胶囊、TabBar 胶囊页签条、树当前节点 accent
+- 之前：表格行高沿用 Element Plus 默认；皮肤只有 table / input / menu；页签用 Element Plus 默认下划线样式
+- 之后：`--layout-row-h` 44 / `--layout-thead-h` 40 进第一层；`skins/table.css` 重写（表头 subtle 底 12/500、外框圆角、hover accent）；新增 `skins/tabs.css`（`.is-tabbar`）、`skins/tree.css`
+- 关联需求：`R-042`、`R-045`
+- 覆盖关系：—
+- 影响功能：`F-001 direct`、`F-003 direct`、`F-011 / F-005 indirect`
+
+### C-032 · 02～05 模板重排与 UiFilterBar 改版
+
+- 类型：`modify`
+- 原因：同上画板；参考站 PuiSearch 筛选条为「标签 + 控件」+ 搜索 / 重置 / 高级搜索
+- 之前：UiFilterBar 只有控件与文字链接重置；02～05 表格模块无操作列、分页居左；05 用默认 ElTabs
+- 之后：UiFilterBar 新增 `searchable` / `advanced` 与 `search` / `toggle` 事件、label + 控件写法、窄屏换行策略；`TABLE_MODULE` 加高级搜索展开区、序号 / 操作列、分页右对齐；04 左树面板 UiModuleHeader + 搜索 + `highlight-current`；05 页签加 `is-tabbar`
+- 关联需求：`R-044`、`R-041`
+- 覆盖关系：—
+- 影响功能：`F-003 direct`、`F-011 direct`、`F-005 indirect`
 
 ### C-028 · 第一层默认值对齐参考站
 
@@ -250,6 +277,8 @@ updated: "2026-09-03"
 | C-028 | F-001, F-002, F-004 | direct | 默认值与新类 | tokens 计数、UiShell 底色 |
 | C-029 | F-003 | direct | 新组件与重构 | typecheck / build / 展示页 |
 | C-030 | F-011 | direct | 模板重排 | 五套渲染、与画板核对 |
+| C-031 | F-001, F-003 | direct | 新 token 与皮肤 | tokens 计数 80；表格行高 / 页签 / 树渲染 |
+| C-032 | F-003, F-011 | direct | 组件 API 与模板 | typecheck / build / 五套渲染 |
 | C-027 | F-011 | direct | 页签顺序与命名 | 路由 |
 
 ## 实现映射
@@ -263,8 +292,8 @@ updated: "2026-09-03"
 | R-012, R-029 | `packages/design-system/ui/UiShell.vue`、`ui/index.ts`、`vite.lib.config.ts` → `dist/ui.iife.js` + `dist/ui.css` | R-012 verified / R-029 implemented | E-02, E-04（正式项目 import 待第二步） |
 | R-043 | `CLAUDE.md` §2 滚动规则、`whitelist.json`（el-scrollbar）、`scripts/check-prototype.js`（no-overflow-scroll）、`ui/UiShell.vue`（侧栏 / 主区 ElScrollbar，expose scrollTo / wrapEl）、`showcase.html`（.ds-side / .ds-scroll）、`showcase.data.js`（Affix / Backtop / InfiniteScroll / Scrollbar 演示） | verified | E-17 |
 | R-040 | `CLAUDE.md` §2.1、`scripts/check-prototype.js`（composites / placeholders / --strict）、`README.md` 三级偏差表 | verified | E-14 |
-| R-041 | `ui/composites/UiListItem.vue`、`UiFilterBar.vue`、`UiStatCard.vue`、`ui/index.ts`、`whitelist.json` custom、`showcase.data.js` CUSTOM | verified | E-15 |
-| R-042 | `skins/index.css`、`skins/table.css`、`skins/input.css`、`requests/_template.md`、`requests/README.md`；模板与展示页加载顺序 | verified | E-16 |
+| R-041 | `ui/composites/UiListItem.vue`、`UiFilterBar.vue`、`UiStatCard.vue`、`ui/index.ts`、`whitelist.json` custom、`showcase.data.js` CUSTOM | verified | E-15, E-21 |
+| R-042 | `skins/index.css`、`skins/{table,input,menu,tabs,tree}.css`、`requests/_template.md`、`requests/README.md`；模板与展示页加载顺序 | verified | E-16, E-21 |
 | R-004 | `ui/UiShell.vue`、`ui/UiPageHeader.vue`、`ui/UiState.vue` 内边距全部引用 token | implemented | E-03（第三层 lint 待第二步） |
 | R-015, R-022, R-023 | `CLAUDE.md` §1～§6 | verified | E-05 |
 | R-016～R-018 | `apps/prototypes/_template.html` | R-016/018 verified / R-017 implemented | E-02, E-06（与正式页面等宽比对待第二步） |
@@ -340,6 +369,8 @@ updated: "2026-09-03"
 | RV | IT | 变更 | 类型 | 需求 | 前后摘要 | 影响功能 |
 |---|---|---|---|---|---|---|
 | RV-008 | IT-008 | C-023 | modify | R-037 | 自研组件独立页签 + 配置卡 | F-011 |
+| RV-011 | IT-011 | C-031 | modify | R-042, R-045 | 行高 token；tabs / tree 皮肤 | F-001, F-003 |
+| RV-011 | IT-011 | C-032 | modify | R-044, R-041 | 02～05 模板与 UiFilterBar 改版 | F-003, F-011 |
 | RV-008 | IT-008 | C-024 | modify | R-041, R-012 | 组件按精修稿美化 | F-003, F-004 |
 | RV-008 | IT-008 | C-025 | modify | R-007, R-042 | +display 字号、menu 皮肤 | F-001, F-003 |
 | RV-007 | IT-007 | C-021 | add | R-043 | 无 → 滚动统一 ElScrollbar | F-003, F-005, F-007, F-011 |

@@ -1,9 +1,16 @@
-/* skins/table.css · 表格皮肤：表头用次级底色、行更松、去掉最外层竖线 */
+/* skins/table.css · 表格皮肤（对齐参考 PuiTablePage）：表头 subtle 底 12/500、行高 44、外框圆角 8、hover accent */
 .el-table {
   --el-table-header-bg-color: var(--color-bg-subtle);
   --el-table-header-text-color: var(--color-text-secondary);
   --el-table-row-hover-bg-color: var(--color-bg-accent);
   --el-table-border-color: var(--color-border-muted);
+  --el-table-text-color: var(--color-text-default);
+  border: var(--border-w) solid var(--color-border-muted);
+  border-radius: var(--radius-md);
+  overflow: hidden;
 }
-.el-table .el-table__cell { padding-block: var(--space-component-pad-y); }
-.el-table th.el-table__cell { font-weight: var(--font-weight-medium); }
+.el-table--border::after, .el-table--border::before, .el-table__inner-wrapper::before { display: none; }
+.el-table .el-table__cell { padding: 0; height: var(--layout-row-h); }
+.el-table th.el-table__cell { height: var(--layout-thead-h); font-size: var(--font-size-caption); font-weight: var(--font-weight-medium); }
+.el-table .cell { line-height: 1.4; padding-inline: var(--space-component-gap); }
+.el-table--striped .el-table__body tr.el-table__row--striped td.el-table__cell { background: var(--color-bg-surface); }

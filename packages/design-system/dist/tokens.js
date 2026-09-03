@@ -1,6 +1,6 @@
 /* 由 scripts/build-tokens.mjs 自动生成，勿手改；真值在 tokens.css */
 window.DS_TOKENS = {
-  "generatedAt": "2026-09-03T04:42:58.730Z",
+  "generatedAt": "2026-09-03T07:31:39.119Z",
   "source": "tokens.css",
   "groups": [
     {
@@ -269,6 +269,18 @@ window.DS_TOKENS = {
           "name": "--layout-aside-w",
           "value": "320px",
           "comment": "分析区 / 左树等侧栏面板的最小宽",
+          "dark": null
+        },
+        {
+          "name": "--layout-row-h",
+          "value": "44px",
+          "comment": "表格行高",
+          "dark": null
+        },
+        {
+          "name": "--layout-thead-h",
+          "value": "40px",
+          "comment": "表头高",
           "dark": null
         },
         {
@@ -1180,7 +1192,7 @@ window.DS_TOKENS = {
     }
   },
   "counts": {
-    "semantic": 78,
+    "semantic": 80,
     "raw": 28,
     "mapping": 56
   }

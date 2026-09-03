@@ -103,11 +103,19 @@
 .ui-list-item__chevron { color: var(--color-text-placeholder);
 }
 
-.ui-filter-bar { padding: var(--space-component-pad-y) var(--space-component-pad-x); background: var(--color-bg-subtle); border-radius: var(--radius-lg);
+.ui-filter-bar { flex-wrap: wrap; padding: var(--space-component-gap) var(--space-component-pad-x); background: var(--color-bg-subtle); border-radius: var(--radius-md); margin-bottom: 0;
 }
 .ui-filter-bar__filters { flex: 1; min-width: 0;
 }
-.ui-filter-bar__right { flex: none;
+.ui-filter-bar__filters > .l-inline > small { color: var(--color-text-secondary); font-size: 13px;
+}
+.ui-filter-bar__filters > .l-inline > .el-input,
+.ui-filter-bar__filters > .l-inline > .el-select,
+.ui-filter-bar__filters > .l-inline > .el-date-editor { width: var(--layout-control-w);
+}
+.ui-filter-bar__btns { flex: none;
+}
+.ui-filter-bar__right { flex: none; margin-left: auto; white-space: nowrap;
 }
 .ui-filter-bar__summary { color: var(--color-text-muted);
 }
