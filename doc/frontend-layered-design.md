@@ -1,7 +1,7 @@
 # 前端三层分层设计说明
 
 > 本文档描述 `virtual` 项目前端的三层分层模型：每一层包含什么、由谁修改、如何约束 AI 在各层的行为，以及"提示词 → 可交互原型 → 正式页面"的流转方式。
-> 对应需求台账见 `doc/frontend-layered-design.md.rai.md`（当前 RV-009）；需求 ID、状态与验收标准以台账为准。
+> 对应需求台账见 `doc/frontend-layered-design.md.rai.md`（当前 RV-010）；需求 ID、状态与验收标准以台账为准。
 > 技术栈：Vue 3 + Element Plus 2.14 + Vite 8 + Tailwind CSS 4，pnpm monorepo。
 
 ## 1. 目标与问题
@@ -71,13 +71,13 @@ virtual/
 | component | `--space-component-gap` | `--space-component-pad-x` / `-y` | `--space-component-title` |
 | inline | `--space-inline-gap` | `--space-inline-pad` | — |
 
-共 13 个。防膨胀规则：新场景不新增 token，而是判断"哪个作用域的哪种关系"后落入矩阵；组件内部间距由第二层写死引用 token，第三层不设置，因此第三层实际可用的只有 `page`、`module` 两行与 `--space-component-gap`；两个 token 在所有场景下值相同则合并。
+默认值对齐参考站 park-mgt-web（page 20 / module 16 / content 12 / control 8）：page-gap 24、page-pad 20、module-gap 16、module-pad 16、component-gap 12。共 13 个。防膨胀规则：新场景不新增 token，而是判断"哪个作用域的哪种关系"后落入矩阵；组件内部间距由第二层写死引用 token，第三层不设置，因此第三层实际可用的只有 `page`、`module` 两行与 `--space-component-gap`；两个 token 在所有场景下值相同则合并。
 
 密度系数 `--density` 乘入 page / module / component 三级间距，`[data-density="compact" | "loose"]` 整体切换松紧。
 
 ### 4.4 布局尺寸与其他 token
 
-尺寸不是间距，单独以 `--layout-*` 命名（侧边栏宽/折叠宽、顶栏高、内容区最大宽与内边距、表单标签列宽、控件默认宽、栅格列数与间隙），`--z-*` 层级，`--font-*`（字体族、四级字号、行高、字重）、`--radius-*`、`--shadow-*`、`--border-w`。
+尺寸不是间距，单独以 `--layout-*` 命名（侧边栏宽 230 / 折叠宽 66、顶栏高 60、侧面板宽 320、内容区最大宽与内边距、表单标签列宽、控件默认宽、栅格列数与间隙），`--z-*` 层级，`--font-*`（字体族、四级字号、行高、字重）、`--radius-*`、`--shadow-*`、`--border-w`。
 
 ### 4.5 Element Plus 主题映射
 

@@ -4,11 +4,11 @@ var DesignSystemUI = (function(exports, vue, element_plus) {
 		[Symbol.toStringTag]: { value: "Module" }
 	});
 	//#region ui/UiShell.vue?vue&type=script&setup=true&lang.ts
-	var _hoisted_1$5 = { class: "ui-shell__header" };
-	var _hoisted_2$5 = { class: "ui-shell__header-left l-inline" };
-	var _hoisted_3$5 = { class: "ui-shell__title" };
-	var _hoisted_4$5 = { class: "ui-shell__header-right l-cluster" };
-	var _hoisted_5$3 = { class: "ui-shell__main" };
+	var _hoisted_1$6 = { class: "ui-shell__header" };
+	var _hoisted_2$6 = { class: "ui-shell__header-left l-inline" };
+	var _hoisted_3$6 = { class: "ui-shell__title" };
+	var _hoisted_4$6 = { class: "ui-shell__header-right l-cluster" };
+	var _hoisted_5$4 = { class: "ui-shell__main" };
 	//#endregion
 	//#region ui/UiShell.vue
 	var UiShell_default = /* @__PURE__ */ (0, vue.defineComponent)({
@@ -74,7 +74,7 @@ var DesignSystemUI = (function(exports, vue, element_plus) {
 					"is-collapsed": __props.collapsed,
 					"is-mobile": isMobile.value
 				}]) }, [
-					(0, vue.createElementVNode)("header", _hoisted_1$5, [(0, vue.createElementVNode)("div", _hoisted_2$5, [(0, vue.createVNode)((0, vue.unref)(element_plus.ElButton), {
+					(0, vue.createElementVNode)("header", _hoisted_1$6, [(0, vue.createElementVNode)("div", _hoisted_2$6, [(0, vue.createVNode)((0, vue.unref)(element_plus.ElButton), {
 						text: "",
 						circle: "",
 						class: "ui-shell__toggle",
@@ -91,7 +91,7 @@ var DesignSystemUI = (function(exports, vue, element_plus) {
 							"stroke-linecap": "round"
 						}, [(0, vue.createElementVNode)("path", { d: "M4 6h16M4 12h16M4 18h16" })], -1)])]),
 						_: 1
-					}), (0, vue.renderSlot)(_ctx.$slots, "logo", {}, () => [_cache[3] || (_cache[3] = (0, vue.createElementVNode)("span", { class: "ui-shell__mark" }, null, -1)), (0, vue.createElementVNode)("span", _hoisted_3$5, (0, vue.toDisplayString)(__props.title), 1)])]), (0, vue.createElementVNode)("div", _hoisted_4$5, [(0, vue.renderSlot)(_ctx.$slots, "header-actions")])]),
+					}), (0, vue.renderSlot)(_ctx.$slots, "logo", {}, () => [_cache[3] || (_cache[3] = (0, vue.createElementVNode)("span", { class: "ui-shell__mark" }, null, -1)), (0, vue.createElementVNode)("span", _hoisted_3$6, (0, vue.toDisplayString)(__props.title), 1)])]), (0, vue.createElementVNode)("div", _hoisted_4$6, [(0, vue.renderSlot)(_ctx.$slots, "header-actions")])]),
 					!isMobile.value ? ((0, vue.openBlock)(), (0, vue.createElementBlock)("aside", {
 						key: 0,
 						class: "ui-shell__sidebar",
@@ -148,7 +148,7 @@ var DesignSystemUI = (function(exports, vue, element_plus) {
 						})]),
 						_: 1
 					}, 8, ["modelValue"])),
-					(0, vue.createElementVNode)("main", _hoisted_5$3, [(0, vue.createVNode)((0, vue.unref)(element_plus.ElScrollbar), {
+					(0, vue.createElementVNode)("main", _hoisted_5$4, [(0, vue.createVNode)((0, vue.unref)(element_plus.ElScrollbar), {
 						ref_key: "mainScroll",
 						ref: mainScroll,
 						class: "ui-shell__scroll",
@@ -163,14 +163,14 @@ var DesignSystemUI = (function(exports, vue, element_plus) {
 	});
 	//#endregion
 	//#region ui/UiPageHeader.vue?vue&type=script&setup=true&lang.ts
-	var _hoisted_1$4 = { class: "ui-page-header l-page-header" };
-	var _hoisted_2$4 = { class: "ui-page-header__text" };
-	var _hoisted_3$4 = {
+	var _hoisted_1$5 = { class: "ui-page-header l-page-header" };
+	var _hoisted_2$5 = { class: "ui-page-header__text" };
+	var _hoisted_3$5 = {
 		key: 0,
 		class: "ui-page-header__crumb l-inline"
 	};
-	var _hoisted_4$4 = { key: 1 };
-	var _hoisted_5$2 = { class: "l-cluster l-cluster--end" };
+	var _hoisted_4$5 = { key: 1 };
+	var _hoisted_5$3 = { class: "l-cluster l-cluster--end" };
 	//#endregion
 	//#region ui/UiPageHeader.vue
 	var UiPageHeader_default = /* @__PURE__ */ (0, vue.defineComponent)({
@@ -185,23 +185,23 @@ var DesignSystemUI = (function(exports, vue, element_plus) {
 			* 面包屑插槽 + 标题 + 副标题 + 右侧操作区。间距由 .l-page-header（第一层）决定。
 			*/
 			return (_ctx, _cache) => {
-				return (0, vue.openBlock)(), (0, vue.createElementBlock)("div", _hoisted_1$4, [(0, vue.createElementVNode)("div", _hoisted_2$4, [
-					_ctx.$slots.breadcrumb ? ((0, vue.openBlock)(), (0, vue.createElementBlock)("small", _hoisted_3$4, [(0, vue.renderSlot)(_ctx.$slots, "breadcrumb")])) : (0, vue.createCommentVNode)("", true),
+				return (0, vue.openBlock)(), (0, vue.createElementBlock)("div", _hoisted_1$5, [(0, vue.createElementVNode)("div", _hoisted_2$5, [
+					_ctx.$slots.breadcrumb ? ((0, vue.openBlock)(), (0, vue.createElementBlock)("small", _hoisted_3$5, [(0, vue.renderSlot)(_ctx.$slots, "breadcrumb")])) : (0, vue.createCommentVNode)("", true),
 					(0, vue.createElementVNode)("h1", null, (0, vue.toDisplayString)(__props.title), 1),
-					__props.subtitle ? ((0, vue.openBlock)(), (0, vue.createElementBlock)("small", _hoisted_4$4, (0, vue.toDisplayString)(__props.subtitle), 1)) : (0, vue.createCommentVNode)("", true)
-				]), (0, vue.createElementVNode)("div", _hoisted_5$2, [(0, vue.renderSlot)(_ctx.$slots, "actions")])]);
+					__props.subtitle ? ((0, vue.openBlock)(), (0, vue.createElementBlock)("small", _hoisted_4$5, (0, vue.toDisplayString)(__props.subtitle), 1)) : (0, vue.createCommentVNode)("", true)
+				]), (0, vue.createElementVNode)("div", _hoisted_5$3, [(0, vue.renderSlot)(_ctx.$slots, "actions")])]);
 			};
 		}
 	});
 	//#endregion
 	//#region ui/UiState.vue?vue&type=script&setup=true&lang.ts
-	var _hoisted_1$3 = { class: "ui-state" };
-	var _hoisted_2$3 = {
+	var _hoisted_1$4 = { class: "ui-state" };
+	var _hoisted_2$4 = {
 		key: 2,
 		class: "ui-state__error l-state"
 	};
-	var _hoisted_3$3 = { class: "ui-state__error-title" };
-	var _hoisted_4$3 = { class: "ui-state__error-hint" };
+	var _hoisted_3$4 = { class: "ui-state__error-title" };
+	var _hoisted_4$4 = { class: "ui-state__error-hint" };
 	//#endregion
 	//#region ui/UiState.vue
 	var UiState_default = /* @__PURE__ */ (0, vue.defineComponent)({
@@ -222,7 +222,7 @@ var DesignSystemUI = (function(exports, vue, element_plus) {
 			*/
 			const emit = __emit;
 			return (_ctx, _cache) => {
-				return (0, vue.openBlock)(), (0, vue.createElementBlock)("div", _hoisted_1$3, [__props.state === "loading" ? ((0, vue.openBlock)(), (0, vue.createBlock)((0, vue.unref)(element_plus.ElSkeleton), {
+				return (0, vue.openBlock)(), (0, vue.createElementBlock)("div", _hoisted_1$4, [__props.state === "loading" ? ((0, vue.openBlock)(), (0, vue.createBlock)((0, vue.unref)(element_plus.ElSkeleton), {
 					key: 0,
 					rows: __props.rows,
 					animated: ""
@@ -233,7 +233,7 @@ var DesignSystemUI = (function(exports, vue, element_plus) {
 				}, {
 					default: (0, vue.withCtx)(() => [(0, vue.renderSlot)(_ctx.$slots, "action")]),
 					_: 3
-				}, 8, ["description"])) : __props.state === "error" ? ((0, vue.openBlock)(), (0, vue.createElementBlock)("div", _hoisted_2$3, [
+				}, 8, ["description"])) : __props.state === "error" ? ((0, vue.openBlock)(), (0, vue.createElementBlock)("div", _hoisted_2$4, [
 					_cache[2] || (_cache[2] = (0, vue.createElementVNode)("span", { class: "ui-state__error-icon" }, [(0, vue.createElementVNode)("svg", {
 						viewBox: "0 0 24 24",
 						width: "18",
@@ -247,8 +247,8 @@ var DesignSystemUI = (function(exports, vue, element_plus) {
 						cy: "12",
 						r: "9"
 					}), (0, vue.createElementVNode)("path", { d: "M12 8v5M12 16h.01" })])], -1)),
-					(0, vue.createElementVNode)("strong", _hoisted_3$3, (0, vue.toDisplayString)(__props.errorText), 1),
-					(0, vue.createElementVNode)("small", _hoisted_4$3, (0, vue.toDisplayString)(__props.errorHint), 1),
+					(0, vue.createElementVNode)("strong", _hoisted_3$4, (0, vue.toDisplayString)(__props.errorText), 1),
+					(0, vue.createElementVNode)("small", _hoisted_4$4, (0, vue.toDisplayString)(__props.errorHint), 1),
 					(0, vue.createVNode)((0, vue.unref)(element_plus.ElButton), {
 						size: "small",
 						onClick: _cache[0] || (_cache[0] = ($event) => emit("retry"))
@@ -262,14 +262,14 @@ var DesignSystemUI = (function(exports, vue, element_plus) {
 	});
 	//#endregion
 	//#region ui/composites/UiListItem.vue?vue&type=script&setup=true&lang.ts
-	var _hoisted_1$2 = { class: "ui-list-item__main l-inline" };
-	var _hoisted_2$2 = { class: "ui-list-item__text l-stack l-stack--tight" };
-	var _hoisted_3$2 = { class: "ui-list-item__title" };
-	var _hoisted_4$2 = {
+	var _hoisted_1$3 = { class: "ui-list-item__main l-inline" };
+	var _hoisted_2$3 = { class: "ui-list-item__text l-stack l-stack--tight" };
+	var _hoisted_3$3 = { class: "ui-list-item__title" };
+	var _hoisted_4$3 = {
 		key: 0,
 		class: "ui-list-item__subtitle"
 	};
-	var _hoisted_5$1 = { class: "ui-list-item__trailing l-cluster" };
+	var _hoisted_5$2 = { class: "ui-list-item__trailing l-cluster" };
 	var _hoisted_6$1 = {
 		key: 1,
 		class: "ui-list-item__chevron",
@@ -319,14 +319,14 @@ var DesignSystemUI = (function(exports, vue, element_plus) {
 						"is-divided": __props.divided
 					}]),
 					onClick: _cache[0] || (_cache[0] = ($event) => __props.clickable && emit("click"))
-				}, [(0, vue.createElementVNode)("span", _hoisted_1$2, [(0, vue.renderSlot)(_ctx.$slots, "leading", {}, () => [__props.avatar ? ((0, vue.openBlock)(), (0, vue.createBlock)((0, vue.unref)(element_plus.ElAvatar), {
+				}, [(0, vue.createElementVNode)("span", _hoisted_1$3, [(0, vue.renderSlot)(_ctx.$slots, "leading", {}, () => [__props.avatar ? ((0, vue.openBlock)(), (0, vue.createBlock)((0, vue.unref)(element_plus.ElAvatar), {
 					key: 0,
 					class: "ui-list-item__avatar",
 					size: 36
 				}, {
 					default: (0, vue.withCtx)(() => [(0, vue.createTextVNode)((0, vue.toDisplayString)(__props.avatar.slice(0, 1)), 1)]),
 					_: 1
-				})) : (0, vue.createCommentVNode)("", true)]), (0, vue.createElementVNode)("span", _hoisted_2$2, [(0, vue.createElementVNode)("strong", _hoisted_3$2, (0, vue.toDisplayString)(__props.title), 1), __props.subtitle ? ((0, vue.openBlock)(), (0, vue.createElementBlock)("small", _hoisted_4$2, (0, vue.toDisplayString)(__props.subtitle), 1)) : (0, vue.createCommentVNode)("", true)])]), (0, vue.createElementVNode)("span", _hoisted_5$1, [
+				})) : (0, vue.createCommentVNode)("", true)]), (0, vue.createElementVNode)("span", _hoisted_2$3, [(0, vue.createElementVNode)("strong", _hoisted_3$3, (0, vue.toDisplayString)(__props.title), 1), __props.subtitle ? ((0, vue.openBlock)(), (0, vue.createElementBlock)("small", _hoisted_4$3, (0, vue.toDisplayString)(__props.subtitle), 1)) : (0, vue.createCommentVNode)("", true)])]), (0, vue.createElementVNode)("span", _hoisted_5$2, [
 					__props.status ? ((0, vue.openBlock)(), (0, vue.createBlock)((0, vue.unref)(element_plus.ElTag), {
 						key: 0,
 						type: __props.status.type || "info",
@@ -344,10 +344,10 @@ var DesignSystemUI = (function(exports, vue, element_plus) {
 	});
 	//#endregion
 	//#region ui/composites/UiFilterBar.vue?vue&type=script&setup=true&lang.ts
-	var _hoisted_1$1 = { class: "ui-filter-bar l-toolbar" };
-	var _hoisted_2$1 = { class: "ui-filter-bar__filters l-cluster" };
-	var _hoisted_3$1 = { class: "ui-filter-bar__right l-cluster l-cluster--end" };
-	var _hoisted_4$1 = {
+	var _hoisted_1$2 = { class: "ui-filter-bar l-toolbar" };
+	var _hoisted_2$2 = { class: "ui-filter-bar__filters l-cluster" };
+	var _hoisted_3$2 = { class: "ui-filter-bar__right l-cluster l-cluster--end" };
+	var _hoisted_4$2 = {
 		key: 0,
 		class: "ui-filter-bar__summary"
 	};
@@ -371,7 +371,7 @@ var DesignSystemUI = (function(exports, vue, element_plus) {
 			*/
 			const emit = __emit;
 			return (_ctx, _cache) => {
-				return (0, vue.openBlock)(), (0, vue.createElementBlock)("div", _hoisted_1$1, [(0, vue.createElementVNode)("span", _hoisted_2$1, [(0, vue.renderSlot)(_ctx.$slots, "default"), __props.resettable ? ((0, vue.openBlock)(), (0, vue.createBlock)((0, vue.unref)(element_plus.ElButton), {
+				return (0, vue.openBlock)(), (0, vue.createElementBlock)("div", _hoisted_1$2, [(0, vue.createElementVNode)("span", _hoisted_2$2, [(0, vue.renderSlot)(_ctx.$slots, "default"), __props.resettable ? ((0, vue.openBlock)(), (0, vue.createBlock)((0, vue.unref)(element_plus.ElButton), {
 					key: 0,
 					link: "",
 					type: "primary",
@@ -379,20 +379,20 @@ var DesignSystemUI = (function(exports, vue, element_plus) {
 				}, {
 					default: (0, vue.withCtx)(() => [(0, vue.createTextVNode)((0, vue.toDisplayString)(__props.resetText), 1)]),
 					_: 1
-				})) : (0, vue.createCommentVNode)("", true)]), (0, vue.createElementVNode)("span", _hoisted_3$1, [_ctx.$slots.summary ? ((0, vue.openBlock)(), (0, vue.createElementBlock)("small", _hoisted_4$1, [(0, vue.renderSlot)(_ctx.$slots, "summary")])) : (0, vue.createCommentVNode)("", true), (0, vue.renderSlot)(_ctx.$slots, "actions")])]);
+				})) : (0, vue.createCommentVNode)("", true)]), (0, vue.createElementVNode)("span", _hoisted_3$2, [_ctx.$slots.summary ? ((0, vue.openBlock)(), (0, vue.createElementBlock)("small", _hoisted_4$2, [(0, vue.renderSlot)(_ctx.$slots, "summary")])) : (0, vue.createCommentVNode)("", true), (0, vue.renderSlot)(_ctx.$slots, "actions")])]);
 			};
 		}
 	});
 	//#endregion
 	//#region ui/composites/UiStatCard.vue?vue&type=script&setup=true&lang.ts
-	var _hoisted_1 = { class: "ui-stat-card l-module" };
-	var _hoisted_2 = { class: "ui-stat-card__head" };
-	var _hoisted_3 = { class: "ui-stat-card__label" };
-	var _hoisted_4 = {
+	var _hoisted_1$1 = { class: "ui-stat-card l-module" };
+	var _hoisted_2$1 = { class: "ui-stat-card__head" };
+	var _hoisted_3$1 = { class: "ui-stat-card__label" };
+	var _hoisted_4$1 = {
 		key: 0,
 		class: "ui-stat-card__icon"
 	};
-	var _hoisted_5 = { class: "ui-stat-card__value l-inline" };
+	var _hoisted_5$1 = { class: "ui-stat-card__value l-inline" };
 	var _hoisted_6 = { class: "ui-stat-card__num" };
 	var _hoisted_7 = {
 		key: 0,
@@ -400,30 +400,6 @@ var DesignSystemUI = (function(exports, vue, element_plus) {
 	};
 	var _hoisted_8 = {
 		key: 0,
-		class: "ui-stat-card__foot l-inline"
-	};
-	var _hoisted_9 = {
-		key: 0,
-		viewBox: "0 0 24 24",
-		width: "10",
-		height: "10",
-		fill: "none",
-		stroke: "currentColor",
-		"stroke-width": "3",
-		"stroke-linecap": "round"
-	};
-	var _hoisted_10 = {
-		key: 1,
-		viewBox: "0 0 24 24",
-		width: "10",
-		height: "10",
-		fill: "none",
-		stroke: "currentColor",
-		"stroke-width": "3",
-		"stroke-linecap": "round"
-	};
-	var _hoisted_11 = {
-		key: 1,
 		class: "ui-stat-card__hint"
 	};
 	//#endregion
@@ -438,31 +414,73 @@ var DesignSystemUI = (function(exports, vue, element_plus) {
 			hint: { default: "" },
 			upIsGood: {
 				type: Boolean,
-				default: true
+				default: void 0
 			}
 		},
 		setup(__props) {
 			/**
 			* UiStatCard · 第二层 · 复合组件
-			* 统计卡片：标签 / 数值 / 单位 / 趋势胶囊 / 说明 / 右上角图标插槽。基于 .l-module；所有值只引用 token。
+			* 统计卡片（对齐参考 StandardStatsMaterial）：标签 + 右上趋势胶囊（或图标插槽）/ 数值 / 说明。
+			* 基于 .l-module；所有值只引用 token。
 			*/
 			const props = __props;
 			const display = (0, vue.computed)(() => typeof props.value === "number" ? props.value.toLocaleString("zh-CN") : props.value);
 			const trendClass = (0, vue.computed)(() => {
-				if (props.trend === void 0 || props.trend === 0) return "is-flat";
+				if (props.trend === void 0) return "";
+				if (props.trend === 0) return "is-flat";
+				if (props.upIsGood === void 0) return "is-primary";
 				return (props.trend > 0 ? props.upIsGood : !props.upIsGood) ? "is-good" : "is-bad";
 			});
-			const trendText = (0, vue.computed)(() => props.trend === void 0 ? "" : props.trend === 0 ? "持平" : `${Math.abs(props.trend)}%`);
+			const trendText = (0, vue.computed)(() => props.trend === void 0 ? "" : props.trend === 0 ? "持平" : `${props.trend > 0 ? "+" : ""}${props.trend}%`);
 			return (_ctx, _cache) => {
-				return (0, vue.openBlock)(), (0, vue.createElementBlock)("section", _hoisted_1, [
-					(0, vue.createElementVNode)("div", _hoisted_2, [(0, vue.createElementVNode)("span", _hoisted_3, (0, vue.toDisplayString)(__props.label), 1), _ctx.$slots.icon ? ((0, vue.openBlock)(), (0, vue.createElementBlock)("span", _hoisted_4, [(0, vue.renderSlot)(_ctx.$slots, "icon")])) : (0, vue.createCommentVNode)("", true)]),
-					(0, vue.createElementVNode)("div", _hoisted_5, [(0, vue.createElementVNode)("span", _hoisted_6, (0, vue.toDisplayString)(display.value), 1), __props.unit ? ((0, vue.openBlock)(), (0, vue.createElementBlock)("span", _hoisted_7, (0, vue.toDisplayString)(__props.unit), 1)) : (0, vue.createCommentVNode)("", true)]),
-					__props.trend !== void 0 || __props.hint ? ((0, vue.openBlock)(), (0, vue.createElementBlock)("div", _hoisted_8, [__props.trend !== void 0 ? ((0, vue.openBlock)(), (0, vue.createElementBlock)("span", {
-						key: 0,
+				return (0, vue.openBlock)(), (0, vue.createElementBlock)("section", _hoisted_1$1, [
+					(0, vue.createElementVNode)("div", _hoisted_2$1, [(0, vue.createElementVNode)("span", _hoisted_3$1, (0, vue.toDisplayString)(__props.label), 1), _ctx.$slots.icon ? ((0, vue.openBlock)(), (0, vue.createElementBlock)("span", _hoisted_4$1, [(0, vue.renderSlot)(_ctx.$slots, "icon")])) : __props.trend !== void 0 ? ((0, vue.openBlock)(), (0, vue.createElementBlock)("span", {
+						key: 1,
 						class: (0, vue.normalizeClass)(["ui-stat-card__trend", trendClass.value])
-					}, [__props.trend > 0 ? ((0, vue.openBlock)(), (0, vue.createElementBlock)("svg", _hoisted_9, [..._cache[0] || (_cache[0] = [(0, vue.createElementVNode)("path", { d: "M12 19V5M5 12l7-7 7 7" }, null, -1)])])) : __props.trend < 0 ? ((0, vue.openBlock)(), (0, vue.createElementBlock)("svg", _hoisted_10, [..._cache[1] || (_cache[1] = [(0, vue.createElementVNode)("path", { d: "M12 5v14M5 12l7 7 7-7" }, null, -1)])])) : (0, vue.createCommentVNode)("", true), (0, vue.createTextVNode)(" " + (0, vue.toDisplayString)(trendText.value), 1)], 2)) : (0, vue.createCommentVNode)("", true), __props.hint ? ((0, vue.openBlock)(), (0, vue.createElementBlock)("small", _hoisted_11, (0, vue.toDisplayString)(__props.hint), 1)) : (0, vue.createCommentVNode)("", true)])) : (0, vue.createCommentVNode)("", true),
+					}, (0, vue.toDisplayString)(trendText.value), 3)) : (0, vue.createCommentVNode)("", true)]),
+					(0, vue.createElementVNode)("div", _hoisted_5$1, [
+						(0, vue.createElementVNode)("span", _hoisted_6, (0, vue.toDisplayString)(display.value), 1),
+						__props.unit ? ((0, vue.openBlock)(), (0, vue.createElementBlock)("span", _hoisted_7, (0, vue.toDisplayString)(__props.unit), 1)) : (0, vue.createCommentVNode)("", true),
+						_ctx.$slots.icon && __props.trend !== void 0 ? ((0, vue.openBlock)(), (0, vue.createElementBlock)("span", {
+							key: 1,
+							class: (0, vue.normalizeClass)(["ui-stat-card__trend", trendClass.value])
+						}, (0, vue.toDisplayString)(trendText.value), 3)) : (0, vue.createCommentVNode)("", true)
+					]),
+					__props.hint ? ((0, vue.openBlock)(), (0, vue.createElementBlock)("small", _hoisted_8, (0, vue.toDisplayString)(__props.hint), 1)) : (0, vue.createCommentVNode)("", true),
 					(0, vue.renderSlot)(_ctx.$slots, "default")
 				]);
+			};
+		}
+	});
+	//#endregion
+	//#region ui/composites/UiModuleHeader.vue?vue&type=script&setup=true&lang.ts
+	var _hoisted_1 = { class: "ui-module-header l-module-header" };
+	var _hoisted_2 = { class: "ui-module-header__text" };
+	var _hoisted_3 = { class: "ui-module-header__title" };
+	var _hoisted_4 = {
+		key: 0,
+		class: "ui-module-header__desc"
+	};
+	var _hoisted_5 = {
+		key: 0,
+		class: "ui-module-header__meta l-cluster"
+	};
+	//#endregion
+	//#region ui/composites/UiModuleHeader.vue
+	var UiModuleHeader_default = /* @__PURE__ */ (0, vue.defineComponent)({
+		__name: "UiModuleHeader",
+		props: {
+			title: {},
+			desc: {}
+		},
+		setup(__props) {
+			/**
+			* UiModuleHeader · 第二层 · 复合组件
+			* 模块（卡片）标题行：标题 + 描述 + 右侧 meta 插槽。基于 .l-module-header；间距与字号只引用 token。
+			* 来源：五套页面模板中每个模块都出现的同一结构（data-composite="module-header"）。
+			*/
+			return (_ctx, _cache) => {
+				return (0, vue.openBlock)(), (0, vue.createElementBlock)("header", _hoisted_1, [(0, vue.createElementVNode)("div", _hoisted_2, [(0, vue.createElementVNode)("h2", _hoisted_3, (0, vue.toDisplayString)(__props.title), 1), __props.desc ? ((0, vue.openBlock)(), (0, vue.createElementBlock)("small", _hoisted_4, (0, vue.toDisplayString)(__props.desc), 1)) : (0, vue.createCommentVNode)("", true)]), _ctx.$slots.meta ? ((0, vue.openBlock)(), (0, vue.createElementBlock)("span", _hoisted_5, [(0, vue.renderSlot)(_ctx.$slots, "meta")])) : (0, vue.createCommentVNode)("", true)]);
 			};
 		}
 	});
@@ -475,7 +493,8 @@ var DesignSystemUI = (function(exports, vue, element_plus) {
 		UiState: UiState_default,
 		UiListItem: UiListItem_default,
 		UiFilterBar: UiFilterBar_default,
-		UiStatCard: UiStatCard_default
+		UiStatCard: UiStatCard_default,
+		UiModuleHeader: UiModuleHeader_default
 	};
 	function install(app) {
 		for (const [name, comp] of Object.entries(components)) app.component(name, comp);
@@ -484,6 +503,7 @@ var DesignSystemUI = (function(exports, vue, element_plus) {
 	//#endregion
 	exports.UiFilterBar = UiFilterBar_default;
 	exports.UiListItem = UiListItem_default;
+	exports.UiModuleHeader = UiModuleHeader_default;
 	exports.UiPageHeader = UiPageHeader_default;
 	exports.UiShell = UiShell_default;
 	exports.UiStatCard = UiStatCard_default;

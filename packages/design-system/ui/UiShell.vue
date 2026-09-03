@@ -140,7 +140,7 @@ defineExpose({ scrollTo, wrapEl })
   height: 100vh;
   height: 100dvh;
   overflow: hidden;
-  background: var(--color-bg-page);
+  background: var(--color-bg-canvas);
 }
 .ui-shell.is-mobile { grid-template-columns: minmax(0, 1fr); grid-template-areas: 'header' 'main'; }
 

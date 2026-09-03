@@ -3,11 +3,12 @@ rai-schema-version: 2
 task: "前端三层分层设计需求基线"
 task-key: "frontend-layered-design"
 primary-target: "doc/frontend-layered-design.md"
-requirement-version: "RV-009"
-iteration: "IT-009"
+requirement-version: "RV-010"
+iteration: "IT-010"
 current-changes:
-  - "C-026"
-  - "C-027"
+  - "C-028"
+  - "C-029"
+  - "C-030"
 status: "active"
 updated: "2026-09-03"
 ---
@@ -16,11 +17,11 @@ updated: "2026-09-03"
 
 ## 快速摘要
 
-- 当前需求版本：`RV-009`
-- 当前工作迭代：`IT-009`
-- 当前变更：`C-026` 新增五套页面排版模板（add R-044）；`C-027` 页签重排：自研组件 → 布局范式 → 布局配置（modify R-037）
-- 本轮目标：「布局配置」= 参考 HY Compiler Studio `#/materials/layout` 的五个菜单配置，实现五种多菜单业务布局效果
-- 当前结论：**IT-009 完成**（R-044 verified，R-037 重新 verified，代码已提交）；IT-008 完成（R-037 / R-041 / R-012 / R-007 / R-042 重新 verified，代码已提交）；展示页按方向 A 重做并验证（R-037），hash 路由落地并验证（R-038）；第一步成果保持——第一、二层（F-001～F-004）、原型模板与检查脚本（F-005）、`CLAUDE.md`、说明文档已实现并通过验收，17 条 `verified`、6 条 `implemented`（其余验收条件依赖第二步的 apps/web）；12 条 `ready` 属于第二步（apps/web 工具链、ESLint、展示页、插件、视觉回归），待用户验收第一步后授权
+- 当前需求版本：`RV-010`
+- 当前工作迭代：`IT-010`
+- 当前变更：`C-028` 第一层默认值对齐参考站（add R-045）；`C-029` 模块标题行复合组件与统计卡重构（modify R-041）；`C-030` 五套模板按精修稿重排（modify R-044，clarify R-040 的 `:style` 例外）
+- 本轮目标：布局配置模块排版与间距达到参考站（hy-compiler MaterialCenterPage / LayoutTemplateShowcase）的审美；第一层颜色与间距随之调校
+- 当前结论：**IT-010 完成**（R-045 verified；R-041 / R-044 重新 verified）；IT-009 完成（R-044 verified，R-037 重新 verified，代码已提交）；IT-008 完成（R-037 / R-041 / R-012 / R-007 / R-042 重新 verified，代码已提交）；展示页按方向 A 重做并验证（R-037），hash 路由落地并验证（R-038）；第一步成果保持——第一、二层（F-001～F-004）、原型模板与检查脚本（F-005）、`CLAUDE.md`、说明文档已实现并通过验收，17 条 `verified`、6 条 `implemented`（其余验收条件依赖第二步的 apps/web）；12 条 `ready` 属于第二步（apps/web 工具链、ESLint、展示页、插件、视觉回归），待用户验收第一步后授权
 
 ## 当前需求清单
 
@@ -37,6 +38,8 @@ updated: "2026-09-03"
 - [ ] `R-009` `layout.css` 提供无 JS 行为的布局类 `.l-page / .l-section / .l-stack / .l-grid` 及常用变体，只引用语义 token，原型与正式项目引用同一文件。`category: maintainability` `status: implemented`
 - [ ] `R-010` `base.css` 统一 reset 与字体加载，原型与正式项目引用同一文件。`category: quality` `status: implemented`
 - [x] `R-030` `tokens.css` 将语义 token 映射到 Element Plus 主题变量（`--el-color-primary`、`--el-border-color`、`--el-bg-color`、`--el-border-radius-base` 等），Element Plus 外观只由第一层驱动，不单独维护 SCSS 主题。`category: maintainability` `status: verified`
+
+- [x] `R-045` 第一层默认值对齐参考站 `D:\hy-project\hy-compiler\apps\playground\src\style.css`（`--hy-space-*`）与 LayoutTemplateShowcase：间距 page-gap 24 / page-pad 20 / module-gap 16 / module-pad 16 / component-gap 12 / inline 8；布局 header 60 / sidebar 230 / collapsed 66 / 新增 `--layout-aside-w` 320；圆角 4 / 6 / 12；字号新增 `--font-size-micro` 10，display 改 24；新增 `--color-bg-canvas`（应用壳内容区底 #f0f3f4，UiShell 使用）、subtle 改 #f3f5f5；`layout.css` 新增 `.l-grid--main-aside`、`.l-split--aside`、`.l-tile`、`.l-bars` / `.l-bar`。`category: ux` `status: verified`
 
 ### 第二层：基础组件与外壳
 
@@ -134,6 +137,7 @@ updated: "2026-09-03"
 | R-037 | 双击打开即渲染；页面结构与画板「方向 A」一致（顶栏页签、左锚点、限宽、右目录）；设计变量数量 = tokens.json 语义计数；组件物料覆盖 Element Plus 官方组件清单且白名单标记与 whitelist.json 一致；切换 dark / compact / 主色后全部组件同步变化 | 用户输入（方向 A、全量 Element Plus） | R-011, R-029, R-030, R-038 | RV-003 | C-013 | F-011 |
 | R-039 | tokens.css 默认加载 `--el-color-primary` = `#0076a3`；展示页与原型模板无需改动即呈现新配色；dark 模式下主按钮 / 文字对比可读 | 用户输入（参考 technology-cyan） | R-001, R-002, R-007 | RV-005 | C-016 | F-001 |
 | R-043 | grep 第二层源码与展示页无 `overflow: auto/scroll`（Element Plus 内部除外）；展示页与原型页面 `document.scrollingElement.scrollHeight === clientHeight`（window 不滚）而 `.el-scrollbar__wrap` 可滚；check 脚本对含 `overflow:auto` 的原型报错 | 用户输入（滚动套用 Element Plus 滚动组件） | R-011, R-012 | RV-007 | C-021 | F-003, F-004, F-005, F-011 |
+| R-045 | tokens.json 语义计数 78；展示页布局配置芯片显示 page 20 / module 16 / header 60 / sidebar 230 / collapsed 66；01 统计模板与画板「布局配置精修稿」结构一致 | 用户输入（参考 hy-compiler MaterialCenterPage） | R-003, R-005, R-007 | RV-010 | C-028 | F-001, F-002, F-004, F-011 |
 | R-040 | CLAUDE.md 含四句消费规则；check 脚本对含 `data-composite` 的原型输出候选统计、对 `data-placeholder` 输出警告、`--strict` 下退出码非零 | 用户输入（原型 UI 不满足时怎么办） | R-015, R-019 | RV-006 | C-018 | F-003, F-005, F-007 |
 | R-041 | 三个组件 `vue-tsc` 通过、IIFE 可注册、展示页「自研复合组件」渲染；源码无裸数值 / 裸色 / 手写 flex | 对话结论（范例） | R-040, R-029 | RV-006 | C-019 | F-003, F-011 |
 | R-042 | `skins/index.css` 被原型模板、展示页与 README 引入顺序一致；`requests/_template.md` 存在并含全部字段 | 对话结论 | R-040 | RV-006 | C-020 | F-003, F-005 |
@@ -167,35 +171,45 @@ updated: "2026-09-03"
 
 ## 当前迭代
 
-### IT-009 · 布局配置 = 五套页面排版模板
+### IT-010 · 布局配置精修与第一层调校
 
-- 目标：把「布局配置」页签实现为参考站的五种多菜单业务布局效果；自研组件配置卡改回「自研组件」页签
-- 范围：`showcase.data.js`（TEMPLATES、APP_MENU、SAMPLE.menu/history）、`showcase.html`（templates 路由页）、README、CLAUDE.md、说明文档；git commit
-- 包含变更：`C-026`、`C-027`
-- 对应需求版本：`RV-009`
-- 退出条件：R-044 verified，R-037 重新 verified，代码已提交
+- 目标：布局配置五套模板达到参考站审美；第一层间距 / 尺寸 / 圆角 / 字号 / canvas 底色对齐参考；新增 UiModuleHeader
+- 范围：`tokens.css`、`layout.css`、`ui/UiShell.vue`、`ui/composites/UiStatCard.vue`、`ui/composites/UiModuleHeader.vue`、`showcase.data.js`、README / CLAUDE.md / 说明文档；git commit
+- 包含变更：`C-028`、`C-029`、`C-030`
+- 对应需求版本：`RV-010`
+- 退出条件：R-045 verified；R-041 / R-044 重新 verified；代码已提交
 
 ## 当前变更
 
-### C-026 · 新增五套页面排版模板
+### C-028 · 第一层默认值对齐参考站
 
 - 类型：`add`
-- 原因：用户指出「布局配置」应是参考站 `#/materials/layout` 五个菜单配置对应的五种布局效果
-- 之前：无页面级模板，原型从空白 `_template.html` 起步
-- 之后：R-044
-- 关联需求：`R-044`
+- 原因：用户认为布局配置间距不符合审美，指定参考 hy-compiler MaterialCenterPage；读取其 `style.css` 的 `--hy-space-*` 与 LayoutTemplateShowcase 的模块结构
+- 之前：page-pad 32/24、module 24/24、header 56、sidebar 240/64、radius 3/6/10、display 28，无 canvas 底
+- 之后：R-045
+- 关联需求：`R-045`
 - 覆盖关系：—
-- 影响功能：`F-011 direct`、`F-005 direct`（原型先选模板）
+- 影响功能：`F-001 direct`、`F-002 direct`、`F-004 direct`（UiShell 用 canvas 底）、`F-005 / F-011 indirect`
 
-### C-027 · 页签重排
+### C-029 · UiModuleHeader 与 UiStatCard 重构
 
 - 类型：`modify`
-- 原因：「布局配置」名称让位给页面模板；自研组件配置卡改名回「自研组件」
-- 之前：设计变量 / 组件物料 / 布局范式 / 布局配置（自研组件）
-- 之后：设计变量 / 组件物料 / 自研组件 / 布局范式 / 布局配置（五套模板）
-- 关联需求：`R-037`
+- 原因：五套模板每个模块共用"标题 + 描述 + meta"结构（结构级下沉）；统计卡按参考站改为右上趋势胶囊
+- 之前：模板内手写 `.l-module-header`；StatCard 趋势在数值下方、带箭头、icon 在右上
+- 之后：新增 `UiModuleHeader`；StatCard 趋势胶囊置右上（不传 upIsGood 用主色，传了用语义色；给 icon 插槽时趋势下移），数值 display 24、说明 micro 10
+- 关联需求：`R-041`
 - 覆盖关系：—
-- 影响功能：`F-011 direct`
+- 影响功能：`F-003 direct`、`F-011 indirect`
+
+### C-030 · 五套模板按精修稿重排
+
+- 类型：`modify`
+- 原因：画板「布局配置精修稿（01 统计模板）」已确认
+- 之前：模板用 UiPageHeader 大标题、`.l-grid--cols-2` 均分、进度条模拟柱图
+- 之后：面包屑行（无大标题）、分析区 `.l-grid--main-aside` 1.3fr / 0.7fr、柱图用 `.l-bars`、概况项用 `.l-tile`、左树用 `.l-split--aside`；R-040 澄清：`:style` 仅允许绑定数据驱动尺寸
+- 关联需求：`R-044`、`R-040`
+- 覆盖关系：—
+- 影响功能：`F-011 direct`、`F-005 indirect`
 
 ## 功能影响
 
@@ -233,6 +247,9 @@ updated: "2026-09-03"
 | C-024 | F-005 | indirect | 原型模板外观随之变化 | 模板渲染 |
 | C-025 | F-001, F-003 | direct | 新 token 与皮肤 | tokens.json 计数 75；菜单高亮 |
 | C-026 | F-011, F-005 | direct | 新页面与原型起步方式 | 五模板渲染；骨架可复制 |
+| C-028 | F-001, F-002, F-004 | direct | 默认值与新类 | tokens 计数、UiShell 底色 |
+| C-029 | F-003 | direct | 新组件与重构 | typecheck / build / 展示页 |
+| C-030 | F-011 | direct | 模板重排 | 五套渲染、与画板核对 |
 | C-027 | F-011 | direct | 页签顺序与命名 | 路由 |
 
 ## 实现映射
@@ -315,6 +332,7 @@ updated: "2026-09-03"
 | E-17 | R-043, R-012 | grep 第二层源码与 layout.css 无 `overflow: auto/scroll`；Playwright：展示页 window 不可滚（scrollHeight = clientHeight）、`.ds-scroll .el-scrollbar__wrap` 可滚，侧栏为 ElScrollbar；点击锚点「Feedback」后 wrap.scrollTop = 12593 且高亮同步、window.scrollY = 0；390 宽侧栏横向条可滚且页面无横向溢出；原型模板 500 行数据下 window 不滚、`.ui-shell__scroll` wrap 可滚、侧栏 ElScrollbar 存在；check 脚本对 `overflow:auto` 报错规则已加入；`vue-tsc` 通过 | pass | 2026-09-02 |
 | E-18 | R-037（布局配置）, R-041, R-012, R-007, R-042 | `vue-tsc` 通过、`pnpm build` 产出（tokens 75 语义）；Playwright `#/custom`：页签顺序 设计变量 / 组件物料 / 布局范式 / 布局配置，6 张配置卡、25 个滑块、13 个取色器，锚点 外壳 1 / 页面级 2 / 复合组件 3；UiStatCard 卡片调 `--space-module-pad` 滑块后舞台内 padding 24→32px、数值高亮，恢复默认后回 24px；组件物料页自研一节改为跳转卡；无 JS 错误。截图 `doc/showcase-config.png`。画板新增「自研组件（配置卡）」与「自研组件精修稿」两块 | pass | 2026-09-03 |
 | E-19 | R-044, R-037 | Playwright `#/templates`：页签 设计变量 / 组件物料 / 自研组件 / 布局范式 / 布局配置；五个模板按钮与左锚点一致；01 → 4 张 UiStatCard + 4 个分析 / 概况 / 进度模块；02 表格 3 行 + 分页；03 统计 4 + 表格；04 ElTree 7 节点 + 表格；05 ElTabs 4 项（环境监测激活）+ 表格；侧栏高亮与面包屑随模板切换（企业档案 / 运行监测 / 组织与片区 / 环境监测）；芯片 page 32px / module 24px / header 56px / sidebar 240px / collapsed 64px；无 JS 错误。顺带修复：ElPagination layout 含 sizes 时须 v-model:page-size 否则不渲染（README 已注明）。截图 `doc/showcase-templates-01.png`、`showcase-templates-04.png` | pass | 2026-09-03 |
+| E-20 | R-045, R-041, R-044 | 读取参考 `style.css`（`--hy-space-control 8 / content 12 / module-inner 16 / module 16 / page 20 / section 24`、`--hy-surface-muted #f3f5f5`）与 LayoutTemplateShowcase 模板结构；`vue-tsc` 通过、`pnpm build` 78 语义 token；Playwright `#/templates`：芯片 page 20px / module 16px / header 60px / sidebar 230px / collapsed 66px，01 统计模板渲染 4 张统计卡 + 2×2 分析区（柱图 7 柱、分布 4 条、概况 4 格、进度 4 条），02～05 表格 / 树 / 页签渲染正常，无 JS 错误；与画板「布局配置精修稿」逐块对照一致。截图 `doc/showcase-templates-01.png`、`-04.png` | pass | 2026-09-03 |
 | E-08 | R-028 | `doc/frontend-layered-design.md` §1～§10 与 RV-002 逐节核对；IT-003 同步 §3 目录树与 §9 展示页（RV-003）；IT-004 同步 §6 路由与 §9 方向 A（RV-004）：Vue 3 + Element Plus、Vite 8 + Tailwind 4、monorepo 目录、CDN 原型形态、插件三技能、展示页面、实施状态 | pass | 2026-09-02 |
 
 ## 历史索引

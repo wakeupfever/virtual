@@ -34,7 +34,8 @@
     "ui-state",
     "ui-list-item",
     "ui-filter-bar",
-    "ui-stat-card"
+    "ui-stat-card",
+    "ui-module-header"
   ],
   "html": [
     "div",

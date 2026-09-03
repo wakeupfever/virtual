@@ -70,6 +70,17 @@
 .l-span-8 { grid-column: span 8; }
 .l-span-12 { grid-column: span 12; }
 
+/* 主区 + 侧面板：1.3fr / 0.7fr（分析区、详情侧栏） */
+.l-grid--main-aside { grid-template-columns: minmax(0, 1.3fr) minmax(var(--layout-aside-w), 0.7fr); }
+
+/* 次级填充块：模块内的小格（概况项、统计项） */
+.l-tile { background: var(--color-bg-subtle); border-radius: var(--radius-md); padding: var(--space-component-gap); }
+
+/* 柱状条容器：子项 .l-bar 高度由数据决定（:style 绑定百分比） */
+.l-bars { display: flex; align-items: stretch; flex: 1 1 auto; gap: var(--space-component-gap); background: var(--color-bg-subtle); border-radius: var(--radius-md); padding: var(--space-module-pad); min-height: 128px; }
+.l-bars > * { flex: 1; min-width: 0; display: flex; flex-direction: column; align-items: center; justify-content: flex-end; gap: var(--space-inline-gap); }
+.l-bar { width: 100%; max-width: var(--space-10); border-radius: var(--radius-md) var(--radius-md) 0 0; background: var(--color-primary); }
+
 /* 左右分栏：侧栏固定宽 + 主区自适应 */
 .l-split {
   display: grid;
@@ -77,6 +88,7 @@
   gap: var(--space-module-gap);
 }
 .l-split--reverse { grid-template-columns: minmax(0, 1fr) var(--layout-sidebar-w); }
+.l-split--aside { grid-template-columns: var(--layout-aside-w) minmax(0, 1fr); }
 
 /* ---- 组件级 ---- */
 
@@ -137,8 +149,10 @@
 /* ---- 响应式：中屏以下栅格与分栏降级为单列 ---- */
 @media (max-width: 768px) {
   .l-grid,
+  .l-grid--main-aside,
   .l-split,
-  .l-split--reverse { grid-template-columns: minmax(0, 1fr); }
+  .l-split--reverse,
+  .l-split--aside { grid-template-columns: minmax(0, 1fr); }
   .l-span-2, .l-span-3, .l-span-4, .l-span-6, .l-span-8, .l-span-12 { grid-column: auto; }
   .l-page { padding-inline: var(--space-module-pad); }
 }

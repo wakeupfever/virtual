@@ -16,7 +16,7 @@
 ## 2. 硬性规则（三层通用）
 
 - 禁止裸写 `<button> <input> <select> <textarea> <table> <form> <dialog>`，用白名单组件（`packages/design-system/whitelist.json`）
-- 禁止 inline style、`<style>`（原型内）、裸色值（`#xxx` / `rgb()`）、裸像素值；只用 `--color-*` `--space-*` `--layout-*` `--font-*` `--radius-*` `--shadow-*` 语义 token
+- 禁止 inline style、`<style>`（原型内）、裸色值（`#xxx` / `rgb()`）、裸像素值；只用 `--color-*` `--space-*` `--layout-*` `--font-*` `--radius-*` `--shadow-*` 语义 token。唯一例外：`:style` 绑定**数据驱动的尺寸**（柱高、进度宽等百分比），且只能配合 `.l-bars` / `.l-bar` 这类第一层容器使用
 - 禁止引用原始刻度 `--space-N` `--palette-*`；禁止改 `--el-*` 变量
 - 禁止手写 `display: flex / grid` 和 Tailwind 布局 / 任意值类（`flex` `grid` `w-[..]` `p-4` …），只用 `.l-*` 布局类
 - 白名单外的 Element Plus 组件不能用；需要时先提议

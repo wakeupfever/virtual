@@ -24,7 +24,7 @@
   --space-16: 64px;
 
   --palette-white: #ffffff;
-  --palette-gray-50: #f7f9f9;
+  --palette-gray-50: #f3f5f5;
   --palette-gray-100: #f0f3f4;
   --palette-gray-200: #e6e8e8;
   --palette-gray-300: #d5dcdf;
@@ -57,6 +57,7 @@
   --color-bg-surface: var(--palette-white);
   --color-bg-subtle: var(--palette-gray-50);   /* 斑马纹、hover 行 */
   --color-bg-muted: var(--palette-gray-100);   /* 禁用、次级填充 */
+  --color-bg-canvas: var(--palette-gray-100);  /* 应用壳内容区底色（模块白卡浮于其上） */
   --color-bg-accent: var(--palette-cyan-50);   /* 主色柔和底：选中行、强调面板 */
   --color-bg-overlay: var(--palette-white);
   --color-bg-mask: rgba(0, 0, 0, 0.5);
@@ -86,14 +87,14 @@
   --color-info: var(--palette-gray-600);
 
   /* 间距 · page（内容区与外壳、页面主要区块之间） */
-  --space-page-gap: calc(var(--space-10) * var(--density));
-  --space-page-pad-x: calc(var(--space-8) * var(--density));
-  --space-page-pad-y: calc(var(--space-6) * var(--density));
-  --space-page-title: calc(var(--space-6) * var(--density));
+  --space-page-gap: calc(var(--space-6) * var(--density));
+  --space-page-pad-x: calc(var(--space-5) * var(--density));
+  --space-page-pad-y: calc(var(--space-5) * var(--density));
+  --space-page-title: calc(var(--space-4) * var(--density));
 
   /* 间距 · module（卡片、面板、表单区块） */
-  --space-module-gap: calc(var(--space-6) * var(--density));
-  --space-module-pad: calc(var(--space-6) * var(--density));
+  --space-module-gap: calc(var(--space-4) * var(--density));
+  --space-module-pad: calc(var(--space-4) * var(--density));
   --space-module-title: calc(var(--space-4) * var(--density));
 
   /* 间距 · component（组件之间与组件内部） */
@@ -107,9 +108,10 @@
   --space-inline-pad: var(--space-1);
 
   /* 布局尺寸（不是间距） */
-  --layout-sidebar-w: 240px;
-  --layout-sidebar-w-collapsed: 64px;
-  --layout-header-h: 56px;
+  --layout-sidebar-w: 230px;
+  --layout-sidebar-w-collapsed: 66px;
+  --layout-header-h: 60px;
+  --layout-aside-w: 320px;          /* 分析区 / 左树等侧栏面板的最小宽 */
   --layout-content-max: 1440px;
   --layout-content-pad: var(--space-page-pad-x);
   --layout-form-label-w: 120px;
@@ -131,11 +133,12 @@
   --font-family: "Helvetica Neue", Helvetica, "PingFang SC", "Hiragino Sans GB",
     "Microsoft YaHei", "微软雅黑", Arial, sans-serif;
   --font-family-mono: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
-  --font-size-display: 28px;      /* 统计数值等强调数字 */
+  --font-size-display: 24px;      /* 统计数值等强调数字 */
   --font-size-page-title: 20px;
   --font-size-module-title: 16px;
   --font-size-body: 14px;
   --font-size-caption: 12px;
+  --font-size-micro: 10px;        /* 卡片说明、芯片、图表刻度 */
   --line-height-tight: 1.3;
   --line-height-body: 1.6;
   --font-weight-regular: 400;
@@ -143,9 +146,9 @@
   --font-weight-bold: 600;
 
   /* 圆角 */
-  --radius-sm: 3px;
+  --radius-sm: 4px;
   --radius-md: 6px;
-  --radius-lg: 10px;
+  --radius-lg: 12px;
   --radius-full: 9999px;
 
   /* 阴影 */
@@ -234,6 +237,7 @@ html:root {
   --color-bg-surface: var(--palette-gray-900);
   --color-bg-subtle: #1b2b32;
   --color-bg-muted: #22353d;
+  --color-bg-canvas: #131f25;
   --color-bg-accent: #0f3040;
   --color-bg-overlay: var(--palette-gray-900);
   --color-bg-mask: rgba(0, 0, 0, 0.7);

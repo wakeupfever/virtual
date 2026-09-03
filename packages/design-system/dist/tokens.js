@@ -1,6 +1,6 @@
 /* 由 scripts/build-tokens.mjs 自动生成，勿手改；真值在 tokens.css */
 window.DS_TOKENS = {
-  "generatedAt": "2026-09-03T04:00:01.503Z",
+  "generatedAt": "2026-09-03T04:42:58.730Z",
   "source": "tokens.css",
   "groups": [
     {
@@ -32,6 +32,12 @@ window.DS_TOKENS = {
           "value": "var(--palette-gray-100)",
           "comment": "禁用、次级填充",
           "dark": "#22353d"
+        },
+        {
+          "name": "--color-bg-canvas",
+          "value": "var(--palette-gray-100)",
+          "comment": "应用壳内容区底色（模块白卡浮于其上）",
+          "dark": "#131f25"
         },
         {
           "name": "--color-bg-accent",
@@ -157,37 +163,37 @@ window.DS_TOKENS = {
       "tokens": [
         {
           "name": "--space-page-gap",
-          "value": "calc(var(--space-10) * var(--density))",
+          "value": "calc(var(--space-6) * var(--density))",
           "comment": "",
           "dark": null
         },
         {
           "name": "--space-page-pad-x",
-          "value": "calc(var(--space-8) * var(--density))",
+          "value": "calc(var(--space-5) * var(--density))",
           "comment": "",
           "dark": null
         },
         {
           "name": "--space-page-pad-y",
-          "value": "calc(var(--space-6) * var(--density))",
+          "value": "calc(var(--space-5) * var(--density))",
           "comment": "",
           "dark": null
         },
         {
           "name": "--space-page-title",
-          "value": "calc(var(--space-6) * var(--density))",
+          "value": "calc(var(--space-4) * var(--density))",
           "comment": "",
           "dark": null
         },
         {
           "name": "--space-module-gap",
-          "value": "calc(var(--space-6) * var(--density))",
+          "value": "calc(var(--space-4) * var(--density))",
           "comment": "",
           "dark": null
         },
         {
           "name": "--space-module-pad",
-          "value": "calc(var(--space-6) * var(--density))",
+          "value": "calc(var(--space-4) * var(--density))",
           "comment": "",
           "dark": null
         },
@@ -243,20 +249,26 @@ window.DS_TOKENS = {
       "tokens": [
         {
           "name": "--layout-sidebar-w",
-          "value": "240px",
+          "value": "230px",
           "comment": "",
           "dark": null
         },
         {
           "name": "--layout-sidebar-w-collapsed",
-          "value": "64px",
+          "value": "66px",
           "comment": "",
           "dark": null
         },
         {
           "name": "--layout-header-h",
-          "value": "56px",
+          "value": "60px",
           "comment": "",
+          "dark": null
+        },
+        {
+          "name": "--layout-aside-w",
+          "value": "320px",
+          "comment": "分析区 / 左树等侧栏面板的最小宽",
           "dark": null
         },
         {
@@ -373,7 +385,7 @@ window.DS_TOKENS = {
         },
         {
           "name": "--font-size-display",
-          "value": "28px",
+          "value": "24px",
           "comment": "统计数值等强调数字",
           "dark": null
         },
@@ -399,6 +411,12 @@ window.DS_TOKENS = {
           "name": "--font-size-caption",
           "value": "12px",
           "comment": "",
+          "dark": null
+        },
+        {
+          "name": "--font-size-micro",
+          "value": "10px",
+          "comment": "卡片说明、芯片、图表刻度",
           "dark": null
         },
         {
@@ -441,7 +459,7 @@ window.DS_TOKENS = {
       "tokens": [
         {
           "name": "--radius-sm",
-          "value": "3px",
+          "value": "4px",
           "comment": "",
           "dark": null
         },
@@ -453,7 +471,7 @@ window.DS_TOKENS = {
         },
         {
           "name": "--radius-lg",
-          "value": "10px",
+          "value": "12px",
           "comment": "",
           "dark": null
         },
@@ -607,7 +625,7 @@ window.DS_TOKENS = {
         },
         {
           "name": "--palette-gray-50",
-          "value": "#f7f9f9",
+          "value": "#f3f5f5",
           "comment": "",
           "dark": null
         },
@@ -1090,7 +1108,8 @@ window.DS_TOKENS = {
       "ui-state",
       "ui-list-item",
       "ui-filter-bar",
-      "ui-stat-card"
+      "ui-stat-card",
+      "ui-module-header"
     ],
     "html": [
       "div",
@@ -1140,6 +1159,7 @@ window.DS_TOKENS = {
       "--color-bg-surface": "var(--palette-gray-900)",
       "--color-bg-subtle": "#1b2b32",
       "--color-bg-muted": "#22353d",
+      "--color-bg-canvas": "#131f25",
       "--color-bg-accent": "#0f3040",
       "--color-bg-overlay": "var(--palette-gray-900)",
       "--color-bg-mask": "rgba(0, 0, 0, 0.7)",
@@ -1160,7 +1180,7 @@ window.DS_TOKENS = {
     }
   },
   "counts": {
-    "semantic": 75,
+    "semantic": 78,
     "raw": 28,
     "mapping": 56
   }

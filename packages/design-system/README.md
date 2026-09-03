@@ -26,18 +26,18 @@ app.use(ElementPlus).use(DesignSystemUI)
 
 | 类别 | 命名 | 可用值 |
 |---|---|---|
-| 颜色 bg | `--color-bg-{page\|surface\|subtle\|muted\|accent\|overlay\|mask}` | 页面底、卡片表面、斑马纹/hover、禁用/次级填充、主色柔和底（选中行/强调面板）、浮层、遮罩 |
+| 颜色 bg | `--color-bg-{page\|surface\|subtle\|muted\|canvas\|accent\|overlay\|mask}` | 页面底（文档 / 原型外壳外）、卡片表面、斑马纹/hover/次级填充块、禁用、**应用壳内容区底（模块白卡浮于其上）**、主色柔和底、浮层、遮罩 |
 | 颜色 text | `--color-text-{default\|secondary\|muted\|placeholder\|inverse}` | |
 | 颜色 border | `--color-border-{default\|muted}` | |
 | 颜色 icon | `--color-icon-{default\|muted}` | |
 | 功能色 | `--color-{primary\|success\|warning\|danger\|info}`，`--color-primary-hover`，`--color-danger-hover` | |
-| 间距 page | `--space-page-{gap\|pad-x\|pad-y\|title}` | 页面区块之间 / 内容区内边距 / 页头到正文 |
-| 间距 module | `--space-module-{gap\|pad\|title}` | 卡片之间 / 卡片内边距 / 卡片标题到内容 |
+| 间距 page | `--space-page-{gap\|pad-x\|pad-y\|title}` | 页面区块之间 24 / 内容区内边距 20 / 页头到正文 16 |
+| 间距 module | `--space-module-{gap\|pad\|title}` | 卡片之间 16 / 卡片内边距 16 / 卡片标题到内容 16 |
 | 间距 component | `--space-component-{gap\|pad-x\|pad-y\|title}` | 按钮组、表单项之间 / 组件内边距 / label 到控件 |
 | 间距 inline | `--space-inline-{gap\|pad}` | 图标与文字 / tag 内边距 |
-| 布局尺寸 | `--layout-{sidebar-w\|sidebar-w-collapsed\|header-h\|content-max\|content-pad\|form-label-w\|control-w\|control-w-sm}`，`--grid-cols`，`--grid-gap` | |
+| 布局尺寸 | `--layout-{sidebar-w\|sidebar-w-collapsed\|header-h\|aside-w\|content-max\|content-pad\|form-label-w\|control-w\|control-w-sm}`，`--grid-cols`，`--grid-gap` | 默认 230 / 66 / 60 / 320（对齐参考站 park-mgt-web） |
 | 层级 | `--z-{header\|sidebar\|drawer\|dialog\|toast}` | |
-| 字体 | `--font-family`，`--font-size-{display\|page-title\|module-title\|body\|caption}`，`--line-height-{tight\|body}`，`--font-weight-{regular\|medium\|bold}` | |
+| 字体 | `--font-family`，`--font-size-{display\|page-title\|module-title\|body\|caption\|micro}`（24 / 20 / 16 / 14 / 12 / 10），`--line-height-{tight\|body}`，`--font-weight-{regular\|medium\|bold}` | |
 | 圆角 | `--radius-{sm\|md\|lg\|full}` | |
 | 阴影 | `--shadow-{sm\|md\|lg}` | |
 | 边框 | `--border-w`，`--border-w-thick` | |
@@ -60,7 +60,10 @@ app.use(ElementPlus).use(DesignSystemUI)
 | `.l-module-header` | 模块标题行 | — |
 | `.l-stack` | 纵向堆叠 | `--tight`、`--loose` |
 | `.l-grid` | 栅格，默认 12 列 | `--cols-2/3/4`、`--tight`；子项 `.l-span-2/3/4/6/8/12` |
-| `.l-split` | 侧栏 + 主区两栏 | `--reverse` |
+| `.l-split` | 侧栏 + 主区两栏（侧栏宽 `--layout-sidebar-w`） | `--reverse`、`--aside`（侧栏宽 `--layout-aside-w`，左树右表） |
+| `.l-grid--main-aside` | 主区 1.3fr + 侧面板 0.7fr（分析区 2×2） | — |
+| `.l-tile` | 模块内的次级填充小格（概况项） | — |
+| `.l-bars` / `.l-bar` | 柱状条容器 / 柱；柱高由数据 `:style="{ height }"` 绑定 | — |
 | `.l-cluster` | 横向可换行（按钮组、筛选条） | `--end`、`--between` |
 | `.l-toolbar` | 表格上方工具条 | — |
 | `.l-form` | 表单区块，label 宽度取 token | — |
@@ -157,6 +160,10 @@ app.use(ElementPlus).use(DesignSystemUI)
 </UiState>
 ```
 
+### `UiModuleHeader`（composites）
+
+模块标题行：`title`（14 / 600）+ `desc`（12 / muted）+ `meta` 插槽（右侧，主色 12 / 500）。五套页面模板每个模块都用它。
+
 ### `UiListItem`（composites）
 
 列表项：头像 / 标题 / 副标题 …… 状态胶囊 + 操作 + 箭头。由 `.l-cluster` + `.l-inline` + `.l-stack--tight` + ElAvatar + ElTag 拼成。`active` 用 `--color-bg-accent` 高亮当前项，`divided` 加分割线。
@@ -180,8 +187,8 @@ app.use(ElementPlus).use(DesignSystemUI)
 |---|---|---|
 | `label` / `value` / `unit` | | 数值为 number 时自动千分位；数值字号 `--font-size-display` |
 | slot `icon` | | 右上角图标（accent 圆角底） |
-| `trend` | `number?` | 百分比，正为上升；0 显示「持平」；胶囊带箭头 |
-| `upIsGood` | `boolean` | 上升是否为好（决定颜色），默认 true |
+| `trend` | `number?` | 百分比；0 显示「持平」；胶囊在右上角（给 `icon` 插槽时下移到数值行） |
+| `upIsGood` | `boolean?` | 不传 → 主色胶囊（参考站风格）；传了 → 按好坏用语义色 |
 | `hint` | `string?` | 说明 |
 
 ## 页面排版模板（布局配置）
