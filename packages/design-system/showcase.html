@@ -22,7 +22,7 @@
 
 <!-- 本页是 design-system 包内部的文档站，允许 <style> 与 :style；所有值仍只引用 token -->
 <style>
-  :root { --ds-content-max: 1200px; --ds-content-max-wide: 1560px; --ds-side-w: 220px; --ds-toc-w: 200px; --ds-card-min: 440px; }
+  :root { --ds-content-max: 1200px; --ds-content-max-wide: 1560px; --ds-side-w: 220px; --ds-toc-w: 200px; --ds-card-min: 440px; --ds-panel-w: 360px; --ds-panel-max: 344px; }
 
   /* 外壳 */
   .ds-top { position: sticky; top: 0; z-index: var(--z-header); height: var(--layout-header-h); background: color-mix(in srgb, var(--color-bg-surface) 88%, transparent); backdrop-filter: saturate(1.4) blur(10px); border-bottom: var(--border-w) solid var(--color-border-muted); display: flex; align-items: center; gap: var(--space-page-gap); padding: 0 var(--space-page-pad-x); }
@@ -50,6 +50,7 @@
   .ds-side__view { padding: var(--space-module-pad) var(--space-3); display: flex; flex-direction: column; gap: 2px; }
   .ds-scroll { flex: 1; min-width: 0; height: 100%; }
   .ds-side__label { font-size: 11px; color: var(--color-text-muted); padding: 0 var(--space-3) var(--space-2); letter-spacing: 0.5px; }
+  .ds-side__label--sub { padding-top: var(--space-4); color: var(--color-text-placeholder); }
   .ds-side__item { padding: 7px var(--space-3); border-radius: var(--radius-md); color: var(--color-text-secondary); cursor: pointer; display: flex; justify-content: space-between; align-items: center; }
   .ds-side__item:hover { background: var(--color-bg-subtle); color: var(--color-text-default); }
   .ds-side__item.is-active { background: color-mix(in srgb, var(--color-primary) 10%, var(--color-bg-surface)); color: var(--color-primary); font-weight: var(--font-weight-medium); }
@@ -150,58 +151,91 @@
 
   /* 自研组件 · 配置卡 */
   .ds-cfg { display: flex; flex-direction: column; overflow: hidden; }
-  .ds-cfg__head { display: flex; align-items: center; justify-content: space-between; gap: var(--space-3); padding: 14px var(--space-5); border-bottom: var(--border-w) solid var(--color-bg-muted); }
-  .ds-cfg__name { display: flex; align-items: center; gap: var(--space-2); font-size: 15px; font-weight: var(--font-weight-medium); }
-  .ds-cfg__links { display: flex; gap: var(--space-4); font-size: var(--font-size-caption); }
+  .ds-cfg__head { display: flex; align-items: baseline; justify-content: space-between; gap: var(--space-3); padding: var(--space-4) var(--space-6); border-bottom: var(--border-w) solid var(--color-bg-muted); }
+  .ds-cfg__name { display: flex; align-items: baseline; gap: var(--space-2); font-size: 16px; font-weight: var(--font-weight-bold); }
+  .ds-cfg__cn { font-size: var(--font-size-caption); font-weight: var(--font-weight-regular); color: var(--color-text-muted); }
+  .ds-cfg__links { display: flex; gap: var(--space-4); font-size: var(--font-size-caption); flex: none; }
   .ds-cfg__links a, .ds-cfg__links span { color: var(--color-primary); cursor: pointer; }
-  .ds-cfg__body { display: grid; grid-template-columns: minmax(0, 1fr) 340px; }
-  .ds-cfg__stage { padding: var(--space-6) var(--space-5); background: var(--color-bg-subtle); display: flex; flex-direction: column; gap: var(--space-4); border-right: var(--border-w) solid var(--color-bg-muted); min-width: 0; }
+  .ds-cfg__body { display: grid; grid-template-columns: minmax(0, 1fr) var(--ds-panel-w); }
+  .ds-cfg__stage { padding: var(--space-8) var(--space-6); background: var(--color-bg-subtle); display: flex; flex-direction: column; gap: var(--space-5); border-right: var(--border-w) solid var(--color-bg-muted); min-width: 0; }
+  .ds-cfg__demo { flex: 1; display: flex; flex-direction: column; justify-content: center; min-width: 0; }
   .ds-cfg__anatomy { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; font-size: 11px; color: var(--color-text-muted); }
-  .ds-cfg__anatomy .ds-pill { padding: 1px 8px; border-radius: var(--radius-full); border: var(--border-w) solid var(--color-border-default); background: var(--color-bg-surface); font-family: var(--font-family-mono); color: var(--color-text-secondary); }
-  .ds-cfg__panel { padding: var(--space-5); display: flex; flex-direction: column; gap: var(--space-3); font-size: var(--font-size-caption); }
-  .ds-cfg__panel-head { display: flex; align-items: center; justify-content: space-between; font-weight: var(--font-weight-medium); color: var(--color-text-default); }
-  .ds-cfg__panel-head .ds-reset { color: var(--color-primary); cursor: pointer; font-weight: var(--font-weight-regular); }
+  .ds-cfg__anatomy .ds-pill { padding: 1px 8px; border-radius: var(--radius-full); border: var(--border-w) solid var(--color-border-muted); background: var(--color-bg-surface); font-family: var(--font-family-mono); color: var(--color-text-secondary); }
+  .ds-cfg__panel { padding: var(--space-5) var(--space-5) var(--space-4); display: flex; flex-direction: column; gap: var(--space-3); min-width: 0; }
+  .ds-cfg__panel-head { display: flex; align-items: baseline; gap: var(--space-2); font-size: var(--font-size-caption); }
+  .ds-cfg__panel-head b { font-weight: var(--font-weight-medium); color: var(--color-text-default); }
+  .ds-cfg__panel-head .ds-label { font-size: 11px; }
+  .ds-cfg__panel-head .ds-reset { font-size: 11px; color: var(--color-primary); cursor: pointer; flex: none; margin-left: auto; }
   .ds-cfg__panel-head .ds-reset.is-dim { color: var(--color-text-placeholder); cursor: default; }
-  .ds-tk { display: grid; grid-template-columns: minmax(0, 1fr) 72px; gap: var(--space-2); align-items: center; }
-  .ds-tk__name { font-family: var(--font-family-mono); color: var(--color-text-default); cursor: pointer; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .ds-cfg__tokens .el-scrollbar__view { display: flex; flex-direction: column; padding-right: var(--space-2); }
+  .ds-tk { display: grid; grid-template-columns: minmax(0, 1fr) 84px 46px; gap: var(--space-2); align-items: center; min-height: 26px; }
+  .ds-tk + .ds-tk { border-top: var(--border-w) solid var(--color-bg-subtle); }
+  .ds-tk__name { font-family: var(--font-family-mono); font-size: 11px; color: var(--color-text-secondary); cursor: pointer; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
   .ds-tk__name:hover { color: var(--color-primary); }
-  .ds-tk__ctl { display: flex; flex-direction: column; gap: 2px; min-width: 0; }
-  .ds-tk__ctl .el-slider { --el-slider-height: 4px; --el-slider-button-size: 14px; margin: 0 6px; }
-  .ds-tk__ctl-color { display: flex; align-items: center; gap: var(--space-2); }
-  .ds-tk__ctl-color .el-color-picker { --el-color-picker-size: 20px; }
-  .ds-tk__val { text-align: right; font-family: var(--font-family-mono); color: var(--color-text-secondary); white-space: nowrap; }
-  .ds-tk__val.is-tweaked { color: var(--color-primary); }
-  .ds-cfg__note { font-size: 11px; color: var(--color-text-muted); line-height: var(--line-height-body); border-top: var(--border-w) solid var(--color-bg-muted); padding-top: var(--space-3); }
-  .ds-cfg__foot { display: grid; grid-template-columns: 1fr 1fr; border-top: var(--border-w) solid var(--color-bg-muted); }
-  .ds-cfg__props { padding: var(--space-4) var(--space-5); display: flex; flex-direction: column; gap: var(--space-2); border-right: var(--border-w) solid var(--color-bg-muted); font-size: var(--font-size-caption); }
-  .ds-cfg__props-grid { display: grid; grid-template-columns: 130px 150px 1fr; gap: 6px 12px; color: var(--color-text-secondary); }
+  .ds-tk__ctl { display: flex; align-items: center; min-width: 0; }
+  .ds-tk__ctl .el-slider { --el-slider-height: 3px; --el-slider-button-size: 12px; width: 100%; margin: 0 6px; }
+  .ds-tk__ctl .el-color-picker { --el-color-picker-size: 20px; }
+  .ds-tk__val { text-align: right; font-family: var(--font-family-mono); font-size: 11px; color: var(--color-text-muted); white-space: nowrap; }
+  .ds-tk__val.is-tweaked { color: var(--color-primary); font-weight: var(--font-weight-medium); }
+  .ds-cfg__note { font-size: 11px; color: var(--color-text-placeholder); line-height: var(--line-height-body); }
+  .ds-cfg__foot { display: grid; grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr); gap: var(--space-8); padding: var(--space-5) var(--space-6) var(--space-6); border-top: var(--border-w) solid var(--color-bg-muted); }
+  .ds-cfg__props, .ds-cfg__usage { display: flex; flex-direction: column; gap: var(--space-3); font-size: var(--font-size-caption); min-width: 0; }
+  .ds-cfg__props-grid { display: grid; grid-template-columns: 120px 140px 1fr; gap: var(--space-2) var(--space-4); color: var(--color-text-secondary); }
   .ds-cfg__props-grid .ds-mono { color: var(--color-text-default); }
-  .ds-cfg__usage { padding: var(--space-4) var(--space-5); display: flex; flex-direction: column; gap: var(--space-2); font-size: var(--font-size-caption); }
-  .ds-cfg__code { font-family: var(--font-family-mono); color: var(--color-text-secondary); background: var(--color-bg-subtle); border-radius: var(--radius-md); padding: var(--space-3); line-height: 1.7; white-space: pre-wrap; word-break: break-all; cursor: pointer; }
+  .ds-cfg__meta { font-size: 11px; color: var(--color-text-muted); display: flex; gap: var(--space-2); }
+  .ds-cfg__meta .ds-mono { color: var(--color-text-secondary); }
+  .ds-cfg__code { font-family: var(--font-family-mono); font-size: 11px; color: var(--color-text-secondary); background: var(--color-bg-subtle); border-radius: var(--radius-md); padding: var(--space-3); line-height: 1.7; white-space: pre-wrap; word-break: break-all; cursor: pointer; }
   .ds-cfg__code:hover { color: var(--color-text-default); }
-  .ds-cfg__label { font-weight: var(--font-weight-medium); color: var(--color-text-default); }
-  @media (max-width: 1100px) { .ds-cfg__body { grid-template-columns: 1fr; } .ds-cfg__stage { border-right: none; border-bottom: var(--border-w) solid var(--color-bg-muted); } .ds-cfg__foot { grid-template-columns: 1fr; } .ds-cfg__props { border-right: none; border-bottom: var(--border-w) solid var(--color-bg-muted); } }
+  .ds-cfg__label { font-size: 11px; letter-spacing: 0.4px; font-weight: var(--font-weight-medium); color: var(--color-text-muted); }
+  @media (max-width: 1100px) {
+    .ds-cfg__body { grid-template-columns: 1fr; }
+    .ds-cfg__stage { border-right: none; border-bottom: var(--border-w) solid var(--color-bg-muted); }
+    .ds-cfg__foot { grid-template-columns: 1fr; gap: var(--space-6); }
+    /* 面板落到舞台下方后横向很宽：token 行改多列排布，避免一行只放一个 */
+    .ds-cfg__tokens .el-scrollbar__view { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 0 var(--space-8); align-content: start; }
+    .ds-tk { border-top: var(--border-w) solid var(--color-bg-subtle); }
+  }
+
+  /* 整页模板视图（#/page/<key>）：UiShell 撑满视口，控制条浮在右下角 */
+  .ds-full { height: 100vh; height: 100dvh; }
+  .ds-full > .ui-shell { height: 100%; }
+  /* 控制条放左下角：右下角是分页 / 表格操作区，整页模板里最容易被挡的就是那里 */
+  .ds-fab { position: fixed; left: var(--space-page-pad-x); bottom: var(--space-page-pad-y); z-index: var(--z-drawer); display: flex; align-items: center; gap: var(--space-inline-gap); padding: var(--space-inline-pad) var(--space-component-pad-x); border-radius: var(--radius-full); background: var(--color-bg-surface); border: var(--border-w) solid var(--color-border-muted); box-shadow: var(--shadow-lg); font-size: var(--font-size-caption); }
+  .ds-fab__name { min-width: 96px; text-align: center; font-weight: var(--font-weight-medium); white-space: nowrap; }
+  .ds-fab__sep { width: var(--border-w); align-self: stretch; background: var(--color-border-muted); }
+  .ds-fab .ds-seg__item { padding: 3px 10px; }
+  @media (max-width: 720px) { .ds-fab { right: var(--space-page-pad-x); flex-wrap: wrap; justify-content: center; border-radius: var(--radius-lg); } .ds-fab__sep { display: none; } }
+
+  /* 布局配置 · 模板索引卡 */
+  .ds-tplcard { cursor: pointer; transition: border-color .15s, box-shadow .15s; }
+  .ds-tplcard:hover { border-color: var(--color-primary); box-shadow: var(--shadow-md); }
+  .ds-tplcard__main { display: flex; align-items: flex-start; gap: var(--space-6); padding: var(--space-6); }
+  .ds-tplcard__no { flex: none; width: var(--layout-icon-lg); height: var(--layout-icon-lg); display: flex; align-items: center; justify-content: center; border-radius: var(--radius-md); background: var(--color-bg-accent); color: var(--color-primary); font-family: var(--font-family-mono); font-weight: var(--font-weight-bold); }
+  .ds-tplcard__body { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: var(--space-2); }
+  .ds-tplcard__title { font-size: 18px; font-weight: var(--font-weight-bold); }
+  .ds-tplcard__desc { font-size: var(--font-size-caption); color: var(--color-text-secondary); line-height: var(--line-height-body); }
+  .ds-tplcard__open { flex: none; color: var(--color-text-placeholder); font-size: var(--layout-icon-sm); }
+  .ds-tplcard:hover .ds-tplcard__open { color: var(--color-primary); }
+  .ds-tplcard__foot { display: flex; align-items: center; justify-content: space-between; gap: var(--space-4); flex-wrap: wrap; padding: var(--space-4) var(--space-6); border-top: var(--border-w) solid var(--color-bg-muted); background: var(--color-bg-subtle); cursor: default; }
 
   /* 布局配置 · 页面排版模板 */
-  .ds-tpl__bar { display: flex; align-items: center; justify-content: space-between; gap: var(--space-4); flex-wrap: wrap; }
-  .ds-tpl__tabs { display: flex; border: var(--border-w) solid var(--color-border-default); border-radius: var(--radius-md); overflow: hidden; }
-  .ds-tpl__tab { padding: 6px 14px; font-size: 13px; color: var(--color-text-secondary); cursor: pointer; white-space: nowrap; border-right: var(--border-w) solid var(--color-border-muted); }
-  .ds-tpl__tab:last-child { border-right: none; }
-  .ds-tpl__tab:hover { background: var(--color-bg-subtle); }
-  .ds-tpl__tab.is-active { background: var(--color-primary); color: var(--color-text-inverse); }
-  .ds-tpl__meta { display: flex; gap: var(--space-2); flex-wrap: wrap; }
-  .ds-tpl__chip { font-family: var(--font-family-mono); font-size: 11px; padding: 2px 8px; border-radius: var(--radius-sm); background: var(--color-bg-muted); color: var(--color-text-secondary); cursor: pointer; }
-  .ds-tpl__chip:hover { color: var(--color-primary); }
-  .ds-tpl__desc { display: flex; align-items: baseline; gap: var(--space-3); font-size: var(--font-size-caption); color: var(--color-text-muted); }
-  .ds-tpl__desc strong { font-size: var(--font-size-body); color: var(--color-text-default); }
-  .ds-tpl__stage { height: 720px; border: var(--border-w) solid var(--color-border-muted); border-radius: var(--radius-lg); overflow: hidden; box-shadow: var(--shadow-sm); background: var(--color-bg-page); }
-  .ds-tpl__stage .ui-shell { height: 100%; }
-  .ds-tpl__foot { display: flex; align-items: center; justify-content: space-between; gap: var(--space-4); flex-wrap: wrap; }
-  @media (max-width: 960px) { .ds-tpl__stage { height: 560px; } }
+  .ds-tpl__chip { display: inline-flex; align-items: baseline; gap: 6px; font-family: var(--font-family-mono); font-size: 11px; color: var(--color-text-placeholder); cursor: pointer; white-space: nowrap; }
+  .ds-tpl__chip b { font-weight: var(--font-weight-medium); color: var(--color-text-secondary); }
+  .ds-tpl__chip:hover b { color: var(--color-primary); }
+  .ds-tpl__note { font-size: 11px; color: var(--color-text-muted); line-height: var(--line-height-body); max-width: 900px; }
+  .ds-tpl__note .ds-mono { color: var(--color-text-secondary); }
 
   /* 布局范式示意块 */
-  .ds-block { background: color-mix(in srgb, var(--color-primary) 12%, var(--color-bg-surface)); border: var(--border-w) dashed var(--color-primary); border-radius: var(--radius-md); padding: var(--space-component-pad-y) var(--space-component-pad-x); color: var(--color-text-secondary); font-size: var(--font-size-caption); text-align: center; }
+  .ds-block { background: var(--color-bg-surface); border: var(--border-w) dashed var(--color-border-default); border-radius: var(--radius-md); padding: var(--space-component-pad-y) var(--space-component-pad-x); color: var(--color-text-muted); font-size: var(--font-size-caption); text-align: center; }
   .ds-outline { outline: var(--border-w) dashed var(--color-border-default); outline-offset: calc(var(--space-1) * -1); }
+  .ds-lay__head { display: flex; align-items: baseline; gap: var(--space-3); flex-wrap: wrap; }
+  .ds-lay__title { font-family: var(--font-family-mono); font-size: 16px; font-weight: var(--font-weight-medium); }
+  .ds-lay__sub { font-size: var(--font-size-caption); color: var(--color-text-muted); }
+  .ds-lay .ds-card { background: var(--color-bg-subtle); }
+  .ds-lay .ds-comp__stage { padding: var(--space-8) var(--space-6); gap: var(--space-6); }
+  .ds-lay .ds-comp__foot { border-top: none; padding: 0 var(--space-6) var(--space-5); color: var(--color-text-muted); }
+  .ds-lay .ds-comp__foot span:hover { color: var(--color-primary); }
+  .ds-lay small.ds-dim { display: block; font-family: var(--font-family-mono); font-size: 11px; color: var(--color-text-placeholder); margin-bottom: var(--space-2); }
 
   .sc-probe { position: absolute; visibility: hidden; pointer-events: none; }
 
@@ -253,8 +287,25 @@
 </head>
 <body>
 <div id="app">
+  <!-- ===================== 整页模板（#/page/<key>）：没有展示页外壳，UiShell 撑满视口，尺寸全是真实值 ===================== -->
+  <div v-if="state.route === 'page'" class="ds-full">
+    <component :is="demoComp(currentTemplate)" :key="currentTemplate.key"></component>
+    <div class="ds-fab">
+      <el-button size="small" text @click="go('templates')"><el-icon class="el-icon--left"><ArrowLeft /></el-icon>返回</el-button>
+      <span class="ds-fab__sep"></span>
+      <el-button size="small" text circle :title="'上一套'" @click="stepTemplate(-1)"><el-icon><CaretLeft /></el-icon></el-button>
+      <span class="ds-fab__name">{{ currentTemplate.no }} {{ currentTemplate.label }}</span>
+      <el-button size="small" text circle :title="'下一套'" @click="stepTemplate(1)"><el-icon><CaretRight /></el-icon></el-button>
+      <span class="ds-fab__sep"></span>
+      <div class="ds-seg"><div class="ds-seg__item" :class="{ 'is-active': !state.dark }" @click="state.dark = false; applyMode()">浅色</div><div class="ds-seg__item" :class="{ 'is-active': state.dark }" @click="state.dark = true; applyMode()">深色</div></div>
+      <div class="ds-seg"><div v-for="d in ['compact','default','loose']" :key="d" class="ds-seg__item" :class="{ 'is-active': state.density === d }" @click="state.density = d; applyMode()">{{ { compact: '紧', default: '中', loose: '松' }[d] }}</div></div>
+      <span class="ds-fab__sep"></span>
+      <el-button size="small" @click="copy(currentTemplate.skeleton)">复制骨架</el-button>
+    </div>
+  </div>
+
   <!-- 顶栏：品牌 + 路由页签 + 主题控制 -->
-  <header class="ds-top">
+  <header v-if="state.route !== 'page'" class="ds-top">
     <div class="ds-brand"><div class="ds-brand__mark"></div><div class="ds-brand__name">设计系统</div><div class="ds-brand__ver">v0.1 · Element Plus 2.14</div></div>
     <nav class="ds-tabs">
       <div v-for="r in ROUTES" :key="r.key" class="ds-tab" :class="{ 'is-active': state.route === r.key }" @click="go(r.key)">{{ r.label }}</div>
@@ -267,12 +318,15 @@
     </div>
   </header>
 
-  <div class="ds-body">
+  <div v-if="state.route !== 'page'" class="ds-body">
     <!-- 左侧：当前路由的分组锚点 -->
     <aside class="ds-side">
       <el-scrollbar><div class="ds-side__view">
       <div class="ds-side__label">{{ currentRoute.label }}</div>
-      <div v-for="a in anchors" :key="a.id" class="ds-side__item" :class="{ 'is-active': state.anchor === a.id, 'is-dim': a.dim }" @click="jump(a.id)"><span>{{ a.label }}</span><span v-if="a.count" class="ds-side__count">{{ a.count }}</span></div>
+      <template v-for="a in anchors" :key="a.id">
+        <div v-if="a.head" class="ds-side__label ds-side__label--sub">{{ a.label }}</div>
+        <div v-else class="ds-side__item" :class="{ 'is-active': state.anchor === a.id, 'is-dim': a.dim }" @click="jump(a.id)"><span>{{ a.label }}</span><span v-if="a.count" class="ds-side__count">{{ a.count }}</span></div>
+      </template>
       <template v-if="state.route === 'materials'">
         <div class="ds-side__sep"></div>
         <div class="ds-side__hint">带 <span class="ds-badge ds-badge--wl">白名单</span> 的组件第三层可直接使用；其余需先提议。命令式 API（Message 等）同样在白名单内。</div>
@@ -423,43 +477,41 @@
       <div class="ds-content ds-content--wide">
         <div class="ds-hero">
           <div class="ds-hero__title">自研组件</div>
-          <div class="ds-hero__desc">Element Plus 未覆盖的外壳、页面级与复合组件。它们不是新画的：每一个都由白名单原语 + .l-* 布局类拼成，每一处尺寸与颜色都来自第一层 token —— 改变量，组件跟着变。右侧「脱胎第一层」面板可临时调整该组件消费的 token（只作用于本卡舞台）验证联动。</div>
+          <div class="ds-hero__desc">Element Plus 未覆盖的外壳、页面级与复合组件——单个组件的形态与接口看这里，整页排版看「布局配置」。每一个都由白名单原语 + .l-* 拼成，尺寸与颜色全部来自第一层 token；右侧「脱胎第一层」可临时改这些 token（只作用于本页舞台）验证联动。左侧切换组件。</div>
         </div>
-        <section v-for="g in CUSTOM_GROUPS" :key="g.key" :id="'cg-' + g.key" class="ds-group">
-          <div class="ds-group__head"><div class="ds-group__title">{{ g.label }}</div><div class="ds-group__sub">{{ g.desc }}</div></div>
+        <section :id="'c-' + currentCustom.key" class="ds-group">
           <div class="l-stack">
-            <div v-for="c in customOf(g.key)" :key="c.key" class="ds-card ds-cfg">
+            <div v-for="c in [currentCustom]" :key="c.key" class="ds-card ds-cfg">
               <div class="ds-cfg__head">
-                <div class="ds-cfg__name"><span>{{ c.name }} {{ c.cn }}</span><span class="ds-badge ds-badge--wl">白名单</span><span class="ds-badge">{{ c.source.replace(/\/[^/]+$/, '') }}</span></div>
+                <div class="ds-cfg__name"><span>{{ c.name }}</span><span class="ds-cfg__cn">{{ c.cn }}</span><span class="ds-badge ds-badge--wl">白名单</span><span class="ds-badge">{{ c.source.replace(/\/[^/]+$/, '') }}</span></div>
                 <div class="ds-cfg__links"><span @click="copy(c.usage)">复制用法</span><a :href="'./' + c.source" target="_blank">查看源码</a></div>
               </div>
               <div class="ds-cfg__body">
                 <div class="ds-cfg__stage" :style="tweakStyle(c)">
-                  <component :is="demoComp(c)"></component>
+                  <div class="ds-cfg__demo"><component :is="demoComp(c)"></component></div>
                   <div class="ds-cfg__anatomy"><span>结构</span><span v-for="a in c.anatomy" :key="a" class="ds-pill">{{ a }}</span></div>
                 </div>
                 <div class="ds-cfg__panel">
-                  <div class="ds-cfg__panel-head"><span>脱胎第一层 · 消费的 token</span><span class="ds-reset" :class="{ 'is-dim': !hasTweak(c) }" @click="resetTweak(c)">恢复默认</span></div>
-                  <div v-for="n in c.tokens" :key="n" class="ds-tk">
-                    <div class="ds-tk__ctl">
-                      <div v-if="tokenKind(n) === 'color'" class="ds-tk__ctl-color"><el-color-picker :model-value="tweakValue(c, n)" size="small" @update:model-value="v => setTweak(c, n, v)"></el-color-picker><span class="ds-tk__name" @click="copy(n)">{{ n }}</span></div>
-                      <template v-else-if="tokenKind(n) === 'length'">
-                        <span class="ds-tk__name" @click="copy(n)">{{ n }}</span>
-                        <el-slider :model-value="pxOf(tweakValue(c, n))" :min="sliderRange(n)[0]" :max="sliderRange(n)[1]" :step="1" :show-tooltip="false" size="small" @update:model-value="v => setTweak(c, n, v + 'px')"></el-slider>
-                      </template>
-                      <span v-else class="ds-tk__name" @click="copy(n)">{{ n }}</span>
+                  <div class="ds-cfg__panel-head"><b>脱胎第一层</b><span class="ds-label">{{ c.tokens.length }} 个 token</span><span class="ds-reset" :class="{ 'is-dim': !hasTweak(c) }" @click="resetTweak(c)">恢复默认</span></div>
+                  <el-scrollbar class="ds-cfg__tokens" max-height="var(--ds-panel-max)">
+                    <div v-for="n in c.tokens" :key="n" class="ds-tk">
+                      <span class="ds-tk__name" :title="n" @click="copy(n)">{{ n }}</span>
+                      <span class="ds-tk__ctl">
+                        <el-color-picker v-if="tokenKind(n) === 'color'" :model-value="tweakValue(c, n)" size="small" @update:model-value="v => setTweak(c, n, v)"></el-color-picker>
+                        <el-slider v-else-if="tokenKind(n) === 'length'" :model-value="pxOf(tweakValue(c, n))" :min="sliderRange(n)[0]" :max="sliderRange(n)[1]" :step="1" :show-tooltip="false" size="small" @update:model-value="v => setTweak(c, n, v + 'px')"></el-slider>
+                      </span>
+                      <span class="ds-tk__val" :class="{ 'is-tweaked': state.tweaks[c.key]?.[n] }">{{ tokenKind(n) === 'color' ? shortColor(tweakValue(c, n)) : tweakValue(c, n) }}</span>
                     </div>
-                    <div class="ds-tk__val" :class="{ 'is-tweaked': state.tweaks[c.key]?.[n] }">{{ tokenKind(n) === 'color' ? shortColor(tweakValue(c, n)) : tweakValue(c, n) }}</div>
-                  </div>
+                  </el-scrollbar>
                   <div class="ds-cfg__note">调整只作用于本卡片的舞台，用于验证联动；要改全局默认值，去「设计变量」或 tokens.css。</div>
                 </div>
               </div>
               <div class="ds-cfg__foot">
                 <div class="ds-cfg__props">
-                  <div class="ds-cfg__label">Props</div>
+                  <div class="ds-cfg__label">PROPS</div>
                   <div class="ds-cfg__props-grid"><template v-for="p in c.props" :key="p[0]"><span class="ds-mono">{{ p[0] }}</span><span class="ds-mono">{{ p[1] }}</span><span>{{ p[2] }}</span></template></div>
-                  <div v-if="c.slots?.length" style="margin-top: var(--space-2);"><span class="ds-cfg__label">Slots</span> <span class="ds-mono" style="color: var(--color-text-secondary);">{{ c.slots.join(' · ') }}</span></div>
-                  <div v-if="c.events?.length"><span class="ds-cfg__label">Events</span> <span class="ds-mono" style="color: var(--color-text-secondary);">{{ c.events.join(' · ') }}</span></div>
+                  <div v-if="c.slots?.length" class="ds-cfg__meta"><span class="ds-cfg__label">SLOTS</span><span class="ds-mono">{{ c.slots.join(' · ') }}</span></div>
+                  <div v-if="c.events?.length" class="ds-cfg__meta"><span class="ds-cfg__label">EVENTS</span><span class="ds-mono">{{ c.events.join(' · ') }}</span></div>
                 </div>
                 <div class="ds-cfg__usage">
                   <div class="ds-cfg__label">用法</div>
@@ -484,21 +536,31 @@
       <div class="ds-content ds-content--wide">
         <div class="ds-hero">
           <div class="ds-hero__title">布局配置 · 页面排版模板</div>
-          <div class="ds-hero__desc">五种多菜单业务布局：同一个 UiShell 应用壳承载统计、表格、统计 + 表格、左树 + 表格与 TabBar + 表格五套页面骨架，验证模块组合后的间距效果。骨架全部由第一层 .l-* 与第二层组件拼成，可直接复制进原型的 .l-page。</div>
+          <div class="ds-hero__desc">五种多菜单业务布局。每一套都是一张能整屏打开的真实页面：同一个 UiShell 应用壳，侧栏、顶栏与内容区尺寸全部取自第一层 token，没有缩放也没有预览框。骨架由 .l-* 与第二层组件拼成，可直接复制进原型的 .l-page。</div>
+          <div class="ds-hero__meta"><span v-for="m in layoutMeta" :key="m.k" class="ds-tpl__chip" :title="m.n" @click="copy(m.n)">{{ m.k }}<b>{{ m.v }}</b></span></div>
         </div>
-        <section :id="'tpl-' + currentTemplate.key" class="ds-group">
-          <div class="ds-tpl__bar">
-            <div class="ds-tpl__tabs"><div v-for="t in TEMPLATES" :key="t.key" class="ds-tpl__tab" :class="{ 'is-active': state.template === t.key }" @click="pickTemplate(t.key)">{{ t.no }} {{ t.label }}</div></div>
-            <div class="ds-tpl__meta"><span v-for="m in layoutMeta" :key="m.k" class="ds-tpl__chip" :title="m.n" @click="copy(m.n)">{{ m.k }} {{ m.v }}</span></div>
+        <section v-for="t in TEMPLATES" :key="t.key" :id="'tpl-' + t.key" class="ds-group">
+          <div class="ds-card ds-tplcard" @click="go('page', t.key)">
+            <div class="ds-tplcard__main">
+              <div class="ds-tplcard__no">{{ t.no }}</div>
+              <div class="ds-tplcard__body">
+                <div class="ds-tplcard__title">{{ t.label }}</div>
+                <div class="ds-tplcard__desc">{{ t.desc }}</div>
+                <div class="ds-cfg__anatomy"><span>结构</span><span v-for="a in t.anatomy" :key="a" class="ds-pill">{{ a }}</span></div>
+              </div>
+              <div class="ds-tplcard__open"><el-icon><Right /></el-icon></div>
+            </div>
+            <div class="ds-tplcard__foot" @click.stop>
+              <span class="ds-label">整屏打开后可切换模板、深浅与密度</span>
+              <div class="l-cluster">
+                <el-button size="small" @click="copy(t.skeleton)">复制页面骨架</el-button>
+                <el-button size="small" @click="copy(t.demo)">复制含外壳的完整模板</el-button>
+                <el-button size="small" type="primary" @click="go('page', t.key)">打开整页</el-button>
+              </div>
+            </div>
           </div>
-          <div class="ds-tpl__desc"><strong>{{ currentTemplate.no }} {{ currentTemplate.label }}</strong><span>{{ currentTemplate.desc }}</span></div>
-          <div class="ds-tpl__stage"><component :is="demoComp(currentTemplate)" :key="currentTemplate.key"></component></div>
-          <div class="ds-tpl__foot">
-            <div class="ds-cfg__anatomy"><span>结构</span><span v-for="a in currentTemplate.anatomy" :key="a" class="ds-pill">{{ a }}</span></div>
-            <div class="l-cluster"><el-button size="small" @click="copy(currentTemplate.skeleton)">复制页面骨架（.l-page 内容）</el-button><el-button size="small" type="primary" plain @click="copy(currentTemplate.demo)">复制含外壳的完整模板</el-button></div>
-          </div>
-          <div class="ds-card" style="padding: var(--space-module-pad); font-size: var(--font-size-caption); color: var(--color-text-secondary); line-height: var(--line-height-body);">间距来源：page 用 <span class="ds-mono">--space-page-pad-x/y</span>，模块之间用 <span class="ds-mono">--space-module-gap</span>（.l-page 直接子元素自动 page-gap，栅格内用 --grid-gap），模块内标题到内容用 <span class="ds-mono">--space-module-title</span>，顶栏高 <span class="ds-mono">--layout-header-h</span>，侧栏宽 <span class="ds-mono">--layout-sidebar-w / -collapsed</span>。切换右上角密度可看到整套模板同步收放。</div>
         </section>
+        <p class="ds-tpl__note">间距来源：page 用 <span class="ds-mono">--space-page-pad-x/y</span>，模块之间用 <span class="ds-mono">--space-module-gap</span>（.l-page 直接子元素自动 page-gap，栅格内用 --grid-gap），模块内标题到内容用 <span class="ds-mono">--space-module-title</span>，顶栏高 <span class="ds-mono">--layout-header-h</span>，侧栏宽 <span class="ds-mono">--layout-sidebar-w / -collapsed</span>。在整页视图里切换密度可看到整套模板同步收放。</p>
       </div>
     </main>
 
@@ -509,8 +571,8 @@
           <div class="ds-hero__title">布局范式</div>
           <div class="ds-hero__desc">第一层 layout.css 的 .l-* 布局类。第三层禁止手写 flex / grid，只能组合这些类；原型与正式项目引用同一份文件，布局一致性是文件级别的。</div>
         </div>
-        <section v-for="l in LAYOUTS" :key="l.key" :id="'l-' + l.key" class="ds-group">
-          <div class="ds-group__head"><div class="ds-group__title ds-mono" style="font-size: 16px;">{{ l.title }}</div><div class="ds-group__sub">{{ l.desc }}</div></div>
+        <section v-for="l in LAYOUTS" :key="l.key" :id="'l-' + l.key" class="ds-group ds-lay">
+          <div class="ds-lay__head"><div class="ds-lay__title">{{ l.title }}</div><div class="ds-lay__sub">{{ l.desc }}</div></div>
           <div class="ds-card ds-comp">
             <div class="ds-comp__stage"><component :is="demoComp(l)"></component></div>
             <div class="ds-comp__foot"><template v-for="(n, i) in l.tokens" :key="n"><span v-if="i" class="ds-dim">·</span><span @click="copy(n)">{{ n }}</span></template></div>
@@ -530,10 +592,17 @@ const { ROUTES, CATEGORIES, CUSTOM_GROUPS, COMPONENTS, CUSTOM, LAYOUTS, DESC, SA
 
 const app = Vue.createApp({
   setup() {
-    const routeFromHash = () => { const k = location.hash.replace(/^#\/?/, '').split(/[?/]/)[0]; return ROUTES.some(r => r.key === k) ? k : ROUTES[0].key }
-    const state = Vue.reactive({ route: routeFromHash(), anchor: '', dark: false, density: 'default', primary: '', preset: PRESETS[0].key, showRaw: false, showEl: false, tick: 0, tweaks: {}, template: 'stat' })
+    /* hash 路由：#/<route> 或 #/<route>/<sub>。
+     * 'page' 不在顶栏导航里：#/page/<模板 key> 把该模板当作一张真实页面整屏渲染（无展示页外壳）。
+     * #/custom/<组件 key> 是自研组件的单组件详情。 */
+    const parseHash = () => {
+      const [k = '', sub = ''] = location.hash.replace(/^#\/?/, '').split('?')[0].split('/')
+      return { key: k === 'page' || ROUTES.some(r => r.key === k) ? k : ROUTES[0].key, sub }
+    }
+    const first = parseHash()
+    const state = Vue.reactive({ route: first.key, sub: first.sub, anchor: '', dark: false, density: 'default', primary: '', preset: PRESETS[0].key, showRaw: false, showEl: false, tick: 0, tweaks: {} })
     const probe = Vue.ref(null)
-    const currentRoute = Vue.computed(() => ROUTES.find(r => r.key === state.route))
+    const currentRoute = Vue.computed(() => ROUTES.find(r => r.key === state.route) || ROUTES[0])
 
     /* ---------- token 读取 ---------- */
     const group = id => (T.groups.find(g => g.id === id) || { tokens: [] }).tokens
@@ -582,8 +651,10 @@ const app = Vue.createApp({
     const tweakStyle = c => state.tweaks[c.key] || {}
 
     /* ---------- 布局配置 · 页面排版模板 ---------- */
-    const currentTemplate = Vue.computed(() => TEMPLATES.find(t => t.key === state.template) || TEMPLATES[0])
-    const pickTemplate = key => { state.template = key; state.anchor = 'tpl-' + key }
+    const currentTemplate = Vue.computed(() => TEMPLATES.find(t => t.key === state.sub) || TEMPLATES[0])
+    const currentCustom = Vue.computed(() => CUSTOM.find(c => c.key === state.sub) || CUSTOM[0])
+    const tplIndex = Vue.computed(() => TEMPLATES.findIndex(t => t.key === currentTemplate.value.key))
+    const stepTemplate = d => { const n = TEMPLATES[(tplIndex.value + d + TEMPLATES.length) % TEMPLATES.length]; go('page', n.key) }
     const layoutMeta = Vue.computed(() => { state.tick; return [
       ['page', '--space-page-pad-x'], ['module', '--space-module-gap'], ['header', '--layout-header-h'], ['sidebar', '--layout-sidebar-w'], ['collapsed', '--layout-sidebar-w-collapsed'],
     ].map(([k, n]) => ({ k, n, v: resolved.value[n] })) })
@@ -614,7 +685,11 @@ const app = Vue.createApp({
         { id: 'raw', label: '原始刻度', count: T.counts.raw, dim: true }, { id: 'el-map', label: 'Element Plus 映射', count: T.counts.mapping, dim: true },
       ]
       if (state.route === 'materials') return [...CATEGORIES.map(c => ({ id: 'cat-' + c.key, label: c.label, count: compsOf(c.key).length })), { id: 'cat-custom', label: '自研组件 →', dim: true }]
-      if (state.route === 'custom') return [...CUSTOM_GROUPS.map(g => ({ id: 'cg-' + g.key, label: g.label, count: customOf(g.key).length })), { id: 'cg-candidates', label: '候选结构（原型统计）', dim: true }]
+      // 自研组件：侧栏按分组列出每个组件，选中即切 #/custom/<key>，主区只渲染这一个组件
+      if (state.route === 'custom') return CUSTOM_GROUPS.flatMap(g => [
+        { id: 'cg-' + g.key, label: g.label, head: true },
+        ...customOf(g.key).map(c => ({ id: 'c-' + c.key, label: c.name, pick: c.key })),
+      ]).concat({ id: 'cg-candidates', label: '候选结构（原型统计）', dim: true })
       if (state.route === 'templates') return TEMPLATES.map(t => ({ id: 'tpl-' + t.key, label: t.no + ' ' + t.label }))
       return LAYOUTS.map(l => ({ id: 'l-' + l.key, label: l.title }))
     })
@@ -622,7 +697,9 @@ const app = Vue.createApp({
     const mainScroll = Vue.ref(null)
     const wrap = () => mainScroll.value?.wrapRef
     const jump = id => {
-      if (id.startsWith('tpl-')) { state.template = id.slice(4); state.anchor = id; mainScroll.value?.setScrollTop(0); return }
+      const a = anchors.value.find(x => x.id === id)
+      if (a?.pick) { go('custom', a.pick); return }
+      if (a?.head) return
       const el = document.getElementById(id), w = wrap()
       if (!el || !w) return
       const top = el.getBoundingClientRect().top - w.getBoundingClientRect().top + w.scrollTop - 24
@@ -633,7 +710,7 @@ const app = Vue.createApp({
       if (ticking) return; ticking = true
       requestAnimationFrame(() => {
         ticking = false
-        const w = wrap(); if (!w || state.route === 'templates') return
+        const w = wrap(); if (!w || state.route === 'custom') return
         const base = w.getBoundingClientRect().top + 40
         let cur = anchors.value[0]?.id
         for (const a of anchors.value) { const el = document.getElementById(a.id); if (el && el.getBoundingClientRect().top <= base) cur = a.id }
@@ -642,8 +719,20 @@ const app = Vue.createApp({
     }
 
     /* ---------- 路由 ---------- */
-    const go = key => { if (location.hash !== `#/${key}`) location.hash = `#/${key}`; state.route = key; Vue.nextTick(() => { mainScroll.value?.setScrollTop(0); state.anchor = key === 'templates' ? 'tpl-' + state.template : anchors.value[0]?.id }) }
-    window.addEventListener('hashchange', () => { state.route = routeFromHash(); Vue.nextTick(() => { mainScroll.value?.setScrollTop(0); state.anchor = state.route === 'templates' ? 'tpl-' + state.template : anchors.value[0]?.id }) })
+    /* 进入 custom 时默认落到第一个组件；侧栏高亮跟着 sub 走 */
+    const defaultSub = key => key === 'custom' ? CUSTOM[0].key : key === 'page' ? TEMPLATES[0].key : ''
+    const syncAnchor = () => { state.anchor = state.route === 'custom' ? 'c-' + state.sub : anchors.value[0]?.id }
+    const go = (key, sub = defaultSub(key)) => {
+      const h = sub ? `#/${key}/${sub}` : `#/${key}`
+      if (location.hash !== h) location.hash = h
+      state.route = key; state.sub = sub
+      Vue.nextTick(() => { mainScroll.value?.setScrollTop(0); syncAnchor() })
+    }
+    window.addEventListener('hashchange', () => {
+      const { key, sub } = parseHash()
+      state.route = key; state.sub = sub || defaultSub(key)
+      Vue.nextTick(() => { mainScroll.value?.setScrollTop(0); syncAnchor() })
+    })
 
     /* ---------- 主题 ---------- */
     function applyMode() {
@@ -667,13 +756,15 @@ const app = Vue.createApp({
     }
 
     Vue.onMounted(() => {
-      if (!location.hash) history.replaceState(null, '', `#/${state.route}`)
+      if (!state.sub && defaultSub(state.route)) state.sub = defaultSub(state.route)
+      const h = state.sub ? `#/${state.route}/${state.sub}` : `#/${state.route}`
+      if (location.hash !== h) history.replaceState(null, '', h)
       state.primary = shortColor(getComputedStyle(document.body).getPropertyValue('--color-primary').trim()) || getComputedStyle(document.documentElement).getPropertyValue('--color-primary').trim()
-      state.anchor = state.route === 'templates' ? 'tpl-' + state.template : anchors.value[0]?.id
+      syncAnchor()
       state.tick++
     })
 
-    return { T, ROUTES, CATEGORIES, CUSTOM_GROUPS, COMPONENTS, CUSTOM, LAYOUTS, PRESETS, state, probe, mainScroll, onScroll, customOf, tokenKind, sliderRange, pxOf, tweakValue, setTweak, resetTweak, hasTweak, tweakStyle, TEMPLATES, currentTemplate, pickTemplate, layoutMeta, currentRoute, anchors, resolved, group, colorGroup, functionalColors, colorsByScope, spaceTokens, fontSizes, fontOthers, fontWeightFor, fontSampleText, describe, shortColor, isWhite, compsOf, demoComp, jump, go, applyMode, applyPrimary, applyPreset, copy }
+    return { T, ROUTES, CATEGORIES, CUSTOM_GROUPS, COMPONENTS, CUSTOM, LAYOUTS, PRESETS, state, probe, mainScroll, onScroll, customOf, tokenKind, sliderRange, pxOf, tweakValue, setTweak, resetTweak, hasTweak, tweakStyle, TEMPLATES, currentTemplate, currentCustom, tplIndex, stepTemplate, layoutMeta, currentRoute, anchors, resolved, group, colorGroup, functionalColors, colorsByScope, spaceTokens, fontSizes, fontOthers, fontWeightFor, fontSampleText, describe, shortColor, isWhite, compsOf, demoComp, jump, go, applyMode, applyPrimary, applyPreset, copy }
   },
 })
 app.use(ElementPlus, { locale: ElementPlusLocaleZhCn }).use(DesignSystemUI)

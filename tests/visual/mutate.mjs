@@ -38,6 +38,9 @@ const KNOWN = {
   UiStatCard: { '--color-success': '仅 up-is-good 且上升（is-good）时使用，demo 未含该组合' },
 }
 
+/** 组件名 → 展示页路由 key（UiStatCard → ui-stat-card），与 showcase.data.js 的 CUSTOM.key 一致 */
+const keyOf = name => name.replace(/([a-z0-9])([A-Z])/g, '$1-$2').toLowerCase()
+
 /** 变异值：按 token 前缀给一个肯定看得出来的值 */
 function mutant(token) {
   if (/^--color-/.test(token)) return '#ff00ff'
@@ -66,7 +69,10 @@ try {
   await page.waitForTimeout(800)
 
   for (const [comp, tokens] of Object.entries(coverage.components)) {
-    const card = page.locator('.ds-cfg').filter({ has: page.locator('.ds-cfg__head, .ds-comp__head', { hasText: comp }) }).first()
+    // 展示页每次只渲染一个组件（#/custom/<key>），先切过去再取那张唯一的配置卡
+    await page.evaluate(k => { location.hash = `#/custom/${k}` }, keyOf(comp))
+    await page.waitForTimeout(300)
+    const card = page.locator('.ds-cfg').filter({ has: page.locator('.ds-cfg__head', { hasText: comp }) }).first()
     if (!(await card.count())) { rows.push({ comp, token: '*', result: 'nocard' }); continue }
     const stage = card.locator('.ds-cfg__stage').first()
     const snapshot = () => stage.evaluate((el, props) => {

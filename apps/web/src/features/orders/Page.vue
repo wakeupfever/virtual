@@ -21,7 +21,7 @@ const create = async () => { await submit(); ElMessage.success('已创建') }
 </script>
 
 <template>
-  <div class="l-page">
+  <div class="l-page l-page--fill">
     <UiPageHeader title="订单列表" :subtitle="`共 ${total} 条`">
       <template #actions>
         <ElButton @click="load">刷新</ElButton>
@@ -29,7 +29,7 @@ const create = async () => { await submit(); ElMessage.success('已创建') }
       </template>
     </UiPageHeader>
 
-    <section class="l-module">
+    <section class="l-module l-fill">
       <div class="l-toolbar">
         <span class="l-cluster">
           <ElInput v-model="filter.keyword" placeholder="搜索客户 / 单号" clearable />
@@ -42,8 +42,8 @@ const create = async () => { await submit(); ElMessage.success('已创建') }
         </span>
       </div>
 
-      <UiState :state="view" @retry="load">
-        <ElTable :data="rows" stripe>
+      <UiState class="l-fill" :state="view" @retry="load">
+        <ElTable class="l-fill" :data="rows" stripe>
           <ElTableColumn prop="no" label="单号" width="160" />
           <ElTableColumn prop="customer" label="客户" min-width="160" show-overflow-tooltip />
           <ElTableColumn prop="amount" label="金额" width="120" align="right" />
