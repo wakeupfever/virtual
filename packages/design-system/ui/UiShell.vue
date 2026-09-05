@@ -174,8 +174,8 @@ defineExpose({ scrollTo, wrapEl })
 
 .ui-shell__main { grid-area: main; min-width: 0; min-height: 0; }
 .ui-shell__scroll { height: 100%; }
-/* 滚动视图 = 确定高度的纵向 flex：
- * 普通 .l-page 的 min-height 是 auto，不会被压缩，内容更高就照常外层内滚；
- * .l-page--fill 显式置 min-height: 0，于是恰好填满并能把多余高度让给 .l-fill 子项。 */
-.ui-shell__view { height: 100%; display: flex; flex-direction: column; }
+/* 滚动视图给出确定高度，.l-page--fill 的 height: 100% 才有参照；内容更高时照常溢出并由 wrap 内滚。
+ * 这里刻意保持块级：一旦改成 flex，.l-page 的 margin-inline: auto 会在交叉轴压过 stretch，
+ * 把内容收缩成 max-content 宽再居中——宽屏上两侧会平白多出大片留白。 */
+.ui-shell__view { height: 100%; }
 </style>

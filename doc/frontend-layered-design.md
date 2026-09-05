@@ -92,7 +92,7 @@ virtual/
 
 ### 4.6 无行为布局类 `layout.css`
 
-`.l-page`、`.l-page-header`、`.l-module`、`.l-module-header`、`.l-stack`、`.l-grid`（+ `.l-span-*`）、`.l-split`、`.l-cluster`、`.l-toolbar`、`.l-form`、`.l-inline`、`.l-state` 及其变体，全部只引用语义 token，不含 JS，768px 以下自动降为单列。另有一组高度填充类供表格页使用：`.l-page--fill` 让页面撑满外壳内容区并纵向排布，子项加 `.l-fill` 吃掉剩余高度（`.l-module.l-fill` 会同时把模块自身改为纵向排布）。它依赖 `UiShell` 把滚动视图设为确定高度的纵向 flex——百分比高度需要父级有确定高度才成立；「能否被压缩」则由 `min-height` 区分：不加 `--fill` 的页面 `min-height` 为 auto，不会被压缩，内容更高照常由外壳内滚。配合 `skins/table.css` 的 `.el-table.l-fill`，表格由父级剩余高度决定高度、表头固定、表体在 Element Plus 自带的 `ElScrollbar` 内滚、分页贴底，**不需要给 `el-table` 传 `height`**。原型与正式项目引用**同一个文件**，布局一致性是文件级别的，因此其冻结级别与第二层相同。
+`.l-page`、`.l-page-header`、`.l-module`、`.l-module-header`、`.l-stack`、`.l-grid`（+ `.l-span-*`）、`.l-split`、`.l-cluster`、`.l-toolbar`、`.l-form`、`.l-inline`、`.l-state` 及其变体，全部只引用语义 token，不含 JS，768px 以下自动降为单列。另有一组高度填充类供表格页使用：`.l-page--fill` 让页面撑满外壳内容区并纵向排布，子项加 `.l-fill` 吃掉剩余高度（`.l-module.l-fill` 会同时把模块自身改为纵向排布）。它依赖 `UiShell` 把滚动视图设为**确定高度的块级容器**——百分比高度需要父级有确定高度才成立，而视图必须保持块级：一旦改成 flex，`.l-page` 的 `margin-inline: auto` 会在交叉轴压过 `align-items: stretch`，把页面收缩成 max-content 宽再居中，宽屏上两侧凭空多出留白。不加 `--fill` 的页面高度仍为 auto，内容更高照常由外壳内滚。配合 `skins/table.css` 的 `.el-table.l-fill`，表格由父级剩余高度决定高度、表头固定、表体在 Element Plus 自带的 `ElScrollbar` 内滚、分页贴底，**不需要给 `el-table` 传 `height`**。原型与正式项目引用**同一个文件**，布局一致性是文件级别的，因此其冻结级别与第二层相同。
 
 ### 4.7 `base.css`
 
