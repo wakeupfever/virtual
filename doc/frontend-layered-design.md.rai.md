@@ -14,6 +14,7 @@ current-changes:
   - "C-042"
   - "C-043"
   - "C-044"
+  - "C-045"
 status: "active"
 updated: "2026-09-05"
 ---
@@ -24,9 +25,9 @@ updated: "2026-09-05"
 
 - 当前需求版本：`RV-016`
 - 当前工作迭代：`IT-016`
-- 当前变更：`C-037` 展示页三页视觉重排、`C-038` 去重叠：自研组件单组件详情 + 布局配置整页路由、`C-039` 内容区取消限宽、`C-040` 高度填充布局与高级搜索浮窗（add R-050 / R-051）、`C-041` dist 产物可复现、`C-042` 修复填充链把页面收成 max-content 宽、`C-043` 展示页全局调参面板、`C-044` 调参值格可输入 / 控件不变形 / 控制条可拖动
+- 当前变更：`C-037` 展示页三页视觉重排、`C-038` 去重叠：自研组件单组件详情 + 布局配置整页路由、`C-039` 内容区取消限宽、`C-040` 高度填充布局与高级搜索浮窗（add R-050 / R-051）、`C-041` dist 产物可复现、`C-042` 修复填充链把页面收成 max-content 宽、`C-043` 展示页全局调参面板、`C-044` 调参值格可输入 / 控件不变形 / 控制条可拖动、`C-045` 第一层与模板用户验收
 - 本轮目标：展示页从「文档里的缩略预览」变成「能整屏打开的真实页面」，并补上表格页最缺的一块能力——页面撑满、表格随父级高度流动、表体内滚、分页贴底
-- 当前结论：**IT-016 完成**（R-050 / R-051 verified；R-005 / R-009 / R-037 / R-038 / R-041 / R-042 / R-044 / R-048 / R-049 重新 verified）；IT-015 完成（R-026 / R-027 / R-049 verified）；IT-014 完成（R-020 / R-021 / R-024 / R-025 / R-031 verified）；IT-013 完成（R-047 / R-048 verified，R-049 ready；R-005 / R-037 重新 verified）；IT-012 完成（R-046 verified，R-037 重新 verified）；IT-011 完成（R-042 / R-045 / R-044 / R-041 重新 verified）；IT-010 完成（R-045 verified；R-041 / R-044 重新 verified）；IT-009 完成（R-044 verified，R-037 重新 verified，代码已提交）；IT-008 完成（R-037 / R-041 / R-012 / R-007 / R-042 重新 verified，代码已提交）；展示页按方向 A 重做并验证（R-037），hash 路由落地并验证（R-038）；第一步成果保持——第一、二层（F-001～F-004）、原型模板与检查脚本（F-005）、`CLAUDE.md`、说明文档已实现并通过验收，17 条 `verified`、6 条 `implemented`（其余验收条件依赖第二步的 apps/web）；4 条 `ready` 属于第二步 B（Claude 插件 R-032～R-035），待用户验收第一步后授权
+- 当前结论：**IT-016 完成**（R-050 / R-051 verified；R-005 / R-009 / R-037 / R-038 / R-041 / R-042 / R-044 / R-048 / R-049 重新 verified）；IT-015 完成（R-026 / R-027 / R-049 verified）；IT-014 完成（R-020 / R-021 / R-024 / R-025 / R-031 verified）；IT-013 完成（R-047 / R-048 verified，R-049 ready；R-005 / R-037 重新 verified）；IT-012 完成（R-046 verified，R-037 重新 verified）；IT-011 完成（R-042 / R-045 / R-044 / R-041 重新 verified）；IT-010 完成（R-045 verified；R-041 / R-044 重新 verified）；IT-009 完成（R-044 verified，R-037 重新 verified，代码已提交）；IT-008 完成（R-037 / R-041 / R-012 / R-007 / R-042 重新 verified，代码已提交）；展示页按方向 A 重做并验证（R-037），hash 路由落地并验证（R-038）。**分步进度：第一步（第一、二层 + 原型模板 + CLAUDE.md）已交付并验收；第二步 A（apps/web 工具链与 ESLint 三层约束）、C（pre-commit / CI 门禁）、D（视觉回归与变异验证）已完成；第二步 B（Claude 插件 R-032～R-035）尚未开工，等授权。** 2026-09-05 用户验收第一层配置与五套模板（C-045），六条 `implemented` 转 `verified`；50 条需求现为 46 verified / 4 ready，4 条 ready 即第二步 B
 
 ## 当前需求清单
 
@@ -35,13 +36,13 @@ updated: "2026-09-05"
 - [x] `R-001` `tokens.css` 采用两级结构：原始刻度（`--space-N`、`--palette-*`）与语义 token；第二、三层只允许引用语义 token。`category: maintainability` `status: verified`
 - [x] `R-002` 语义颜色按 作用域（bg / text / border / icon）× 语义（page / surface / muted / default / secondary / primary / danger / success / warning）命名，映射到原始色。`category: ux` `status: verified`
 - [x] `R-003` 语义间距按 作用域（page / module / component / inline）× 关系（gap / pad / title）[× 轴 x / y] 命名为 `--space-{scope}-{relation}[-{axis}]`，初始 13 个。`category: ux` `status: verified`
-- [ ] `R-004` 组件内部间距由第二层组件写死引用 token，第三层不设置组件内部间距。`category: maintainability` `status: implemented`
+- [x] `R-004` 组件内部间距由第二层组件写死引用 token，第三层不设置组件内部间距。`category: maintainability` `status: verified`
 - [x] `R-005` 布局尺寸以 `--layout-*` 命名（侧边栏宽/折叠宽、顶栏高、内容区最大宽与内边距、栅格列数与间隙）并提供 `--z-*` 层级，与 `--space-*` 分开。`--layout-content-max` 默认 `none`：业务后台内容区铺满，不在超宽屏居中留白；要恢复限宽改成具体值即可（一处生效，原型与正式页面同步）。`category: ux` `status: verified`
 - [x] `R-006` 提供密度系数 `--density`，通过 `[data-density="compact"]` 整体缩放语义间距。`category: functional` `status: verified`
 - [x] `R-007` 字号/行高、圆角、阴影、边框宽纳入第一层语义 token；字号五级：display / page-title / module-title / body / caption。`category: ux` `status: verified`
 - [x] `R-008` 语义颜色预留 `[data-theme="dark"]` 重映射入口（含 Element Plus dark 变量同步），第二层不写死白色背景等固定色。`category: ux` `status: verified`
-- [ ] `R-009` `layout.css` 提供无 JS 行为的布局类 `.l-page / .l-section / .l-stack / .l-grid` 及常用变体，只引用语义 token，原型与正式项目引用同一文件。含高度填充三件套：`.l-page--fill`（撑满外壳内容区并纵向排布）、`.l-fill`（任意 flex 容器子项占满剩余高度，`flex: 1 1 auto; min-height: 0`）、`.l-module.l-fill`（被标记的模块自身纵向排布，才能把余量交给内部 `.l-fill`）。详见 `R-050`。`category: maintainability` `status: implemented`
-- [ ] `R-010` `base.css` 统一 reset 与字体加载，原型与正式项目引用同一文件。`category: quality` `status: implemented`
+- [x] `R-009` `layout.css` 提供无 JS 行为的布局类 `.l-page / .l-section / .l-stack / .l-grid` 及常用变体，只引用语义 token，原型与正式项目引用同一文件。含高度填充三件套：`.l-page--fill`（撑满外壳内容区并纵向排布）、`.l-fill`（任意 flex 容器子项占满剩余高度，`flex: 1 1 auto; min-height: 0`）、`.l-module.l-fill`（被标记的模块自身纵向排布，才能把余量交给内部 `.l-fill`）。详见 `R-050`。`category: maintainability` `status: verified`
+- [x] `R-010` `base.css` 统一 reset 与字体加载，原型与正式项目引用同一文件。`category: quality` `status: verified`
 - [x] `R-030` `tokens.css` 将语义 token 映射到 Element Plus 主题变量（`--el-color-primary`、`--el-border-color`、`--el-bg-color`、`--el-border-radius-base` 等），Element Plus 外观只由第一层驱动，不单独维护 SCSS 主题。`category: maintainability` `status: verified`
 
 - [x] `R-047` 第二层 token 约束：`ui/**/*.vue` 的 `<style>` 与 `skins/*.css` 中视觉属性（颜色 / 背景 / 边框 / 内外边距 / gap / 圆角 / 阴影 / 字号 / 宽高，含 `--el-*` 变量赋值）的值必须是第一层语义 token；裸色、裸长度（0 与视口单位除外）、引用 `--palette-*` / `--space-N`、在第二层定义语义名、引用不存在的 token 均为错误；由 `scripts/check-layer2.mjs` 检查并内置于 `pnpm build`。新增尺寸 token：`--layout-control-h` 32 / `--layout-menu-item-h` 40 / `--layout-icon-{sm,md,lg}` 22 / 28 / 40；13px 档位不新增，统一用 `--font-size-caption`。`category: quality` `status: verified`
@@ -55,16 +56,16 @@ updated: "2026-09-05"
 
 ### 第二层：基础组件与外壳
 
-- [ ] `R-011` 第二层由两部分构成：Element Plus 允许使用的组件白名单（初始：ElButton、ElInput、ElSelect、ElCheckbox、ElSwitch、ElForm/ElFormItem、ElTable、ElDialog、ElDrawer、ElMessage/ElNotification、ElTabs、ElPagination），以及自研复合组件清单（仅限 Element Plus 未覆盖的外壳与页面级组件）；两份清单均写入 README。`category: maintainability` `status: implemented`
+- [x] `R-011` 第二层由两部分构成：Element Plus 允许使用的组件白名单（初始：ElButton、ElInput、ElSelect、ElCheckbox、ElSwitch、ElForm/ElFormItem、ElTable、ElDialog、ElDrawer、ElMessage/ElNotification、ElTabs、ElPagination），以及自研复合组件清单（仅限 Element Plus 未覆盖的外壳与页面级组件）；两份清单均写入 README。`category: maintainability` `status: verified`
 - [x] `R-012` 外壳组件 `UiShell` 实现侧边栏折叠、路由高亮、响应式抽屉，所有尺寸取自 `--layout-*`，自身不写数值；外壳固定为视口高，侧栏与主内容区各自在 `ElScrollbar` 内滚动，页面（window）不滚动；顶栏带品牌色块，侧栏菜单经 `skins/menu.css` 呈现圆角胶囊高亮。`category: functional` `status: verified`
-- [ ] `R-029` 第二层技术形态：正式项目通过 npm 引入 Element Plus 2.14.x；原型通过 CDN 引入 Vue 3 全局构建与**同一版本** Element Plus；自研复合组件用 Vite 库模式打包为 `dist/ui.iife.js`（Vue、ElementPlus 设为 external 全局），原型与正式项目共用同一份源码。`category: maintainability` `status: implemented`
+- [x] `R-029` 第二层技术形态：正式项目通过 npm 引入 Element Plus 2.14.x；原型通过 CDN 引入 Vue 3 全局构建与**同一版本** Element Plus；自研复合组件用 Vite 库模式打包为 `dist/ui.iife.js`（Vue、ElementPlus 设为 external 全局），原型与正式项目共用同一份源码。`category: maintainability` `status: verified`
 - [x] `R-014` `design-system/README.md` 作为组件索引，列出白名单组件、自研组件、props 与用法示例；AI 开发第三层前必须先读。`category: delivery` `status: verified`
 - [x] `R-015` 第二层建成后冻结；新增或修改须经"提议 → 判定通用/业务 → 单独提交 + 更新 README"流程。`category: maintainability` `status: verified`
 
 ### 第三层：原型
 
 - [x] `R-016` `prototypes/` 每个功能一个单文件 HTML，从 `_template.html` 起步；模板引入 Vue 3 全局构建、Element Plus CDN（与 R-029 同版本）、`tokens.css / layout.css / base.css / dist/ui.iife.js`，固定 DATA / state / template / methods 四区块，`state` 为 Vue `reactive` 对象。`category: functional` `status: verified`
-- [ ] `R-017` 原型模板默认套用 `UiShell`，内容区宽度与正式页面一致。`category: ux` `status: implemented`
+- [x] `R-017` 原型模板默认套用 `UiShell`，内容区宽度与正式页面一致。`category: ux` `status: verified`
 - [x] `R-018` 原型 `DATA` 必须包含长文本、空列表、大数据量样本，并可切换 loading / empty / error 状态。`category: quality` `status: verified`
 - [x] `R-019` `scripts/check-prototype.js` 扫描 `prototypes/*.html`，发现原生表单/表格元素、`style="`、裸色值、非白名单 `el-*` 组件即报错退出。`category: quality` `status: verified`
 - [x] `R-039` 第一层默认配色改为「科技青」（参考用户本机 HY Compiler Studio `themeVariant=technology-cyan`）：主色 `#0076a3` / 强调 `#00486a` / 柔和底 `#e8f4f7`，中性灰带青灰色相（文字 `#304853` / `#4e6d7b`，边框 `#d5dcdf` / `#e6e8e8`，浅色页面底为纯白 `#ffffff`，靠卡片边框与轻阴影分层），功能色 成功 `#0cc778` / 警告 `#f7ba2a` / 危险 `#e0464b`，圆角 3 / 6 / 10，阴影带色相；新增 `--color-bg-accent`；深色重映射改为青灰底并提亮主色 `#2f9fcf`。Element 蓝 / 靛蓝 / 靛紫 保留为展示页预设。`category: ux` `status: verified`
@@ -196,7 +197,7 @@ updated: "2026-09-05"
 
 - 目标：展示页从「文档里的缩略预览」变成「能整屏打开的真实页面」；补上表格页最缺的能力——页面撑满、表格随父级高度流动、表体内滚、分页贴底；高级搜索不再挤压表格
 - 范围：`tokens.css`（content-max）、`layout.css`（填充三件套）、`ui/UiShell.vue`、`ui/UiState.vue`、`ui/composites/UiFilterBar.vue`、`skins/table.css`、`scripts/check-layer2.mjs`、`showcase.html`、`showcase.data.js`、`apps/prototypes/_template.html`、`apps/web/src/features/orders/Page.vue`、`tests/visual/mutate.mjs`、README / CLAUDE.md §2；git commit（第一二层与第三层回填分两次提交）
-- 包含变更：`C-037`、`C-038`、`C-039`、`C-040`、`C-041`、`C-042`、`C-043`、`C-044`
+- 包含变更：`C-037`、`C-038`、`C-039`、`C-040`、`C-041`、`C-042`、`C-043`、`C-044`、`C-045`
 - 对应需求版本：`RV-016`
 - 退出条件：R-050 / R-051 verified；R-005 / R-009 / R-037 / R-038 / R-041 / R-042 / R-044 / R-048 / R-049 重新 verified；八项门禁全绿；代码已提交
 
@@ -289,6 +290,16 @@ updated: "2026-09-05"
 - 关联需求：`R-050`、`R-051`、`R-009`、`R-012`、`R-041`、`R-042`
 - 覆盖关系：—
 - 影响功能：`F-001 direct`、`F-002 direct`、`F-003 direct`、`F-004 direct`、`F-005 direct`、`F-006 direct`
+
+### C-045 · 第一层与模板用户验收，六条 implemented 转 verified
+
+- 类型：`implement`
+- 原因：用户「我对现在的第一层配置和模板都能接受」
+- 之前：`R-004` / `R-009` / `R-010` / `R-011` / `R-017` / `R-029` 停在 `implemented`，各自的验收备注都是「待第二步」——第三层 lint、apps/web 引用第一层、ESLint 读白名单、与正式页面等宽比对、正式项目 import 第二层
+- 之后：六条全部 `verified`。阻塞条件已被第二步 A / C / D 消除并有证据：`apps/web/src/main.ts` 依次引入 tokens / skins / layout / base 与 `@virtual/design-system`（E-24）；`eslint.config.js` 从 `whitelist.json` 生成白名单并拦截第三层 inline style 与 `<style>`（E-24）；原型与正式页面同视口像素差 0.00%（E-25）。至此 50 条需求中 46 条 verified，仅剩第二步 B 的 4 条 `ready`
+- 关联需求：`R-004`、`R-009`、`R-010`、`R-011`、`R-017`、`R-029`
+- 覆盖关系：—
+- 影响功能：`F-001 verification_only`、`F-002 verification_only`、`F-003 verification_only`、`F-005 verification_only`
 
 ### C-044 · 调参面板值格可输入、控件不再变形；控制条可拖动
 
@@ -472,6 +483,7 @@ updated: "2026-09-05"
 | C-039 | F-001, F-002 | direct | 第一层 token 值改变 | 1920 下 `.l-page` 宽 = 内容区宽；无横向滚动 |
 | C-040 | F-001, F-002, F-003, F-004, F-005, F-006 | direct | 新增布局能力与组件行为 | 逐层高度实测；矮视口内滚；浮窗前后高度不变；视觉回归 0.00% |
 | C-041 | F-003, F-007 | direct | 构建产物确定性 | 连续两次生成一致；`git diff --exit-code -- dist` 返回 0 |
+| C-045 | F-001, F-002, F-003, F-005 | verification_only | 六条需求转 verified | main.ts 引入链、ESLint 白名单、像素差 0.00% |
 | C-044 | F-011 | direct | 调参控件形态与浮层交互 | 拉满不变形；打字不被弹回；控制条可拖 |
 | C-043 | F-011 | direct | 展示页新增全局调参能力 | 空开抽屉零写入；三类控件联动；复制与重置闭环 |
 | C-042 | F-002, F-004 | direct | 外壳滚动视图的格式化上下文 | 1920 下 `.l-page` 宽 = 内容区宽；矮视口表体仍内滚；非填充页仍外滚 |
@@ -482,10 +494,10 @@ updated: "2026-09-05"
 | 需求 | 文件/符号/配置/测试 | 状态 | 证据 |
 |---|---|---|---|
 | R-001～R-008, R-030, R-039 | `packages/design-system/tokens.css`（① 原始刻度 ② 语义 ③ `html:root` Element Plus 映射 ④ `[data-theme="dark"]`） | verified | E-01, E-02, E-13 |
-| R-009 | `packages/design-system/layout.css` | implemented | E-01（apps/web 引用待第二步） |
-| R-010 | `packages/design-system/base.css` | implemented | 同上 |
-| R-011, R-014 | `packages/design-system/README.md`、`whitelist.json` | R-014 verified / R-011 implemented | E-03（ESLint 白名单待第二步） |
-| R-012, R-029 | `packages/design-system/ui/UiShell.vue`、`ui/index.ts`、`vite.lib.config.ts` → `dist/ui.iife.js` + `dist/ui.css` | R-012 verified / R-029 implemented | E-02, E-04（正式项目 import 待第二步） |
+| R-009 | `packages/design-system/layout.css` | verified | E-01, E-24（apps/web main.ts 已引入） |
+| R-010 | `packages/design-system/base.css` | verified | 同上 |
+| R-011, R-014 | `packages/design-system/README.md`、`whitelist.json` | verified | E-03, E-24（eslint.config.js 读 whitelist.json） |
+| R-012, R-029 | `packages/design-system/ui/UiShell.vue`、`ui/index.ts`、`vite.lib.config.ts` → `dist/ui.iife.js` + `dist/ui.css` | verified | E-02, E-04, E-24（apps/web import @virtual/design-system） |
 | R-043 | `CLAUDE.md` §2 滚动规则、`whitelist.json`（el-scrollbar）、`scripts/check-prototype.js`（no-overflow-scroll）、`ui/UiShell.vue`（侧栏 / 主区 ElScrollbar，expose scrollTo / wrapEl）、`showcase.html`（.ds-side / .ds-scroll）、`showcase.data.js`（Affix / Backtop / InfiniteScroll / Scrollbar 演示） | verified | E-17 |
 | R-040 | `CLAUDE.md` §2.1、`scripts/check-prototype.js`（composites / placeholders / --strict）、`README.md` 三级偏差表 | verified | E-14 |
 | R-041 | `ui/composites/UiListItem.vue`、`UiFilterBar.vue`、`UiStatCard.vue`、`ui/index.ts`、`whitelist.json` custom、`showcase.data.js` CUSTOM | verified | E-15, E-21 |
@@ -493,9 +505,9 @@ updated: "2026-09-05"
 | R-047, R-048 | `scripts/check-layer2.mjs`、`dist/token-coverage.js(.json)`、`tokens.css`（5 个尺寸 token）、`skins/*`、`ui/*`、`showcase.data.js`（CUSTOM.tokens 由 DS_COVERAGE 注入）、`package.json` | verified | E-23 |
 | R-049 | `tests/visual/mutate.mjs`、`tests/visual/_lib.mjs` | verified | E-25 |
 | R-046 | `tokens.css` ⑤ 段、`scripts/build-tokens.mjs`（palettes）、`showcase.html`（applyPreset）、`showcase.data.js`（PRESETS） | verified | E-22 |
-| R-004 | `ui/UiShell.vue`、`ui/UiPageHeader.vue`、`ui/UiState.vue` 内边距全部引用 token | implemented | E-03（第三层 lint 待第二步） |
+| R-004 | `ui/UiShell.vue`、`ui/UiPageHeader.vue`、`ui/UiState.vue` 内边距全部引用 token | verified | E-03, E-24（第三层 lint 已拦 inline style / `<style>`） |
 | R-015, R-022, R-023 | `CLAUDE.md` §1～§6 | verified | E-05 |
-| R-016～R-018 | `apps/prototypes/_template.html` | R-016/018 verified / R-017 implemented | E-02, E-06（与正式页面等宽比对待第二步） |
+| R-016～R-018 | `apps/prototypes/_template.html` | verified | E-02, E-06, E-25（与正式页面像素差 0.00%） |
 | R-019 | `scripts/check-prototype.js` | verified | E-07 |
 | R-028 | `doc/frontend-layered-design.md`（RV-002 版本，§1～§10） | verified | E-08 |
 | R-020, R-021, R-031 | `apps/web/{package.json,vite.config.ts,tsconfig.json,index.html}`、`src/{main.ts,App.vue,tailwind.css,router/index.ts}`、`src/features/orders/*`；根 `package.json`（dev:web / build:web / lint / typecheck） | verified | E-24 |
@@ -542,7 +554,7 @@ updated: "2026-09-05"
 |---|---|---|
 | 插件形态（H-003）是否符合预期 | R-032 | 第二步实现位置 |
 | 原型 CDN 是否需要离线副本（H-004） | R-016 | 模板依赖引入方式 |
-| 第二步 B 实施授权：Claude 插件 | R-032～R-036 | 是否进入下一迭代 |
+| 第二步 B 实施授权：Claude 插件（唯一未开工项） | R-032～R-035 | 是否进入下一迭代 |
 | 展示页控制台既有 `compiler-30` 报错与两条 404 未定位（`git show HEAD` 版本同样存在，105 个字符串模板逐个 `Vue.compile` 均通过，非本轮引入） | R-037 | 不影响渲染与门禁，待单独排查 |
 | 超宽屏（24 寸以上）纯文本页面行长偏长（`--layout-content-max: none` 的代价） | R-005 | 需要时改回具体值 |
 
@@ -594,6 +606,7 @@ updated: "2026-09-05"
 | RV-016 | IT-016 | C-039 | modify | R-005 | `--layout-content-max` 1440px → none | F-001, F-002 |
 | RV-016 | IT-016 | C-040 | add | R-050, R-051, R-009, R-041, R-042 | 无 → 高度填充布局与高级搜索浮窗 | F-001～F-006 |
 | RV-016 | IT-016 | C-041 | implementation_correction | R-048, R-026 | dist 可复现：键排序 + 去掉生成时间 | F-003, F-007 |
+| RV-016 | IT-016 | C-045 | implement | R-004, R-009, R-010, R-011, R-017, R-029 | implemented → verified（用户验收 + 第二步阻塞已清） | F-001, F-002, F-003, F-005 |
 | RV-016 | IT-016 | C-044 | implementation_correction | R-052, R-044 | 值格可输入、控件不变形、控制条可拖 | F-011 |
 | RV-016 | IT-016 | C-043 | add | R-052, R-037 | 四个开关 → 覆盖 82 个 token 的调参面板 | F-011 |
 | RV-016 | IT-016 | C-042 | implementation_correction | R-050, R-005, R-012 | 外壳视图改回块级，修复填充链把页面收成 max-content 宽 | F-002, F-004 |
