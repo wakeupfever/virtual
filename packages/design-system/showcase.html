@@ -199,7 +199,8 @@
   /* 调参浮窗：全局改写第一层 token（写在 :root 的 inline style 上，压过 data-theme / data-palette）。
    * 做成可拖动、可收起的浮窗而不是抽屉——调参时要能看见被调的页面。 */
   .ds-controls .el-button .ds-badge { margin-left: var(--space-inline-pad); }
-  .ds-tuner { position: fixed; z-index: var(--z-dialog); width: 420px; max-width: calc(100vw - var(--space-page-gap)); max-height: calc(100vh - var(--space-page-gap)); display: flex; flex-direction: column; background: var(--color-bg-surface); border: var(--border-w) solid var(--color-border-muted); border-radius: var(--radius-lg); box-shadow: var(--shadow-lg); overflow: hidden; }
+  /* 默认停在右上角；拖动后由 :style 的 left/top 接管（floatStyle 会把 right/bottom 置 auto） */
+  .ds-tuner { position: fixed; right: var(--space-page-pad-x); top: calc(var(--layout-header-h) + var(--space-3)); z-index: var(--z-dialog); width: 420px; max-width: calc(100vw - var(--space-page-gap)); max-height: calc(100vh - var(--space-page-gap)); display: flex; flex-direction: column; background: var(--color-bg-surface); border: var(--border-w) solid var(--color-border-muted); border-radius: var(--radius-lg); box-shadow: var(--shadow-lg); overflow: hidden; }
   .ds-tuner__bar, .ds-tuner__head, .ds-tuner__foot { flex: none; }
   .ds-tuner.is-min { width: max-content; }
   .ds-tuner__bar { display: flex; align-items: center; gap: var(--space-inline-gap); padding: var(--space-inline-pad) var(--space-inline-pad) var(--space-inline-pad) var(--space-component-pad-x); background: var(--color-bg-subtle); cursor: grab; user-select: none; touch-action: none; }
@@ -217,8 +218,14 @@
   .ds-tuner__title { display: flex; align-items: baseline; justify-content: space-between; margin-bottom: var(--space-2); font-size: var(--font-size-caption); font-weight: var(--font-weight-medium); }
   .ds-tuner__title span { font-size: 11px; color: var(--color-text-placeholder); font-weight: var(--font-weight-regular); }
   .ds-tuner__empty { font-size: 11px; color: var(--color-text-placeholder); }
-  .ds-tuner .ds-tk.is-text { grid-template-columns: minmax(0, 1fr); gap: 2px; padding-block: var(--space-1); }
-  .ds-tuner .ds-tk__val.is-tweaked { cursor: pointer; }
+  /* 值格是可输入的：滑块 / 取色器只是快捷方式，精确值直接打字，清空即恢复默认 */
+  .ds-tuner .ds-tk { grid-template-columns: minmax(0, 1fr) 72px 72px; }
+  .ds-tuner .ds-tk.is-text { grid-template-columns: minmax(0, 1fr) 0 96px; }
+  .ds-tuner .ds-tk.is-on .ds-tk__name { color: var(--color-primary); }
+  .ds-tuner .ds-tk__in { --el-component-size-small: 22px; }
+  .ds-tuner .ds-tk__in .el-input__inner { font-family: var(--font-family-mono); font-size: 11px; }
+  .ds-tuner .ds-tk__in .el-input__wrapper { padding-inline: var(--space-inline-pad); }
+  .ds-tuner .ds-tk.is-on .ds-tk__in .el-input__wrapper { box-shadow: 0 0 0 var(--border-w) var(--color-primary) inset; }
   .ds-tuner__foot { display: flex; align-items: center; gap: var(--space-2); padding: var(--space-3) var(--space-5); border-top: var(--border-w) solid var(--color-bg-muted); background: var(--color-bg-subtle); }
   .ds-tuner__foot .ds-label { margin-right: auto; }
 
@@ -227,6 +234,9 @@
   .ds-full > .ui-shell { height: 100%; }
   /* 控制条放左下角：右下角是分页 / 表格操作区，整页模板里最容易被挡的就是那里 */
   .ds-fab { position: fixed; left: var(--space-page-pad-x); bottom: var(--space-page-pad-y); z-index: var(--z-drawer); display: flex; align-items: center; gap: var(--space-inline-gap); padding: var(--space-inline-pad) var(--space-component-pad-x); border-radius: var(--radius-full); background: var(--color-bg-surface); border: var(--border-w) solid var(--color-border-muted); box-shadow: var(--shadow-lg); font-size: var(--font-size-caption); }
+  .ds-fab { cursor: grab; user-select: none; touch-action: none; }
+  .ds-fab.is-dragging { cursor: grabbing; }
+  .ds-fab__grip { display: inline-flex; color: var(--color-icon-muted); }
   .ds-fab__name { min-width: 96px; text-align: center; font-weight: var(--font-weight-medium); white-space: nowrap; }
   .ds-fab__sep { width: var(--border-w); align-self: stretch; background: var(--color-border-muted); }
   .ds-fab .ds-seg__item { padding: 3px 10px; }
@@ -316,7 +326,8 @@
   <!-- ===================== 整页模板（#/page/<key>）：没有展示页外壳，UiShell 撑满视口，尺寸全是真实值 ===================== -->
   <div v-if="state.route === 'page'" class="ds-full">
     <component :is="demoComp(currentTemplate)" :key="currentTemplate.key"></component>
-    <div class="ds-fab">
+    <div class="ds-fab" :class="{ 'is-dragging': state.fabDrag }" :style="fabStyle" @pointerdown="e => dragStart(e, 'fab')">
+      <span class="ds-fab__grip"><el-icon><Rank></Rank></el-icon></span>
       <el-button size="small" text @click="go('templates')"><el-icon class="el-icon--left"><ArrowLeft></ArrowLeft></el-icon>返回</el-button>
       <span class="ds-fab__sep"></span>
       <el-button size="small" text circle :title="'上一套'" @click="stepTemplate(-1)"><el-icon><CaretLeft></CaretLeft></el-icon></el-button>
@@ -612,7 +623,7 @@
   </div>
   <!-- ===================== 调参浮窗：全局改写第一层 token；可拖动、可收起 ===================== -->
   <div v-if="state.tuner" class="ds-tuner" :class="{ 'is-min': state.tunerMin, 'is-dragging': state.tunerDrag }" :style="tunerStyle">
-    <div class="ds-tuner__bar" @pointerdown="dragStart">
+    <div class="ds-tuner__bar" @pointerdown="e => dragStart(e, 'tuner')">
       <span class="ds-tuner__grip"><el-icon><Rank></Rank></el-icon></span>
       <span class="ds-tuner__label">调参 · 第一层</span>
       <span v-if="overrideCount" class="ds-tuner__n">{{ overrideCount }} 项已改</span>
@@ -629,17 +640,11 @@
       <div class="ds-tuner__body">
         <div v-for="g in tunerGroups" :key="g.id" class="ds-tuner__group">
           <div class="ds-tuner__title">{{ g.label }}<span>{{ g.tokens.length }}</span></div>
-          <div v-for="n in g.tokens" :key="n" class="ds-tk" :class="{ 'is-text': kindOf(g.id, n) === 'text' }">
+          <div v-for="n in g.tokens" :key="n" class="ds-tk" :class="{ 'is-text': kindOf(g.id, n) === 'text', 'is-on': isOverridden(n) }">
             <span class="ds-tk__name" :title="describe(n) || n" @click="copy(n)">{{ n }}</span>
-            <template v-if="kindOf(g.id, n) === 'color'">
-              <span class="ds-tk__ctl"><el-color-picker :model-value="overrideValue(n)" size="small" show-alpha @update:model-value="v => v ? (setOverride(n, v), state.tick++) : resetOverride(n)"></el-color-picker></span>
-              <span class="ds-tk__val" :class="{ 'is-tweaked': isOverridden(n) }" :title="isOverridden(n) ? '点击恢复默认' : ''" @click="isOverridden(n) && resetOverride(n)">{{ shortColor(overrideValue(n)) }}</span>
-            </template>
-            <template v-else-if="kindOf(g.id, n) === 'length'">
-              <span class="ds-tk__ctl"><el-slider :model-value="pxOf(overrideValue(n))" :min="rangeOf(g.id, n)[0]" :max="rangeOf(g.id, n)[1]" :step="1" :show-tooltip="false" size="small" @input="v => onSlide(n, v)" @change="state.tick++"></el-slider></span>
-              <span class="ds-tk__val" :class="{ 'is-tweaked': isOverridden(n) }" :title="isOverridden(n) ? '点击恢复默认' : ''" @click="isOverridden(n) && resetOverride(n)">{{ overrideValue(n) }}</span>
-            </template>
-            <span v-else class="ds-tk__ctl"><el-input :model-value="overrideValue(n)" size="small" @change="v => v ? (setOverride(n, v), state.tick++) : resetOverride(n)"></el-input></span>
+            <span v-if="kindOf(g.id, n) === 'color'" class="ds-tk__ctl"><el-color-picker :model-value="overrideValue(n)" size="small" show-alpha @update:model-value="v => v ? (setOverride(n, v), state.tick++) : resetOverride(n)"></el-color-picker></span>
+            <span v-else-if="kindOf(g.id, n) === 'length'" class="ds-tk__ctl"><el-slider :model-value="pxOf(overrideValue(n))" :min="rangeOf(g.id, n)[0]" :max="rangeOf(g.id, n)[1]" :step="1" :show-tooltip="false" size="small" @input="v => onSlide(n, v)" @change="state.tick++"></el-slider></span>
+            <el-input class="ds-tk__in" :model-value="draftValue(n)" size="small" :title="'清空并回车即恢复默认 · ' + n" @update:model-value="v => onDraft(n, v)" @change="commitDraft(n)" @blur="commitDraft(n)"></el-input>
           </div>
         </div>
         <div v-if="!tunerGroups.length" class="ds-tuner__empty">没有匹配「{{ state.tunerQ }}」的 token。</div>
@@ -670,7 +675,7 @@ const app = Vue.createApp({
       return { key: k === 'page' || ROUTES.some(r => r.key === k) ? k : ROUTES[0].key, sub }
     }
     const first = parseHash()
-    const state = Vue.reactive({ route: first.key, sub: first.sub, anchor: '', dark: false, density: 'default', primary: '', preset: PRESETS[0].key, showRaw: false, showEl: false, tick: 0, tweaks: {}, tuner: false, tunerMin: false, tunerDrag: false, tunerPos: { x: 0, y: 0 }, tunerQ: '', overrides: {} })
+    const state = Vue.reactive({ route: first.key, sub: first.sub, anchor: '', dark: false, density: 'default', primary: '', preset: PRESETS[0].key, showRaw: false, showEl: false, tick: 0, tweaks: {}, tuner: false, tunerMin: false, tunerDrag: false, tunerPos: { x: 0, y: 0 }, fabDrag: false, fabPos: { x: 0, y: 0 }, tunerQ: '', overrides: {} })
     const probe = Vue.ref(null)
     const currentRoute = Vue.computed(() => ROUTES.find(r => r.key === state.route) || ROUTES[0])
 
@@ -730,55 +735,85 @@ const app = Vue.createApp({
       { id: 'layout', label: '布局尺寸' }, { id: 'z', label: '层级' },
     ]
     const isLen = v => /^-?\d+(?:\.\d+)?px$/.test(v || '')
-    const BASE_RANGE = (gid, n) => gid === 'space' ? [0, 64] : gid === 'radius' ? [0, 32] : gid === 'border' ? [0, 8]
+    const BASE_RANGE = (gid, n) => gid === 'space' ? [0, 64] : gid === 'radius' ? [0, 48] : gid === 'border' ? [0, 8]
       : gid === 'font' ? [8, 48] : /^--layout-(header|row|thead|control-h|menu|icon)/.test(n) ? [0, 120] : [0, 480]
-    /** 控件类型由「解析出来的值长什么样」决定，不靠名字猜。
-     * 远超常规区间的哨兵值（--radius-full 的 9999px）降级为文本框：
-     * el-slider 会把越界的 model-value 钳住并回吐，@input 收到后就成了「无声改写」。 */
+
+    /** token 的「基线值」：一旦开始覆盖就冻结，控件形态与滑块区间都只看它。
+     * 否则区间会跟着当前值一起长，拉到接近上限时滑块会突然变成输入框。 */
+    const baseCache = {}
+    const baseOf = n => (n in baseCache ? baseCache[n] : resolved.value[n])
+    /** 控件类型由基线值长什么样决定：颜色→取色器，纯 px→滑块，其余（含 --radius-full 的 9999px 哨兵）→文本框 */
     const kindOf = (gid, n) => {
       if (gid === 'color') return 'color'
-      const v = overrideValue(n)
-      return isLen(v) && pxOf(v) <= BASE_RANGE(gid, n)[1] * 3 ? 'length' : 'text'
+      const b = baseOf(n)
+      return isLen(b) && pxOf(b) <= BASE_RANGE(gid, n)[1] * 3 ? 'length' : 'text'
     }
-    /** 区间必须包住当前值，否则渲染的一瞬间就会被钳值回写 */
+    /** 区间由基线值决定并必须包住它，否则渲染的一瞬间就会被 el-slider 钳值回写 */
     const rangeOf = (gid, n) => {
       const [lo, hi] = BASE_RANGE(gid, n)
-      const cur = pxOf(overrideValue(n))
-      return [Math.min(lo, cur), Math.max(hi, Math.ceil(cur * 1.5))]
+      const b = pxOf(baseOf(n))
+      return [Math.min(lo, b), Math.max(hi, b)]
     }
     /** 只有真的变了才写，挡住控件回吐同值触发的空写 */
     const onSlide = (n, v) => { const next = v + 'px'; if (next !== overrideValue(n)) setOverride(n, next) }
+
+    /* 文本 / 数值输入用本地草稿：el-input 是单向绑定，不留草稿的话每次重渲染都会把旧值写回原生 input，输入框等于只读 */
+    const draft = Vue.reactive({})
+    // shortColor 只把 rgb(r, g, b) 归一成 #rrggbb，其余原样返回，正好当统一的显示函数用
+    const draftValue = n => (n in draft ? draft[n] : shortColor(overrideValue(n)))
+    const onDraft = (n, v) => { draft[n] = v }
+    const commitDraft = n => {
+      if (!(n in draft)) return
+      const v = String(draft[n]).trim()
+      delete draft[n]
+      if (!v) return resetOverride(n)          // 清空即恢复默认
+      if (v !== overrideValue(n)) { setOverride(n, v); state.tick++ }
+    }
     const overrideValue = n => state.overrides[n] ?? resolved.value[n]
     const isOverridden = n => n in state.overrides
-    const setOverride = (n, v) => { state.overrides[n] = v; document.documentElement.style.setProperty(n, v) }
-    const resetOverride = n => { delete state.overrides[n]; document.documentElement.style.removeProperty(n); state.tick++ }
+    const setOverride = (n, v) => {
+      if (!(n in baseCache)) baseCache[n] = resolved.value[n]   // 第一次覆盖时把基线冻结下来
+      state.overrides[n] = v; document.documentElement.style.setProperty(n, v)
+    }
+    const resetOverride = n => { delete state.overrides[n]; delete baseCache[n]; document.documentElement.style.removeProperty(n); state.tick++ }
     const resetOverrides = () => {
-      for (const n of Object.keys(state.overrides)) document.documentElement.style.removeProperty(n)
+      for (const n of Object.keys(state.overrides)) { document.documentElement.style.removeProperty(n); delete baseCache[n] }
       state.overrides = {}; state.primary = shortColor(getComputedStyle(document.documentElement).getPropertyValue('--color-primary').trim()); state.tick++
     }
     const overrideCount = Vue.computed(() => Object.keys(state.overrides).length)
     const overrideCss = () => `:root {\n${Object.entries(state.overrides).map(([n, v]) => `  ${n}: ${v};`).join('\n')}\n}`
-    /* 浮窗拖动：只按下标题栏才拖；位置钳在视口内，缩到只剩标题栏时也不会被拖出屏幕 */
-    const TUNER_W = 420
-    const tunerStyle = Vue.computed(() => ({ left: state.tunerPos.x + 'px', top: state.tunerPos.y + 'px' }))
-    /** 按浮窗实际高度钳位，保证整体留在视口内（收起时只有标题栏，能贴到很下面） */
-    const clampPos = (x, y) => {
-      const pad = 8
-      const h = document.querySelector('.ds-tuner')?.getBoundingClientRect().height || 40
-      return { x: Math.min(Math.max(pad, x), Math.max(pad, innerWidth - TUNER_W - pad)), y: Math.min(Math.max(pad, y), Math.max(pad, innerHeight - h - pad)) }
+    /* 浮层拖动（调参浮窗与整页控制条共用）：按下把手才拖，按实际尺寸钳在视口内 */
+    const DRAG = {
+      tuner: { sel: '.ds-tuner', pos: () => state.tunerPos, flag: 'tunerDrag' },
+      fab: { sel: '.ds-fab', pos: () => state.fabPos, flag: 'fabDrag' },
     }
-    let dragFrom = null
-    const dragMove = e => { if (dragFrom) Object.assign(state.tunerPos, clampPos(e.clientX - dragFrom.dx, e.clientY - dragFrom.dy)) }
-    const dragEnd = () => { dragFrom = null; state.tunerDrag = false; window.removeEventListener('pointermove', dragMove) }
-    function dragStart(e) {
-      if (e.target.closest('.ds-tuner__acts')) return   // 收起 / 关闭按钮不触发拖动
-      dragFrom = { dx: e.clientX - state.tunerPos.x, dy: e.clientY - state.tunerPos.y }
-      state.tunerDrag = true
+    const clampIn = (el, x, y) => {
+      const pad = 8, r = el.getBoundingClientRect()
+      return { x: Math.min(Math.max(pad, x), Math.max(pad, innerWidth - r.width - pad)), y: Math.min(Math.max(pad, y), Math.max(pad, innerHeight - r.height - pad)) }
+    }
+    let dragCtx = null
+    const dragMove = e => { if (dragCtx) Object.assign(dragCtx.pos, clampIn(dragCtx.el, e.clientX - dragCtx.dx, e.clientY - dragCtx.dy)) }
+    const dragEnd = () => { if (dragCtx) state[dragCtx.flag] = false; dragCtx = null; window.removeEventListener('pointermove', dragMove) }
+    function dragStart(e, key) {
+      if (e.target.closest('.el-button, .el-input, .ds-seg')) return   // 条上的控件不触发拖动
+      const conf = DRAG[key], el = e.currentTarget.closest(conf.sel), pos = conf.pos()
+      if (!el) return
+      if (!pos.x && !pos.y) { const r = el.getBoundingClientRect(); pos.x = Math.round(r.x); pos.y = Math.round(r.y) }  // 首次拖动前用 CSS 默认位，这里接管
+      dragCtx = { pos, el, flag: conf.flag, dx: e.clientX - pos.x, dy: e.clientY - pos.y }
+      state[conf.flag] = true
       window.addEventListener('pointermove', dragMove)
       window.addEventListener('pointerup', dragEnd, { once: true })
     }
-    const openTuner = () => { if (!state.tunerPos.x) Object.assign(state.tunerPos, clampPos(innerWidth - TUNER_W - 24, 72)); state.tuner = true; state.tunerMin = false }
-    window.addEventListener('resize', () => { if (state.tuner) Object.assign(state.tunerPos, clampPos(state.tunerPos.x, state.tunerPos.y)) })
+    const floatStyle = pos => (pos.x || pos.y) ? { left: pos.x + 'px', top: pos.y + 'px', right: 'auto', bottom: 'auto' } : {}
+    const tunerStyle = Vue.computed(() => floatStyle(state.tunerPos))
+    const fabStyle = Vue.computed(() => floatStyle(state.fabPos))
+    const openTuner = () => { state.tuner = true; state.tunerMin = false }
+    window.addEventListener('resize', () => {
+      for (const k of Object.keys(DRAG)) {
+        const pos = DRAG[k].pos(), el = document.querySelector(DRAG[k].sel)
+        if (el && (pos.x || pos.y)) Object.assign(pos, clampIn(el, pos.x, pos.y))
+      }
+    })
 
     const tunerGroups = Vue.computed(() => {
       const q = state.tunerQ.trim().toLowerCase()
@@ -906,7 +941,7 @@ const app = Vue.createApp({
     })
 
     return { T, ROUTES, CATEGORIES, CUSTOM_GROUPS, COMPONENTS, CUSTOM, LAYOUTS, PRESETS, state, probe, mainScroll, onScroll, customOf, tokenKind, sliderRange, pxOf, tweakValue, setTweak, resetTweak, hasTweak, tweakStyle,
-      tunerGroups, kindOf, rangeOf, onSlide, tunerStyle, dragStart, openTuner, overrideValue, isOverridden, setOverride, resetOverride, resetOverrides, overrideCount, overrideCss, TEMPLATES, currentTemplate, currentCustom, tplIndex, stepTemplate, layoutMeta, currentRoute, anchors, resolved, group, colorGroup, functionalColors, colorsByScope, spaceTokens, fontSizes, fontOthers, fontWeightFor, fontSampleText, describe, shortColor, isWhite, compsOf, demoComp, jump, go, applyMode, applyPrimary, applyPreset, copy }
+      tunerGroups, kindOf, rangeOf, onSlide, tunerStyle, fabStyle, dragStart, openTuner, draftValue, onDraft, commitDraft, overrideValue, isOverridden, setOverride, resetOverride, resetOverrides, overrideCount, overrideCss, TEMPLATES, currentTemplate, currentCustom, tplIndex, stepTemplate, layoutMeta, currentRoute, anchors, resolved, group, colorGroup, functionalColors, colorsByScope, spaceTokens, fontSizes, fontOthers, fontWeightFor, fontSampleText, describe, shortColor, isWhite, compsOf, demoComp, jump, go, applyMode, applyPrimary, applyPreset, copy }
   },
 })
 app.use(ElementPlus, { locale: ElementPlusLocaleZhCn }).use(DesignSystemUI)

@@ -13,6 +13,7 @@ current-changes:
   - "C-041"
   - "C-042"
   - "C-043"
+  - "C-044"
 status: "active"
 updated: "2026-09-05"
 ---
@@ -23,7 +24,7 @@ updated: "2026-09-05"
 
 - 当前需求版本：`RV-016`
 - 当前工作迭代：`IT-016`
-- 当前变更：`C-037` 展示页三页视觉重排、`C-038` 去重叠：自研组件单组件详情 + 布局配置整页路由、`C-039` 内容区取消限宽、`C-040` 高度填充布局与高级搜索浮窗（add R-050 / R-051）、`C-041` dist 产物可复现、`C-042` 修复填充链把页面收成 max-content 宽、`C-043` 展示页全局调参面板
+- 当前变更：`C-037` 展示页三页视觉重排、`C-038` 去重叠：自研组件单组件详情 + 布局配置整页路由、`C-039` 内容区取消限宽、`C-040` 高度填充布局与高级搜索浮窗（add R-050 / R-051）、`C-041` dist 产物可复现、`C-042` 修复填充链把页面收成 max-content 宽、`C-043` 展示页全局调参面板、`C-044` 调参值格可输入 / 控件不变形 / 控制条可拖动
 - 本轮目标：展示页从「文档里的缩略预览」变成「能整屏打开的真实页面」，并补上表格页最缺的一块能力——页面撑满、表格随父级高度流动、表体内滚、分页贴底
 - 当前结论：**IT-016 完成**（R-050 / R-051 verified；R-005 / R-009 / R-037 / R-038 / R-041 / R-042 / R-044 / R-048 / R-049 重新 verified）；IT-015 完成（R-026 / R-027 / R-049 verified）；IT-014 完成（R-020 / R-021 / R-024 / R-025 / R-031 verified）；IT-013 完成（R-047 / R-048 verified，R-049 ready；R-005 / R-037 重新 verified）；IT-012 完成（R-046 verified，R-037 重新 verified）；IT-011 完成（R-042 / R-045 / R-044 / R-041 重新 verified）；IT-010 完成（R-045 verified；R-041 / R-044 重新 verified）；IT-009 完成（R-044 verified，R-037 重新 verified，代码已提交）；IT-008 完成（R-037 / R-041 / R-012 / R-007 / R-042 重新 verified，代码已提交）；展示页按方向 A 重做并验证（R-037），hash 路由落地并验证（R-038）；第一步成果保持——第一、二层（F-001～F-004）、原型模板与检查脚本（F-005）、`CLAUDE.md`、说明文档已实现并通过验收，17 条 `verified`、6 条 `implemented`（其余验收条件依赖第二步的 apps/web）；4 条 `ready` 属于第二步 B（Claude 插件 R-032～R-035），待用户验收第一步后授权
 
@@ -97,7 +98,7 @@ updated: "2026-09-05"
 
 ### 页面排版模板
 
-- [x] `R-044` 五套页面排版模板（参考用户本机 HY Compiler Studio「页面排版模板 · 五种多菜单业务布局效果」）：01 统计模板（统计卡行 → 趋势 / 分布 → 概况 → 进度）、02 纯表格页（面包屑 → 筛选条「label + 控件」含高级搜索展开区 → 表格（表头 40 / 行 44、状态圆胶囊、操作列固定右）→ 分页右对齐）、03 统计 + 表格、04 左树 + 表格（`.l-split--aside` 320：UiModuleHeader + 搜索 + ElTree `highlight-current`）、05 TabBar + 表格（`<el-tabs class="is-tabbar">` 胶囊页签条）。骨架只用 `.l-*` + 白名单 / 自研组件，间距全部来自 token；单一来源 `showcase.data.js` `TEMPLATES`；02～05 表格模板采用高度填充写法（`R-050`），01 统计模板保持自然流。展示页「布局配置」`#/templates` 是**索引页**：五张模板卡（编号 / 名称 / 说明 / 结构 pills / 复制骨架 / 复制完整模板 / 打开整页），hero 芯片显示 page / module / header / sidebar / collapsed 实时值；点「打开整页」进 `#/page/<key>`，**没有展示页外壳**，UiShell 撑满视口、尺寸全为真实值，右下角浮动控制条提供 返回 / 上下一套 / 深浅 / 密度 / 复制骨架。原型开发第一步为选模板（CLAUDE.md §3）。`category: functional` `status: verified`
+- [x] `R-044` 五套页面排版模板（参考用户本机 HY Compiler Studio「页面排版模板 · 五种多菜单业务布局效果」）：01 统计模板（统计卡行 → 趋势 / 分布 → 概况 → 进度）、02 纯表格页（面包屑 → 筛选条「label + 控件」含高级搜索展开区 → 表格（表头 40 / 行 44、状态圆胶囊、操作列固定右）→ 分页右对齐）、03 统计 + 表格、04 左树 + 表格（`.l-split--aside` 320：UiModuleHeader + 搜索 + ElTree `highlight-current`）、05 TabBar + 表格（`<el-tabs class="is-tabbar">` 胶囊页签条）。骨架只用 `.l-*` + 白名单 / 自研组件，间距全部来自 token；单一来源 `showcase.data.js` `TEMPLATES`；02～05 表格模板采用高度填充写法（`R-050`），01 统计模板保持自然流。展示页「布局配置」`#/templates` 是**索引页**：五张模板卡（编号 / 名称 / 说明 / 结构 pills / 复制骨架 / 复制完整模板 / 打开整页），hero 芯片显示 page / module / header / sidebar / collapsed 实时值；点「打开整页」进 `#/page/<key>`，**没有展示页外壳**，UiShell 撑满视口、尺寸全为真实值，浮动控制条提供 返回 / 上下一套 / 深浅 / 密度 / 调参 / 复制骨架，可按把手拖动到任意位置。原型开发第一步为选模板（CLAUDE.md §3）。`category: functional` `status: verified`
 
 ### 展示页面
 
@@ -161,7 +162,7 @@ updated: "2026-09-05"
 | R-044 | 五个页签各自渲染：01 含 4 张 UiStatCard，02～05 含表格与分页，04 含 ElTree，05 含 ElTabs；侧栏高亮与面包屑随模板切换；芯片值与 tokens 一致；`复制页面骨架` 得到的内容可放入 `_template.html` 的 `.l-page` 并通过 check | 用户输入（127.0.0.1:5173/#/materials/layout 五个菜单） | R-012, R-041, R-009 | RV-011 | C-026, C-030, C-032 | F-011, F-005 |
 | R-038 | 直达 `#/<key>` 高亮对应菜单；点击菜单改 hash；后退恢复；原型模板 `#/reports` 高亮「报表」；十条路由（含 `#/custom/<key>`、`#/page/<key>`）循环无运行时报错，空 `<sub>` 落到首项并补全 hash | 用户输入（补充路由概念） | R-012, R-016 | RV-004 | C-014, C-038 | F-005, F-011, F-008 |
 | R-050 | 1440×1200 下 `#/page/stat-table`：页面高 = 外壳内容区高，模块 / 表格逐层吃满，分页贴底且无外层滚动；压到 420 高时表体 `clientHeight < scrollHeight`（内滚生效）且仍无外层滚动；不加 `--fill` 的 01 统计页仍为外层滚动；`el-table` 全程不传 `height`；**且 1920 宽下 `.l-page` 宽度必须等于外壳内容区宽度**（填充链不得反过来压缩宽度，见 C-042） | 用户输入（表格高度应受父级限制、默认占满） | R-009, R-012, R-042, R-043 | RV-016 | C-040 | F-001, F-002, F-003, F-004, F-005, F-006 |
-| R-052 | 打开抽屉不碰任何控件时 `:root` 的 inline style 必须为空、「已改」计数为 0（钳值回写会当场暴露）；浮窗可按标题栏拖动、收起为 183×34 的标题栏、展开复原 420×735，拖到底部仍整体在视口内；82 行控件（85 语义 token 去掉 3 个断点 / 密度）含 41 滑块 / 24 取色器 / 17 文本框；改 `--radius-lg` 与 `--border-w` 后模块圆角 12→13、边框 1→2，改 `--radius-md` 后 Element Plus 输入框圆角 6→18；复制得到只含改动项的 `:root` 片段；全部重置后 inline 清空且视觉复原 | 用户输入（控制项应更丰富） | R-037, R-030 | RV-016 | C-043 | F-011 |
+| R-052 | 打开抽屉不碰任何控件时 `:root` 的 inline style 必须为空、「已改」计数为 0（钳值回写会当场暴露）；浮窗可按标题栏拖动、收起为 183×34 的标题栏、展开复原 420×735，拖到底部仍整体在视口内；82 行控件（85 语义 token 去掉 3 个断点 / 密度）含 41 滑块 / 24 取色器 / 17 文本框；改 `--radius-lg` 与 `--border-w` 后模块圆角 12→13、边框 1→2，改 `--radius-md` 后 Element Plus 输入框圆角 6→18；滑块推到上限后控件形态与区间**不得变化**（形态与区间只由首次覆盖时冻结的基线值决定）；值格可直接打字改精确值、清空即恢复默认；复制得到只含改动项的 `:root` 片段；全部重置后 inline 清空且视觉复原 | 用户输入（控制项应更丰富） | R-037, R-030 | RV-016 | C-043 | F-011 |
 | R-051 | 点开高级搜索前后，筛选条 / 表格 / 页面高度三项数值完全相同；浮窗渲染在 body（teleport）且含全部展开项；无 `#advanced` 插槽时仍只触发 `toggle` | 用户输入（高级搜索激活应该是浮窗 不影响高度） | R-041 | RV-016 | C-040 | F-003, F-005, F-011 |
 
 ## 不变量
@@ -195,7 +196,7 @@ updated: "2026-09-05"
 
 - 目标：展示页从「文档里的缩略预览」变成「能整屏打开的真实页面」；补上表格页最缺的能力——页面撑满、表格随父级高度流动、表体内滚、分页贴底；高级搜索不再挤压表格
 - 范围：`tokens.css`（content-max）、`layout.css`（填充三件套）、`ui/UiShell.vue`、`ui/UiState.vue`、`ui/composites/UiFilterBar.vue`、`skins/table.css`、`scripts/check-layer2.mjs`、`showcase.html`、`showcase.data.js`、`apps/prototypes/_template.html`、`apps/web/src/features/orders/Page.vue`、`tests/visual/mutate.mjs`、README / CLAUDE.md §2；git commit（第一二层与第三层回填分两次提交）
-- 包含变更：`C-037`、`C-038`、`C-039`、`C-040`、`C-041`、`C-042`、`C-043`
+- 包含变更：`C-037`、`C-038`、`C-039`、`C-040`、`C-041`、`C-042`、`C-043`、`C-044`
 - 对应需求版本：`RV-016`
 - 退出条件：R-050 / R-051 verified；R-005 / R-009 / R-037 / R-038 / R-041 / R-042 / R-044 / R-048 / R-049 重新 verified；八项门禁全绿；代码已提交
 
@@ -288,6 +289,16 @@ updated: "2026-09-05"
 - 关联需求：`R-050`、`R-051`、`R-009`、`R-012`、`R-041`、`R-042`
 - 覆盖关系：—
 - 影响功能：`F-001 direct`、`F-002 direct`、`F-003 direct`、`F-004 direct`、`F-005 direct`、`F-006 direct`
+
+### C-044 · 调参面板值格可输入、控件不再变形；控制条可拖动
+
+- 类型：`implementation_correction`
+- 原因：用户反馈「滑块拉满之后变成输入框了，但是我又不能直接修改它」「五个模板左下角那个固定返回和统计模板我又无法拖动」
+- 之前：① `rangeOf` 用**当前值**算上限（`max(hi, cur × 1.5)`），拖近上限时区间跟着长，越过 `hi × 3` 阈值后 `kindOf` 把滑块换成输入框；② 那个输入框是 `el-input` 单向 `:model-value`，Element Plus 每次重渲染都把 `props.modelValue` 写回原生 input，打字立刻被弹回，等于只读；③ 整页控制条 `.ds-fab` 固定在左下角，不可移动
+- 之后：① 新增**基线值**概念——首次覆盖时冻结该 token 的原值，`kindOf` 与 `rangeOf` 只看基线，控件形态与滑块区间在调整过程中恒定不变（圆角上限同时由 32 放宽到 48）；② 值格统一换成可输入的 `el-input` 并引入本地草稿（`draft` + `commitDraft`），滑块 / 取色器降为快捷方式，精确值直接打字、清空即恢复默认，颜色值经 `shortColor` 归一为 `#rrggbb`；③ 拖动逻辑抽成 `DRAG` 配置 + `dragStart(e, key)`，浮窗与控制条共用，控制条加把手图标、按下控件不触发拖动、按实际尺寸钳在视口内
+- 关联需求：`R-052`、`R-044`
+- 覆盖关系：修正 `C-043` 的实现，不改变 `R-052` 的语义
+- 影响功能：`F-011 direct`
 
 ### C-043 · 展示页全局调参面板
 
@@ -461,6 +472,7 @@ updated: "2026-09-05"
 | C-039 | F-001, F-002 | direct | 第一层 token 值改变 | 1920 下 `.l-page` 宽 = 内容区宽；无横向滚动 |
 | C-040 | F-001, F-002, F-003, F-004, F-005, F-006 | direct | 新增布局能力与组件行为 | 逐层高度实测；矮视口内滚；浮窗前后高度不变；视觉回归 0.00% |
 | C-041 | F-003, F-007 | direct | 构建产物确定性 | 连续两次生成一致；`git diff --exit-code -- dist` 返回 0 |
+| C-044 | F-011 | direct | 调参控件形态与浮层交互 | 拉满不变形；打字不被弹回；控制条可拖 |
 | C-043 | F-011 | direct | 展示页新增全局调参能力 | 空开抽屉零写入；三类控件联动；复制与重置闭环 |
 | C-042 | F-002, F-004 | direct | 外壳滚动视图的格式化上下文 | 1920 下 `.l-page` 宽 = 内容区宽；矮视口表体仍内滚；非填充页仍外滚 |
 | C-027 | F-011 | direct | 页签顺序与命名 | 路由 |
@@ -569,7 +581,7 @@ updated: "2026-09-05"
 | E-28 | R-050, R-051, R-009, R-041, R-042 | 1440×1200 `#/page/stat-table`：视图 1140 → 页面 1140 → 模块 920 → 表格 774 → 表体 732，表头 40 固定、分页 32 贴底、无外层滚动；1280×420 `#/page/table`：页面恰好 360、无外层滚动、表体 client 45 / scroll 132（**内滚生效**）、分页仍在视野内；1280×500 `#/page/stat`（不加 `--fill`）：视图 440 / 页面 817 / 外层可滚、滚动条存在——两种模式并存；04 左树穿过 `.l-split` 栅格：split 757、树面板与表格模块同为 757、表格 567；原型模板 1440×900：视图 840 → 页面 840 → 模块 707 → UiState 625 → 表格 593，且 loading / empty / error / ready 四态高度恒定（825→840 不再跳动）。浮窗：点开前后 筛选条 56 / 表格 611 / 页面 840 三项**完全相同**，浮窗 289×109、白底 + 边框 + 阴影、z-index 2011、含 2 个展开项；`el-table` 全程未传 `height` | pass | 2026-09-05 |
 | E-29 | R-048, R-049, R-026, R-027 | `check-layer2` 输出键排序后与改前内容逐项等价（脚本比对 `equal: true`）；再去掉两个生成脚本的 `generatedAt` 后，连续两次 `build:ds` 之间 `git diff --exit-code -- packages/design-system/dist` 返回 0——CI 第四步此前因时间戳每次必失败，现已可过；八项门禁全绿——`lint` / `typecheck` 0 错误，`build:ds` 0 错误 1 条既有警告（未消费 2），`check:prototype` 通过，`test:visual` 三用例均 0.00%，`test:mutation` 7 组件全过。变异测试抓到真信号：新增的 `--space-module-pad` / `--space-module-gap` 在 UiFilterBar 上观察不到，核实为 `ElPopover` teleport 到 body 不在快照范围 + `.l-stack` 基类被 `--tight` 覆盖（与 UiListItem 已有例外同因），写入 `KNOWN` 并注明原因，未放宽断言 | pass | 2026-09-05 |
 | E-30 | R-050, R-005, R-012 | 用户发现宽屏两侧又出现留白。复现：1920×1000 `#/page/stat-table` 下 `--layout-content-max` 与 `max-width` 均解析为 `none`，但 `.l-page` 仅 x=538 / w=1075（内容区 1690）——`.ui-shell__view` 的 `display: flex` 让 `.l-page` 的 `margin-inline: auto` 在交叉轴压过 `stretch`，收缩成 max-content 宽。视图改回块级 + `.l-page--fill` 自带 `height: 100%` 后三种情形同时成立：1920×1000 填充页 `.l-page` x=230 / w=1690 / h=940 = 视图，模块 720 / 表格 574 / 分页贴底 / 无外层滚动；1280×420 表体 client 45 vs scroll 132（内滚生效）、分页仍在视野；1920×500 非填充页 `.l-page` w=1690 / h=817、视图 440、外层可滚且滚动条存在；原型模板 1920 下同样 w=1690、表格 1616 | pass | 2026-09-05 |
-| E-31 | R-052, R-037 | 新标签页打开抽屉、不做任何操作：`:root` inline style 为空、计数 0（修复前会被 el-slider 钳值回写成 4 项）；分组 颜色24 / 间距13 / 圆角4 / 边框2 / 阴影3 / 字体13 / 布局尺寸20 / 层级5，共 82 行 = 41 滑块 + 24 取色器 + 17 文本框，`--radius-full` 为文本框；`#/page/table` 整页视图经 FAB 打开抽屉同样可用，键盘步进 `--radius-lg` / `--border-w` 后模块 borderRadius 12→13px、borderTopWidth 1→2px、计数 2；`--radius-md` 6→18px 时 Element Plus 输入框圆角同步 6→18px（small 按钮走 `--radius-sm`，已在提示文案中写明）；复制输出 `:root {  --radius-lg: 13px;  --border-w: 2px; }`；全部重置后 inline 清空、模块复原 12px/1px、计数归零；新标签页无控制台报错 | pass | 2026-09-05 |
+| E-31 | R-052, R-037 | 新标签页打开抽屉、不做任何操作：`:root` inline style 为空、计数 0（修复前会被 el-slider 钳值回写成 4 项）；分组 颜色24 / 间距13 / 圆角4 / 边框2 / 阴影3 / 字体13 / 布局尺寸20 / 层级5，共 82 行 = 41 滑块 + 24 取色器 + 17 文本框，`--radius-full` 为文本框；`#/page/table` 整页视图经 FAB 打开抽屉同样可用，键盘步进 `--radius-lg` / `--border-w` 后模块 borderRadius 12→13px、borderTopWidth 1→2px、计数 2；`--radius-md` 6→18px 时 Element Plus 输入框圆角同步 6→18px（small 按钮走 `--radius-sm`，已在提示文案中写明）；复制输出 `:root {  --radius-lg: 13px;  --border-w: 2px; }`；全部重置后 inline 清空、模块复原 12px/1px、计数归零；新标签页无控制台报错。二轮修正后复验：`--radius-lg` 打字 30px 全程不被弹回、提交后模块圆角 30px 且控件仍是滑块（上限稳定在 48）；`--radius-full` 设为 20px 后仍是文本框（基线冻结在 9999px）；清空输入框即恢复默认（inline 移除、圆角回 12px）；`--space-module-gap` 用 End 推到上限 64px 控件不变形；`--color-primary` 打字 `#c2410c` 后截图确认搜索按钮 / 高级搜索链接 / 侧栏选中项 / 面板按钮全部转为橙色（注：自动化的 getComputedStyle 读数会滞后，以截图为准）；整页控制条按把手从 (20,893) 拖到 (440,333) | pass | 2026-09-05 |
 | E-08 | R-028 | `doc/frontend-layered-design.md` §1～§10 与 RV-002 逐节核对；IT-003 同步 §3 目录树与 §9 展示页（RV-003）；IT-004 同步 §6 路由与 §9 方向 A（RV-004）：Vue 3 + Element Plus、Vite 8 + Tailwind 4、monorepo 目录、CDN 原型形态、插件三技能、展示页面、实施状态 | pass | 2026-09-02 |
 
 ## 历史索引
@@ -582,6 +594,7 @@ updated: "2026-09-05"
 | RV-016 | IT-016 | C-039 | modify | R-005 | `--layout-content-max` 1440px → none | F-001, F-002 |
 | RV-016 | IT-016 | C-040 | add | R-050, R-051, R-009, R-041, R-042 | 无 → 高度填充布局与高级搜索浮窗 | F-001～F-006 |
 | RV-016 | IT-016 | C-041 | implementation_correction | R-048, R-026 | dist 可复现：键排序 + 去掉生成时间 | F-003, F-007 |
+| RV-016 | IT-016 | C-044 | implementation_correction | R-052, R-044 | 值格可输入、控件不变形、控制条可拖 | F-011 |
 | RV-016 | IT-016 | C-043 | add | R-052, R-037 | 四个开关 → 覆盖 82 个 token 的调参面板 | F-011 |
 | RV-016 | IT-016 | C-042 | implementation_correction | R-050, R-005, R-012 | 外壳视图改回块级，修复填充链把页面收成 max-content 宽 | F-002, F-004 |
 | RV-015 | IT-015 | C-036 | implement | R-026, R-027, R-049, R-037, R-012 | ready → verified；两处缺陷修复 | F-007, F-008 |
