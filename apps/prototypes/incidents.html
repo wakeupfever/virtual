@@ -1,0 +1,452 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>巴中新环保系统 · 事件指挥</title>
+
+<!-- ===== 依赖：顺序固定，版本必须与 packages/design-system/package.json 一致 ===== -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/element-plus@2.14.5/dist/index.css">
+<link rel="stylesheet" href="../../packages/design-system/tokens.css">
+<link rel="stylesheet" href="../../packages/design-system/skins/index.css">
+<link rel="stylesheet" href="../../packages/design-system/layout.css">
+<link rel="stylesheet" href="../../packages/design-system/base.css">
+<link rel="stylesheet" href="../../packages/design-system/dist/ui.css">
+<script src="https://cdn.jsdelivr.net/npm/vue@3.5.42/dist/vue.global.prod.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/element-plus@2.14.5/dist/index.full.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/element-plus@2.14.5/dist/locale/zh-cn.min.js"></script>
+<script src="../../packages/design-system/dist/ui.iife.js"></script>
+<script src="../../packages/design-system/dist/tokens.js"></script>
+<!-- 原型禁止出现 <style> 与 style=""：所有外观来自第一、二层 -->
+</head>
+<body>
+
+<!-- ===== ③ 模板：只能使用 whitelist.json 中的标签 + .l-* 布局类；自定义标签必须显式闭合 ===== -->
+<div id="app">
+  <ui-shell title="巴中新环保系统" :menu="DATA.menu" :active-key="state.route" v-model:collapsed="state.collapsed" @select="onSelect">
+    <template #header-actions>
+      <!-- 原型必备：三态切换（R-018）。转正式页面时删除 -->
+      <span class="l-inline">
+        <small>原型状态</small>
+        <el-select v-model="state.view" size="small">
+          <el-option label="ready" value="ready"></el-option>
+          <el-option label="loading" value="loading"></el-option>
+          <el-option label="empty" value="empty"></el-option>
+          <el-option label="error" value="error"></el-option>
+        </el-select>
+        <el-select v-model="state.dataset" size="small">
+          <el-option label="常规数据" value="normal"></el-option>
+          <el-option label="长文本" value="long"></el-option>
+          <el-option label="大数据量" value="big"></el-option>
+        </el-select>
+        <ui-tuner></ui-tuner>
+      </span>
+    </template>
+
+    <!-- 事件列表（FR-INC-002）：菜单默认进入列表，不自动选中任何事件 -->
+    <div v-if="state.route === 'incidents'" class="l-page l-page--fill">
+      <div class="l-grid l-grid--cols-4">
+        <ui-stat-card label="在办事件" :value="counts.active" hint="含已接报待定级"></ui-stat-card>
+        <ui-stat-card label="已接报待定级" :value="counts.reported" hint="需 2 小时内定级"></ui-stat-card>
+        <ui-stat-card label="未闭环调度单" :value="counts.dispatch" hint="存在即阻断事件终止"></ui-stat-card>
+        <ui-stat-card label="待处理报告草稿" :value="counts.draft" hint="终止前必须清零"></ui-stat-card>
+      </div>
+
+      <section class="l-module l-stack l-stack--tight l-fill">
+        <el-tabs class="is-tabbar" v-model="state.tab">
+          <el-tab-pane v-for="t in DATA.tabs" :key="t.value" :name="t.value" :label="`${t.label} ${countOf(t.value)}`"></el-tab-pane>
+        </el-tabs>
+
+        <ui-filter-bar advanced searchable @search="reload" @reset="resetFilter">
+          <span class="l-inline">
+            <small>关键词</small>
+            <el-input v-model="state.keyword" placeholder="事件编号 / 名称 / 企业" clearable></el-input>
+          </span>
+          <span class="l-inline">
+            <small>来源</small>
+            <el-select v-model="state.source" placeholder="全部" clearable>
+              <el-option v-for="s in DATA.sources" :key="s.value" :label="s.label" :value="s.value"></el-option>
+            </el-select>
+          </span>
+          <template #advanced>
+            <span class="l-inline">
+              <small>等级</small>
+              <el-select v-model="state.level" placeholder="全部" clearable>
+                <el-option v-for="l in DATA.levels" :key="l.value" :label="l.label" :value="l.value"></el-option>
+              </el-select>
+            </span>
+            <span class="l-inline">
+              <small>发现时间</small>
+              <el-date-picker v-model="state.range" type="daterange" start-placeholder="开始" end-placeholder="结束"></el-date-picker>
+            </span>
+          </template>
+          <template #actions>
+            <el-button @click="notReady('导出事件台账')">导出</el-button>
+            <el-button type="primary" @click="state.createOpen = true">人工建单</el-button>
+          </template>
+        </ui-filter-bar>
+
+        <ui-state class="l-fill" :state="state.view" :empty-text="`${labelOf(DATA.tabs, state.tab)}下暂无事件`" @retry="reload">
+          <el-table class="l-fill" :data="pagedRows">
+            <el-table-column prop="no" label="事件编号" width="170"></el-table-column>
+            <el-table-column prop="name" label="事件名称" min-width="200" show-overflow-tooltip></el-table-column>
+            <el-table-column label="来源 / 原始单据" min-width="190" show-overflow-tooltip>
+              <template #default="{ row }">
+                <span class="l-inline">
+                  <span>{{ labelOf(DATA.sources, row.source) }}</span>
+                  <small>{{ row.originNo }} · v{{ row.originVer }}</small>
+                </span>
+              </template>
+            </el-table-column>
+            <el-table-column prop="enterprise" label="企业 / 位置" min-width="180" show-overflow-tooltip></el-table-column>
+            <el-table-column label="状态 / 等级" width="150">
+              <template #default="{ row }">
+                <span class="l-inline">
+                  <el-tag size="small" :type="statusType(row.status)">{{ labelOf(DATA.tabs, row.status) }}</el-tag>
+                  <small>{{ row.level ? labelOf(DATA.levels, row.level) : '未定级' }}</small>
+                </span>
+              </template>
+            </el-table-column>
+            <el-table-column label="接报人 / 接报时间" min-width="170">
+              <template #default="{ row }">
+                <span class="l-inline">
+                  <span>{{ row.receiver }}</span>
+                  <small>{{ row.receivedAt }}</small>
+                </span>
+              </template>
+            </el-table-column>
+            <el-table-column label="关联" width="150">
+              <template #default="{ row }">
+                <small>上报 {{ row.rel.reports }} · 告警 {{ row.rel.alarms }} · 调度 {{ row.rel.dispatch }}</small>
+              </template>
+            </el-table-column>
+            <!-- 行内动作最多两个（CLAUDE.md §2）：其余动作放进作战面板 -->
+            <el-table-column label="操作" width="150" fixed="right" class-name="is-actions">
+              <template #default="{ row }">
+                <el-button link type="primary" size="small" @click="enterCommand(row)">进入指挥</el-button>
+                <el-button link type="primary" size="small" @click="openSource(row)">来源</el-button>
+              </template>
+            </el-table-column>
+          </el-table>
+          <div class="l-cluster l-cluster--end">
+            <el-pagination layout="total, prev, pager, next, sizes" :total="filteredRows.length" v-model:current-page="state.page" v-model:page-size="state.pageSize" :page-sizes="[10, 20, 50]"></el-pagination>
+          </div>
+        </ui-state>
+      </section>
+    </div>
+
+    <!-- 未覆盖的菜单：明确占位并写清对应 PRD 章节（R-053） -->
+    <div v-else class="l-page l-page--fill">
+      <section class="l-module l-fill">
+        <ui-state class="l-fill" state="empty" :empty-text="`「${currentMenu.label}」原型尚未覆盖`">
+          <template #action>
+            <div class="l-stack l-stack--tight">
+              <small>对应 PRD {{ currentMenu.prd }}。本轮覆盖的菜单：事件指挥 → 事件列表。</small>
+              <span class="l-cluster l-cluster--center">
+                <el-button type="primary" @click="onSelect('incidents')">前往事件列表</el-button>
+              </span>
+            </div>
+          </template>
+        </ui-state>
+      </section>
+    </div>
+
+    <!-- 作战面板（FR-INC-002）：只能由列表点击进入，顶部固定显示"当前作战事件（已明确选择）" -->
+    <el-drawer v-model="state.commandOpen" size="620px" :title="state.current ? `作战面板 ${state.current.no}` : '作战面板'">
+      <div v-if="state.current" class="l-stack">
+        <section class="l-module">
+          <ui-module-header title="当前作战事件（已明确选择）" :desc="state.current.name">
+            <template #meta>{{ labelOf(DATA.tabs, state.current.status) }}</template>
+          </ui-module-header>
+          <div class="l-grid l-grid--cols-2 l-grid--tight">
+            <div v-for="f in commandFields" :key="f.label" class="l-tile">
+              <small>{{ f.label }}</small>
+              <strong>{{ f.value }}</strong>
+            </div>
+          </div>
+        </section>
+
+        <section class="l-module">
+          <ui-module-header title="处置时间轴" desc="每一步留痕，绑定当前事件">
+            <template #meta>{{ state.current.timeline.length }} 条</template>
+          </ui-module-header>
+          <div class="l-stack l-stack--tight">
+            <ui-list-item v-for="(t, i) in state.current.timeline" :key="i" :title="t.action" :subtitle="`${t.at} · ${t.by}`" divided>
+              <template #trailing><small>{{ t.note }}</small></template>
+            </ui-list-item>
+          </div>
+        </section>
+
+        <section class="l-module">
+          <ui-module-header title="通知回执" desc="每个「收件人 × 通道」独立记录，未接入通道显示 CHANNEL_OFF">
+            <template #meta>{{ state.current.notices.length }} 条</template>
+          </ui-module-header>
+          <div class="l-stack l-stack--tight">
+            <ui-list-item v-for="(n, i) in state.current.notices" :key="i" :title="`${n.to} · ${n.channel}`" :subtitle="n.at" divided>
+              <template #trailing>
+                <el-tag size="small" :type="n.state === 'CHANNEL_OFF' ? 'info' : (n.state === '已确认' ? 'success' : 'warning')">{{ n.state }}</el-tag>
+              </template>
+            </ui-list-item>
+          </div>
+        </section>
+      </div>
+      <template #footer>
+        <div class="l-cluster l-cluster--end">
+          <el-button @click="state.commandOpen = false">返回事件列表</el-button>
+          <el-button type="primary" @click="terminate">终止校验</el-button>
+        </div>
+      </template>
+    </el-drawer>
+
+    <!-- 人工建单（FR-INC-001）：来源快照字段 -->
+    <el-dialog v-model="state.createOpen" title="人工建单" width="520px">
+      <el-form class="l-form" label-position="right">
+        <el-form-item label="事件名称"><el-input v-model="state.form.name" placeholder="简述事件"></el-input></el-form-item>
+        <el-form-item label="来源类型">
+          <el-select v-model="state.form.source" placeholder="请选择">
+            <el-option v-for="s in DATA.sources" :key="s.value" :label="s.label" :value="s.value"></el-option>
+          </el-select>
+        </el-form-item>
+        <el-form-item label="企业 / 位置"><el-input v-model="state.form.enterprise" placeholder="企业名称 + 具体位置"></el-input></el-form-item>
+        <el-form-item label="接报依据"><el-input v-model="state.form.basis" type="textarea" placeholder="核对过的告警 / 上报 / 监测 / 视频证据"></el-input></el-form-item>
+      </el-form>
+      <template #footer>
+        <el-button @click="state.createOpen = false">取消</el-button>
+        <el-button type="primary" :disabled="!createValid" @click="submitCreate">建单</el-button>
+      </template>
+    </el-dialog>
+  </ui-shell>
+</div>
+
+<script>
+/* ===== ① DATA：mock 数据只放这里。转正式页面时整块替换为 features/incidents/api.ts =====
+ * 必须包含：常规样本、长文本样本、大数据量样本（R-018）
+ * 信息架构与字段来自《巴中新环保系统 PRD》§5.2 一级导航、§8.5 事件指挥 */
+const DATA = {
+  menu: [
+    { key: 'overview', label: '综合态势', prd: '§8.1', icon: 'dashboard', group: '态势' },
+    { key: 'map', label: '环境应急一张图', prd: '§8.2', icon: 'map' },
+    { key: 'monitor', label: '在线监测', prd: '§8.3', icon: 'monitor', group: '处置', children: [
+      { key: 'monitor-tree', label: '设备树与趋势', prd: '§8.3' },
+      { key: 'monitor-hj212', label: 'HJ212 接入概览', prd: '§9' },
+    ] },
+    { key: 'alarms', label: '告警中心', prd: '§8.4', icon: 'alarm' },
+    { key: 'incidents', label: '事件指挥', prd: '§8.5', icon: 'incident', children: [
+      { key: 'incidents', label: '事件列表', prd: '§8.5 FR-INC-002' },
+      { key: 'inc-reports', label: '上报与报告', prd: '§8.5 FR-INC-006', children: [
+        { key: 'inc-report-first', label: '首报', prd: '§8.5 FR-INC-006' },
+        { key: 'inc-report-follow', label: '续报', prd: '§8.5 FR-INC-006' },
+        { key: 'inc-report-final', label: '终报', prd: '§8.5 FR-INC-006' },
+      ] },
+      { key: 'inc-relations', label: '关联事件', prd: '§8.5 FR-INC-008' },
+    ] },
+    { key: 'wastewater', label: '事故废水三级防控', prd: '§8.6', icon: 'quality' },
+    { key: 'enterprises', label: '企业监管', prd: '§8.7', icon: 'enterprise', group: '基础' },
+    { key: 'emergency', label: '应急管理', prd: '§8.8', icon: 'emergency' },
+    { key: 'devices', label: '设备与数据接入', prd: '§8.9', icon: 'device' },
+    { key: 'quality', label: '数据质量', prd: '§8.10', icon: 'settings' },
+    { key: 'stats', label: '统计分析', prd: '§8.11', icon: 'stats' },
+  ],
+  tabs: [
+    { value: 'all', label: '全部' },
+    { value: 'active', label: '在办' },
+    { value: 'reported', label: '已接报待定级' },
+    { value: 'archived', label: '已归档' },
+  ],
+  sources: [
+    { value: 'alarm', label: '告警升级' },
+    { value: 'report', label: '企业上报' },
+    { value: 'hotline', label: '12369 接报' },
+    { value: 'manual', label: '人工建单' },
+    { value: 'drill', label: '演练' },
+  ],
+  levels: [
+    { value: 'i', label: 'Ⅰ 级' },
+    { value: 'ii', label: 'Ⅱ 级' },
+    { value: 'iii', label: 'Ⅲ 级' },
+    { value: 'iv', label: 'Ⅳ 级' },
+  ],
+  incidents: {
+    normal: [
+      {
+        no: 'IN-20260905-002', name: '东区一号排口 COD 持续超标', source: 'alarm', originNo: 'AL-20260905-0012', originVer: 2,
+        enterprise: '巴中示例化工 · 东区一号排口', status: 'active', level: 'iii', receiver: '王强', receivedAt: '09-05 08:20',
+        rel: { reports: 2, alarms: 3, dispatch: 1 }, commander: '李勇', response: 'Ⅲ 级响应', risk: '下游 3.2km 取水口',
+        next: '12:00 前提交续报', dispatchOpen: 1,
+        timeline: [
+          { action: '告警升级为事件', at: '09-05 08:20', by: '王强', note: '来源 AL-20260905-0012 v2' },
+          { action: '启动 Ⅲ 级响应', at: '09-05 08:35', by: '李勇', note: '预案 YA-2026-018' },
+          { action: '调度巡查队', at: '09-05 09:02', by: '李勇', note: '调度单 DP-0031 未闭环' },
+        ],
+        notices: [
+          { to: '园区值班室', channel: '站内信', at: '09-05 08:21', state: '已确认' },
+          { to: '企业环保员', channel: '短信', at: '09-05 08:21', state: '已送达' },
+          { to: '现场广播', channel: 'IP 广播', at: '—', state: 'CHANNEL_OFF' },
+        ],
+      },
+      {
+        no: 'IN-20260905-001', name: '西区危废暂存间异味', source: 'report', originNo: 'RP-20260905-0007', originVer: 1,
+        enterprise: '巴中示例材料 · 西区暂存间', status: 'reported', level: '', receiver: '张敏', receivedAt: '09-05 07:12',
+        rel: { reports: 1, alarms: 0, dispatch: 0 }, commander: '待指派', response: '未启动', risk: '厂界异味投诉 2 起',
+        next: '2 小时内完成定级', dispatchOpen: 0,
+        timeline: [
+          { action: '企业上报接报', at: '09-05 07:12', by: '张敏', note: '查重未命中现有事件' },
+        ],
+        notices: [
+          { to: '值班组长', channel: '站内信', at: '09-05 07:13', state: '已读' },
+        ],
+      },
+      {
+        no: 'IN-20260904-006', name: '雨水排口 pH 异常（演练）', source: 'drill', originNo: 'DR-20260904-0002', originVer: 1,
+        enterprise: '巴中示例食品 · 雨水排口', status: 'archived', level: 'iv', receiver: '陈超', receivedAt: '09-04 14:00',
+        rel: { reports: 3, alarms: 1, dispatch: 2 }, commander: '陈超', response: '演练结束', risk: '无',
+        next: '已归档', dispatchOpen: 0,
+        timeline: [
+          { action: '演练建单', at: '09-04 14:00', by: '陈超', note: '年度应急演练' },
+          { action: '提交终报并归档', at: '09-04 17:40', by: '陈超', note: '报告 RPT-0091' },
+        ],
+        notices: [
+          { to: '演练组', channel: '站内信', at: '09-04 14:01', state: '已确认' },
+        ],
+      },
+    ],
+    long: [
+      {
+        no: 'IN-20260903-011', name: '巴中经开区西南片区多企业协同处置的雨污混流导致下游断面氨氮持续升高的复合型环境事件（含跨企业并案）', source: 'hotline',
+        originNo: 'HL-20260903-0004', originVer: 3, enterprise: '巴中示例化工、巴中示例材料、巴中示例食品 · 西南片区雨污合流管网至城南断面', status: 'active', level: 'ii',
+        receiver: '接报人姓名很长的值班员示例姓名', receivedAt: '09-03 22:41',
+        rel: { reports: 6, alarms: 9, dispatch: 4 }, commander: '园区应急指挥部总指挥（分管副主任）', response: 'Ⅱ 级响应',
+        risk: '城南断面氨氮连续 6 小时超标，下游 8.5km 处为集中式饮用水水源保护区二级区，存在跨界影响风险',
+        next: '按 6 小时一次续报，下一次 04:00 前提交，并同步市局与下游区县', dispatchOpen: 3,
+        timeline: [
+          { action: '12369 接报', at: '09-03 22:41', by: '值班员', note: '群众投诉异味与河道变色，已核对视频与在线监测证据' },
+          { action: '并案', at: '09-04 01:05', by: '监管员', note: '与 IN-20260903-009 建立源事件/衍生事件关系，双方保持独立编号与生命周期' },
+        ],
+        notices: [
+          { to: '市生态环境局值班室（跨部门通道）', channel: '电话 / 融合通信', at: '09-03 22:55', state: '已确认' },
+          { to: '下游区县联络员', channel: '短信', at: '09-03 22:56', state: '失败' },
+        ],
+      },
+    ],
+    big: Array.from({ length: 500 }, (_, i) => ({
+      no: `IN-20260801-${String(i + 100).padStart(4, '0')}`,
+      name: `批量演练事件 ${i + 1}`,
+      source: ['alarm', 'report', 'hotline', 'manual', 'drill'][i % 5],
+      originNo: `SRC-${String(i + 100).padStart(4, '0')}`,
+      originVer: (i % 3) + 1,
+      enterprise: `示例企业 ${i % 12 + 1} · 排口 ${i % 4 + 1}`,
+      status: ['active', 'reported', 'archived'][i % 3],
+      level: ['i', 'ii', 'iii', 'iv'][i % 4],
+      receiver: `值班员 ${i % 6 + 1}`,
+      receivedAt: '08-01 09:00',
+      rel: { reports: i % 4, alarms: i % 5, dispatch: i % 3 },
+      commander: `指挥 ${i % 5 + 1}`, response: 'Ⅳ 级响应', risk: '批量样本', next: '批量样本', dispatchOpen: i % 3,
+      timeline: [{ action: '批量建单', at: '08-01 09:00', by: '系统', note: '压测样本' }],
+      notices: [{ to: '值班室', channel: '站内信', at: '08-01 09:01', state: '已读' }],
+    })),
+  },
+}
+
+/* ===== ② state：状态只放这里。转正式页面时映射为 composables/useIncidents.ts =====
+ * route：hash 路由 #/<key>，与 UiShell 菜单 key 一致（R-038 / R-053） */
+const routeFromHash = () => location.hash.replace(/^#\/?/, '').split(/[?/]/)[0] || 'incidents'
+const state = Vue.reactive({
+  route: routeFromHash(),
+  collapsed: false,
+  view: 'ready',        // ready | loading | empty | error（R-018 三态）
+  dataset: 'normal',    // normal | long | big
+  tab: 'all',
+  keyword: '',
+  source: '',
+  level: '',
+  range: null,
+  page: 1,
+  pageSize: 10,
+  current: null,        // FR-INC-002：不自动选中第一条，只有点「进入指挥」才有值
+  commandOpen: false,
+  createOpen: false,
+  form: { name: '', source: '', enterprise: '', basis: '' },
+})
+
+/* ===== ④ methods：只读 DATA、改 state；禁止直接操作 DOM 样式 ===== */
+const app = Vue.createApp({
+  setup() {
+    const labelOf = (list, v) => (list.find(x => x.value === v) || {}).label || v
+    const findMenu = (list, key) => {
+      for (const item of list) {
+        if (item.key === key) return item
+        const hit = item.children && findMenu(item.children, key)
+        if (hit) return hit
+      }
+      return null
+    }
+    const currentMenu = Vue.computed(() => findMenu(DATA.menu, state.route) || { label: state.route, prd: '—' })
+
+    const rows = Vue.computed(() => (state.view === 'empty' ? [] : DATA.incidents[state.dataset]))
+    const filteredRows = Vue.computed(() =>
+      rows.value.filter(r =>
+        (state.tab === 'all' || r.status === state.tab) &&
+        (!state.keyword || r.no.includes(state.keyword) || r.name.includes(state.keyword) || r.enterprise.includes(state.keyword)) &&
+        (!state.source || r.source === state.source) &&
+        (!state.level || r.level === state.level)))
+    const pagedRows = Vue.computed(() => {
+      const start = (state.page - 1) * state.pageSize
+      return filteredRows.value.slice(start, start + state.pageSize)
+    })
+    const countOf = tab => (tab === 'all' ? rows.value.length : rows.value.filter(r => r.status === tab).length)
+    const counts = Vue.computed(() => ({
+      active: rows.value.filter(r => r.status === 'active').length,
+      reported: rows.value.filter(r => r.status === 'reported').length,
+      dispatch: rows.value.reduce((n, r) => n + r.dispatchOpen, 0),
+      draft: rows.value.filter(r => r.status !== 'archived').length,
+    }))
+    Vue.watch(() => [state.tab, state.keyword, state.source, state.level, state.dataset], () => { state.page = 1 })
+
+    const statusType = v => ({ active: 'danger', reported: 'warning', archived: 'info' })[v] || 'info'
+    const commandFields = Vue.computed(() => {
+      const c = state.current
+      if (!c) return []
+      return [
+        { label: '来源 / 原始单据', value: `${labelOf(DATA.sources, c.source)} · ${c.originNo} v${c.originVer}` },
+        { label: '接报人 / 接报时间', value: `${c.receiver} · ${c.receivedAt}` },
+        { label: '企业 / 位置', value: c.enterprise },
+        { label: '状态 / 等级', value: `${labelOf(DATA.tabs, c.status)} · ${c.level ? labelOf(DATA.levels, c.level) : '未定级'}` },
+        { label: '总指挥 / 当前响应', value: `${c.commander} · ${c.response}` },
+        { label: '关键风险', value: c.risk },
+        { label: '关联数据', value: `上报 ${c.rel.reports} · 告警 ${c.rel.alarms} · 调度 ${c.rel.dispatch}` },
+        { label: '下一步动作', value: c.next },
+      ]
+    })
+
+    const onSelect = key => { location.hash = `#/${key}` }
+    window.addEventListener('hashchange', () => { state.route = routeFromHash() })
+    if (!location.hash) history.replaceState(null, '', `#/${state.route}`)
+
+    const resetFilter = () => { state.keyword = ''; state.source = ''; state.level = ''; state.range = null }
+    const reload = () => { state.view = 'loading'; setTimeout(() => { state.view = 'ready' }, 600) }
+    const notReady = what => ElementPlus.ElMessage.info(`${what}：原型未覆盖`)
+    // FR-INC-002：只有用户明确点击才载入作战面板
+    const enterCommand = row => { state.current = row; state.commandOpen = true }
+    const openSource = row => ElementPlus.ElMessage.info(`来源快照 ${row.originNo} v${row.originVer}（只读，不被后续修改覆盖）`)
+    // FR-INC-005：存在未闭环调度单时，终止校验不通过
+    const terminate = () => {
+      const c = state.current
+      if (c.dispatchOpen > 0) {
+        ElementPlus.ElMessage.error(`终止校验未通过：还有 ${c.dispatchOpen} 张未闭环调度单`)
+        return
+      }
+      ElementPlus.ElMessage.success('终止校验通过（mock）')
+    }
+    const createValid = Vue.computed(() => !!(state.form.name && state.form.source && state.form.enterprise && state.form.basis))
+    const submitCreate = () => { state.createOpen = false; ElementPlus.ElMessage.success('已建单（mock）：来源快照与接报依据已记录') }
+
+    return {
+      DATA, state, currentMenu, rows, filteredRows, pagedRows, counts, countOf, labelOf, statusType, commandFields,
+      onSelect, resetFilter, reload, notReady, enterCommand, openSource, terminate, createValid, submitCreate,
+    }
+  },
+})
+app.use(ElementPlus, { locale: ElementPlusLocaleZhCn }).use(DesignSystemUI).mount('#app')
+</script>
+</body>
+</html>

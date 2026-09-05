@@ -117,6 +117,38 @@ function collect(paths) {
 const argv = process.argv.slice(2)
 const strict = argv.includes('--strict')
 const targets = argv.filter(a => a !== '--strict')
+/**
+ * 展示页「布局配置」的五套骨架（R-057）：CLAUDE.md §3 让原型从「复制页面骨架」起步，
+ * 那这些字符串本身就必须是能直接粘进 in-DOM 原型的合法内容——显式闭合、无 inline style、只用白名单标签。
+ * 曾经不是：13 处 inline style、7 处非白名单标签、大量自闭合，照抄必被本脚本拦下。
+ * el-progress / el-tree 是台账里已登记的白名单缺口（阻塞项），这里按 PENDING 单独提示，不静默放行。
+ */
+const PENDING_WHITELIST = new Set(['el-progress', 'el-tree'])
+
+function checkSkeletons() {
+  const src = readFileSync(join(ROOT, 'packages/design-system/showcase.data.js'), 'utf8')
+  const sandbox = { DS_COVERAGE: { components: {} } }
+  new Function('window', src)(sandbox)
+  const templates = sandbox.DS_SHOWCASE?.TEMPLATES ?? []
+  const errors = []
+  const pending = new Map()
+  for (const tpl of templates) {
+    const markup = tpl.skeleton ?? ''
+    const where = `${tpl.no} ${tpl.label}`
+    for (const rule of RULES) {
+      const m = markup.match(rule.re)
+      if (m) errors.push(`skeleton [${where}] ${rule.id}: ${rule.msg} → ${m[0].slice(0, 60)}`)
+    }
+    for (const m of markup.matchAll(/<([a-z][a-z0-9-]*)\b/gi)) {
+      const tag = m[1].toLowerCase()
+      if (ALLOWED_TAGS.has(tag)) continue
+      if (PENDING_WHITELIST.has(tag)) { pending.set(tag, (pending.get(tag) || new Set()).add(where)); continue }
+      errors.push(`skeleton [${where}] tag-not-allowed: <${tag}> 不在白名单，骨架必须可直接粘进原型`)
+    }
+  }
+  return { count: templates.length, errors, pending }
+}
+
 const files = collect(targets.length ? targets : [join(ROOT, 'apps/prototypes')])
 let failed = 0
 for (const f of files) {
@@ -141,8 +173,23 @@ if (placeholders.length) {
   console[strict ? 'error' : 'warn'](`\n占位组件（data-placeholder）${strict ? '' : '，promote 前需消除'}：`)
   for (const p of placeholders) console[strict ? 'error' : 'warn'](`  ${strict ? '✖' : '!'} ${p.name}  ${p.file}:${p.line}`)
 }
+// 骨架：只在默认扫描（未指定文件）时校验，避免 lint-staged 单文件模式下重复跑
+const skel = targets.length ? null : checkSkeletons()
+if (skel) {
+  if (skel.errors.length) {
+    failed++
+    console.error('✖ packages/design-system/showcase.data.js（布局配置骨架）')
+    for (const e of skel.errors) console.error(`   ${e}`)
+  } else {
+    console.log(`✔ 布局配置骨架 ${skel.count} 套（可直接粘进原型）`)
+  }
+  for (const [tag, where] of skel.pending) {
+    console.warn(`  ! <${tag}> 尚未进白名单（台账阻塞项），影响骨架：${[...where].join('、')}`)
+  }
+}
+
 if (failed) {
-  console.error(`\n${failed} 个原型不合规`)
+  console.error(`\n${failed} 处不合规`)
   process.exit(1)
 }
 console.log(`\n${files.length} 个原型全部通过`)

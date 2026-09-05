@@ -41,7 +41,7 @@
 
 ## 3. 原型（`apps/prototypes/`）
 
-- **先选页面模板**：01 统计 / 02 纯表格 / 03 统计 + 表格 / 04 左树 + 表格 / 05 TabBar + 表格（展示页「布局配置」可预览并复制骨架；定义在 `packages/design-system/showcase.data.js` 的 `TEMPLATES`），把骨架放进 `.l-page` 再填业务内容；组合不了的再走 §2.1
+- **先选页面模板**：01 统计 / 02 纯表格 / 03 统计 + 表格 / 04 左树 + 表格 / 05 TabBar + 表格（展示页「布局配置」可预览并复制骨架；定义在 `packages/design-system/showcase.data.js` 的 `TEMPLATES`），把骨架放进 `.l-page` 再填业务内容（骨架本身就是合规内容：显式闭合、无 inline style、只用白名单标签，由 `check-prototype.js` 的 skeleton 段保证）；组合不了的再走 §2.1
 - 从 `_template.html` 复制起步，**保留四个区块**及其注释：① `DATA`（mock 数据）② `state`（`Vue.reactive`）③ `<div id="app">` 模板 ④ `methods`（`setup()` 内）
 - 一个功能一个 HTML，单文件可直接打开；依赖只有 CDN Vue / Element Plus（版本与 `packages/design-system/package.json` 一致）和 `../../packages/design-system/` 下的文件
 - 模板必须套 `<ui-shell>`，内容区用 `.l-page` 包裹

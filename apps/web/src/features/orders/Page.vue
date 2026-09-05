@@ -55,8 +55,8 @@ const create = async () => { await submit(); ElMessage.success('已创建') }
           <ElTableColumn prop="remark" label="备注" min-width="240" show-overflow-tooltip />
           <ElTableColumn label="操作" width="140" fixed="right" class-name="is-actions">
             <template #default="{ row }">
-              <ElButton text type="primary" size="small" @click="viewRow(row)">查看</ElButton>
-              <ElButton text type="danger" size="small" @click="confirmRemove(row)">删除</ElButton>
+              <ElButton link type="primary" size="small" @click="viewRow(row)">查看</ElButton>
+              <ElButton link type="danger" size="small" @click="confirmRemove(row)">删除</ElButton>
             </template>
           </ElTableColumn>
         </ElTable>
