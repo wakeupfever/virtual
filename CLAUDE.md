@@ -45,6 +45,7 @@
 - 一个功能一个 HTML，单文件可直接打开；依赖只有 CDN Vue / Element Plus（版本与 `packages/design-system/package.json` 一致）和 `../../packages/design-system/` 下的文件
 - 模板必须套 `<ui-shell>`，内容区用 `.l-page` 包裹
 - 路由：hash 路由 `#/<key>`，`<key>` 即 `UiShell` 菜单 key；`onSelect` 只改 `location.hash`，`state.route` 由 `hashchange` 同步（模板已内置）。转正式页面时 `#/<key>` → vue-router `/<key>`
+- **需求文档里有菜单或路由，原型就必须有可切换的路由**：菜单每一项都要有对应页面，点击后内容真的变化。本轮未实现的菜单项渲染明确占位（`<ui-state state="empty">` 写清「原型尚未覆盖」+ 对应需求章节），**不允许点了没反应或停在同一个页面**——菜单是信息架构的一部分，只做一个页面等于没有验证架构
 - in-DOM 模板：自定义标签**必须显式闭合**（`<el-table-column ...></el-table-column>`），props 用 kebab-case（`:active-key`）
 - `DATA` 必须含：常规样本、长文本样本、大数据量样本；`state.view` 必须能切换 `ready | loading | empty | error`，通过 `<ui-state>` 呈现
 - 交互只读 `DATA`、改 `state`；禁止操作 DOM 样式

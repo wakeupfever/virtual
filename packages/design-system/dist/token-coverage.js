@@ -149,6 +149,37 @@ window.DS_COVERAGE = {
       "--space-module-pad",
       "--space-page-gap"
     ],
+    "ui/UiTuner.vue": [
+      "--border-w",
+      "--color-bg-muted",
+      "--color-bg-subtle",
+      "--color-bg-surface",
+      "--color-border-muted",
+      "--color-primary",
+      "--color-text-muted",
+      "--color-text-placeholder",
+      "--color-text-secondary",
+      "--font-family-mono",
+      "--font-size-caption",
+      "--font-size-micro",
+      "--font-weight-medium",
+      "--font-weight-regular",
+      "--layout-aside-w",
+      "--layout-header-h",
+      "--layout-icon-sm",
+      "--line-height-body",
+      "--radius-lg",
+      "--shadow-lg",
+      "--space-component-gap",
+      "--space-component-pad-x",
+      "--space-component-pad-y",
+      "--space-inline-gap",
+      "--space-inline-pad",
+      "--space-module-gap",
+      "--space-module-pad",
+      "--space-page-pad-x",
+      "--z-dialog"
+    ],
     "ui/composites/UiFilterBar.vue": [
       "--color-bg-subtle",
       "--color-text-muted",
@@ -346,6 +377,37 @@ window.DS_COVERAGE = {
       "--space-inline-pad",
       "--space-module-pad",
       "--space-page-gap"
+    ],
+    "UiTuner": [
+      "--border-w",
+      "--color-bg-muted",
+      "--color-bg-subtle",
+      "--color-bg-surface",
+      "--color-border-muted",
+      "--color-primary",
+      "--color-text-muted",
+      "--color-text-placeholder",
+      "--color-text-secondary",
+      "--font-family-mono",
+      "--font-size-caption",
+      "--font-size-micro",
+      "--font-weight-medium",
+      "--font-weight-regular",
+      "--layout-aside-w",
+      "--layout-header-h",
+      "--layout-icon-sm",
+      "--line-height-body",
+      "--radius-lg",
+      "--shadow-lg",
+      "--space-component-gap",
+      "--space-component-pad-x",
+      "--space-component-pad-y",
+      "--space-inline-gap",
+      "--space-inline-pad",
+      "--space-module-gap",
+      "--space-module-pad",
+      "--space-page-pad-x",
+      "--z-dialog"
     ]
   },
   "tokens": {
@@ -359,6 +421,7 @@ window.DS_COVERAGE = {
       "skins/tabs.css",
       "ui/UiShell.vue",
       "ui/UiState.vue",
+      "ui/UiTuner.vue",
       "ui/composites/UiStatCard.vue",
       "ui/composites/UiStatCard.vue (via .l-module)"
     ],
@@ -367,10 +430,12 @@ window.DS_COVERAGE = {
       "skins/menu.css",
       "skins/table.css",
       "skins/tree.css",
+      "ui/UiTuner.vue",
       "ui/composites/UiFilterBar.vue",
       "ui/composites/UiListItem.vue"
     ],
     "--color-bg-muted": [
+      "ui/UiTuner.vue",
       "ui/composites/UiStatCard.vue"
     ],
     "--color-bg-canvas": [
@@ -398,6 +463,7 @@ window.DS_COVERAGE = {
       "skins/table.css",
       "skins/tabs.css",
       "ui/UiPageHeader.vue",
+      "ui/UiTuner.vue",
       "ui/composites/UiFilterBar.vue",
       "ui/composites/UiStatCard.vue"
     ],
@@ -407,13 +473,15 @@ window.DS_COVERAGE = {
       "ui/UiPageHeader.vue",
       "ui/UiState.vue",
       "ui/UiState.vue (via .l-state)",
+      "ui/UiTuner.vue",
       "ui/composites/UiFilterBar.vue",
       "ui/composites/UiListItem.vue",
       "ui/composites/UiModuleHeader.vue",
       "ui/composites/UiStatCard.vue"
     ],
     "--color-text-placeholder": [
-      "ui/UiPageHeader.vue"
+      "ui/UiPageHeader.vue",
+      "ui/UiTuner.vue"
     ],
     "--color-text-inverse": [
       "ui/composites/UiListItem.vue"
@@ -426,6 +494,7 @@ window.DS_COVERAGE = {
       "skins/table.css",
       "skins/tabs.css",
       "ui/UiShell.vue",
+      "ui/UiTuner.vue",
       "ui/composites/UiListItem.vue",
       "ui/composites/UiStatCard.vue (via .l-module)"
     ],
@@ -443,6 +512,7 @@ window.DS_COVERAGE = {
       "skins/tabs.css",
       "skins/tree.css",
       "ui/UiShell.vue",
+      "ui/UiTuner.vue",
       "ui/composites/UiListItem.vue",
       "ui/composites/UiModuleHeader.vue",
       "ui/composites/UiStatCard.vue"
@@ -466,7 +536,8 @@ window.DS_COVERAGE = {
     ],
     "--space-page-pad-x": [
       "layout.css",
-      "ui/UiShell.vue (via .l-page)"
+      "ui/UiShell.vue (via .l-page)",
+      "ui/UiTuner.vue"
     ],
     "--space-page-pad-y": [
       "layout.css",
@@ -478,6 +549,7 @@ window.DS_COVERAGE = {
     ],
     "--space-module-gap": [
       "layout.css",
+      "ui/UiTuner.vue",
       "ui/composites/UiFilterBar.vue (via .l-stack)",
       "ui/composites/UiListItem.vue (via .l-stack)"
     ],
@@ -485,6 +557,7 @@ window.DS_COVERAGE = {
       "layout.css",
       "ui/UiShell.vue (via .l-page)",
       "ui/UiState.vue (via .l-state)",
+      "ui/UiTuner.vue",
       "ui/composites/UiFilterBar.vue",
       "ui/composites/UiStatCard.vue (via .l-module)"
     ],
@@ -501,6 +574,7 @@ window.DS_COVERAGE = {
       "ui/UiPageHeader.vue (via .l-page-header)",
       "ui/UiShell.vue (via .l-cluster)",
       "ui/UiState.vue (via .l-state)",
+      "ui/UiTuner.vue",
       "ui/composites/UiFilterBar.vue",
       "ui/composites/UiFilterBar.vue (via .l-cluster)",
       "ui/composites/UiFilterBar.vue (via .l-stack--tight)",
@@ -515,10 +589,12 @@ window.DS_COVERAGE = {
     "--space-component-pad-x": [
       "skins/tabs.css",
       "ui/UiShell.vue",
+      "ui/UiTuner.vue",
       "ui/composites/UiFilterBar.vue",
       "ui/composites/UiListItem.vue"
     ],
     "--space-component-pad-y": [
+      "ui/UiTuner.vue",
       "ui/composites/UiListItem.vue"
     ],
     "--space-component-title": [
@@ -534,6 +610,7 @@ window.DS_COVERAGE = {
       "ui/UiPageHeader.vue (via .l-inline)",
       "ui/UiShell.vue (via .l-inline)",
       "ui/UiState.vue",
+      "ui/UiTuner.vue",
       "ui/composites/UiFilterBar.vue (via .l-inline)",
       "ui/composites/UiListItem.vue (via .l-inline)",
       "ui/composites/UiStatCard.vue",
@@ -543,6 +620,7 @@ window.DS_COVERAGE = {
       "skins/menu.css",
       "skins/tabs.css",
       "ui/UiState.vue",
+      "ui/UiTuner.vue",
       "ui/composites/UiModuleHeader.vue",
       "ui/composites/UiStatCard.vue"
     ],
@@ -554,10 +632,12 @@ window.DS_COVERAGE = {
       "ui/UiShell.vue"
     ],
     "--layout-header-h": [
-      "ui/UiShell.vue"
+      "ui/UiShell.vue",
+      "ui/UiTuner.vue"
     ],
     "--layout-aside-w": [
-      "layout.css"
+      "layout.css",
+      "ui/UiTuner.vue"
     ],
     "--layout-row-h": [
       "skins/table.css"
@@ -572,7 +652,8 @@ window.DS_COVERAGE = {
       "skins/menu.css"
     ],
     "--layout-icon-sm": [
-      "ui/UiShell.vue"
+      "ui/UiShell.vue",
+      "ui/UiTuner.vue"
     ],
     "--layout-icon-md": [
       "ui/composites/UiStatCard.vue"
@@ -610,13 +691,16 @@ window.DS_COVERAGE = {
       "ui/UiShell.vue"
     ],
     "--z-drawer": [],
-    "--z-dialog": [],
+    "--z-dialog": [
+      "ui/UiTuner.vue"
+    ],
     "--z-toast": [],
     "--font-family": [
       "base.css"
     ],
     "--font-family-mono": [
-      "base.css"
+      "base.css",
+      "ui/UiTuner.vue"
     ],
     "--font-size-display": [
       "ui/composites/UiStatCard.vue"
@@ -638,11 +722,13 @@ window.DS_COVERAGE = {
       "base.css",
       "skins/table.css",
       "skins/tabs.css",
+      "ui/UiTuner.vue",
       "ui/composites/UiFilterBar.vue",
       "ui/composites/UiModuleHeader.vue",
       "ui/composites/UiStatCard.vue"
     ],
     "--font-size-micro": [
+      "ui/UiTuner.vue",
       "ui/composites/UiStatCard.vue"
     ],
     "--line-height-tight": [
@@ -650,10 +736,12 @@ window.DS_COVERAGE = {
       "ui/composites/UiModuleHeader.vue"
     ],
     "--line-height-body": [
-      "base.css"
+      "base.css",
+      "ui/UiTuner.vue"
     ],
     "--font-weight-regular": [
-      "base.css"
+      "base.css",
+      "ui/UiTuner.vue"
     ],
     "--font-weight-medium": [
       "base.css",
@@ -662,6 +750,7 @@ window.DS_COVERAGE = {
       "skins/tabs.css",
       "skins/tree.css",
       "ui/UiState.vue",
+      "ui/UiTuner.vue",
       "ui/composites/UiListItem.vue",
       "ui/composites/UiModuleHeader.vue",
       "ui/composites/UiStatCard.vue"
@@ -687,6 +776,7 @@ window.DS_COVERAGE = {
     ],
     "--radius-lg": [
       "layout.css",
+      "ui/UiTuner.vue",
       "ui/composites/UiStatCard.vue (via .l-module)"
     ],
     "--radius-full": [
@@ -697,12 +787,15 @@ window.DS_COVERAGE = {
     "--shadow-md": [
       "ui/composites/UiStatCard.vue"
     ],
-    "--shadow-lg": [],
+    "--shadow-lg": [
+      "ui/UiTuner.vue"
+    ],
     "--border-w": [
       "layout.css",
       "skins/table.css",
       "skins/tabs.css",
       "ui/UiShell.vue",
+      "ui/UiTuner.vue",
       "ui/composites/UiListItem.vue",
       "ui/composites/UiStatCard.vue (via .l-module)"
     ],
@@ -714,10 +807,8 @@ window.DS_COVERAGE = {
     "--color-warning",
     "--color-danger-hover",
     "--color-info",
-    "--z-dialog",
     "--radius-sm",
-    "--shadow-sm",
-    "--shadow-lg"
+    "--shadow-sm"
   ],
   "dead": [
     "--layout-content-pad",

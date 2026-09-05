@@ -82,6 +82,89 @@
 .ui-state__error .el-button { margin-top: var(--space-inline-pad);
 }
 
+.ui-tuner__entry .ui-tuner__n { margin-left: var(--space-inline-pad);
+}
+.ui-tuner__probe { position: absolute; visibility: hidden; pointer-events: none;
+}
+.ui-tuner {
+  position: fixed; right: var(--space-page-pad-x); top: calc(var(--layout-header-h) + var(--space-component-gap));
+  z-index: var(--z-dialog); width: var(--layout-aside-w); max-height: 100vh;
+  display: flex; flex-direction: column;
+  background: var(--color-bg-surface); border: var(--border-w) solid var(--color-border-muted);
+  border-radius: var(--radius-lg); box-shadow: var(--shadow-lg); overflow: hidden;
+}
+.ui-tuner.is-min { width: max-content;
+}
+.ui-tuner__bar, .ui-tuner__head, .ui-tuner__foot { flex: none;
+}
+.ui-tuner__bar {
+  display: flex; align-items: center; gap: var(--space-inline-gap);
+  padding: var(--space-inline-pad) var(--space-inline-pad) var(--space-inline-pad) var(--space-component-pad-x);
+  background: var(--color-bg-subtle); cursor: grab; user-select: none; touch-action: none;
+}
+.ui-tuner:not(.is-min) .ui-tuner__bar { border-bottom: var(--border-w) solid var(--color-border-muted);
+}
+.ui-tuner.is-dragging .ui-tuner__bar { cursor: grabbing;
+}
+.ui-tuner__label { font-size: var(--font-size-caption); font-weight: var(--font-weight-medium); white-space: nowrap;
+}
+.ui-tuner__n { font-size: var(--font-size-micro); font-family: var(--font-family-mono); color: var(--color-primary);
+}
+.ui-tuner__acts { margin-left: auto; display: flex; align-items: center;
+}
+.ui-tuner__head {
+  display: flex; flex-direction: column; gap: var(--space-component-gap);
+  padding: var(--space-component-pad-y) var(--space-module-pad);
+  border-bottom: var(--border-w) solid var(--color-bg-muted);
+}
+.ui-tuner__head small { font-size: var(--font-size-micro); color: var(--color-text-muted); line-height: var(--line-height-body);
+}
+.ui-tuner__head code { font-family: var(--font-family-mono);
+}
+.ui-tuner__scroll { flex: 1 1 auto; min-height: 0;
+}
+.ui-tuner__body { display: flex; flex-direction: column; gap: var(--space-module-gap); padding: var(--space-component-pad-y) var(--space-module-pad) var(--space-module-pad);
+}
+.ui-tuner__group { display: flex; flex-direction: column;
+}
+.ui-tuner__title {
+  display: flex; align-items: baseline; justify-content: space-between; margin-bottom: var(--space-component-gap);
+  font-size: var(--font-size-caption); font-weight: var(--font-weight-medium);
+}
+.ui-tuner__title span { font-size: var(--font-size-micro); color: var(--color-text-placeholder); font-weight: var(--font-weight-regular);
+}
+.ui-tuner__empty { font-size: var(--font-size-micro); color: var(--color-text-placeholder);
+}
+.ui-tuner__row { display: grid; grid-template-columns: minmax(0, 1fr) 64px 60px; gap: var(--space-inline-gap); align-items: center; min-height: var(--layout-icon-sm);
+}
+.ui-tuner__row.is-text { grid-template-columns: minmax(0, 1fr) 0 88px;
+}
+.ui-tuner__row + .ui-tuner__row { border-top: var(--border-w) solid var(--color-bg-subtle);
+}
+.ui-tuner__name { font-family: var(--font-family-mono); font-size: var(--font-size-micro); color: var(--color-text-secondary); white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
+.ui-tuner__row.is-on .ui-tuner__name { color: var(--color-primary);
+}
+.ui-tuner__ctl { display: flex; align-items: center; min-width: 0;
+}
+.ui-tuner__ctl .el-slider { width: 100%; margin: 0 var(--space-inline-gap);
+}
+.ui-tuner__ctl .el-color-picker { --el-color-picker-size: var(--layout-icon-sm);
+}
+.ui-tuner__in .el-input__inner { font-family: var(--font-family-mono); font-size: var(--font-size-micro);
+}
+.ui-tuner__in .el-input__wrapper { padding-inline: var(--space-inline-pad);
+}
+.ui-tuner__row.is-on .ui-tuner__in .el-input__wrapper { box-shadow: 0 0 0 var(--border-w) var(--color-primary) inset;
+}
+.ui-tuner__foot {
+  display: flex; align-items: center; gap: var(--space-inline-gap);
+  padding: var(--space-component-pad-y) var(--space-module-pad);
+  border-top: var(--border-w) solid var(--color-bg-muted); background: var(--color-bg-subtle);
+}
+.ui-tuner__foot small { margin-right: auto; font-size: var(--font-size-micro); color: var(--color-text-muted);
+}
+
 .ui-list-item { padding: var(--space-component-pad-y) var(--space-component-pad-x); border-radius: var(--radius-md); flex-wrap: nowrap; transition: background 0.15s ease;
 }
 .ui-list-item.is-clickable { cursor: pointer;

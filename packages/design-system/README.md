@@ -65,6 +65,11 @@ app.use(ElementPlus).use(DesignSystemUI)
 | `.l-grid--main-aside` | 主区 1.3fr + 侧面板 0.7fr（分析区 2×2） | — |
 | `.l-tile` | 模块内的次级填充小格（概况项） | — |
 | `.l-bars` / `.l-bar` | 柱状条容器 / 柱；柱高由数据 `:style="{ height }"` 绑定 | — |
+| `.l-cluster` | 横向可换行（按钮组、筛选条） | `--end`、`--between` |
+| `.l-toolbar` | 表格上方工具条 | — |
+| `.l-form` | 表单区块，label 宽度取 token | — |
+| `.l-inline` | 图标 + 文字 | — |
+| `.l-state` | loading / empty / error 占位容器（一般由 `UiState` 内部使用） | — |
 
 ### 高度填充（表格页）
 
@@ -85,11 +90,6 @@ app.use(ElementPlus).use(DesignSystemUI)
 - `.l-fill` 标记吃掉剩余高度的那一项；`.el-table.l-fill` 由 `skins/table.css` 接管，表体在 Element Plus 自带的 `ElScrollbar` 内滚（R-043），表体最矮保留一行 `--layout-row-h`
 - 不加 `--fill` 的页面（统计 / 表单页）行为不变：内容多高就多高，超出由外壳内滚
 - 视口过矮时表体先收缩内滚，收到一行仍放不下才由外壳整体滚动
-| `.l-cluster` | 横向可换行（按钮组、筛选条） | `--end`、`--between` |
-| `.l-toolbar` | 表格上方工具条 | — |
-| `.l-form` | 表单区块，label 宽度取 token | — |
-| `.l-inline` | 图标 + 文字 | — |
-| `.l-state` | loading / empty / error 占位容器（一般由 `UiState` 内部使用） | — |
 
 ## 第二层 · Element Plus 白名单
 
@@ -189,6 +189,20 @@ app.use(ElementPlus).use(DesignSystemUI)
   <ElTable :data="rows" />
 </UiState>
 ```
+
+### `UiTuner`
+
+调参浮窗：把第一层语义 token 变成实时可调的控件，改动写在 `:root` 的 inline style 上，整站联动（Element Plus 组件的圆角 / 边框经 `--el-*` 映射自第一层，不需要单独配）。
+
+| prop / 行为 | 说明 |
+|---|---|
+| `title` | 浮窗标题，默认「调参 · 第一层」 |
+| 渲染 | 一个「调参」入口按钮 + 打开后的浮窗；按标题栏拖动、可收起、可关闭 |
+| 数据源 | `window.DS_TOKENS`（`dist/tokens.js`），清单不手工维护；页面必须引入该脚本，否则面板为空 |
+| 控件 | 颜色→取色器、纯 px→滑块、其余→文本框；形态由**首次覆盖时冻结的基线值**决定，调整过程中不变形 |
+| 值格 | 可直接打字改精确值，清空即恢复默认；「全部重置」「复制为 tokens.css」在底部 |
+
+**之所以是第二层组件而不是页面里的一段代码**：原型（第三层）禁止 `<style>` 与 inline style，调参面板必须有自己的样式，只能住在允许写样式的第二层。展示页与任意原型都用 `<ui-tuner></ui-tuner>` 接入。
 
 ### `UiModuleHeader`（composites）
 

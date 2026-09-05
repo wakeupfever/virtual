@@ -42,6 +42,21 @@ disable-model-invocation: true
 
 路由用 hash：`#/<key>`，`<key>` 即 `UiShell` 菜单 key；`onSelect` 只改 `location.hash`，`state.route` 由 `hashchange` 同步（模板已内置）。
 
+**需求文档里有菜单或路由，原型就必须有可切换的路由。** 先把需求里的一级导航原样搬进 `DATA.menu`（顺序、命名都别改），再按 `state.route` 分支渲染：本轮实现的菜单渲染真实页面，其余渲染明确占位——
+
+```html
+<div v-if="state.route === 'alarms'" class="l-page l-page--fill">…真实页面…</div>
+<div v-else class="l-page l-page--fill">
+  <section class="l-module l-fill">
+    <ui-state class="l-fill" state="empty" :empty-text="`「${currentMenu.label}」原型尚未覆盖`">
+      <template #action><small>对应需求 {{ currentMenu.prd }}</small></template>
+    </ui-state>
+  </section>
+</div>
+```
+
+点了没反应、或所有菜单都停在同一个页面，都算没完成：菜单是信息架构的一部分，只做一个页面等于没验证架构。给 `DATA.menu` 的每一项挂上对应的需求章节号，占位页直接引用，评审时能一眼看出哪些还没做。
+
 **in-DOM 模板的两个硬性写法**：自定义标签必须显式闭合（`<el-table-column ...></el-table-column>`，不能写成 `/>`，否则整个应用编译失败）；props 用 kebab-case（`:active-key`）。
 
 ## 3. 物料不够用时（三级偏差，四句话按顺序来）

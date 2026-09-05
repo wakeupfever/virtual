@@ -1,0 +1,492 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>巴中新环保系统 · 告警中心</title>
+
+<!-- ===== 依赖：顺序固定，版本必须与 packages/design-system/package.json 一致 ===== -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/element-plus@2.14.5/dist/index.css">
+<link rel="stylesheet" href="../../packages/design-system/tokens.css">
+<link rel="stylesheet" href="../../packages/design-system/skins/index.css">
+<link rel="stylesheet" href="../../packages/design-system/layout.css">
+<link rel="stylesheet" href="../../packages/design-system/base.css">
+<link rel="stylesheet" href="../../packages/design-system/dist/ui.css">
+<script src="https://cdn.jsdelivr.net/npm/vue@3.5.42/dist/vue.global.prod.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/element-plus@2.14.5/dist/index.full.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/element-plus@2.14.5/dist/locale/zh-cn.min.js"></script>
+<script src="../../packages/design-system/dist/ui.iife.js"></script>
+<script src="../../packages/design-system/dist/tokens.js"></script>
+<!-- 原型禁止出现 <style> 与 style=""：所有外观来自第一、二层 -->
+</head>
+<body>
+
+<!-- ===== ③ 模板：只能使用 whitelist.json 中的标签 + .l-* 布局类；自定义标签必须显式闭合，不能自闭合 ===== -->
+<div id="app">
+  <ui-shell title="巴中新环保系统" :menu="DATA.menu" :active-key="state.route" v-model:collapsed="state.collapsed" @select="onSelect">
+    <template #header-actions>
+      <!-- 原型必备：三态切换（R-018）。转正式页面时删除 -->
+      <span class="l-inline">
+        <small>原型状态</small>
+        <el-select v-model="state.view" size="small">
+          <el-option label="ready" value="ready"></el-option>
+          <el-option label="loading" value="loading"></el-option>
+          <el-option label="empty" value="empty"></el-option>
+          <el-option label="error" value="error"></el-option>
+        </el-select>
+        <el-select v-model="state.dataset" size="small">
+          <el-option label="常规数据" value="normal"></el-option>
+          <el-option label="长文本" value="long"></el-option>
+          <el-option label="大数据量" value="big"></el-option>
+        </el-select>
+        <ui-tuner></ui-tuner>
+      </span>
+    </template>
+
+    <!-- 路由：菜单每一项都有对应页面；未实现的渲染明确占位，不让点击无反应 -->
+    <div v-if="state.route === 'alarms'" class="l-page l-page--fill">
+      <section class="l-module l-stack l-stack--tight l-fill">
+        <!-- 状态页签作卡片头（FR-ALM-003 的处置阶段），与筛选条、表格同处一张卡 -->
+        <el-tabs v-model="state.tab">
+          <el-tab-pane v-for="t in DATA.tabs" :key="t.value" :name="t.value" :label="`${t.label} ${countOf(t.value)}`"></el-tab-pane>
+        </el-tabs>
+
+        <ui-filter-bar advanced @search="reload" @reset="resetFilter">
+          <span class="l-inline">
+            <small>关键词</small>
+            <el-input v-model="state.keyword" placeholder="告警编号 / 企业 / 设备" clearable></el-input>
+          </span>
+          <span class="l-inline">
+            <small>告警类型</small>
+            <el-select v-model="state.type" placeholder="全部" clearable>
+              <el-option v-for="t in DATA.alarmTypes" :key="t.value" :label="t.label" :value="t.value"></el-option>
+            </el-select>
+          </span>
+          <template #advanced>
+            <span class="l-inline">
+              <small>级别</small>
+              <el-select v-model="state.level" placeholder="全部" clearable>
+                <el-option v-for="l in DATA.levels" :key="l.value" :label="l.label" :value="l.value"></el-option>
+              </el-select>
+            </span>
+            <span class="l-inline">
+              <small>来源</small>
+              <el-select v-model="state.source" placeholder="全部" clearable>
+                <el-option v-for="s in DATA.sources" :key="s.value" :label="s.label" :value="s.value"></el-option>
+              </el-select>
+            </span>
+            <span class="l-inline">
+              <small>触发时间</small>
+              <el-date-picker v-model="state.range" type="daterange" start-placeholder="开始" end-placeholder="结束"></el-date-picker>
+            </span>
+            <span class="l-inline">
+              <small>仅看未关联事件</small>
+              <el-switch v-model="state.onlyUnlinked"></el-switch>
+            </span>
+          </template>
+          <template #summary>当前视图 {{ filteredRows.length }} 条 · 已选 {{ state.checked.length }} 条</template>
+          <template #actions>
+            <el-button @click="reload">刷新</el-button>
+            <el-button @click="notReady('导出')">导出</el-button>
+            <el-button type="primary" :disabled="!state.checked.length" @click="batchConfirm">批量确认（{{ state.checked.length }}）</el-button>
+          </template>
+        </ui-filter-bar>
+
+        <ui-state class="l-fill" :state="state.view" empty-text="当前筛选条件下没有告警" @retry="reload">
+          <el-table class="l-fill" :data="pagedRows" stripe @selection-change="rows => state.checked = rows">
+            <el-table-column type="selection" width="44"></el-table-column>
+            <el-table-column prop="no" label="告警编号" width="160"></el-table-column>
+            <el-table-column label="级别" width="80">
+              <template #default="{ row }">
+                <el-tag :type="levelType(row.level)" size="small" effect="dark" round>{{ labelOf(DATA.levels, row.level) }}</el-tag>
+              </template>
+            </el-table-column>
+            <el-table-column label="告警类型" width="120">
+              <template #default="{ row }">{{ labelOf(DATA.alarmTypes, row.type) }}</template>
+            </el-table-column>
+            <el-table-column prop="enterprise" label="企业" min-width="170" show-overflow-tooltip></el-table-column>
+            <el-table-column prop="target" label="设备 / 因子" min-width="150" show-overflow-tooltip></el-table-column>
+            <el-table-column prop="trigger" label="触发值" width="140" show-overflow-tooltip></el-table-column>
+            <el-table-column prop="firedAt" label="触发时间" width="160"></el-table-column>
+            <el-table-column label="来源" width="110">
+              <template #default="{ row }">
+                <el-tag v-if="row.source === 'report'" type="warning" size="small">企业上报</el-tag>
+                <span v-else>{{ labelOf(DATA.sources, row.source) }}</span>
+              </template>
+            </el-table-column>
+            <el-table-column label="状态" width="130">
+              <template #default="{ row }">
+                <span class="l-inline">
+                  <el-tag :type="statusType(row.status)" size="small">{{ labelOf(DATA.tabs, row.status) }}</el-tag>
+                  <small v-if="row.incidentNo">{{ row.incidentNo }}</small>
+                </span>
+              </template>
+            </el-table-column>
+            <el-table-column label="操作" width="176" fixed="right">
+              <template #default="{ row }">
+                <el-button text type="primary" size="small" @click="openDetail(row)">详情</el-button>
+                <el-button v-if="row.status === 'pending'" text type="primary" size="small" @click="confirmOne(row)">确认</el-button>
+                <el-button v-else-if="row.status === 'confirmed'" text type="primary" size="small" @click="notReady('派发')">派发</el-button>
+                <el-button text type="primary" size="small" @click="openLink(row)">关联事件</el-button>
+              </template>
+            </el-table-column>
+          </el-table>
+          <div class="l-cluster l-cluster--end">
+            <el-pagination layout="total, prev, pager, next, sizes" :total="filteredRows.length" v-model:current-page="state.page" v-model:page-size="state.pageSize" :page-sizes="[10, 20, 50]"></el-pagination>
+          </div>
+        </ui-state>
+      </section>
+    </div>
+
+    <!-- 其余一级导航：原型尚未覆盖，给明确占位而不是空白页 -->
+    <div v-else class="l-page l-page--fill">
+      <section class="l-module l-fill">
+        <ui-state class="l-fill" state="empty" :empty-text="`「${currentMenu.label}」原型尚未覆盖`">
+          <template #action>
+            <div class="l-stack l-stack--tight">
+              <small>对应 PRD {{ currentMenu.prd }}。已覆盖的菜单：告警中心。</small>
+              <div class="l-cluster l-cluster--end">
+                <el-button type="primary" @click="onSelect('alarms')">前往告警中心</el-button>
+              </div>
+            </div>
+          </template>
+        </ui-state>
+      </section>
+    </div>
+
+    <!-- 告警详情：时间轴 + 原始上报（FR-ALM-003 / FR-ALM-004） -->
+    <el-drawer v-model="state.detailOpen" size="560px" :title="state.current ? `告警详情 ${state.current.no}` : '告警详情'">
+      <div v-if="state.current" class="l-stack">
+        <section class="l-module">
+          <ui-module-header title="基本信息" :desc="labelOf(DATA.alarmTypes, state.current.type)">
+            <template #meta>{{ labelOf(DATA.tabs, state.current.status) }}</template>
+          </ui-module-header>
+          <div class="l-grid l-grid--cols-2 l-grid--tight">
+            <div v-for="f in detailFields" :key="f.label" class="l-tile">
+              <small>{{ f.label }}</small>
+              <strong>{{ f.value }}</strong>
+            </div>
+          </div>
+        </section>
+
+        <section v-if="state.current.report" class="l-module">
+          <ui-module-header title="原始上报快照" desc="人工填报，待核实，不等同 HJ212 实测数据">
+            <template #meta>{{ state.current.report.no }}</template>
+          </ui-module-header>
+          <div class="l-stack l-stack--tight">
+            <div v-for="f in reportFields" :key="f.label" class="l-inline">
+              <small>{{ f.label }}</small>
+              <span>{{ f.value }}</span>
+            </div>
+            <div class="l-cluster">
+              <el-button size="small" @click="notReady('查看原始上报')">查看原始上报</el-button>
+              <el-button v-if="state.current.incidentNo" size="small" type="primary" plain @click="notReady('进入关联事件')">进入关联事件 {{ state.current.incidentNo }}</el-button>
+            </div>
+          </div>
+        </section>
+
+        <section class="l-module">
+          <ui-module-header title="处置时间轴" desc="每一步留痕，附件只增不改">
+            <template #meta>{{ state.current.timeline.length }} 条</template>
+          </ui-module-header>
+          <div class="l-stack l-stack--tight">
+            <ui-list-item v-for="(t, i) in state.current.timeline" :key="i" :title="t.action" :subtitle="`${t.at} · ${t.by}`" divided>
+              <template #trailing><small>{{ t.note }}</small></template>
+            </ui-list-item>
+          </div>
+        </section>
+      </div>
+      <template #footer>
+        <div class="l-cluster l-cluster--end">
+          <el-button @click="state.detailOpen = false">关闭</el-button>
+          <el-button type="primary" @click="openLink(state.current)">关联 / 升级事件</el-button>
+        </div>
+      </template>
+    </el-drawer>
+
+    <!-- 关联 / 升级事件：FR-ALM-005。必须显式选择，推荐不等于自动关联 -->
+    <el-dialog v-model="state.linkOpen" title="关联 / 升级事件" width="720px">
+      <div class="l-stack l-stack--tight">
+        <el-form class="l-form" label-position="right">
+          <el-form-item label="处理方式">
+            <el-radio-group v-model="state.link.mode">
+              <el-radio value="existing">关联已有事件</el-radio>
+              <el-radio value="new">新建事件</el-radio>
+            </el-radio-group>
+          </el-form-item>
+        </el-form>
+
+        <template v-if="state.link.mode === 'existing'">
+          <ui-module-header title="候选事件" desc="仅同企业、未结束未归档、且你有权限的事件；推荐分只是参考，必须手动选定">
+            <template #meta>{{ candidates.length }} 个候选</template>
+          </ui-module-header>
+          <ui-state :state="candidates.length ? 'ready' : 'empty'" empty-text="该企业没有可关联的在办事件，请改用「新建事件」">
+            <div class="l-stack l-stack--tight">
+              <ui-list-item
+                v-for="c in candidates"
+                :key="c.no"
+                :title="`${c.no} ${c.name}`"
+                :subtitle="`${c.type} · ${c.location} · 接报 ${c.reportedAt} · 已关联 ${c.linked} 条告警`"
+                :status="{ label: `推荐分 ${c.score}`, type: c.score >= 80 ? 'success' : 'info' }"
+                :active="state.link.incidentNo === c.no"
+                clickable
+                divided
+                @click="state.link.incidentNo = c.no">
+                <template #trailing><small>{{ c.reason }}</small></template>
+              </ui-list-item>
+            </div>
+          </ui-state>
+        </template>
+        <div v-else class="l-tile">
+          <small>将新建事件</small>
+          <strong>由本条告警升级，企业与风险源自动带入，定级在事件指挥中完成</strong>
+        </div>
+
+        <el-form class="l-form" label-position="right">
+          <el-form-item label="关联类型">
+            <el-select v-model="state.link.relType" placeholder="必填">
+              <el-option v-for="r in DATA.relTypes" :key="r" :label="r" :value="r"></el-option>
+            </el-select>
+          </el-form-item>
+          <el-form-item label="关联理由">
+            <el-input v-model="state.link.reason" type="textarea" :rows="2" placeholder="必填：写明为什么判定属于同一事件"></el-input>
+          </el-form-item>
+          <el-form-item label="已核对证据">
+            <el-checkbox-group v-model="state.link.evidence">
+              <el-checkbox v-for="e in DATA.evidences" :key="e" :value="e" :label="e"></el-checkbox>
+            </el-checkbox-group>
+          </el-form-item>
+        </el-form>
+        <small>{{ linkHint }}</small>
+      </div>
+      <template #footer>
+        <el-button @click="state.linkOpen = false">取消</el-button>
+        <el-button type="primary" :disabled="!linkValid" @click="submitLink">确认关联</el-button>
+      </template>
+    </el-dialog>
+  </ui-shell>
+</div>
+
+<script>
+/* ===== ① DATA：mock 数据只放这里。转正式页面时整块替换为 features/alarms/api.ts =====
+ * 必须包含：常规样本、长文本样本、大数据量样本（R-018）
+ * 字段口径对齐 PRD §8.4 与 §10.2 告警域 */
+const DATA = {
+  // PRD §5.2 一级导航（V1.16 起取消「系统管理」）
+  menu: [
+    { key: 'overview', label: '综合态势', prd: '§8.1' },
+    { key: 'map', label: '环境应急一张图', prd: '§8.2' },
+    { key: 'monitor', label: '在线监测', prd: '§8.3' },
+    { key: 'alarms', label: '告警中心', prd: '§8.4' },
+    { key: 'incidents', label: '事件指挥', prd: '§8.5' },
+    { key: 'enterprises', label: '企业监管', prd: '§8.7' },
+    { key: 'emergency', label: '应急管理', prd: '§8.8' },
+    { key: 'devices', label: '设备与数据接入', prd: '§8.9' },
+    { key: 'quality', label: '数据质量', prd: '§8.10' },
+    { key: 'stats', label: '统计分析', prd: '§8.11' },
+  ],
+  // FR-ALM-003 处置阶段
+  tabs: [
+    { value: 'all', label: '全部' },
+    { value: 'pending', label: '待确认' },
+    { value: 'confirmed', label: '待派发' },
+    { value: 'handling', label: '处置中' },
+    { value: 'reviewing', label: '待复核' },
+    { value: 'closed', label: '已核销' },
+  ],
+  // FR-ALM-001 告警类型
+  alarmTypes: [
+    { value: 'threshold', label: '超阈值' },
+    { value: 'nearly', label: '临界预警' },
+    { value: 'device', label: '设备告警' },
+    { value: 'quality', label: '数据质量' },
+    { value: 'expiry', label: '到期告警' },
+    { value: 'manual', label: '人工告警' },
+  ],
+  levels: [
+    { value: 'urgent', label: '紧急' },
+    { value: 'major', label: '重要' },
+    { value: 'minor', label: '一般' },
+  ],
+  sources: [
+    { value: 'hj212', label: 'HJ212' },
+    { value: 'report', label: '企业上报' },
+    { value: 'manual', label: '值班录入' },
+  ],
+  relTypes: ['同一污染源', '同一时间窗次生', '同一受体影响', '上报与实测互证'],
+  evidences: ['监测数据曲线', '现场照片 / 视频', '企业上报材料', '巡查记录'],
+  // 候选事件：同企业、未结束未归档（FR-ALM-005）
+  incidents: [
+    { no: 'IN-20260905-002', name: '化工园区东侧排口 COD 异常', type: '水污染', location: '东区一号排口', reportedAt: '09-05 08:12', linked: 3, score: 86, reason: '同企业同排口，时间窗 2 小时内', enterprise: '巴中示例化工有限公司' },
+    { no: 'IN-20260904-011', name: '园区雨水管网油污溯源', type: '水污染', location: '雨水总排口', reportedAt: '09-04 16:40', linked: 1, score: 61, reason: '同企业，污染物不同，需人工判定', enterprise: '巴中示例化工有限公司' },
+    { no: 'IN-20260905-004', name: '危废暂存间异味投诉', type: '大气污染', location: '西区危废库', reportedAt: '09-05 10:05', linked: 0, score: 42, reason: '同企业，类型与点位均不同', enterprise: '巴中示例材料科技有限公司' },
+  ],
+  alarms: {
+    normal: [
+      { no: 'AL-20260905-0012', level: 'urgent', type: 'threshold', enterprise: '巴中示例化工有限公司', target: 'WS-东区一号排口 / COD', trigger: '实测 82.4 mg/L（限值 50）', firedAt: '2026-09-05 08:14', source: 'hj212', status: 'pending', incidentNo: '',
+        timeline: [{ action: '规则触发', at: '09-05 08:14', by: '系统', note: '持续 15 分钟超限' }] },
+      { no: 'AL-20260905-0011', level: 'major', type: 'manual', enterprise: '巴中示例化工有限公司', target: '企业上报 / 废水异常', trigger: '上报初判：中风险', firedAt: '2026-09-05 08:02', source: 'report', status: 'handling', incidentNo: 'IN-20260905-002',
+        report: { no: 'ER-20260905-003', version: 'V2（续报）', reporter: '李明 · 环保专员', risk: '中', location: '东区一号排口', verified: '待核实' },
+        timeline: [
+          { action: '企业正式提交上报', at: '09-05 08:02', by: '李明', note: 'ER-20260905-003 V1' },
+          { action: '值班员接报回执', at: '09-05 08:09', by: '王强', note: '已回执' },
+          { action: '关联事件', at: '09-05 08:20', by: '王强', note: '同一污染源 → IN-20260905-002' },
+        ] },
+      { no: 'AL-20260905-0009', level: 'minor', type: 'device', enterprise: '巴中示例材料科技有限公司', target: 'DT-0431 / 心跳', trigger: '连续 3 个周期缺失心跳', firedAt: '2026-09-05 07:41', source: 'hj212', status: 'confirmed', incidentNo: '',
+        timeline: [{ action: '规则触发', at: '09-05 07:41', by: '系统', note: '' }, { action: '确认', at: '09-05 07:55', by: '运维张伟', note: '疑似链路抖动' }] },
+      { no: 'AL-20260904-0087', level: 'minor', type: 'quality', enterprise: '巴中示例食品实业', target: 'DT-0198 / 氨氮', trigger: '恒值持续 6 小时', firedAt: '2026-09-04 22:10', source: 'hj212', status: 'reviewing', incidentNo: '',
+        timeline: [{ action: '规则触发', at: '09-04 22:10', by: '系统', note: '' }, { action: '派发', at: '09-04 22:30', by: '王强', note: '指派企业自查' }, { action: '整改提交', at: '09-05 09:00', by: '企业', note: '已更换探头' }] },
+      { no: 'AL-20260904-0061', level: 'minor', type: 'expiry', enterprise: '巴中示例材料科技有限公司', target: '应急预案 / 有效期', trigger: '距到期 15 天', firedAt: '2026-09-04 09:00', source: 'manual', status: 'closed', incidentNo: '',
+        timeline: [{ action: '规则触发', at: '09-04 09:00', by: '系统', note: '' }, { action: '核销', at: '09-04 15:20', by: '监管员刘芳', note: '企业已提交新版预案' }] },
+      { no: 'AL-20260904-0055', level: 'major', type: 'nearly', enterprise: '巴中示例化工有限公司', target: 'WS-东区一号排口 / 氨氮', trigger: '实测 7.8 mg/L（预警区间 7~8）', firedAt: '2026-09-04 18:30', source: 'hj212', status: 'pending', incidentNo: '',
+        timeline: [{ action: '规则触发', at: '09-04 18:30', by: '系统', note: '进入预警区间' }] },
+    ],
+    long: [
+      { no: 'AL-20260905-0013', level: 'urgent', type: 'threshold', enterprise: '四川省巴中经济开发区某某某某某某某某某某某某化工科技发展有限责任公司西南分公司第二生产基地', target: 'WS-东区一号排口 / 化学需氧量（重铬酸盐法，HJ 828—2017）', trigger: '实测 128.6 mg/L，超出排放限值 50 mg/L 的 157%，持续 42 分钟未回落', firedAt: '2026-09-05 11:26', source: 'hj212', status: 'handling', incidentNo: 'IN-20260905-002',
+        timeline: [{ action: '规则触发', at: '09-05 11:26', by: '系统', note: '连续 42 分钟超限，已进入冷却期聚合，期间触发 7 次，峰值 128.6 mg/L' }, { action: '确认并升级', at: '09-05 11:40', by: '值班员王强', note: '判定与东侧排口 COD 异常事件为同一污染源，按同一污染源关联至 IN-20260905-002，已核对监测数据曲线与现场照片' }] },
+    ],
+    big: Array.from({ length: 500 }, (_, i) => {
+      const types = ['threshold', 'nearly', 'device', 'quality', 'expiry', 'manual']
+      const statuses = ['pending', 'confirmed', 'handling', 'reviewing', 'closed']
+      return {
+        no: `AL-20260903-${String(i + 100).padStart(4, '0')}`,
+        level: ['urgent', 'major', 'minor'][i % 3],
+        type: types[i % 6],
+        enterprise: `巴中批量示例企业 ${i + 1}`,
+        target: `DT-${String(1000 + i)} / ${['COD', '氨氮', '总磷', 'pH'][i % 4]}`,
+        trigger: `实测 ${(30 + (i % 70)).toFixed(1)} mg/L`,
+        firedAt: `2026-09-03 ${String(i % 24).padStart(2, '0')}:${String(i % 60).padStart(2, '0')}`,
+        source: ['hj212', 'report', 'manual'][i % 3],
+        status: statuses[i % 5],
+        incidentNo: i % 11 === 0 ? 'IN-20260903-001' : '',
+        timeline: [{ action: '规则触发', at: '09-03', by: '系统', note: '' }],
+      }
+    }),
+  },
+}
+
+/* ===== ② state：状态只放这里。转正式页面时映射为 composables/useAlarms.ts ===== */
+const routeFromHash = () => location.hash.replace(/^#\/?/, '').split(/[?/]/)[0] || 'alarms'
+const state = Vue.reactive({
+  route: routeFromHash(),
+  collapsed: false,
+  view: 'ready',        // ready | loading | empty | error（R-018 四态）
+  dataset: 'normal',    // normal | long | big
+  tab: 'all',
+  keyword: '',
+  type: '',
+  level: '',
+  source: '',
+  range: null,
+  onlyUnlinked: false,
+  page: 1,
+  pageSize: 10,
+  checked: [],
+  detailOpen: false,
+  linkOpen: false,
+  current: null,
+  link: { mode: 'existing', incidentNo: '', relType: '', reason: '', evidence: [] },
+})
+
+/* ===== ④ methods：只读 DATA、改 state；禁止直接操作 DOM 样式 ===== */
+const app = Vue.createApp({
+  setup() {
+    const rows = Vue.computed(() => (state.view === 'empty' ? [] : DATA.alarms[state.dataset]))
+    const matchTab = r => state.tab === 'all' || r.status === state.tab
+    const filteredRows = Vue.computed(() => rows.value.filter(r =>
+      matchTab(r) &&
+      (!state.keyword || r.no.includes(state.keyword) || r.enterprise.includes(state.keyword) || r.target.includes(state.keyword)) &&
+      (!state.type || r.type === state.type) &&
+      (!state.level || r.level === state.level) &&
+      (!state.source || r.source === state.source) &&
+      (!state.onlyUnlinked || !r.incidentNo)))
+    const pagedRows = Vue.computed(() => {
+      const start = (state.page - 1) * state.pageSize
+      return filteredRows.value.slice(start, start + state.pageSize)
+    })
+    Vue.watch(() => [state.keyword, state.type, state.level, state.source, state.tab, state.dataset, state.onlyUnlinked], () => { state.page = 1 })
+
+    const currentMenu = Vue.computed(() => DATA.menu.find(m => m.key === state.route) || DATA.menu[0])
+    const countOf = tab => rows.value.filter(r => tab === 'all' || r.status === tab).length
+    const labelOf = (list, v) => (list.find(x => x.value === v) || {}).label || v
+    const levelType = v => ({ urgent: 'danger', major: 'warning', minor: 'info' })[v] || 'info'
+    const statusType = v => ({ pending: 'danger', confirmed: 'warning', handling: 'primary', reviewing: 'warning', closed: 'success' })[v] || 'info'
+
+    const detailFields = Vue.computed(() => {
+      const r = state.current
+      if (!r) return []
+      return [
+        { label: '告警编号', value: r.no },
+        { label: '级别', value: labelOf(DATA.levels, r.level) },
+        { label: '企业', value: r.enterprise },
+        { label: '设备 / 因子', value: r.target },
+        { label: '触发值', value: r.trigger },
+        { label: '触发时间', value: r.firedAt },
+        { label: '来源', value: labelOf(DATA.sources, r.source) },
+        { label: '当前主事件', value: r.incidentNo || '未关联' },
+      ]
+    })
+    const reportFields = Vue.computed(() => {
+      const p = state.current && state.current.report
+      if (!p) return []
+      return [
+        { label: '上报编号', value: p.no },
+        { label: '版本', value: p.version },
+        { label: '报告人', value: p.reporter },
+        { label: '初始风险程度', value: p.risk },
+        { label: '位置', value: p.location },
+        { label: '核实状态', value: p.verified },
+      ]
+    })
+
+    // FR-ALM-005：候选仅限同企业、未结束未归档；推荐分只排序，不代选
+    const candidates = Vue.computed(() => {
+      if (!state.current) return []
+      return DATA.incidents
+        .filter(c => c.enterprise === state.current.enterprise)
+        .slice()
+        .sort((a, b) => b.score - a.score)
+    })
+    const linkValid = Vue.computed(() =>
+      (state.link.mode === 'new' || !!state.link.incidentNo) &&
+      !!state.link.relType && state.link.reason.trim().length > 0 && state.link.evidence.length > 0)
+    const linkHint = Vue.computed(() => {
+      if (linkValid.value) return '校验通过：提交时会再次校验告警版本、目标事件状态与企业一致性。'
+      const miss = []
+      if (state.link.mode === 'existing' && !state.link.incidentNo) miss.push('选定候选事件')
+      if (!state.link.relType) miss.push('关联类型')
+      if (!state.link.reason.trim()) miss.push('关联理由')
+      if (!state.link.evidence.length) miss.push('已核对证据')
+      return `还需填写：${miss.join('、')}。推荐分不代表自动关联，必须人工判定。`
+    })
+
+    const onSelect = key => { location.hash = `#/${key}` }
+    window.addEventListener('hashchange', () => { state.route = routeFromHash() })
+    if (!location.hash) history.replaceState(null, '', `#/${state.route}`)
+
+    const resetFilter = () => { state.keyword = ''; state.type = ''; state.level = ''; state.source = ''; state.range = null; state.onlyUnlinked = false }
+    const reload = () => { state.view = 'loading'; setTimeout(() => { state.view = 'ready' }, 600) }
+    const openDetail = row => { state.current = row; state.detailOpen = true }
+    const openLink = row => {
+      if (!row) return
+      state.current = row
+      state.link = { mode: 'existing', incidentNo: '', relType: '', reason: '', evidence: [] }
+      state.linkOpen = true
+    }
+    const submitLink = () => {
+      const target = state.link.mode === 'new' ? '新建事件' : state.link.incidentNo
+      state.linkOpen = false
+      ElementPlus.ElMessage.success(`已关联至 ${target}（mock，未写入）`)
+    }
+    const confirmOne = row => ElementPlus.ElMessageBox.confirm(`确认告警 ${row.no}？确认后进入待派发。`, '告警确认')
+      .then(() => ElementPlus.ElMessage.success('已确认（mock）')).catch(() => {})
+    const batchConfirm = () => ElementPlus.ElMessage.success(`已批量确认 ${state.checked.length} 条（mock）`)
+    const notReady = name => ElementPlus.ElMessage.info(`${name}：原型未覆盖`)
+
+    return { DATA, state, currentMenu, rows, filteredRows, pagedRows, countOf, labelOf, levelType, statusType, detailFields, reportFields, candidates, linkValid, linkHint, onSelect, resetFilter, reload, openDetail, openLink, submitLink, confirmOne, batchConfirm, notReady }
+  },
+})
+app.use(ElementPlus, { locale: ElementPlusLocaleZhCn }).use(DesignSystemUI).mount('#app')
+</script>
+</body>
+</html>

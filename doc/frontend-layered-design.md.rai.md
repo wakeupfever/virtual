@@ -3,10 +3,10 @@ rai-schema-version: 2
 task: "前端三层分层设计需求基线"
 task-key: "frontend-layered-design"
 primary-target: "doc/frontend-layered-design.md"
-requirement-version: "RV-017"
-iteration: "IT-017"
+requirement-version: "RV-018"
+iteration: "IT-018"
 current-changes:
-  - "C-046"
+  - "C-047"
 status: "active"
 updated: "2026-09-05"
 ---
@@ -15,9 +15,9 @@ updated: "2026-09-05"
 
 ## 快速摘要
 
-- 当前需求版本：`RV-017`
-- 当前工作迭代：`IT-017`
-- 当前变更：`C-046` 第二步 B：Claude 插件（implement R-032 / R-033 / R-035，R-034 待真实原型端到端；clarify R-032 的 commands）
+- 当前需求版本：`RV-018`
+- 当前工作迭代：`IT-018`
+- 当前变更：`C-047` 首个业务原型与两条新规则（add R-053 / R-054）；`C-046` 第二步 B：Claude 插件（implement R-032 / R-033 / R-035，R-034 待真实原型端到端；clarify R-032 的 commands）
 - 本轮目标：把三层策略封装成可安装的 Claude 插件，让「提示词 → 原型 → 正式页面」不再依赖某一次对话里的口头约定
 - 当前结论：**IT-017 完成**（R-032 / R-033 / R-035 verified，R-034 implemented）。**分步进度：第一步、第二步 A / B / C / D 全部交付**；50 条需求现为 49 verified / 1 implemented，唯一未闭环的是 `R-034`——`promote` 技能已就位，但端到端验收需要一个真实业务原型跑一遍，当前 `apps/prototypes/` 只有 `_template.html`。历史迭代结论见「迭代」与「历史索引」两节
 
@@ -98,6 +98,9 @@ updated: "2026-09-05"
 - [x] `R-037` 展示页面从 `packages/design-system/` 目录直接产出（`showcase.html`，零构建，CDN + `dist/ui.iife.js` + `dist/tokens.js`），采用「方向 A · 文档站式」排版：顶栏路由页签（设计变量 / 组件物料 / 布局范式）+ 左侧分组锚点 + 内容限宽 + 右侧本页目录。设计变量页：功能色色卡网格、bg/text/border/icon 分列、间距作用域×关系阶梯尺（条宽取真实解析值）、字体样张、圆角/阴影/边框实物、布局尺寸；原始刻度与 `--el-*` 映射默认折叠。组件物料页：**Element Plus 全部组件**按官方分类（Basic / Form / Data / Navigation / Feedback / Others）逐一渲染，每张卡片含舞台区、白名单/需提议标记、驱动 token 注脚、复制用法；主题 / 密度 / 主色实时切换。**响应式**：内容流式限宽（设计变量 ≤1200、组件物料 ≤1560），卡片按 `auto-fill(minmax(440px, 1fr))` 自动分栏；≤1400 隐藏右目录，≤960 左锚点变为顶部横向滚动条，≤720 色卡/表格降列，≤560 顶栏精简；任何宽度无横向滚动。**自研组件页**（`#/custom/<组件 key>`，位于组件物料之后）：侧栏按 外壳 / 页面级 / 复合组件 分组列出全部组件，主区**一次只渲染选中的那一个**——舞台（真实渲染 + 结构标签，内容垂直居中）、「脱胎第一层」面板（该组件消费的 token 以「名称 | 控件 | 值」单行三列排布，外套 `ElScrollbar` 限高，滑块 / 取色只作用于本页舞台，可恢复默认）、Props / Slots / Events、用法与源码链接；窄屏面板落到舞台下方时 token 行自动多列。**布局范式页**示意块用中性槽位（surface 底 + `--color-border-default` 虚线），整卡统一灰画布、token 脚注并入同一块底。**布局配置页**见 `R-044`。`category: ux` `status: verified`
 
 - [x] `R-052` 展示页全局调参面板：顶栏与整页控制条均可打开「调参」**浮窗**——按标题栏拖动、可收起为一条标题栏、可关闭，位置按浮窗实际高度钳在视口内，整体高度不超过视口（做成浮窗而不是抽屉，是为了调参时能看见被调的页面）；内容区用 `ElScrollbar` 承载，把第一层语义 token 全部变成可实时调整的控件——分组与条目由 `dist/tokens.json` 驱动，不手工维护清单；控件类型按**解析出来的值**判定（颜色→取色器、纯 px→滑块、其余→文本框），滑块区间必须包住当前值，远超常规区间的哨兵值（`--radius-full` 9999px）降级为文本框，避免 `el-slider` 钳值回吐造成无声改写；改动写在 `:root` 的 inline style 上，整站（含所有 Element Plus 组件，其圆角 / 边框经 `--el-*` 映射自 `--radius-*` / `--border-w` / `--color-border-*`）实时联动；支持关键词筛选、单项点值恢复、全部重置、「复制为 tokens.css」输出改动过的 `:root` 片段；顶栏主色取色器并入同一套覆盖机制；断点类 token 不进清单（媒体查询无法响应变量）。`category: ux` `status: verified`
+
+- [x] `R-053` 需求文档里有菜单或路由时，原型必须有可切换的路由：一级导航原样搬进 `DATA.menu`（含对应需求章节号），按 `state.route` 分支渲染，本轮未实现的菜单渲染明确占位（`ui-state` empty + 章节号），不允许点了没反应或所有菜单停在同一页面。`category: functional` `status: verified`
+- [x] `R-054` 调参面板下沉为第二层组件 `UiTuner`：原型（第三层）禁止 `<style>` 与 inline style，调参面板必须有自己的样式，只能住在允许写样式的第二层；展示页与任意原型均以 `<ui-tuner>` 接入，token 清单由 `dist/tokens.js` 驱动（页面需引入该脚本）。`category: ux` `status: verified`
 
 ### 文档
 
@@ -251,6 +254,18 @@ updated: "2026-09-05"
 - 退出条件：R-045 verified；R-041 / R-044 重新 verified；代码已提交
 
 ## 当前变更
+
+### C-047 · 首个业务原型与两条新规则
+
+- 类型：`add`
+- 原因：用户给出《巴中新环保系统 PRD》要求构建可交互原型，并在评审中提出四点：路由点了不变、页头多余、页签条难看、调参面板要开放到原型
+- 之前：`apps/prototypes/` 只有 `_template.html`；原型无多路由概念；调参面板写死在 `showcase.html` 里
+- 之后：R-053 / R-054；`apps/prototypes/alarms.html` 落地告警中心（PRD §8.4），覆盖 10 项一级导航的路由与占位、FR-ALM-001 六类告警、FR-ALM-003 处置阶段页签、FR-ALM-004 企业上报快照、**FR-ALM-005 显式关联事件**（候选只限同企业在办事件，关联类型 / 理由 / 已核对证据未填全则提交禁用，推荐分不代选）
+- 评审四点的处理：① 按 R-053 补路由分支与占位；② 删掉 `UiPageHeader`，操作移入 `UiFilterBar` 的 `actions`；③ 页签移进模块当卡片头并去掉 `is-tabbar` 胶囊样式——问题不在皮肤而在「页头 + 悬空页签条 + 表格」三块白板叠加，收成一张卡后无需改第二层；④ 调参面板下沉为 `UiTuner`
+- 实施中被门禁挡下并修正：`check-layer2` 报 7 处（自造 token 名 `--ui-tuner-max`、`calc(100vw - …)` 被空格切断成裸长度、`--el-slider-height: 3px` 等），改为复用 `--layout-aside-w`、面板封顶 `100vh` 由 flex 收缩滚动区、滑块尺寸交还 Element Plus 默认；变异测试报 18 项未消费，加 `PREP` 展开面板后降到 2 项，最后发现是 `PROPS` 缺 `top/right/bottom/left`——浮层类组件用 token 定默认位置会被误判，补进属性清单后 29 项全过
+- 关联需求：`R-053`、`R-054`、`R-016`、`R-018`、`R-038`、`R-041`、`R-011`
+- 覆盖关系：—
+- 影响功能：`F-005 direct`、`F-003 direct`、`F-011 direct`、`F-008 direct`、`F-010 indirect`
 
 ### C-046 · 第二步 B：Claude 插件
 
@@ -497,6 +512,7 @@ updated: "2026-09-05"
 | C-039 | F-001, F-002 | direct | 第一层 token 值改变 | 1920 下 `.l-page` 宽 = 内容区宽；无横向滚动 |
 | C-040 | F-001, F-002, F-003, F-004, F-005, F-006 | direct | 新增布局能力与组件行为 | 逐层高度实测；矮视口内滚；浮窗前后高度不变；视觉回归 0.00% |
 | C-041 | F-003, F-007 | direct | 构建产物确定性 | 连续两次生成一致；`git diff --exit-code -- dist` 返回 0 |
+| C-047 | F-005, F-003, F-011 | direct | 首个业务原型、第二层新增组件、原型路由规则 | check-prototype 通过；八组件变异全过；lint / typecheck 0 错误 |
 | C-046 | F-010 | direct | 新增可安装插件与三个技能 | validate 通过；实测安装并列出技能 |
 | C-045 | F-001, F-002, F-003, F-005 | verification_only | 六条需求转 verified | main.ts 引入链、ESLint 白名单、像素差 0.00% |
 | C-044 | F-011 | direct | 调参控件形态与浮层交互 | 拉满不变形；打字不被弹回；控制条可拖 |
@@ -532,6 +548,8 @@ updated: "2026-09-05"
 | R-032, R-033, R-035 | 仓库根 `.claude-plugin/marketplace.json`、`packages/claude-plugin/{.claude-plugin/plugin.json,README.md,skills/{layer-rules,prototype,promote}/SKILL.md}` | verified | E-32 |
 | R-034 | 同上（`skills/promote/SKILL.md`） | implemented | E-32（端到端待真实原型） |
 | R-037 | `packages/design-system/showcase.html`、`scripts/build-tokens.mjs`、`dist/tokens.js`(.json)、`package.json` build 脚本 | verified | E-09, E-26 |
+| R-053 | `CLAUDE.md` §3、`packages/claude-plugin/skills/prototype/SKILL.md`、`apps/prototypes/alarms.html`（路由分支 + 占位） | verified | E-33 |
+| R-054 | `ui/UiTuner.vue`、`ui/index.ts`、`whitelist.json`（custom）、`README.md`、`showcase.data.js`（CUSTOM）、`apps/prototypes/{_template,alarms}.html`（引入 dist/tokens.js + `<ui-tuner>`）、`tests/visual/mutate.mjs`（PREP + PROPS 补定位属性） | verified | E-33 |
 | R-052 | `showcase.html`（TUNER_GROUPS / kindOf / rangeOf / onSlide / setOverride 等 + 调参抽屉 + 顶栏与 FAB 入口） | verified | E-31 |
 | R-050 | `layout.css`（`.l-page--fill` / `.l-fill` / `.l-module.l-fill`）、`ui/UiShell.vue`（`view-class="ui-shell__view"` + `height: 100%` 纵向 flex）、`ui/UiState.vue`（`.ui-state.l-fill`）、`skins/table.css`（`.el-table.l-fill`）、`showcase.data.js`（`TABLE_MODULE` / `pageClass`）、`apps/prototypes/_template.html`、`apps/web/src/features/orders/Page.vue`、README「高度填充」、CLAUDE.md §2 | verified | E-28 |
 | R-051 | `ui/composites/UiFilterBar.vue`（`ElPopover` + `#advanced` 插槽 + `.ui-filter-bar__adv`）、`showcase.data.js`（CUSTOM 与 `TABLE_MODULE`）、README UiFilterBar 节、CLAUDE.md §2 | verified | E-28 |
@@ -610,6 +628,7 @@ updated: "2026-09-05"
 | E-30 | R-050, R-005, R-012 | 用户发现宽屏两侧又出现留白。复现：1920×1000 `#/page/stat-table` 下 `--layout-content-max` 与 `max-width` 均解析为 `none`，但 `.l-page` 仅 x=538 / w=1075（内容区 1690）——`.ui-shell__view` 的 `display: flex` 让 `.l-page` 的 `margin-inline: auto` 在交叉轴压过 `stretch`，收缩成 max-content 宽。视图改回块级 + `.l-page--fill` 自带 `height: 100%` 后三种情形同时成立：1920×1000 填充页 `.l-page` x=230 / w=1690 / h=940 = 视图，模块 720 / 表格 574 / 分页贴底 / 无外层滚动；1280×420 表体 client 45 vs scroll 132（内滚生效）、分页仍在视野；1920×500 非填充页 `.l-page` w=1690 / h=817、视图 440、外层可滚且滚动条存在；原型模板 1920 下同样 w=1690、表格 1616 | pass | 2026-09-05 |
 | E-31 | R-052, R-037 | 新标签页打开抽屉、不做任何操作：`:root` inline style 为空、计数 0（修复前会被 el-slider 钳值回写成 4 项）；分组 颜色24 / 间距13 / 圆角4 / 边框2 / 阴影3 / 字体13 / 布局尺寸20 / 层级5，共 82 行 = 41 滑块 + 24 取色器 + 17 文本框，`--radius-full` 为文本框；`#/page/table` 整页视图经 FAB 打开抽屉同样可用，键盘步进 `--radius-lg` / `--border-w` 后模块 borderRadius 12→13px、borderTopWidth 1→2px、计数 2；`--radius-md` 6→18px 时 Element Plus 输入框圆角同步 6→18px（small 按钮走 `--radius-sm`，已在提示文案中写明）；复制输出 `:root {  --radius-lg: 13px;  --border-w: 2px; }`；全部重置后 inline 清空、模块复原 12px/1px、计数归零；新标签页无控制台报错。二轮修正后复验：`--radius-lg` 打字 30px 全程不被弹回、提交后模块圆角 30px 且控件仍是滑块（上限稳定在 48）；`--radius-full` 设为 20px 后仍是文本框（基线冻结在 9999px）；清空输入框即恢复默认（inline 移除、圆角回 12px）；`--space-module-gap` 用 End 推到上限 64px 控件不变形；`--color-primary` 打字 `#c2410c` 后截图确认搜索按钮 / 高级搜索链接 / 侧栏选中项 / 面板按钮全部转为橙色（注：自动化的 getComputedStyle 读数会滞后，以截图为准）；整页控制条按把手从 (20,893) 拖到 (440,333) | pass | 2026-09-05 |
 | E-32 | R-032, R-033, R-034, R-035 | `claude plugin validate packages/claude-plugin` 与 `claude plugin validate .`（市场）均 `Validation passed`（首轮有 author 缺失警告，补 author / homepage / keywords 后归零）；`claude plugin marketplace add D:git-projectirtual` → `Successfully added marketplace: virtual`；`claude plugin install virtual@virtual` → `Successfully installed`，`installed_plugins.json` 记录 installPath 与 gitCommitSha；缓存目录 `skills/{layer-rules,prototype,promote}/SKILL.md` 三个技能齐备，frontmatter 的 name / description / disable-model-invocation 均被正确读入。`I-006` 核对：三个 SKILL.md 均无规则原文，只引用 `CLAUDE.md` / `README.md` / `whitelist.json` / 台账 | pass | 2026-09-05 |
+| E-33 | R-053, R-054, R-016, R-018 | `node scripts/check-prototype.js` 两个原型全过；浏览器实测：点「在线监测」→ hash 变 `#/monitor`、内容切为占位并显示「对应 PRD §8.3」、点回告警中心表格恢复；`FR-ALM-005` 关联对话框候选只列同企业在办事件（3 个事件里排除了另一家企业的），四项未填全时「确认关联」禁用并提示「推荐分不代表自动关联，必须人工判定」；`UiTuner` 在原型内 82 行控件 / 8 分组，改 `--radius-lg` 12→24px 模块圆角实时联动；筛选条由两行 100px 收回一行 56px；`pnpm lint` / `typecheck` 0 错误、`check-layer2` 0 错误、`test:visual` 三用例 0.00%、`test:mutation` 8 组件全过（UiTuner 29 项无例外） | pass | 2026-09-05 |
 | E-08 | R-028 | `doc/frontend-layered-design.md` §1～§10 与 RV-002 逐节核对；IT-003 同步 §3 目录树与 §9 展示页（RV-003）；IT-004 同步 §6 路由与 §9 方向 A（RV-004）：Vue 3 + Element Plus、Vite 8 + Tailwind 4、monorepo 目录、CDN 原型形态、插件三技能、展示页面、实施状态 | pass | 2026-09-02 |
 
 ## 历史索引
@@ -622,6 +641,7 @@ updated: "2026-09-05"
 | RV-016 | IT-016 | C-039 | modify | R-005 | `--layout-content-max` 1440px → none | F-001, F-002 |
 | RV-016 | IT-016 | C-040 | add | R-050, R-051, R-009, R-041, R-042 | 无 → 高度填充布局与高级搜索浮窗 | F-001～F-006 |
 | RV-016 | IT-016 | C-041 | implementation_correction | R-048, R-026 | dist 可复现：键排序 + 去掉生成时间 | F-003, F-007 |
+| RV-018 | IT-018 | C-047 | add | R-053, R-054, R-016, R-041 | 无 → 首个业务原型 + 原型路由规则 + UiTuner | F-003, F-005, F-011 |
 | RV-017 | IT-017 | C-046 | implement | R-032, R-033, R-034, R-035 | ready → 插件可安装；R-032 澄清 commands | F-010 |
 | RV-016 | IT-016 | C-045 | implement | R-004, R-009, R-010, R-011, R-017, R-029 | implemented → verified（用户验收 + 第二步阻塞已清） | F-001, F-002, F-003, F-005 |
 | RV-016 | IT-016 | C-044 | implementation_correction | R-052, R-044 | 值格可输入、控件不变形、控制条可拖 | F-011 |

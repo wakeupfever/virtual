@@ -18,6 +18,8 @@ const coverage = JSON.parse(readFileSync(resolve(ROOT, 'packages/design-system/d
 const PREP = {
   UiState: async (page, card) => { await card.locator('.el-radio-button', { hasText: 'error' }).click(); await page.waitForTimeout(200) },
   UiStatCard: async (page, card) => { await card.locator('.ui-stat-card').first().hover(); await page.waitForTimeout(200) },
+  // 面板默认收起，只有入口按钮可见；不展开的话面板里的 token 全部观察不到
+  UiTuner: async (page, card) => { await card.locator('.ui-tuner__entry').first().click(); await page.waitForTimeout(400) },
 }
 
 /** 已核实的例外：静态舞台上无法观察到，但源码确实按该 token 工作。每条必须写原因 */
@@ -56,7 +58,8 @@ function mutant(token) {
   return '37px'
 }
 
-const PROPS = ['color', 'backgroundColor', 'borderTopColor', 'borderBottomColor', 'borderLeftColor', 'borderTopWidth', 'borderBottomWidth', 'borderRadius', 'boxShadow', 'paddingTop', 'paddingLeft', 'marginTop', 'marginBottom', 'gap', 'rowGap', 'columnGap', 'width', 'height', 'minWidth', 'minHeight', 'fontSize', 'fontWeight', 'fontFamily', 'lineHeight', 'zIndex']
+// 含定位属性：浮层类组件（UiTuner）用 token 定默认位置，不看 top/right 就会误判为未消费
+const PROPS = ['color', 'backgroundColor', 'borderTopColor', 'borderBottomColor', 'borderLeftColor', 'borderTopWidth', 'borderBottomWidth', 'borderRadius', 'boxShadow', 'paddingTop', 'paddingLeft', 'marginTop', 'marginBottom', 'gap', 'rowGap', 'columnGap', 'width', 'height', 'minWidth', 'minHeight', 'top', 'right', 'bottom', 'left', 'fontSize', 'fontWeight', 'fontFamily', 'lineHeight', 'zIndex']
 
 const servers = []
 const base = process.env.SHOWCASE_URL || (servers.push(await startVite({ cwd: ROOT, port: 5199, readyPath: '/packages/design-system/showcase.html' })), servers.at(-1).url)

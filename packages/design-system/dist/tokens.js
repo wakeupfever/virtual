@@ -1156,7 +1156,8 @@ window.DS_TOKENS = {
       "ui-list-item",
       "ui-filter-bar",
       "ui-stat-card",
-      "ui-module-header"
+      "ui-module-header",
+      "ui-tuner"
     ],
     "html": [
       "div",
