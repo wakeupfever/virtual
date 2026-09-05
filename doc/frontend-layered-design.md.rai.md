@@ -19,9 +19,9 @@ updated: "2026-09-05"
 
 - 当前需求版本：`RV-018`
 - 当前工作迭代：`IT-018`
-- 当前变更：`C-049` 无限层级菜单、折叠态与动画、徽标与分页间距；`C-048` 克制轻量风格升级与菜单重做；`C-047` 首个业务原型与两条新规则（add R-053 / R-054）；`C-046` 第二步 B：Claude 插件（implement R-032 / R-033 / R-035，R-034 待真实原型端到端；clarify R-032 的 commands）
-- 本轮目标：把三层策略封装成可安装的 Claude 插件，让「提示词 → 原型 → 正式页面」不再依赖某一次对话里的口头约定
-- 当前结论：**IT-017 完成**（R-032 / R-033 / R-035 verified，R-034 implemented）。**分步进度：第一步、第二步 A / B / C / D 全部交付**；50 条需求现为 49 verified / 1 implemented，唯一未闭环的是 `R-034`——`promote` 技能已就位，但端到端验收需要一个真实业务原型跑一遍，当前 `apps/prototypes/` 只有 `_template.html`。历史迭代结论见「迭代」与「历史索引」两节
+- 当前变更：`C-049` 无限层级菜单、折叠态与动画、徽标与分页间距；`C-048` 克制轻量风格升级与菜单重做；`C-047` 首个业务原型与两条新规则（add R-053 / R-054）
+- 本轮目标：用一份真实 PRD 检验这套底层能否正确还原需求；把模板整体风格升级为「克制轻量」，把侧栏菜单做成可用的信息架构
+- 当前结论：**IT-018 完成**（R-053 / R-054 verified；R-005 / R-007 / R-012 / R-042 / R-048 重新 verified）。**分步进度：第一步、第二步 A / B / C / D 全部交付**；52 条需求现为 51 verified / 1 implemented，唯一未闭环的是 `R-034`——`promote` 技能已就位，`apps/prototypes/alarms.html` 这个真实业务原型也已存在，缺的是**拿它跑一次 promote**。历史迭代结论见「当前迭代」与「历史索引」两节
 
 ## 当前需求清单
 
@@ -71,11 +71,11 @@ updated: "2026-09-05"
 - [x] `R-021` `apps/web/src/features/<模块>/` 按 components / api / composables / Page.vue 组织，只能 import 第一、二层与自身；外壳与路由在应用层（`App.vue`、`router/index.ts`：`MENU` 即路由表，`import.meta.glob` 自动对上 `features/<key>/Page.vue`）；feature 之间禁止互相 import，`@/` 别名只给应用层；每个由原型转换的模块附 `DIFF.md` 差异清单。`category: maintainability` `status: verified`
 - [x] `R-022` 同一 UI 模式在 features 内出现第二次时下沉为该模块业务组件，不复制。`category: maintainability` `status: verified`
 - [x] `R-023` 项目根 `CLAUDE.md` 包含分层说明、硬性规则、原型规则、开发流程四节。`category: delivery` `status: verified`
-- [ ] `R-024` ESLint（`eslint-plugin-vue` flat config）：`features/**` 禁止原生表单/表格元素（`vue/no-restricted-html-elements`）、inline style（`vue/no-static-inline-styles`）、Tailwind 任意值与布局类、非白名单 `El*` 组件；`ui/**` 禁止 import `features/*`。落地：根目录 `eslint.config.js` 一份配置覆盖 `apps/web/src` 与 `packages/design-system/ui`，白名单从 `whitelist.json` 读取（`vue/restricted-component-names`），另禁 `<style>` 块（`vue/no-restricted-block`）与 Tailwind 布局 / 间距 / 尺寸 / 定位 / 响应式前缀 / 任意值类（`vue/no-restricted-class`）。`category: quality` `status: verified`
+- [x] `R-024` ESLint（`eslint-plugin-vue` flat config）：`features/**` 禁止原生表单/表格元素（`vue/no-restricted-html-elements`）、inline style（`vue/no-static-inline-styles`）、Tailwind 任意值与布局类、非白名单 `El*` 组件；`ui/**` 禁止 import `features/*`。落地：根目录 `eslint.config.js` 一份配置覆盖 `apps/web/src` 与 `packages/design-system/ui`，白名单从 `whitelist.json` 读取（`vue/restricted-component-names`），另禁 `<style>` 块（`vue/no-restricted-block`）与 Tailwind 布局 / 间距 / 尺寸 / 定位 / 响应式前缀 / 任意值类（`vue/no-restricted-class`）。`category: quality` `status: verified`
 - [x] `R-025` 使用 `eslint-plugin-boundaries`（v7 `boundaries/dependencies`，`checkAllOrigins` + `checkUnknownLocals`）强制单向依赖：feature → 自身 / vue / vue-router / element-plus / `@virtual/design-system`；app → feature / app；ui → ui / vue / element-plus；其余（跨 feature、feature → app、ui → feature、未登记的外部包）一律报错。`category: quality` `status: verified`
 - [x] `R-026` `.husky/pre-commit` 跑 lint-staged：改动的 `apps/web/src` / `design-system/ui` 文件跑 ESLint（0 警告），改动第一、二层样式跑 `check-layer2`，改动原型跑 `check-prototype`；CI（GitHub Actions，Node 22 + pnpm）依次 lint → typecheck → build:ds 并校验 `dist/` 无 diff → check:prototype → build:web → 视觉回归 → 变异验证，失败时上传 `tests/visual/__output__`。`category: delivery` `status: verified`
 - [x] `R-027` `tests/visual/compare.mjs`：自动起原型与正式页面两个 dev server（jsdelivr 依赖用本地 node_modules 顶替，离线可跑），对 `CASES` 里每个用例喂同一份 mock（`?dataset=`）、同一视口，只截 `.l-page` 内容区做 pixelmatch，差异 > 1%（`--threshold` 可调）即失败并输出 `__output__/<name>-{proto,web,diff}.png` 与差异清单；`PROTO_URL` / `WEB_URL` 可复用已起的服务；纳入 CI。`category: quality` `status: verified`
-- [ ] `R-031` 工具链：Vite 8.x（Rolldown 打包）+ Tailwind CSS 4.x 通过 `@tailwindcss/vite` 插件接入，入口 CSS `@import "tailwindcss"`，Tailwind `@theme` 只引用 `tokens.css` 变量；关闭或隔离 Tailwind preflight 以免覆盖 Element Plus 样式；Node ≥ 20.19。落地：`tailwind.css` 只引 `theme.css` + `utilities.css`，`@theme` 先清空默认再映射 token（颜色 / 字号 / 字重 / 圆角 / 阴影）；根 `pnpm build:web` = vue-tsc + vite build。`category: delivery` `status: verified`
+- [x] `R-031` 工具链：Vite 8.x（Rolldown 打包）+ Tailwind CSS 4.x 通过 `@tailwindcss/vite` 插件接入，入口 CSS `@import "tailwindcss"`，Tailwind `@theme` 只引用 `tokens.css` 变量；关闭或隔离 Tailwind preflight 以免覆盖 Element Plus 样式；Node ≥ 20.19。落地：`tailwind.css` 只引 `theme.css` + `utilities.css`，`@theme` 先清空默认再映射 token（颜色 / 字号 / 字重 / 圆角 / 阴影）；根 `pnpm build:web` = vue-tsc + vite build。`category: delivery` `status: verified`
 
 ### Claude 插件
 
@@ -176,21 +176,30 @@ updated: "2026-09-05"
 
 | 功能 | 名称 | 当前状态 | 对应需求 |
 |---|---|---|---|
-| F-001 | 设计 token 层（tokens.css，含 Element Plus 主题映射） | active | R-001～R-008, R-030 |
+| F-001 | 设计 token 层（tokens.css，含 Element Plus 主题映射） | active | R-001～R-008, R-030, R-039, R-045, R-046 |
 | F-002 | 布局与基础样式层（layout.css、base.css） | active | R-009, R-010, R-050 |
-| F-003 | 基础组件层（Element Plus 白名单 + 自研组件 + 皮肤层） | active | R-011, R-014, R-015, R-029, R-040～R-042 |
-| F-004 | 页面外壳组件（UiShell） | active | R-012 |
-| F-005 | 原型工作流（prototypes/、模板、检查脚本） | active | R-016～R-019 |
+| F-003 | 基础组件层（Element Plus 白名单 + 自研组件 + 皮肤层） | active | R-011, R-014, R-015, R-029, R-040～R-043, R-047, R-048, R-051, R-054 |
+| F-004 | 页面外壳组件（UiShell / UiShellMenu） | active | R-012, R-043, R-050 |
+| F-005 | 原型工作流（prototypes/、模板、检查脚本） | active | R-016～R-019, R-053 |
 | F-006 | 正式功能开发层（Vue 3 + Vite 8 + Tailwind 4） | active | R-020～R-022, R-031 |
 | F-007 | AI 约束机制（CLAUDE.md、ESLint、依赖检查、hooks/CI） | active | R-023～R-026 |
 | F-008 | 原型→正式转换视觉回归与第二层变异验证 | active | R-027, R-049 |
 | F-009 | 项目文档（doc/） | active | R-028 |
 | F-010 | Claude 插件（prototype / promote / layer-rules 技能） | active | R-032～R-035 |
-| F-011 | 设计系统展示页（变量 + 物料） | active | R-037 |
+| F-011 | 设计系统展示页（变量 + 物料 + 整页模板 + 调参） | active | R-037, R-038, R-044, R-052 |
 
 ## 当前迭代
 
-### IT-017 · 第二步 B：Claude 插件
+### IT-018 · 首个业务原型、风格升级与菜单重做
+
+- 目标：用一份真实 PRD（《巴中新环保系统》）检验这套三层底层能否正确还原需求；按评审意见把模板整体风格升级为「克制轻量」，并把侧栏菜单做成可用的信息架构
+- 范围：`tokens.css`（圆角 / 阴影 / 边框 / 灰阶 / 间距值）、`skins/{menu,table}.css`、`ui/{UiShell,UiShellMenu,UiState,UiTuner}.vue`、`ui/index.ts`、`whitelist.json`、`scripts/check-layer2.mjs`、`apps/prototypes/{_template,alarms}.html`、`tests/visual/mutate.mjs`、`CLAUDE.md` §3、插件 `prototype` 技能、README；git commit
+- 包含变更：`C-047`、`C-048`、`C-049`
+- 对应需求版本：`RV-018`
+- 退出条件：R-053 / R-054 verified；`alarms.html` 通过 `check-prototype`；八项门禁全绿；代码已提交
+- 说明：本轮新增两条规则型需求——`R-053`（需求文档有菜单就必须有可切换路由）来自评审反馈，`R-054`（调参面板下沉第二层）来自「原型禁止 `<style>`」这条既有约束的必然推论
+
+### IT-017 · 第二步 B：Claude 插件（已完成）
 
 - 目标：把三层策略封装成可安装的 Claude 插件，让「提示词 → 原型 → 正式页面」这条路不依赖某一次对话里的口头约定
 - 范围：仓库根 `.claude-plugin/marketplace.json`（新）、`packages/claude-plugin/**`（新：manifest + README + 三个技能）、`doc/` 说明文档插件一节；git commit
@@ -619,8 +628,10 @@ updated: "2026-09-05"
 | 事项 | 关联需求 | 影响 |
 |---|---|---|
 | 原型 CDN 是否需要离线副本（H-004） | R-016 | 模板依赖引入方式 |
-| `promote` 端到端验收：需要一个真实业务原型跑通「原型 → 正式页面」 | R-034 | R-034 转 verified 的前提 |
-| 展示页控制台既有 `compiler-30` 报错与两条 404 未定位（`git show HEAD` 版本同样存在，105 个字符串模板逐个 `Vue.compile` 均通过，非本轮引入） | R-037 | 不影响渲染与门禁，待单独排查 |
+| 拿 `alarms.html` 跑一次 `promote`，把「原型 → 正式页面」端到端走通 | R-034 | R-034 转 verified 的唯一前提（原型本身已就绪） |
+| `el-tree` / `el-icon` / `el-progress` 不在白名单 | R-011, R-016 | 挡住 PRD §14 要求的「在线监测设备树」原型；也使展示页模板 04 / 05 的骨架**无法复制进原型**（会被 check-prototype 拦下），与 README「可预览并复制骨架」的说法不符 |
+| PRD §14 要求「单个离线 HTML、CSS/JS 全内嵌、不依赖网络」，与本工作区「共用第一二层 + CDN」冲突 | R-016, R-029 | 后者是原型与正式页面一比一转换的前提；若必须满足 PRD，需要另做一套导出 |
+| 展示页控制台曾出现的 `compiler-30` 报错当前**无法复现** | R-037 | `HEAD~2`（本会话前）自闭合标签数为 0 却同样报错，与本会话在 `C-047` 修掉的那条（自闭合自定义标签）不是同一原因；最近多次新标签页检查均无任何控制台输出，暂按「不可复现」挂起 |
 | 超宽屏（24 寸以上）纯文本页面行长偏长（`--layout-content-max: none` 的代价） | R-005 | 需要时改回具体值 |
 
 无外部阻塞。
@@ -661,6 +672,7 @@ updated: "2026-09-05"
 | E-31 | R-052, R-037 | 新标签页打开抽屉、不做任何操作：`:root` inline style 为空、计数 0（修复前会被 el-slider 钳值回写成 4 项）；分组 颜色24 / 间距13 / 圆角4 / 边框2 / 阴影3 / 字体13 / 布局尺寸20 / 层级5，共 82 行 = 41 滑块 + 24 取色器 + 17 文本框，`--radius-full` 为文本框；`#/page/table` 整页视图经 FAB 打开抽屉同样可用，键盘步进 `--radius-lg` / `--border-w` 后模块 borderRadius 12→13px、borderTopWidth 1→2px、计数 2；`--radius-md` 6→18px 时 Element Plus 输入框圆角同步 6→18px（small 按钮走 `--radius-sm`，已在提示文案中写明）；复制输出 `:root {  --radius-lg: 13px;  --border-w: 2px; }`；全部重置后 inline 清空、模块复原 12px/1px、计数归零；新标签页无控制台报错。二轮修正后复验：`--radius-lg` 打字 30px 全程不被弹回、提交后模块圆角 30px 且控件仍是滑块（上限稳定在 48）；`--radius-full` 设为 20px 后仍是文本框（基线冻结在 9999px）；清空输入框即恢复默认（inline 移除、圆角回 12px）；`--space-module-gap` 用 End 推到上限 64px 控件不变形；`--color-primary` 打字 `#c2410c` 后截图确认搜索按钮 / 高级搜索链接 / 侧栏选中项 / 面板按钮全部转为橙色（注：自动化的 getComputedStyle 读数会滞后，以截图为准）；整页控制条按把手从 (20,893) 拖到 (440,333) | pass | 2026-09-05 |
 | E-32 | R-032, R-033, R-034, R-035 | `claude plugin validate packages/claude-plugin` 与 `claude plugin validate .`（市场）均 `Validation passed`（首轮有 author 缺失警告，补 author / homepage / keywords 后归零）；`claude plugin marketplace add D:git-projectirtual` → `Successfully added marketplace: virtual`；`claude plugin install virtual@virtual` → `Successfully installed`，`installed_plugins.json` 记录 installPath 与 gitCommitSha；缓存目录 `skills/{layer-rules,prototype,promote}/SKILL.md` 三个技能齐备，frontmatter 的 name / description / disable-model-invocation 均被正确读入。`I-006` 核对：三个 SKILL.md 均无规则原文，只引用 `CLAUDE.md` / `README.md` / `whitelist.json` / 台账 | pass | 2026-09-05 |
 | E-33 | R-053, R-054, R-016, R-018 | `node scripts/check-prototype.js` 两个原型全过；浏览器实测：点「在线监测」→ hash 变 `#/monitor`、内容切为占位并显示「对应 PRD §8.3」、点回告警中心表格恢复；`FR-ALM-005` 关联对话框候选只列同企业在办事件（3 个事件里排除了另一家企业的），四项未填全时「确认关联」禁用并提示「推荐分不代表自动关联，必须人工判定」；`UiTuner` 在原型内 82 行控件 / 8 分组，改 `--radius-lg` 12→24px 模块圆角实时联动；筛选条由两行 100px 收回一行 56px；`pnpm lint` / `typecheck` 0 错误、`check-layer2` 0 错误、`test:visual` 三用例 0.00%、`test:mutation` 8 组件全过（UiTuner 29 项无例外） | pass | 2026-09-05 |
+| E-34 | R-005, R-007, R-012, R-042 | 风格升级与菜单重做实测：卡片 `border-radius: 8px` / `box-shadow: none`（改为靠边框分层）；`.l-page` padding 8px；折叠侧栏 66px 下 10 项**全部有图标**（修复前 `innerText` 为空、10 行空白）；三级菜单可逐层展开（告警中心 → 规则与推送 → 阈值规则 / 推送渠道 / 审批流配置），父级徽标由 `sumBadge` 汇总为 6；徽标由 22×40 的椭圆修正为 22×22 正圆；分页与表格间距由「上 0 / 下 20」修正为对称。四处返工：子项默认图标渲染成横杠（改按 depth 判定）、折叠态子菜单图标被 EP 的 `.el-menu--collapse … span` 规则隐藏（图标标签改 `<i>`）、折叠分组分隔线实测仅 16px 宽（去横向留白）、嵌套选中项竖线画在侧栏最左边离文字很远（改底色 + 主色文字）。加动画时误删 `:collapse-transition="false"` 导致 EP 过渡与侧栏宽度过渡打架（侧栏 class 与内联宽度已是折叠值、实测宽度仍 230px），已改回。八项门禁全绿，视觉回归 0.00%，变异测试 8 组件全过 | pass | 2026-09-05 |
 | E-08 | R-028 | `doc/frontend-layered-design.md` §1～§10 与 RV-002 逐节核对；IT-003 同步 §3 目录树与 §9 展示页（RV-003）；IT-004 同步 §6 路由与 §9 方向 A（RV-004）：Vue 3 + Element Plus、Vite 8 + Tailwind 4、monorepo 目录、CDN 原型形态、插件三技能、展示页面、实施状态 | pass | 2026-09-02 |
 
 ## 历史索引
@@ -685,6 +697,9 @@ updated: "2026-09-05"
 | RV-014 | IT-014 | C-035 | implement | R-020, R-021, R-024, R-025, R-031 | ready → verified；R-021 / R-024 澄清 | F-006, F-007 |
 | RV-013 | IT-013 | C-034 | add | R-047, R-048, R-049, R-005, R-037 | 无 → 第二层约束 / 覆盖度 / 变异验证 | F-001, F-003, F-011 |
 | RV-012 | IT-012 | C-033 | add | R-046, R-037 | 无 → [data-palette] 变体段 | F-001, F-011 |
+| RV-010 | IT-010 | C-028 | add | R-045 | 无 → 第一层默认值对齐参考站 | F-001, F-002, F-004 |
+| RV-010 | IT-010 | C-029 | modify | R-041 | UiModuleHeader / UiStatCard 按精修稿重构 | F-003 |
+| RV-010 | IT-010 | C-030 | modify | R-044, R-040 | 五套模板按精修稿重排 | F-011 |
 | RV-011 | IT-011 | C-031 | modify | R-042, R-045 | 行高 token；tabs / tree 皮肤 | F-001, F-003 |
 | RV-011 | IT-011 | C-032 | modify | R-044, R-041 | 02～05 模板与 UiFilterBar 改版 | F-003, F-011 |
 | RV-008 | IT-008 | C-024 | modify | R-041, R-012 | 组件按精修稿美化 | F-003, F-004 |
