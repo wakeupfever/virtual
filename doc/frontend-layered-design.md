@@ -92,7 +92,7 @@ virtual/
 
 ### 4.6 无行为布局类 `layout.css`
 
-`.l-page`、`.l-page-header`、`.l-module`、`.l-module-header`、`.l-stack`、`.l-grid`（+ `.l-span-*`）、`.l-split`、`.l-cluster`、`.l-toolbar`、`.l-form`、`.l-inline`、`.l-state` 及其变体，全部只引用语义 token，不含 JS，768px 以下自动降为单列。原型与正式项目引用**同一个文件**，布局一致性是文件级别的，因此其冻结级别与第二层相同。
+`.l-page`、`.l-page-header`、`.l-module`、`.l-module-header`、`.l-stack`、`.l-grid`（+ `.l-span-*`）、`.l-split`、`.l-cluster`、`.l-toolbar`、`.l-form`、`.l-inline`、`.l-state` 及其变体，全部只引用语义 token，不含 JS，768px 以下自动降为单列。另有一组高度填充类供表格页使用：`.l-page--fill` 让页面撑满外壳内容区并纵向排布，子项加 `.l-fill` 吃掉剩余高度（`.l-module.l-fill` 会同时把模块自身改为纵向排布）。它依赖 `UiShell` 把滚动视图设为确定高度的纵向 flex——百分比高度需要父级有确定高度才成立；「能否被压缩」则由 `min-height` 区分：不加 `--fill` 的页面 `min-height` 为 auto，不会被压缩，内容更高照常由外壳内滚。配合 `skins/table.css` 的 `.el-table.l-fill`，表格由父级剩余高度决定高度、表头固定、表体在 Element Plus 自带的 `ElScrollbar` 内滚、分页贴底，**不需要给 `el-table` 传 `height`**。原型与正式项目引用**同一个文件**，布局一致性是文件级别的，因此其冻结级别与第二层相同。
 
 ### 4.7 `base.css`
 
@@ -106,7 +106,7 @@ reset、字体、页面底色。正式项目关闭 Tailwind preflight，全局 r
 
 ### 5.2 自研复合组件
 
-只做 Element Plus 未覆盖的外壳与页面级组件：`UiShell`（顶栏 + 可折叠侧栏，小屏变抽屉，尺寸全取 `--layout-*`；外壳固定视口高，侧栏与主区各自在 `ElScrollbar` 内滚动，window 不滚）、`UiPageHeader`（标题、副标题、操作区）、`UiState`（`ready | loading | empty | error` 四态容器）。每个组件"定义完成"的条件：props 有 TypeScript 类型且导出；不含业务词汇；README 有用法示例。
+只做 Element Plus 未覆盖的外壳与页面级组件：`UiShell`（顶栏 + 可折叠侧栏，小屏变抽屉，尺寸全取 `--layout-*`；外壳固定视口高，侧栏与主区各自在 `ElScrollbar` 内滚动，window 不滚）、`UiPageHeader`（标题、副标题、操作区）、`UiState`（`ready | loading | empty | error` 四态容器，加 `.l-fill` 时纵向排布以延续填充链）。复合组件里 `UiFilterBar` 的「高级搜索」用 `ElPopover` 浮窗承载（`#advanced` 插槽），展开不改变筛选条与页面高度，下方表格不会被推下去；`ElPopover` 只在第二层内部使用，不进第三层白名单。每个组件"定义完成"的条件：props 有 TypeScript 类型且导出；不含业务词汇；README 有用法示例。
 
 ### 5.3 共用方式
 
@@ -160,7 +160,7 @@ reset、字体、页面底色。正式项目关闭 Tailwind preflight，全局 r
 
 ## 9. 展示页面
 
-`packages/design-system/showcase.html`（数据在 `showcase.data.js`），从第一、二层所在目录直接产出，零构建、双击打开，与原型同一套 CDN 依赖。排版采用画板确认的「方向 A · 文档站式」：顶栏路由页签（`#/tokens` 设计变量 / `#/materials` 组件物料 / `#/custom` 自研组件 / `#/layout` 布局范式 / `#/templates` 布局配置）+ 左侧分组锚点 + 内容限宽 + 右侧本页目录。设计变量页：功能色色卡网格、bg / text / border / icon 分列、间距作用域×关系阶梯尺（条宽即真实解析值，随密度变化）、字体样张、圆角 / 阴影 / 边框实物、布局尺寸与层级；原始刻度与 `--el-*` 映射默认折叠并标注禁止直接引用。组件物料页：Element Plus 全部组件按官方分类（Basic / Config / Form / Data / Navigation / Feedback / Others）逐一渲染；自研组件页：自研组件（外壳 / 页面级 / 复合组件）的配置卡——舞台 + 结构标签 + 「脱胎第一层」面板（临时调整该组件消费的 token，只作用于本卡舞台，验证组件确实随第一层变化）+ Props / Slots / Events + 用法；布局配置页：五套页面排版模板（统计 / 纯表格 / 统计 + 表格 / 左树 + 表格 / TabBar + 表格，参考 HY Compiler Studio 页面排版模板）在同一 UiShell 应用壳内切换预览，芯片显示 page / module / header / sidebar 当前值，可复制骨架进原型；每张卡片含舞台区、白名单 / 需提议标记（来自 `whitelist.json`）、驱动 token 注脚与复制用法。右上角实时切换主色 / 密度 / 深色 / 配色预设，三页同步变化；内容流式限宽并带四级响应式断点。本页属于设计系统内部工具，允许 `<style>` 与 `:style` 绑定，但所有值仍只引用 token。
+`packages/design-system/showcase.html`（数据在 `showcase.data.js`），从第一、二层所在目录直接产出，零构建、双击打开，与原型同一套 CDN 依赖。排版采用画板确认的「方向 A · 文档站式」：顶栏路由页签（`#/tokens` 设计变量 / `#/materials` 组件物料 / `#/custom` 自研组件 / `#/layout` 布局范式 / `#/templates` 布局配置）+ 左侧分组锚点 + 内容限宽 + 右侧本页目录。设计变量页：功能色色卡网格、bg / text / border / icon 分列、间距作用域×关系阶梯尺（条宽即真实解析值，随密度变化）、字体样张、圆角 / 阴影 / 边框实物、布局尺寸与层级；原始刻度与 `--el-*` 映射默认折叠并标注禁止直接引用。组件物料页：Element Plus 全部组件按官方分类（Basic / Config / Form / Data / Navigation / Feedback / Others）逐一渲染；自研组件页（`#/custom/<组件 key>`）：侧栏按 外壳 / 页面级 / 复合组件 分组列出全部组件，主区一次只渲染选中的那一个——舞台 + 结构标签 + 「脱胎第一层」面板（该组件消费的 token 单行三列排布并限高内滚，临时调整只作用于本页舞台，验证组件确实随第一层变化）+ Props / Slots / Events + 用法；布局配置页（`#/templates`）：五套页面排版模板（统计 / 纯表格 / 统计 + 表格 / 左树 + 表格 / TabBar + 表格，参考 HY Compiler Studio 页面排版模板）以索引卡列出，点「打开整页」进 `#/page/<模板 key>`——**没有展示页外壳**，UiShell 撑满视口、尺寸全是真实值，右下角浮动控制条提供 返回 / 上下一套 / 深浅 / 密度 / 复制骨架。这两页职责分开：自研组件看单个组件的形态与接口，布局配置看整页排版。组件物料页每张卡片含舞台区、白名单 / 需提议标记（来自 `whitelist.json`）、驱动 token 注脚与复制用法。右上角实时切换主色 / 密度 / 深色 / 配色预设，三页同步变化；内容流式限宽并带四级响应式断点。本页属于设计系统内部工具，允许 `<style>` 与 `:style` 绑定，但所有值仍只引用 token。
 
 ## 10. 实施状态
 

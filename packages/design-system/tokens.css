@@ -120,7 +120,7 @@
   --layout-icon-sm: 22px;           /* 图标容器三档：品牌标 */
   --layout-icon-md: 28px;           /* 卡片图标 */
   --layout-icon-lg: 40px;           /* 状态 / 空态图标 */
-  --layout-content-max: 1440px;
+  --layout-content-max: none;       /* 内容区最大宽：业务后台默认铺满，超宽屏不居中留白。要恢复限宽改成具体值即可 */
   --layout-content-pad: var(--space-page-pad-x);
   --layout-form-label-w: 120px;
   --layout-control-w: 200px;        /* 工具条中输入框 / 下拉的默认宽 */

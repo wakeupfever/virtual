@@ -26,7 +26,11 @@ const KNOWN = {
     '--layout-header-h': '展示页 demo 外层用 inline --layout-header-h: 44px 缩小舞台，根上的变异被它挡住；原型 / 正式页面无此覆盖',
     '--layout-sidebar-w-collapsed': '只在 collapsed 状态生效',
   },
-  UiFilterBar: { '--space-module-title': '来自 .l-toolbar 的下边距，组件有意置 0（筛选条由外层 .l-stack 控制间距）' },
+  UiFilterBar: {
+    '--space-module-title': '来自 .l-toolbar 的下边距，组件有意置 0（筛选条由外层 .l-stack 控制间距）',
+    '--space-module-pad': '高级搜索浮窗的内边距；ElPopover 把内容 teleport 到 body，不在被快照的 .ds-cfg__stage 里，且默认收起',
+    '--space-module-gap': '来自浮窗内容的 .l-stack 基类，组件用 .l-stack--tight 覆盖为 --space-component-gap',
+  },
   UiListItem: {
     '--space-inline-gap': '来自 .l-inline，组件把主体 gap 改为 --space-component-gap',
     '--space-module-gap': '来自 .l-stack 基类，组件用 .l-stack--tight 覆盖为 --space-component-title',

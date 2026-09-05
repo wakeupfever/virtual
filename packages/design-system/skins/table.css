@@ -14,3 +14,13 @@
 .el-table th.el-table__cell { height: var(--layout-thead-h); font-size: var(--font-size-caption); font-weight: var(--font-weight-medium); }
 .el-table .cell { line-height: 1.4; padding-inline: var(--space-component-gap); }
 .el-table--striped .el-table__body tr.el-table__row--striped td.el-table__cell { background: var(--color-bg-surface); }
+
+/* 高度填充：表格加 .l-fill 即由父容器的剩余高度决定自身高度，无需传 height。
+ * 表头固定、表体在 Element Plus 自带的 ElScrollbar 内滚（R-043）。 */
+.el-table.l-fill { display: flex; flex-direction: column; height: 100%; }
+.el-table.l-fill > .el-table__inner-wrapper { flex: 1 1 auto; min-height: 0; display: flex; flex-direction: column; }
+.el-table.l-fill > .el-table__inner-wrapper > .el-table__header-wrapper { flex: none; }
+/* 表体至少留一行，避免视口极矮时被压成 0 */
+.el-table.l-fill > .el-table__inner-wrapper > .el-table__body-wrapper { flex: 1 1 auto; min-height: var(--layout-row-h); }
+.el-table.l-fill > .el-table__inner-wrapper > .el-table__body-wrapper > .el-scrollbar { height: 100%; }
+.el-table.l-fill > .el-table__inner-wrapper > .el-table__body-wrapper > .el-scrollbar > .el-scrollbar__wrap { height: 100%; }

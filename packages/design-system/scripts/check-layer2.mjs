@@ -133,10 +133,12 @@ const dead = semanticTokens.filter(t => !consumers[t] && !elMapped.has(t) && !/^
 if (dead.length) warnings.push(`第二层与 Element Plus 映射都未消费的语义 token（${dead.length}）：${dead.join(', ')}`)
 
 /* ---------- 输出 ---------- */
+/* dist/ 必须逐字节可复现，否则 CI 的 `git diff --exit-code -- dist` 每次都会失败：
+ * 键序按名字排序（目录遍历顺序不稳定），且不写生成时间。 */
+const sortedEntries = o => Object.entries(o).sort(([a], [b]) => a < b ? -1 : a > b ? 1 : 0)
 const report = {
-  generatedAt: new Date().toISOString(),
-  files: Object.fromEntries(Object.entries(usage).map(([f, s]) => [f, [...s].sort()])),
-  components,
+  files: Object.fromEntries(sortedEntries(usage).map(([f, s]) => [f, [...s].sort()])),
+  components: Object.fromEntries(sortedEntries(components)),
   tokens: Object.fromEntries(semanticTokens.map(t => [t, [...(consumers[t] || [])].sort()])),
   elOnly,
   dead,

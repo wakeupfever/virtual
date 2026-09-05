@@ -18,6 +18,17 @@
 /* 页面级区块：区块之间用 page-gap */
 .l-page > * + * { margin-top: var(--space-page-gap); }
 
+/* 高度填充变体：页面撑满外壳内容区并纵向排布，子项加 .l-fill 吃掉剩余高度。
+ * 依赖外壳把滚动视图设为「至少满高的纵向 flex」（UiShell 已如此），内容更高时照常撑开内滚。 */
+.l-page--fill { flex: 1 1 auto; min-height: 0; display: flex; flex-direction: column; }
+
+/* 通用「占满剩余空间」标记：作用于任意 flex 容器的子项（.l-page--fill / .l-stack / .l-split …）。
+ * min-height: 0 是让内部可滚动区域（表格、列表）能真正收缩的前提。 */
+.l-fill { flex: 1 1 auto; min-height: 0; }
+
+/* 被标记填充的模块自身也要纵向排布，才能把余量交给内部的 .l-fill 子项（与 .l-stack 叠加时行为一致） */
+.l-module.l-fill { display: flex; flex-direction: column; }
+
 /* 页头：标题与操作区左右分布，下方留 page-title 间距 */
 .l-page-header {
   display: flex;

@@ -122,7 +122,7 @@ defineExpose({ scrollTo, wrapEl })
 
     <!-- 内容区：ElScrollbar 内滚；第三层用 .l-page 包裹内容 -->
     <main class="ui-shell__main">
-      <ElScrollbar ref="mainScroll" class="ui-shell__scroll" @scroll="p => emit('scroll', p)">
+      <ElScrollbar ref="mainScroll" class="ui-shell__scroll" view-class="ui-shell__view" @scroll="p => emit('scroll', p)">
         <slot />
       </ElScrollbar>
     </main>
@@ -174,4 +174,8 @@ defineExpose({ scrollTo, wrapEl })
 
 .ui-shell__main { grid-area: main; min-width: 0; min-height: 0; }
 .ui-shell__scroll { height: 100%; }
+/* 滚动视图 = 确定高度的纵向 flex：
+ * 普通 .l-page 的 min-height 是 auto，不会被压缩，内容更高就照常外层内滚；
+ * .l-page--fill 显式置 min-height: 0，于是恰好填满并能把多余高度让给 .l-fill 子项。 */
+.ui-shell__view { height: 100%; display: flex; flex-direction: column; }
 </style>

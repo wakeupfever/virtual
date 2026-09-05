@@ -152,6 +152,7 @@ var DesignSystemUI = (function(exports, vue, element_plus) {
 						ref_key: "mainScroll",
 						ref: mainScroll,
 						class: "ui-shell__scroll",
+						"view-class": "ui-shell__view",
 						onScroll: _cache[1] || (_cache[1] = (p) => emit("scroll", p))
 					}, {
 						default: (0, vue.withCtx)(() => [(0, vue.renderSlot)(_ctx.$slots, "default")]),
@@ -270,7 +271,7 @@ var DesignSystemUI = (function(exports, vue, element_plus) {
 		class: "ui-list-item__subtitle"
 	};
 	var _hoisted_5$3 = { class: "ui-list-item__trailing l-cluster" };
-	var _hoisted_6$1 = {
+	var _hoisted_6$2 = {
 		key: 1,
 		class: "ui-list-item__chevron",
 		viewBox: "0 0 24 24",
@@ -337,7 +338,7 @@ var DesignSystemUI = (function(exports, vue, element_plus) {
 						_: 1
 					}, 8, ["type"])) : (0, vue.createCommentVNode)("", true),
 					(0, vue.renderSlot)(_ctx.$slots, "trailing"),
-					__props.clickable ? ((0, vue.openBlock)(), (0, vue.createElementBlock)("svg", _hoisted_6$1, [..._cache[1] || (_cache[1] = [(0, vue.createElementVNode)("path", { d: "M9 6l6 6-6 6" }, null, -1)])])) : (0, vue.createCommentVNode)("", true)
+					__props.clickable ? ((0, vue.openBlock)(), (0, vue.createElementBlock)("svg", _hoisted_6$2, [..._cache[1] || (_cache[1] = [(0, vue.createElementVNode)("path", { d: "M9 6l6 6-6 6" }, null, -1)])])) : (0, vue.createCommentVNode)("", true)
 				])], 2);
 			};
 		}
@@ -347,8 +348,9 @@ var DesignSystemUI = (function(exports, vue, element_plus) {
 	var _hoisted_1$2 = { class: "ui-filter-bar l-toolbar" };
 	var _hoisted_2$2 = { class: "ui-filter-bar__filters l-cluster" };
 	var _hoisted_3$2 = { class: "ui-filter-bar__btns l-cluster" };
-	var _hoisted_4$2 = { class: "ui-filter-bar__right l-cluster l-cluster--end" };
-	var _hoisted_5$2 = {
+	var _hoisted_4$2 = { class: "ui-filter-bar__adv-body l-stack l-stack--tight" };
+	var _hoisted_5$2 = { class: "ui-filter-bar__right l-cluster l-cluster--end" };
+	var _hoisted_6$1 = {
 		key: 0,
 		class: "ui-filter-bar__summary"
 	};
@@ -384,7 +386,9 @@ var DesignSystemUI = (function(exports, vue, element_plus) {
 			* 表格 / 列表上方筛选条：整条包在 --color-bg-subtle 圆角容器里。
 			* 默认插槽放「label + 控件」对（用 <span class="l-inline"><small>标签</small><el-input/></span>），
 			* 右侧依次：搜索（primary）/ 重置 / 高级搜索（文字链接，可选）；summary 摘要；actions 操作按钮。
+			* 高级搜索用浮窗承载（#advanced 插槽），展开不改变筛选条高度，表格区不会被推下去。
 			*/
+			/** toggle 带上浮窗当前的展开状态；无 #advanced 插槽时退化为无参数的点击事件 */
 			const emit = __emit;
 			return (_ctx, _cache) => {
 				return (0, vue.openBlock)(), (0, vue.createElementBlock)("div", _hoisted_1$2, [(0, vue.createElementVNode)("span", _hoisted_2$2, [(0, vue.renderSlot)(_ctx.$slots, "default"), (0, vue.createElementVNode)("span", _hoisted_3$2, [
@@ -403,16 +407,33 @@ var DesignSystemUI = (function(exports, vue, element_plus) {
 						default: (0, vue.withCtx)(() => [(0, vue.createTextVNode)((0, vue.toDisplayString)(__props.resetText), 1)]),
 						_: 1
 					})) : (0, vue.createCommentVNode)("", true),
-					__props.advanced ? ((0, vue.openBlock)(), (0, vue.createBlock)((0, vue.unref)(element_plus.ElButton), {
+					__props.advanced && _ctx.$slots.advanced ? ((0, vue.openBlock)(), (0, vue.createBlock)((0, vue.unref)(element_plus.ElPopover), {
 						key: 2,
+						trigger: "click",
+						placement: "bottom-start",
+						width: "auto",
+						"popper-class": "ui-filter-bar__adv",
+						"onUpdate:visible": _cache[2] || (_cache[2] = (open) => emit("toggle", open))
+					}, {
+						reference: (0, vue.withCtx)(() => [(0, vue.createVNode)((0, vue.unref)(element_plus.ElButton), {
+							link: "",
+							type: "primary"
+						}, {
+							default: (0, vue.withCtx)(() => [(0, vue.createTextVNode)((0, vue.toDisplayString)(__props.advancedText), 1)]),
+							_: 1
+						})]),
+						default: (0, vue.withCtx)(() => [(0, vue.createElementVNode)("div", _hoisted_4$2, [(0, vue.renderSlot)(_ctx.$slots, "advanced")])]),
+						_: 3
+					})) : __props.advanced ? ((0, vue.openBlock)(), (0, vue.createBlock)((0, vue.unref)(element_plus.ElButton), {
+						key: 3,
 						link: "",
 						type: "primary",
-						onClick: _cache[2] || (_cache[2] = ($event) => emit("toggle"))
+						onClick: _cache[3] || (_cache[3] = ($event) => emit("toggle"))
 					}, {
 						default: (0, vue.withCtx)(() => [(0, vue.createTextVNode)((0, vue.toDisplayString)(__props.advancedText), 1)]),
 						_: 1
 					})) : (0, vue.createCommentVNode)("", true)
-				])]), (0, vue.createElementVNode)("span", _hoisted_4$2, [_ctx.$slots.summary ? ((0, vue.openBlock)(), (0, vue.createElementBlock)("small", _hoisted_5$2, [(0, vue.renderSlot)(_ctx.$slots, "summary")])) : (0, vue.createCommentVNode)("", true), (0, vue.renderSlot)(_ctx.$slots, "actions")])]);
+				])]), (0, vue.createElementVNode)("span", _hoisted_5$2, [_ctx.$slots.summary ? ((0, vue.openBlock)(), (0, vue.createElementBlock)("small", _hoisted_6$1, [(0, vue.renderSlot)(_ctx.$slots, "summary")])) : (0, vue.createCommentVNode)("", true), (0, vue.renderSlot)(_ctx.$slots, "actions")])]);
 			};
 		}
 	});

@@ -3,23 +3,27 @@ rai-schema-version: 2
 task: "前端三层分层设计需求基线"
 task-key: "frontend-layered-design"
 primary-target: "doc/frontend-layered-design.md"
-requirement-version: "RV-015"
-iteration: "IT-015"
+requirement-version: "RV-016"
+iteration: "IT-016"
 current-changes:
-  - "C-036"
+  - "C-037"
+  - "C-038"
+  - "C-039"
+  - "C-040"
+  - "C-041"
 status: "active"
-updated: "2026-09-03"
+updated: "2026-09-05"
 ---
 
 # 前端三层分层设计需求基线 · 需求台账
 
 ## 快速摘要
 
-- 当前需求版本：`RV-015`
-- 当前工作迭代：`IT-015`
-- 当前变更：`C-036` 第二步 C + D：pre-commit / CI 门禁、视觉回归、第二层变异验证（implement R-026 / R-027 / R-049；modify R-037 修展示页滑块钳值、R-012 修折叠按钮图标色）
-- 本轮目标：门禁与测量落地——提交与 CI 自动拦截，原型 → 正式一比一由像素差数字说话，第二层「声明的 token 真的在用」由变异测试说话
-- 当前结论：**IT-015 完成**（R-026 / R-027 / R-049 verified）；IT-014 完成（R-020 / R-021 / R-024 / R-025 / R-031 verified）；IT-013 完成（R-047 / R-048 verified，R-049 ready；R-005 / R-037 重新 verified）；IT-012 完成（R-046 verified，R-037 重新 verified）；IT-011 完成（R-042 / R-045 / R-044 / R-041 重新 verified）；IT-010 完成（R-045 verified；R-041 / R-044 重新 verified）；IT-009 完成（R-044 verified，R-037 重新 verified，代码已提交）；IT-008 完成（R-037 / R-041 / R-012 / R-007 / R-042 重新 verified，代码已提交）；展示页按方向 A 重做并验证（R-037），hash 路由落地并验证（R-038）；第一步成果保持——第一、二层（F-001～F-004）、原型模板与检查脚本（F-005）、`CLAUDE.md`、说明文档已实现并通过验收，17 条 `verified`、6 条 `implemented`（其余验收条件依赖第二步的 apps/web）；4 条 `ready` 属于第二步 B（Claude 插件 R-032～R-035），待用户验收第一步后授权
+- 当前需求版本：`RV-016`
+- 当前工作迭代：`IT-016`
+- 当前变更：`C-037` 展示页三页视觉重排、`C-038` 去重叠：自研组件单组件详情 + 布局配置整页路由、`C-039` 内容区取消限宽、`C-040` 高度填充布局与高级搜索浮窗（add R-050 / R-051）、`C-041` check-layer2 输出键排序
+- 本轮目标：展示页从「文档里的缩略预览」变成「能整屏打开的真实页面」，并补上表格页最缺的一块能力——页面撑满、表格随父级高度流动、表体内滚、分页贴底
+- 当前结论：**IT-016 完成**（R-050 / R-051 verified；R-005 / R-009 / R-037 / R-038 / R-041 / R-042 / R-044 / R-048 / R-049 重新 verified）；IT-015 完成（R-026 / R-027 / R-049 verified）；IT-014 完成（R-020 / R-021 / R-024 / R-025 / R-031 verified）；IT-013 完成（R-047 / R-048 verified，R-049 ready；R-005 / R-037 重新 verified）；IT-012 完成（R-046 verified，R-037 重新 verified）；IT-011 完成（R-042 / R-045 / R-044 / R-041 重新 verified）；IT-010 完成（R-045 verified；R-041 / R-044 重新 verified）；IT-009 完成（R-044 verified，R-037 重新 verified，代码已提交）；IT-008 完成（R-037 / R-041 / R-012 / R-007 / R-042 重新 verified，代码已提交）；展示页按方向 A 重做并验证（R-037），hash 路由落地并验证（R-038）；第一步成果保持——第一、二层（F-001～F-004）、原型模板与检查脚本（F-005）、`CLAUDE.md`、说明文档已实现并通过验收，17 条 `verified`、6 条 `implemented`（其余验收条件依赖第二步的 apps/web）；4 条 `ready` 属于第二步 B（Claude 插件 R-032～R-035），待用户验收第一步后授权
 
 ## 当前需求清单
 
@@ -29,19 +33,22 @@ updated: "2026-09-03"
 - [x] `R-002` 语义颜色按 作用域（bg / text / border / icon）× 语义（page / surface / muted / default / secondary / primary / danger / success / warning）命名，映射到原始色。`category: ux` `status: verified`
 - [x] `R-003` 语义间距按 作用域（page / module / component / inline）× 关系（gap / pad / title）[× 轴 x / y] 命名为 `--space-{scope}-{relation}[-{axis}]`，初始 13 个。`category: ux` `status: verified`
 - [ ] `R-004` 组件内部间距由第二层组件写死引用 token，第三层不设置组件内部间距。`category: maintainability` `status: implemented`
-- [x] `R-005` 布局尺寸以 `--layout-*` 命名（侧边栏宽/折叠宽、顶栏高、内容区最大宽与内边距、栅格列数与间隙）并提供 `--z-*` 层级，与 `--space-*` 分开。`category: ux` `status: verified`
+- [x] `R-005` 布局尺寸以 `--layout-*` 命名（侧边栏宽/折叠宽、顶栏高、内容区最大宽与内边距、栅格列数与间隙）并提供 `--z-*` 层级，与 `--space-*` 分开。`--layout-content-max` 默认 `none`：业务后台内容区铺满，不在超宽屏居中留白；要恢复限宽改成具体值即可（一处生效，原型与正式页面同步）。`category: ux` `status: verified`
 - [x] `R-006` 提供密度系数 `--density`，通过 `[data-density="compact"]` 整体缩放语义间距。`category: functional` `status: verified`
 - [x] `R-007` 字号/行高、圆角、阴影、边框宽纳入第一层语义 token；字号五级：display / page-title / module-title / body / caption。`category: ux` `status: verified`
 - [x] `R-008` 语义颜色预留 `[data-theme="dark"]` 重映射入口（含 Element Plus dark 变量同步），第二层不写死白色背景等固定色。`category: ux` `status: verified`
-- [ ] `R-009` `layout.css` 提供无 JS 行为的布局类 `.l-page / .l-section / .l-stack / .l-grid` 及常用变体，只引用语义 token，原型与正式项目引用同一文件。`category: maintainability` `status: implemented`
+- [ ] `R-009` `layout.css` 提供无 JS 行为的布局类 `.l-page / .l-section / .l-stack / .l-grid` 及常用变体，只引用语义 token，原型与正式项目引用同一文件。含高度填充三件套：`.l-page--fill`（撑满外壳内容区并纵向排布）、`.l-fill`（任意 flex 容器子项占满剩余高度，`flex: 1 1 auto; min-height: 0`）、`.l-module.l-fill`（被标记的模块自身纵向排布，才能把余量交给内部 `.l-fill`）。详见 `R-050`。`category: maintainability` `status: implemented`
 - [ ] `R-010` `base.css` 统一 reset 与字体加载，原型与正式项目引用同一文件。`category: quality` `status: implemented`
 - [x] `R-030` `tokens.css` 将语义 token 映射到 Element Plus 主题变量（`--el-color-primary`、`--el-border-color`、`--el-bg-color`、`--el-border-radius-base` 等），Element Plus 外观只由第一层驱动，不单独维护 SCSS 主题。`category: maintainability` `status: verified`
 
 - [x] `R-047` 第二层 token 约束：`ui/**/*.vue` 的 `<style>` 与 `skins/*.css` 中视觉属性（颜色 / 背景 / 边框 / 内外边距 / gap / 圆角 / 阴影 / 字号 / 宽高，含 `--el-*` 变量赋值）的值必须是第一层语义 token；裸色、裸长度（0 与视口单位除外）、引用 `--palette-*` / `--space-N`、在第二层定义语义名、引用不存在的 token 均为错误；由 `scripts/check-layer2.mjs` 检查并内置于 `pnpm build`。新增尺寸 token：`--layout-control-h` 32 / `--layout-menu-item-h` 40 / `--layout-icon-{sm,md,lg}` 22 / 28 / 40；13px 档位不新增，统一用 `--font-size-caption`。`category: quality` `status: verified`
-- [x] `R-048` 第二层覆盖度报告：按文件统计消费的 token（`<style>`、`:style` / script 的 `var()`、模板用到的 `.l-*` 类间接消费；第一层 layout.css / base.css 计入），输出 `dist/token-coverage.json` 与 `dist/token-coverage.js`（`window.DS_COVERAGE`）；展示页自研组件配置卡的 token 列表改由该数据驱动（`showcase.data.js` 不再手填）；既无第二层消费也未被 `--el-*` 映射引用的语义 token 列为「未消费」警告；复合组件至少消费 bg / text / border / space 中的三类（纯文字组件除外）。`category: maintainability` `status: verified`
-- [x] `R-049` 第二层变异验证：`tests/visual/mutate.mjs` 在展示页「自研组件」舞台上，按 `token-coverage.json` 对每个自研组件声明的 token 逐个改成显著值，断言组件内至少一个元素的 computed style 变化；变异前用 `PREP` 把舞台切到 error / hover 态；观察不到但已核实的例外列在 `KNOWN`（必须写原因）；纳入 CI。`category: quality` `status: verified`
+- [x] `R-048` 第二层覆盖度报告：按文件统计消费的 token（`<style>`、`:style` / script 的 `var()`、模板用到的 `.l-*` 类间接消费；第一层 layout.css / base.css 计入），输出 `dist/token-coverage.json` 与 `dist/token-coverage.js`（`window.DS_COVERAGE`），**输出对象的键按名字排序**（目录遍历顺序不稳定，不排序会产生纯乱序 diff，令 CI 的「`dist/` 无 diff」校验误报）；展示页自研组件配置卡的 token 列表改由该数据驱动（`showcase.data.js` 不再手填）；既无第二层消费也未被 `--el-*` 映射引用的语义 token 列为「未消费」警告；复合组件至少消费 bg / text / border / space 中的三类（纯文字组件除外）。`category: maintainability` `status: verified`
+- [x] `R-049` 第二层变异验证：`tests/visual/mutate.mjs` 在展示页「自研组件」舞台上，按 `token-coverage.json` 对每个自研组件声明的 token 逐个改成显著值，断言组件内至少一个元素的 computed style 变化；展示页改为单组件详情后，靶场按 `keyOf(组件名)`（`UiStatCard → ui-stat-card`）逐个切到 `#/custom/<key>` 再取该页唯一的配置卡；变异前用 `PREP` 把舞台切到 error / hover 态；观察不到但已核实的例外列在 `KNOWN`（必须写原因，当前 6 条）；纳入 CI。`category: quality` `status: verified`
 - [x] `R-046` 调色板变体：整套配色以 `[data-palette="<key>"]` 块放在 `tokens.css` ⑤ 段（当前 element / indigo / violet，默认科技青不加属性）；品牌 / 功能色（及圆角）在深浅两种模式都生效，中性色（bg / border / text / icon / canvas）只作用于浅色（`:not([data-theme="dark"])`），深色仍由 ④ 段统一重映射；`build-tokens.mjs` 抽取为 `palettes`（key / label / vars）；展示页 `PRESETS` 只登记 key / label，切换即设 `html[data-palette]`；第三层换肤只能切该属性。`category: ux` `status: verified`
 - [x] `R-045` 第一层默认值对齐参考站 `D:\hy-project\hy-compiler\apps\playground\src\style.css`（`--hy-space-*`）与 LayoutTemplateShowcase：间距 page-gap 24 / page-pad 20 / module-gap 16 / module-pad 16 / component-gap 12 / inline 8；布局 header 60 / sidebar 230 / collapsed 66 / 新增 `--layout-aside-w` 320；圆角 4 / 6 / 12；字号新增 `--font-size-micro` 10，display 改 24；新增 `--color-bg-canvas`（应用壳内容区底 #f0f3f4，UiShell 使用）、subtle 改 #f3f5f5；布局新增 `--layout-row-h` 44（表格行高）与 `--layout-thead-h` 40（表头高），经 `skins/table.css` 生效；`layout.css` 新增 `.l-grid--main-aside`、`.l-split--aside`、`.l-tile`、`.l-bars` / `.l-bar`。`category: ux` `status: verified`
+
+- [x] `R-050` 高度填充布局：表格页可让页面撑满外壳内容区、表格由父级剩余高度决定自身高度、表头固定、表体在 Element Plus 自带 `ElScrollbar` 内滚（承 `R-043`）、分页贴底，**不给 `el-table` 传 `height` / `max-height`**。第一层加 `.l-page--fill` / `.l-fill` / `.l-module.l-fill`（见 `R-009`）；第二层配套：`UiShell` 的 `ElScrollbar` 用 `view-class="ui-shell__view"` 置为**确定高度**的纵向 flex（百分比 `min-height` 需要父级确定高度才生效，这是链路成立的前提），`UiState` 加 `.ui-state.l-fill` 纵向排布（否则填充链断在它的包裹 div），`skins/table.css` 加 `.el-table.l-fill` 让表格填充并保底一行 `--layout-row-h`。不加 `--fill` 的页面行为不变：`.l-page` 的 `min-height` 为 auto 不会被压缩，内容更高照常由外壳内滚。第三层写法 `.l-page--fill` + 承载模块 `.l-fill` + `<el-table class="l-fill">`。`category: ux` `status: verified`
+- [x] `R-051` 高级搜索用浮窗承载：`UiFilterBar` 新增 `#advanced` 插槽，内部用 `ElPopover`（`popper-class="ui-filter-bar__adv"`，值只引用 token）弹出，展开**不改变**筛选条与页面高度，下方表格不被推下去；`@toggle(open)` 带出展开状态；不给 `#advanced` 插槽时退化为纯文字链接并只 `emit('toggle')`，向后兼容。`ElPopover` 只在第二层内部使用，不进第三层白名单。`category: ux` `status: verified`
 
 ### 第二层：基础组件与外壳
 
@@ -58,7 +65,7 @@ updated: "2026-09-03"
 - [x] `R-018` 原型 `DATA` 必须包含长文本、空列表、大数据量样本，并可切换 loading / empty / error 状态。`category: quality` `status: verified`
 - [x] `R-019` `scripts/check-prototype.js` 扫描 `prototypes/*.html`，发现原生表单/表格元素、`style="`、裸色值、非白名单 `el-*` 组件即报错退出。`category: quality` `status: verified`
 - [x] `R-039` 第一层默认配色改为「科技青」（参考用户本机 HY Compiler Studio `themeVariant=technology-cyan`）：主色 `#0076a3` / 强调 `#00486a` / 柔和底 `#e8f4f7`，中性灰带青灰色相（文字 `#304853` / `#4e6d7b`，边框 `#d5dcdf` / `#e6e8e8`，浅色页面底为纯白 `#ffffff`，靠卡片边框与轻阴影分层），功能色 成功 `#0cc778` / 警告 `#f7ba2a` / 危险 `#e0464b`，圆角 3 / 6 / 10，阴影带色相；新增 `--color-bg-accent`；深色重映射改为青灰底并提亮主色 `#2f9fcf`。Element 蓝 / 靛蓝 / 靛紫 保留为展示页预设。`category: ux` `status: verified`
-- [x] `R-038` 路由：原型与展示页使用 hash 路由 `#/<key>`，`<key>` 与 `UiShell` / 顶栏菜单 key 一致，直达、前进后退、刷新保留；正式项目同一批 key 映射为 vue-router 路径 `/<key>`，promote 时机械转换。`category: functional` `status: verified`
+- [x] `R-038` 路由：原型与展示页使用 hash 路由 `#/<key>`，`<key>` 与 `UiShell` / 顶栏菜单 key 一致，直达、前进后退、刷新保留；正式项目同一批 key 映射为 vue-router 路径 `/<key>`，promote 时机械转换。展示页扩展为两段式 `#/<route>/<sub>`：`#/custom/<组件 key>` 单组件详情、`#/page/<模板 key>` 整页模板；`page` 不进顶栏导航；`<sub>` 缺省时落到该路由的第一项并 `replaceState` 补全。`category: functional` `status: verified`
 
 ### 第三层：正式功能与约束
 
@@ -82,17 +89,17 @@ updated: "2026-09-03"
 ### 第二层演进机制
 
 - [x] `R-040` 三级偏差处理规则：原型或正式页面需要 Element Plus 默认之外的 UI 时，按 样式级（第二层皮肤 `skins/`）/ 结构级（第二层复合组件 `ui/composites/`）/ 行为级（第二层封装外部库或自研）归类处理，第三层永不写样式。消费时：优先复合组件；未命中但能用白名单原语 + `.l-*` 拼出的，就地拼装并在外层打 `data-composite="<候选名>"`；拼不出的用最接近的白名单组件占位并打 `data-placeholder="<需求名>"` 且写需求单。`check-prototype.js` 统计候选出现次数（≥2 提示下沉）、对占位发出警告，`--strict` 模式（promote 前）下占位为错误。`category: maintainability` `status: verified`
-- [x] `R-041` 首批复合组件（结构级下沉范例）：`UiListItem`（头像 / 标题 / 副标题 / 状态与操作插槽）、`UiFilterBar`（筛选区 + 操作区 + 可选重置）、`UiStatCard`（标签 / 数值 / 单位 / 趋势 / 说明），位于 `ui/composites/`，只用白名单原语 + `.l-*` + token，登记白名单、README、展示页。精修（按画板「自研组件精修稿」）：UiStatCard 数值用 `--font-size-display`、趋势胶囊带箭头、右上角 `icon` 插槽、hover 抬升；UiListItem 头像 36、`active` 高亮、`divided` 分割线、clickable 箭头、状态胶囊；UiFilterBar 包在 subtle 圆角容器、默认插槽为「label + 控件」对（`.l-inline` + `<small>`），搜索（primary）/ 重置 / 高级搜索（`advanced`，`@toggle`）按钮紧随其后，`summary` 与 `actions` 插槽在右，窄屏时先换行筛选项再把操作区落到下一行；UiPageHeader `breadcrumb` 插槽；UiState error 态图标 + 标题 + 描述、empty 态 `action` 插槽。`category: functional` `status: verified`
+- [x] `R-041` 首批复合组件（结构级下沉范例）：`UiListItem`（头像 / 标题 / 副标题 / 状态与操作插槽）、`UiFilterBar`（筛选区 + 操作区 + 可选重置）、`UiStatCard`（标签 / 数值 / 单位 / 趋势 / 说明），位于 `ui/composites/`，只用白名单原语 + `.l-*` + token，登记白名单、README、展示页。精修（按画板「自研组件精修稿」）：UiStatCard 数值用 `--font-size-display`、趋势胶囊带箭头、右上角 `icon` 插槽、hover 抬升；UiListItem 头像 36、`active` 高亮、`divided` 分割线、clickable 箭头、状态胶囊；UiFilterBar 包在 subtle 圆角容器、默认插槽为「label + 控件」对（`.l-inline` + `<small>`），搜索（primary）/ 重置 / 高级搜索（`advanced`，浮窗见 `R-051`）按钮紧随其后，`summary` 与 `actions` 插槽在右，窄屏时先换行筛选项再把操作区落到下一行；UiPageHeader `breadcrumb` 插槽；UiState error 态图标 + 标题 + 描述、empty 态 `action` 插槽。`category: functional` `status: verified`
 - [x] `R-043` 滚动统一：任何需要滚动的区域（外壳主区、侧栏、抽屉内容、列表容器、横向条）必须使用 Element Plus `ElScrollbar`，禁止在第二、三层写 `overflow: auto | scroll`（表格 / 虚拟列表 / 下拉等 Element Plus 内部已自带 ElScrollbar 的组件除外）；`el-scrollbar` 加入白名单；`check-prototype.js` 新增 `no-overflow-scroll` 规则；展示页侧栏、主区、无限滚动演示与 UiShell 全部改为 ElScrollbar。`category: ux` `status: verified`
-- [x] `R-042` 皮肤层与需求单：`skins/` 目录存放按组件划分的样式级覆盖（只允许 `--el-<component>-*` 变量与 Element Plus BEM 类，值只引用 token），加载顺序固定为 element-plus → tokens → skins → layout → base（当前皮肤：table（表头 subtle 底 12/500、行 44 / 表头 40、外框圆角、hover accent）/ input / menu / tabs（`.is-tabbar` 胶囊页签条）/ tree（行高 32、当前节点 accent））；`requests/` 目录存放组件需求单（模板含：效果描述、偏差级别、涉及 token、建议组件名与 props、来源原型），由第二层治理者判定后实施。`category: maintainability` `status: verified`
+- [x] `R-042` 皮肤层与需求单：`skins/` 目录存放按组件划分的样式级覆盖（只允许 `--el-<component>-*` 变量与 Element Plus BEM 类，值只引用 token），加载顺序固定为 element-plus → tokens → skins → layout → base（当前皮肤：table（表头 subtle 底 12/500、行 44 / 表头 40、外框圆角、hover accent、`.l-fill` 填充规则见 `R-050`）/ input / menu / tabs（`.is-tabbar` 胶囊页签条）/ tree（行高 32、当前节点 accent））；`requests/` 目录存放组件需求单（模板含：效果描述、偏差级别、涉及 token、建议组件名与 props、来源原型），由第二层治理者判定后实施。`category: maintainability` `status: verified`
 
 ### 页面排版模板
 
-- [x] `R-044` 五套页面排版模板（参考用户本机 HY Compiler Studio「页面排版模板 · 五种多菜单业务布局效果」）：01 统计模板（统计卡行 → 趋势 / 分布 → 概况 → 进度）、02 纯表格页（面包屑 → 筛选条「label + 控件」含高级搜索展开区 → 表格（表头 40 / 行 44、状态圆胶囊、操作列固定右）→ 分页右对齐）、03 统计 + 表格、04 左树 + 表格（`.l-split--aside` 320：UiModuleHeader + 搜索 + ElTree `highlight-current`）、05 TabBar + 表格（`<el-tabs class="is-tabbar">` 胶囊页签条）。骨架只用 `.l-*` + 白名单 / 自研组件，间距全部来自 token；单一来源 `showcase.data.js` `TEMPLATES`；展示页「布局配置」在同一 UiShell 应用壳（侧栏、顶栏历史页签、面包屑）内切换预览，芯片实时显示 page / module / header / sidebar / collapsed 值，可复制骨架或含外壳的完整模板；原型开发第一步为选模板（CLAUDE.md §3）。`category: functional` `status: verified`
+- [x] `R-044` 五套页面排版模板（参考用户本机 HY Compiler Studio「页面排版模板 · 五种多菜单业务布局效果」）：01 统计模板（统计卡行 → 趋势 / 分布 → 概况 → 进度）、02 纯表格页（面包屑 → 筛选条「label + 控件」含高级搜索展开区 → 表格（表头 40 / 行 44、状态圆胶囊、操作列固定右）→ 分页右对齐）、03 统计 + 表格、04 左树 + 表格（`.l-split--aside` 320：UiModuleHeader + 搜索 + ElTree `highlight-current`）、05 TabBar + 表格（`<el-tabs class="is-tabbar">` 胶囊页签条）。骨架只用 `.l-*` + 白名单 / 自研组件，间距全部来自 token；单一来源 `showcase.data.js` `TEMPLATES`；02～05 表格模板采用高度填充写法（`R-050`），01 统计模板保持自然流。展示页「布局配置」`#/templates` 是**索引页**：五张模板卡（编号 / 名称 / 说明 / 结构 pills / 复制骨架 / 复制完整模板 / 打开整页），hero 芯片显示 page / module / header / sidebar / collapsed 实时值；点「打开整页」进 `#/page/<key>`，**没有展示页外壳**，UiShell 撑满视口、尺寸全为真实值，右下角浮动控制条提供 返回 / 上下一套 / 深浅 / 密度 / 复制骨架。原型开发第一步为选模板（CLAUDE.md §3）。`category: functional` `status: verified`
 
 ### 展示页面
 
-- [x] `R-037` 展示页面从 `packages/design-system/` 目录直接产出（`showcase.html`，零构建，CDN + `dist/ui.iife.js` + `dist/tokens.js`），采用「方向 A · 文档站式」排版：顶栏路由页签（设计变量 / 组件物料 / 布局范式）+ 左侧分组锚点 + 内容限宽 + 右侧本页目录。设计变量页：功能色色卡网格、bg/text/border/icon 分列、间距作用域×关系阶梯尺（条宽取真实解析值）、字体样张、圆角/阴影/边框实物、布局尺寸；原始刻度与 `--el-*` 映射默认折叠。组件物料页：**Element Plus 全部组件**按官方分类（Basic / Form / Data / Navigation / Feedback / Others）逐一渲染，每张卡片含舞台区、白名单/需提议标记、驱动 token 注脚、复制用法；主题 / 密度 / 主色实时切换。**响应式**：内容流式限宽（设计变量 ≤1200、组件物料 ≤1560），卡片按 `auto-fill(minmax(440px, 1fr))` 自动分栏；≤1400 隐藏右目录，≤960 左锚点变为顶部横向滚动条，≤720 色卡/表格降列，≤560 顶栏精简；任何宽度无横向滚动。**布局配置页**（`#/custom`，位于布局范式之后）：自研组件按 外壳 / 页面级 / 复合组件 分组，每个组件一张配置卡——舞台（真实渲染 + 结构标签）、「脱胎第一层」面板（列出该组件消费的 token，滑块 / 取色只作用于本卡舞台，可恢复默认）、Props / Slots / Events、用法与源码链接。`category: ux` `status: verified`
+- [x] `R-037` 展示页面从 `packages/design-system/` 目录直接产出（`showcase.html`，零构建，CDN + `dist/ui.iife.js` + `dist/tokens.js`），采用「方向 A · 文档站式」排版：顶栏路由页签（设计变量 / 组件物料 / 布局范式）+ 左侧分组锚点 + 内容限宽 + 右侧本页目录。设计变量页：功能色色卡网格、bg/text/border/icon 分列、间距作用域×关系阶梯尺（条宽取真实解析值）、字体样张、圆角/阴影/边框实物、布局尺寸；原始刻度与 `--el-*` 映射默认折叠。组件物料页：**Element Plus 全部组件**按官方分类（Basic / Form / Data / Navigation / Feedback / Others）逐一渲染，每张卡片含舞台区、白名单/需提议标记、驱动 token 注脚、复制用法；主题 / 密度 / 主色实时切换。**响应式**：内容流式限宽（设计变量 ≤1200、组件物料 ≤1560），卡片按 `auto-fill(minmax(440px, 1fr))` 自动分栏；≤1400 隐藏右目录，≤960 左锚点变为顶部横向滚动条，≤720 色卡/表格降列，≤560 顶栏精简；任何宽度无横向滚动。**自研组件页**（`#/custom/<组件 key>`，位于组件物料之后）：侧栏按 外壳 / 页面级 / 复合组件 分组列出全部组件，主区**一次只渲染选中的那一个**——舞台（真实渲染 + 结构标签，内容垂直居中）、「脱胎第一层」面板（该组件消费的 token 以「名称 | 控件 | 值」单行三列排布，外套 `ElScrollbar` 限高，滑块 / 取色只作用于本页舞台，可恢复默认）、Props / Slots / Events、用法与源码链接；窄屏面板落到舞台下方时 token 行自动多列。**布局范式页**示意块用中性槽位（surface 底 + `--color-border-default` 虚线），整卡统一灰画布、token 脚注并入同一块底。**布局配置页**见 `R-044`。`category: ux` `status: verified`
 
 ### 文档
 
@@ -148,7 +155,9 @@ updated: "2026-09-03"
 | R-041 | 三个组件 `vue-tsc` 通过、IIFE 可注册、展示页「自研复合组件」渲染；源码无裸数值 / 裸色 / 手写 flex | 对话结论（范例） | R-040, R-029 | RV-006 | C-019 | F-003, F-011 |
 | R-042 | `skins/index.css` 被原型模板、展示页与 README 引入顺序一致；`requests/_template.md` 存在并含全部字段 | 对话结论 | R-040 | RV-011 | C-020, C-031 | F-003, F-005 |
 | R-044 | 五个页签各自渲染：01 含 4 张 UiStatCard，02～05 含表格与分页，04 含 ElTree，05 含 ElTabs；侧栏高亮与面包屑随模板切换；芯片值与 tokens 一致；`复制页面骨架` 得到的内容可放入 `_template.html` 的 `.l-page` 并通过 check | 用户输入（127.0.0.1:5173/#/materials/layout 五个菜单） | R-012, R-041, R-009 | RV-011 | C-026, C-030, C-032 | F-011, F-005 |
-| R-038 | 直达 `#/<key>` 高亮对应菜单；点击菜单改 hash；后退恢复；原型模板 `#/reports` 高亮「报表」 | 用户输入（补充路由概念） | R-012, R-016 | RV-004 | C-014 | F-005, F-011, F-008 |
+| R-038 | 直达 `#/<key>` 高亮对应菜单；点击菜单改 hash；后退恢复；原型模板 `#/reports` 高亮「报表」；十条路由（含 `#/custom/<key>`、`#/page/<key>`）循环无运行时报错，空 `<sub>` 落到首项并补全 hash | 用户输入（补充路由概念） | R-012, R-016 | RV-004 | C-014, C-038 | F-005, F-011, F-008 |
+| R-050 | 1440×1200 下 `#/page/stat-table`：页面高 = 外壳内容区高，模块 / 表格逐层吃满，分页贴底且无外层滚动；压到 420 高时表体 `clientHeight < scrollHeight`（内滚生效）且仍无外层滚动；不加 `--fill` 的 01 统计页仍为外层滚动；`el-table` 全程不传 `height` | 用户输入（表格高度应受父级限制、默认占满） | R-009, R-012, R-042, R-043 | RV-016 | C-040 | F-001, F-002, F-003, F-004, F-005, F-006 |
+| R-051 | 点开高级搜索前后，筛选条 / 表格 / 页面高度三项数值完全相同；浮窗渲染在 body（teleport）且含全部展开项；无 `#advanced` 插槽时仍只触发 `toggle` | 用户输入（高级搜索激活应该是浮窗 不影响高度） | R-041 | RV-016 | C-040 | F-003, F-005, F-011 |
 
 ## 不变量
 
@@ -164,7 +173,7 @@ updated: "2026-09-03"
 | 功能 | 名称 | 当前状态 | 对应需求 |
 |---|---|---|---|
 | F-001 | 设计 token 层（tokens.css，含 Element Plus 主题映射） | active | R-001～R-008, R-030 |
-| F-002 | 布局与基础样式层（layout.css、base.css） | active | R-009, R-010 |
+| F-002 | 布局与基础样式层（layout.css、base.css） | active | R-009, R-010, R-050 |
 | F-003 | 基础组件层（Element Plus 白名单 + 自研组件 + 皮肤层） | active | R-011, R-014, R-015, R-029, R-040～R-042 |
 | F-004 | 页面外壳组件（UiShell） | active | R-012 |
 | F-005 | 原型工作流（prototypes/、模板、检查脚本） | active | R-016～R-019 |
@@ -177,7 +186,15 @@ updated: "2026-09-03"
 
 ## 当前迭代
 
-### IT-015 · 第二步 C + D：门禁、视觉回归、变异验证
+### IT-016 · 展示页整页化与高度填充布局
+
+- 目标：展示页从「文档里的缩略预览」变成「能整屏打开的真实页面」；补上表格页最缺的能力——页面撑满、表格随父级高度流动、表体内滚、分页贴底；高级搜索不再挤压表格
+- 范围：`tokens.css`（content-max）、`layout.css`（填充三件套）、`ui/UiShell.vue`、`ui/UiState.vue`、`ui/composites/UiFilterBar.vue`、`skins/table.css`、`scripts/check-layer2.mjs`、`showcase.html`、`showcase.data.js`、`apps/prototypes/_template.html`、`apps/web/src/features/orders/Page.vue`、`tests/visual/mutate.mjs`、README / CLAUDE.md §2；git commit（第一二层与第三层回填分两次提交）
+- 包含变更：`C-037`、`C-038`、`C-039`、`C-040`、`C-041`
+- 对应需求版本：`RV-016`
+- 退出条件：R-050 / R-051 verified；R-005 / R-009 / R-037 / R-038 / R-041 / R-042 / R-044 / R-048 / R-049 重新 verified；八项门禁全绿；代码已提交
+
+### IT-015 · 第二步 C + D：门禁、视觉回归、变异验证（已完成）
 
 - 目标：提交与 CI 自动拦截违规；原型 → 正式一比一有像素差数字；第二层声明的 token 有变异测试证明真在用
 - 范围：`.husky/pre-commit`、`.github/workflows/ci.yml`、根 `package.json`（husky / lint-staged / playwright / pixelmatch / pngjs、test:* 脚本）、`tests/visual/{_lib,compare,mutate}.mjs`、`.gitignore`；顺带修 `showcase.html` 滑块钳值、`UiShell.vue` 折叠按钮色、`check-layer2.mjs` `.l-*` 归因收窄；CLAUDE.md §5 §6、设计说明 §3 §8 §10；git commit
@@ -226,6 +243,56 @@ updated: "2026-09-03"
 - 退出条件：R-045 verified；R-041 / R-044 重新 verified；代码已提交
 
 ## 当前变更
+
+### C-037 · 展示页三页视觉重排
+
+- 类型：`modify`
+- 原因：用户「自研组件、布局范式、布局配置呈现效果太丑」
+- 之前：配置卡高度被右侧 token 滑块列表绑架（`UiStatCard` 卡片 1661px 而组件本身仅 130px，`UiState` 组件 22px / 面板 669px，七张卡累计约 7800px）；布局范式示意块用 accent 蓝虚线，语义上像「选中态」，每卡三条等权横带；布局配置外围是手搓的 `.ds-tpl__tabs` 灰底方块页签（`skins/tabs.css` 的 `.is-tabbar` 反而没用上）、mono 小 chips 像调试输出、底部三条不相干带子堆叠
+- 之后：token 面板改「名称 | 控件 | 值」单行三列并套 `ElScrollbar` 限高（累计 7800px → 4946px，−36%），舞台内容垂直居中；示意块换中性槽位、整卡统一灰画布；页签换成自带的 `is-tabbar` 皮肤，chips 去药丸底，脚注去卡片壳
+- 关联需求：`R-037`
+- 覆盖关系：—
+- 影响功能：`F-011 direct`
+
+### C-038 · 去重叠：自研组件单组件详情 + 布局配置整页路由
+
+- 类型：`modify`
+- 原因：用户认为「自研组件和布局配置有点重叠」，提出去掉自研组件；确认变异靶场耦合后改为保留并重构，并选定模板以「独立整页路由」呈现
+- 之前：自研组件七张大卡纵向堆叠在 `#/custom` 一页；布局配置把模板塞进 720px 高的预览框，是「缩略图」不是页面；hash 路由只有一段
+- 之后：hash 路由扩展为 `#/<route>/<sub>`；自研组件改 `#/custom/<组件 key>` 单组件详情（侧栏分组选择）；布局配置 `#/templates` 变五张索引卡，`#/page/<模板 key>` 整页渲染且无展示页外壳，浮动控制条承载 返回 / 切换 / 深浅 / 密度 / 复制骨架；`mutate.mjs` 靶场随之改为逐组件切路由（新增 `keyOf`）。职责分清：自研组件 = 单组件形态与接口，布局配置 = 整页排版
+- 关联需求：`R-037`、`R-038`、`R-044`、`R-049`
+- 覆盖关系：—
+- 影响功能：`F-011 direct`、`F-008 direct`、`F-005 indirect`
+
+### C-039 · 内容区取消限宽
+
+- 类型：`modify`
+- 原因：整页渲染后用户发现主体伸展不开；实测 1920 视口下内容区 1690px 而 `.l-page` 被 `--layout-content-max` 卡在 1440px 居中，左右各空 125px。旧预览框只有约 980px 宽，从未顶到上限，问题一直被掩盖
+- 之前：`--layout-content-max: 1440px`
+- 之后：`none`（用户在 取消上限 / 提高上限 / 新增 fluid 变体 三选一中选取消）。token 保留，改回具体值即可恢复限宽
+- 关联需求：`R-005`
+- 覆盖关系：—
+- 影响功能：`F-001 direct`、`F-002 direct`、`F-005 / F-006 / F-011 indirect`
+
+### C-040 · 高度填充布局与高级搜索浮窗
+
+- 类型：`add`
+- 原因：用户「页面应该是被表格撑满才对，表格的高度是流动的」「表格应该是受限于父级最终的高度，在不声明高度的情况下应该是默认占满，这个应该是改下布局，新增变体类」「高级搜索激活应该是浮窗 不影响高度」
+- 之前：第一层没有任何「填满高度」的能力，`.l-page` 是普通流式容器（1440×1200 下页面仅 543px，下方约 600px 空画布）；高级搜索由第三层用 `v-if` + `.l-cluster` 在筛选条下方展开，会把表格推下去
+- 之后：R-050 / R-051。实施中发现两处链路缺口并补齐：百分比 `min-height` 需父级**确定高度**才生效（`UiShell` 滚动视图从 `min-height: 100%` 改为 `height: 100%` 的纵向 flex，「能否被压缩」交给 `min-height` 区分），以及 `UiState` 的包裹 div 会断开填充链（加 `.ui-state.l-fill`）；表体保底一行 `--layout-row-h`。原型模板与 `features/orders` 同步切到填充写法（两边同改，视觉回归仍 0.00%）；副作用：四态下页面高度不再跳动
+- 关联需求：`R-050`、`R-051`、`R-009`、`R-012`、`R-041`、`R-042`
+- 覆盖关系：—
+- 影响功能：`F-001 direct`、`F-002 direct`、`F-003 direct`、`F-004 direct`、`F-005 direct`、`F-006 direct`
+
+### C-041 · dist 产物可复现（键排序 + 去掉生成时间）
+
+- 类型：`implementation_correction`
+- 原因：重建 dist 时 `token-coverage.json` 产生 194 行纯乱序 diff（内容逐项相同、仅键序不同）；提交时又发现两个生成脚本都写入 `generatedAt: new Date().toISOString()`，意味着 CI 第四步 `git diff --exit-code -- packages/design-system/dist` **每次构建都必然失败**——该门禁自 C-036 加入以来实际从未真正通过
+- 之前：`files` / `components` 键序来自目录遍历（跨运行、跨平台不稳定）；`dist/tokens.json(.js)`、`dist/token-coverage.json(.js)` 每次构建都带新时间戳
+- 之后：写出前按名字排序；两个脚本均不再写 `generatedAt`。验证：连续两次 `build:ds` 后 `git diff --exit-code -- packages/design-system/dist` 返回 0。本次提交内 coverage 文件的大 diff 是一次性重排
+- 关联需求：`R-048`、`R-026`
+- 覆盖关系：—
+- 影响功能：`F-003 direct`、`F-007 direct`
 
 ### C-036 · 第二步 C + D：门禁、视觉回归、变异验证
 
@@ -362,6 +429,11 @@ updated: "2026-09-03"
 | C-034 | F-001, F-003, F-011 | direct | 检查脚本、新 token、配置卡数据源 | check-layer2 0 错误；build 通过；配置卡联动 |
 | C-035 | F-006, F-007 | direct | 新工程与 lint 约束 | lint / typecheck / build；违规样例被拦；截图对比 |
 | C-036 | F-007, F-008 | direct | 门禁与测试基建 | test:visual 0.00%；test:mutation 全过；CI 工作流 |
+| C-037 | F-011 | direct | 展示页三页排版重排 | 卡片高度实测；浅深 / 紧凑 / 1024 窄屏核对 |
+| C-038 | F-011, F-008 | direct | 路由形态与页面结构改变 | 十条路由循环无报错；深链与后退；靶场逐组件切换后变异全过 |
+| C-039 | F-001, F-002 | direct | 第一层 token 值改变 | 1920 下 `.l-page` 宽 = 内容区宽；无横向滚动 |
+| C-040 | F-001, F-002, F-003, F-004, F-005, F-006 | direct | 新增布局能力与组件行为 | 逐层高度实测；矮视口内滚；浮窗前后高度不变；视觉回归 0.00% |
+| C-041 | F-003 | direct | 构建产物确定性 | 连续两次生成一致 |
 | C-027 | F-011 | direct | 页签顺序与命名 | 路由 |
 
 ## 实现映射
@@ -390,7 +462,11 @@ updated: "2026-09-03"
 | R-026 | `.husky/pre-commit`、根 `package.json`（lint-staged / prepare / test:*）、`.github/workflows/ci.yml` | verified | E-25 |
 | R-027 | `tests/visual/compare.mjs`、`tests/visual/_lib.mjs`、`.gitignore`（`__output__`） | verified | E-25 |
 | R-032～R-035 | `packages/claude-plugin/.claude-plugin/plugin.json`、`skills/{prototype,promote,layer-rules}/SKILL.md` | planned（第二步） | — |
-| R-037 | `packages/design-system/showcase.html`、`scripts/build-tokens.mjs`、`dist/tokens.js`(.json)、`package.json` build 脚本 | verified | E-09 |
+| R-037 | `packages/design-system/showcase.html`、`scripts/build-tokens.mjs`、`dist/tokens.js`(.json)、`package.json` build 脚本 | verified | E-09, E-26 |
+| R-050 | `layout.css`（`.l-page--fill` / `.l-fill` / `.l-module.l-fill`）、`ui/UiShell.vue`（`view-class="ui-shell__view"` + `height: 100%` 纵向 flex）、`ui/UiState.vue`（`.ui-state.l-fill`）、`skins/table.css`（`.el-table.l-fill`）、`showcase.data.js`（`TABLE_MODULE` / `pageClass`）、`apps/prototypes/_template.html`、`apps/web/src/features/orders/Page.vue`、README「高度填充」、CLAUDE.md §2 | verified | E-28 |
+| R-051 | `ui/composites/UiFilterBar.vue`（`ElPopover` + `#advanced` 插槽 + `.ui-filter-bar__adv`）、`showcase.data.js`（CUSTOM 与 `TABLE_MODULE`）、README UiFilterBar 节、CLAUDE.md §2 | verified | E-28 |
+| R-038（两段式） | `showcase.html`（`parseHash` / `go(key, sub)` / `defaultSub` / `syncAnchor`） | verified | E-26 |
+| R-048（键排序） | `scripts/check-layer2.mjs`（`sortedEntries`） | verified | E-29 |
 
 ## 决策与假设
 
@@ -404,6 +480,9 @@ updated: "2026-09-03"
 - `D-011` 展示页面从 `packages/design-system/` 目录直接产出，零构建单文件（用户要求，2026-09-02）。
 - `D-012` 展示页排版采用画板「方向 A · 文档站式」；菜单为 设计变量 / 组件物料 / 布局范式；组件物料全量展示 Element Plus 并标注白名单（用户选定，2026-09-02）。画板：claude.ai 工件「设计系统展示页」。
 - `D-016` 「布局配置」= 五套页面排版模板（参考 HY Compiler Studio `#/materials/layout` 五个菜单），自研组件配置卡改为「自研组件」页签，顺序 设计变量 / 组件物料 / 自研组件 / 布局范式 / 布局配置（用户要求，2026-09-03）。
+- `D-017` 展示页「自研组件」与「布局配置」职责分开：前者是**单组件**的形态与接口（一次只渲染一个，`#/custom/<key>`），后者是**整页排版**（`#/page/<key>` 无外壳整屏渲染）。用户原本提出删掉自研组件页，确认它是变异测试（R-049）唯一靶场后改为保留并重构（用户决定，2026-09-05）。
+- `D-018` 业务后台内容区默认铺满，不设最大宽（`--layout-content-max: none`）。备选方案「提高上限到 1760」与「新增 `.l-page--fill` 之外的 fluid 变体」被否决（用户选定，2026-09-05）。代价：超宽屏上纯文本页面行长偏长，需要时改回具体值。
+- `D-019` 高度填充做成**变体类**而非 `.l-page` 默认行为：表格页显式加 `--fill`，统计 / 表单等多模块页面保持自然流，避免「页面滚」被强制变成「表内滚」后难以退回（用户选定，2026-09-05）。
 - `D-015` 自研组件配置卡（原「布局配置」页签，后由 D-016 改名为「自研组件」）；配置卡设计与组件精修以画板「方向 A · 自研组件（配置卡）」「自研组件精修稿」为准（用户确认，2026-09-03）。
 - `D-014` 默认配色采用「科技青」，取值来自用户本机 HY Compiler Studio 的 technology-cyan 主题变量（`--app-primary #0076a3`、`--app-primary-strong #00486a`、`--app-primary-soft #e8f4f7`、`--park-text #304853`、`--park-text-secondary #4e6d7b`、`--park-border #e6e8e8`、`--park-canvas #f2f2f2`），2026-09-02。
 - `D-013` 路由约定：原型与展示页 hash 路由 `#/<key>`，正式项目 vue-router `/<key>`，key 同源（用户要求补充路由概念）。
@@ -422,6 +501,8 @@ updated: "2026-09-03"
 | 插件形态（H-003）是否符合预期 | R-032 | 第二步实现位置 |
 | 原型 CDN 是否需要离线副本（H-004） | R-016 | 模板依赖引入方式 |
 | 第二步 B 实施授权：Claude 插件 | R-032～R-036 | 是否进入下一迭代 |
+| 展示页控制台既有 `compiler-30` 报错与两条 404 未定位（`git show HEAD` 版本同样存在，105 个字符串模板逐个 `Vue.compile` 均通过，非本轮引入） | R-037 | 不影响渲染与门禁，待单独排查 |
+| 超宽屏（24 寸以上）纯文本页面行长偏长（`--layout-content-max: none` 的代价） | R-005 | 需要时改回具体值 |
 
 无外部阻塞。
 
@@ -453,6 +534,10 @@ updated: "2026-09-03"
 | E-25 | R-026, R-027, R-049, R-037, R-012 | `pnpm test:visual`：orders-normal / orders-long / orders-narrow 差异均 0.00%（截 `.l-page`，1440 与 1024 宽）；pixelmatch 灵敏度核对：normal vs long 截图 1.75%；`pnpm test:mutation`：7 组件 100 项 ok、6 项 KNOWN（各有原因）、0 未消费——首次运行 22 项未消费，经收窄 `.l-*` 归因（后代规则不归因）、PREP 切 error / hover 态、修复滑块钳值与折叠按钮色后归零；`pnpm build:ds` check-layer2 0 错误；lint-staged / CI 配置就绪（容器内无 git，pre-commit 钩子待用户本机首次 `pnpm install` 后由 `prepare` 安装） | pass | 2026-09-03 |
 | E-24 | R-020, R-021, R-024, R-025, R-031 | `pnpm install` 后 `pnpm lint`（0 错误 0 警告）、`pnpm typecheck`、`pnpm build:web`（vue-tsc + vite build 通过，单 chunk 1.0 MB 为全量 Element Plus，待按需引入）；违规样例 Page.vue 报 10 条 vue 规则错误，boundaries 样例报 4 条（跨 feature、feature → app 相对 / `@/`、未登记包 axios）+ ui → feature 1 条；Playwright 1440×900：`/orders` 3 行 / 标题 / 分页 / 侧栏高亮与原型 `_template.html#/orders` 一致，`?dataset=long` 1 行，筛选无结果进 empty 态，新建对话框可开，window 不滚动；与原型截图像素差 0.17%（仅顶栏三态选择器与禁用菜单）；截图 `doc/web-orders.png`、`doc/web-vs-prototype.png` | pass | 2026-09-03 |
 | E-23 | R-047, R-048, R-037 | 首次扫描：14 错误（13px×2、22/28/40px 图标、32px 树、40px 菜单项、2px×2、`--space-3/2`）+ 登记不符 7 条；修复后 `check-layer2` 0 错误 1 警告（未消费 2：`--layout-content-pad`、`--border-w-thick`），语义 token 85 个中第二层消费 69、仅 EP 映射 9；`vue-tsc` / `pnpm build` 通过；Playwright `#/custom`：7 张配置卡、36 滑块 / 35 取色器（数量由扫描结果决定），UiStatCard 调 `--space-module-pad` 16→24 舞台联动、恢复后回 16；`#/templates` 五套无 JS 错误 | pass | 2026-09-03 |
+| E-26 | R-037, R-038, R-044 | 配置卡高度实测：七张卡 7783px → 4946px（−36%），`UiStatCard` 1661 → 796，106 个 token 名仅 1 个截断（带 title 提示）；浅色 / 深色 / 紧凑 / 1024 窄屏（面板落下方自动多列）逐一核对；新标签页十条路由（`#/tokens`、`#/materials`、`#/custom`、`#/layout`、`#/templates`、`#/page/{stat,table,stat-table,tree-table,tabs-table}`）循环无运行时报错；`#/custom` 空 sub 落到 UiShell、`#/page` 空 sub 落到 01、`#/custom/ui-filter-bar` 深链命中、`history.back()` 恢复；整页视图侧栏 230 / 顶栏 60 为真实值，window 不滚；控制条上下一套切换 `#/page/table` 与返回 `#/templates`（5 张卡）均正常。附带确认：控制台 `compiler-30` 与两条 404 在 `git show HEAD` 版本上同样存在，为既有问题 | pass | 2026-09-05 |
+| E-27 | R-005 | 1920 视口 `#/page/stat`：外壳 1920 → 侧栏 230 → 内容区 1690px，改前 `.l-page` 被 max-width 卡在 1440 居中（左右各空 125px），改后 x=230 / w=1690 铺满、`max-width: none`、无横向滚动；原型模板同样生效（同一份 `layout.css`） | pass | 2026-09-05 |
+| E-28 | R-050, R-051, R-009, R-041, R-042 | 1440×1200 `#/page/stat-table`：视图 1140 → 页面 1140 → 模块 920 → 表格 774 → 表体 732，表头 40 固定、分页 32 贴底、无外层滚动；1280×420 `#/page/table`：页面恰好 360、无外层滚动、表体 client 45 / scroll 132（**内滚生效**）、分页仍在视野内；1280×500 `#/page/stat`（不加 `--fill`）：视图 440 / 页面 817 / 外层可滚、滚动条存在——两种模式并存；04 左树穿过 `.l-split` 栅格：split 757、树面板与表格模块同为 757、表格 567；原型模板 1440×900：视图 840 → 页面 840 → 模块 707 → UiState 625 → 表格 593，且 loading / empty / error / ready 四态高度恒定（825→840 不再跳动）。浮窗：点开前后 筛选条 56 / 表格 611 / 页面 840 三项**完全相同**，浮窗 289×109、白底 + 边框 + 阴影、z-index 2011、含 2 个展开项；`el-table` 全程未传 `height` | pass | 2026-09-05 |
+| E-29 | R-048, R-049, R-026, R-027 | `check-layer2` 输出键排序后与改前内容逐项等价（脚本比对 `equal: true`）；再去掉两个生成脚本的 `generatedAt` 后，连续两次 `build:ds` 之间 `git diff --exit-code -- packages/design-system/dist` 返回 0——CI 第四步此前因时间戳每次必失败，现已可过；八项门禁全绿——`lint` / `typecheck` 0 错误，`build:ds` 0 错误 1 条既有警告（未消费 2），`check:prototype` 通过，`test:visual` 三用例均 0.00%，`test:mutation` 7 组件全过。变异测试抓到真信号：新增的 `--space-module-pad` / `--space-module-gap` 在 UiFilterBar 上观察不到，核实为 `ElPopover` teleport 到 body 不在快照范围 + `.l-stack` 基类被 `--tight` 覆盖（与 UiListItem 已有例外同因），写入 `KNOWN` 并注明原因，未放宽断言 | pass | 2026-09-05 |
 | E-08 | R-028 | `doc/frontend-layered-design.md` §1～§10 与 RV-002 逐节核对；IT-003 同步 §3 目录树与 §9 展示页（RV-003）；IT-004 同步 §6 路由与 §9 方向 A（RV-004）：Vue 3 + Element Plus、Vite 8 + Tailwind 4、monorepo 目录、CDN 原型形态、插件三技能、展示页面、实施状态 | pass | 2026-09-02 |
 
 ## 历史索引
@@ -460,6 +545,11 @@ updated: "2026-09-03"
 | RV | IT | 变更 | 类型 | 需求 | 前后摘要 | 影响功能 |
 |---|---|---|---|---|---|---|
 | RV-008 | IT-008 | C-023 | modify | R-037 | 自研组件独立页签 + 配置卡 | F-011 |
+| RV-016 | IT-016 | C-037 | modify | R-037 | 三页排版重排；配置卡累计高度 −36% | F-011 |
+| RV-016 | IT-016 | C-038 | modify | R-037, R-038, R-044, R-049 | 缩略预览 → 单组件详情 + 整页路由；hash 扩展为两段式 | F-011, F-008 |
+| RV-016 | IT-016 | C-039 | modify | R-005 | `--layout-content-max` 1440px → none | F-001, F-002 |
+| RV-016 | IT-016 | C-040 | add | R-050, R-051, R-009, R-041, R-042 | 无 → 高度填充布局与高级搜索浮窗 | F-001～F-006 |
+| RV-016 | IT-016 | C-041 | implementation_correction | R-048, R-026 | coverage 输出键排序，消除 dist 乱序 diff | F-003 |
 | RV-015 | IT-015 | C-036 | implement | R-026, R-027, R-049, R-037, R-012 | ready → verified；两处缺陷修复 | F-007, F-008 |
 | RV-014 | IT-014 | C-035 | implement | R-020, R-021, R-024, R-025, R-031 | ready → verified；R-021 / R-024 澄清 | F-006, F-007 |
 | RV-013 | IT-013 | C-034 | add | R-047, R-048, R-049, R-005, R-037 | 无 → 第二层约束 / 覆盖度 / 变异验证 | F-001, F-003, F-011 |

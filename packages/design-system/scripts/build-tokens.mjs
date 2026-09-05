@@ -77,8 +77,8 @@ for (const blk of blocks) {
   palettes.push({ key, label, vars })
 }
 
+/* 不写生成时间：dist/ 必须逐字节可复现，否则 CI 的 `git diff --exit-code -- dist` 每次都会失败 */
 const out = {
-  generatedAt: new Date().toISOString(),
   source: 'tokens.css',
   groups: groups.filter(g => g.tokens.length),
   whitelist,

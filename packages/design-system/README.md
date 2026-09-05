@@ -54,7 +54,8 @@ app.use(ElementPlus).use(DesignSystemUI)
 
 | 类 | 用途 | 变体 |
 |---|---|---|
-| `.l-page` | 内容区容器（最大宽 + 页面内边距），直接子元素之间自动 page-gap | — |
+| `.l-page` | 内容区容器（最大宽 + 页面内边距），直接子元素之间自动 page-gap | `--fill`（撑满外壳内容区并纵向排布，见下） |
+| `.l-fill` | 「占满剩余高度」标记，作用于任意 flex 容器的子项 | — |
 | `.l-page-header` | 页头（一般由 `UiPageHeader` 内部使用） | — |
 | `.l-module` | 卡片 / 面板容器 | — |
 | `.l-module-header` | 模块标题行 | — |
@@ -64,6 +65,26 @@ app.use(ElementPlus).use(DesignSystemUI)
 | `.l-grid--main-aside` | 主区 1.3fr + 侧面板 0.7fr（分析区 2×2） | — |
 | `.l-tile` | 模块内的次级填充小格（概况项） | — |
 | `.l-bars` / `.l-bar` | 柱状条容器 / 柱；柱高由数据 `:style="{ height }"` 绑定 | — |
+
+### 高度填充（表格页）
+
+表格页通常希望页面撑满外壳内容区、表格吃掉剩余高度、表头固定、表体内滚、分页贴底。写法是两个类，**不给表格传 `height`**：
+
+```html
+<div class="l-page l-page--fill">
+  <!-- 面包屑、统计卡行等：自然高度 -->
+  <section class="l-module l-stack l-stack--tight l-fill">
+    <ui-filter-bar advanced>…</ui-filter-bar>
+    <el-table class="l-fill" :data="rows">…</el-table>
+    <div class="l-cluster l-cluster--end"><el-pagination … /></div>
+  </section>
+</div>
+```
+
+- `.l-page--fill` 让页面恰好等于外壳内容区高度（`UiShell` 的滚动视图已置为确定高度的纵向 flex）
+- `.l-fill` 标记吃掉剩余高度的那一项；`.el-table.l-fill` 由 `skins/table.css` 接管，表体在 Element Plus 自带的 `ElScrollbar` 内滚（R-043），表体最矮保留一行 `--layout-row-h`
+- 不加 `--fill` 的页面（统计 / 表单页）行为不变：内容多高就多高，超出由外壳内滚
+- 视口过矮时表体先收缩内滚，收到一行仍放不下才由外壳整体滚动
 | `.l-cluster` | 横向可换行（按钮组、筛选条） | `--end`、`--between` |
 | `.l-toolbar` | 表格上方工具条 | — |
 | `.l-form` | 表单区块，label 宽度取 token | — |
@@ -188,7 +209,9 @@ app.use(ElementPlus).use(DesignSystemUI)
 
 ### `UiFilterBar`（composites）
 
-表格上方筛选条（对齐参考 PuiSearch），整条包在 `--color-bg-subtle` 圆角容器里：默认插槽放「label + 控件」对——`<span class="l-inline"><small>企业名称</small><el-input/></span>`，控件宽度取 `--layout-control-w`；紧跟其后依次是 `searchable`（默认 true，primary「搜索」，`@search`）、`resettable`（默认 true，「重置」，`@reset`）、`advanced`（「高级搜索」文字链接，`@toggle`，展开区由第三层用 `v-if` + `.l-cluster` 自行放在筛选条下方）；`summary` 插槽放摘要，`actions` 插槽放右侧主操作（导出 / 新增）。窄屏时筛选项先换行，右侧操作区落到下一行右对齐。
+表格上方筛选条（对齐参考 PuiSearch），整条包在 `--color-bg-subtle` 圆角容器里：默认插槽放「label + 控件」对——`<span class="l-inline"><small>企业名称</small><el-input/></span>`，控件宽度取 `--layout-control-w`；紧跟其后依次是 `searchable`（默认 true，primary「搜索」，`@search`）、`resettable`（默认 true，「重置」，`@reset`）、`advanced`（「高级搜索」）；`summary` 插槽放摘要，`actions` 插槽放右侧主操作（导出 / 新增）。窄屏时筛选项先换行，右侧操作区落到下一行右对齐。
+
+高级搜索用**浮窗**承载：把展开项放进 `#advanced` 插槽（同样是「label + 控件」对），组件内部用 `ElPopover` 弹出，展开不改变筛选条高度，下方表格不会被推下去；`@toggle(open)` 带出展开状态。不给 `#advanced` 插槽时退化为纯文字链接，只 `emit('toggle')`，展开区由第三层自理。
 
 ### `UiStatCard`（composites）
 
@@ -207,7 +230,7 @@ app.use(ElementPlus).use(DesignSystemUI)
 | 编号 | 模板 | 结构 |
 |---|---|---|
 | 01 | 统计模板 | UiPageHeader → `.l-grid--cols-4` × UiStatCard → `.l-grid--cols-2` 分析模块 → 概况模块 → 进度模块 |
-| 02 | 纯表格页 | 面包屑 → `.l-module`（UiFilterBar → 高级搜索展开区 → ElTable → ElPagination 右对齐） |
+| 02 | 纯表格页 | 面包屑 → `.l-module.l-fill`（UiFilterBar + `#advanced` 浮窗 → `ElTable.l-fill` → ElPagination 右对齐） |
 | 03 | 统计 + 表格 | 01 的统计行 + 02 的表格模块上下组合 |
 | 04 | 左树 + 表格 | UiPageHeader → `.l-split`（左 `.l-module` ElTree，右 02 的表格模块） |
 | 05 | TabBar + 表格 | UiPageHeader → ElTabs → 02 的表格模块 |

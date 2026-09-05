@@ -1,6 +1,5 @@
 /* 由 scripts/build-tokens.mjs 自动生成，勿手改；真值在 tokens.css */
 window.DS_TOKENS = {
-  "generatedAt": "2026-09-03T09:05:40.088Z",
   "source": "tokens.css",
   "groups": [
     {
@@ -315,8 +314,8 @@ window.DS_TOKENS = {
         },
         {
           "name": "--layout-content-max",
-          "value": "1440px",
-          "comment": "",
+          "value": "none",
+          "comment": "内容区最大宽：业务后台默认铺满，超宽屏不居中留白。要恢复限宽改成具体值即可",
           "dark": null
         },
         {
