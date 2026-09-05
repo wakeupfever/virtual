@@ -24,3 +24,15 @@
 .el-table.l-fill > .el-table__inner-wrapper > .el-table__body-wrapper { flex: 1 1 auto; min-height: var(--layout-row-h); }
 .el-table.l-fill > .el-table__inner-wrapper > .el-table__body-wrapper > .el-scrollbar { height: 100%; }
 .el-table.l-fill > .el-table__inner-wrapper > .el-table__body-wrapper > .el-scrollbar > .el-scrollbar__wrap { height: 100%; }
+
+/* 操作列：Element Plus 默认让单元格内容跟着列宽换行，行内动作一旦排到第二行，
+   固定行高就装不下（实测 3 个文字按钮在 176px 列里折成两行）。
+   给列打 class-name="is-actions" 后按不换行的一行排布，间距统一取 component-gap。
+   注意这只保证「排得整齐」，动作个数仍受 CLAUDE.md §2 的两个上限约束。 */
+.el-table .is-actions .cell {
+  display: flex;
+  align-items: center;
+  gap: var(--space-component-gap);
+  white-space: nowrap;
+}
+.el-table .is-actions .cell .el-button + .el-button { margin-left: 0; }

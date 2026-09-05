@@ -78,6 +78,20 @@ function checkFile(file, strict) {
     }
   }
 
+  // 操作列（R-056）：行内动作最多两个、必须打 is-actions，否则窄列里会折行、间距也不齐
+  for (const m of markup.matchAll(/<(?:el-table-column|ElTableColumn)\b[^>]*label="操作"[^>]*>([\s\S]*?)<\/(?:el-table-column|ElTableColumn)>/g)) {
+    const line = markup.slice(0, m.index).split('\n').length
+    const head = m[0].slice(0, m[0].indexOf('>') + 1)
+    // v-else / v-else-if 的按钮是同一个位置的分支，不重复计数
+    const buttons = (m[1].match(/<el-button\b[^>]*>/gi) || []).filter(tag => !/\sv-else/i.test(tag)).length
+    if (!/class-name="[^"]*\bis-actions\b/.test(head)) {
+      errors.push(`actions-column (line ${line}): 操作列必须写 class-name="is-actions"（由 skins/table.css 负责不换行与间距）`)
+    }
+    if (buttons > 2) {
+      errors.push(`actions-column (line ${line}): 操作列有 ${buttons} 个按钮，行内动作最多 2 个，其余放进详情抽屉 / 弹窗（CLAUDE.md §2）`)
+    }
+  }
+
   if (!/const DATA\s*=/.test(raw)) errors.push('structure: 缺少 ① DATA 区块')
   if (!/const state\s*=\s*Vue\.reactive/.test(raw)) errors.push('structure: 缺少 ② state 区块（Vue.reactive）')
   if (!/id="app"/.test(markup)) errors.push('structure: 缺少 ③ 模板 <div id="app">')

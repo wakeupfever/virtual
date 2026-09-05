@@ -3,10 +3,10 @@ rai-schema-version: 2
 task: "前端三层分层设计需求基线"
 task-key: "frontend-layered-design"
 primary-target: "doc/frontend-layered-design.md"
-requirement-version: "RV-020"
-iteration: "IT-020"
+requirement-version: "RV-021"
+iteration: "IT-021"
 current-changes:
-  - "C-052"
+  - "C-053"
 status: "active"
 updated: "2026-09-05"
 ---
@@ -15,13 +15,14 @@ updated: "2026-09-05"
 
 ## 快速摘要
 
-- 当前需求版本：`RV-020`
-- 当前工作迭代：`IT-020`
-- 当前变更：`C-052` 菜单图标统一光学网格、子菜单竖导轨与折叠飞出层接管、原型去掉徽标
-- 本轮目标：按评审截图修菜单——图标看着没对齐、徽标去掉、二三级菜单的观感重做
+- 当前需求版本：`RV-021`
+- 当前工作迭代：`IT-021`
+- 当前变更：`C-053` 表格操作列规范（add R-056：`is-actions` 皮肤 + 行内动作 ≤ 2 + 机械检查）
+- 本轮目标：把「操作列按钮折行」这类问题修在**规则层**而不是单个原型上——用户明确问「二次生成还会不会再遇到」
 - 上一轮结论：**IT-018 完成**（R-053 / R-054 verified；R-005 / R-007 / R-012 / R-042 / R-048 重新 verified）。**分步进度：第一步、第二步 A / B / C / D 全部交付**；52 条需求现为 51 verified / 1 implemented，唯一未闭环的是 `R-034`——`promote` 技能已就位，`apps/prototypes/alarms.html` 这个真实业务原型也已存在，缺的是**拿它跑一次 promote**。历史迭代结论见「当前迭代」与「历史索引」两节
 - 上一轮结论：**IT-019 完成**（`R-055` verified）。`pnpm check:ledger` 已进 lint-staged 与 CI（第五步），CI 由八步扩为九步
-- 当前结论：**IT-020 完成**（`R-012` 澄清后重新 verified）。53 条需求 = 52 verified + 1 implemented，未闭环的仍只有 `R-034`
+- 上一轮结论：**IT-020 完成**（`R-012` 澄清后重新 verified）
+- 当前结论：**IT-021 完成**（`R-056` verified）。54 条需求 = 53 verified + 1 implemented，未闭环的仍只有 `R-034`
 
 ## 当前需求清单
 
@@ -103,6 +104,7 @@ updated: "2026-09-05"
 - [x] `R-052` 展示页全局调参面板：顶栏与整页控制条均可打开「调参」**浮窗**——按标题栏拖动、可收起为一条标题栏、可关闭，位置按浮窗实际高度钳在视口内，整体高度不超过视口（做成浮窗而不是抽屉，是为了调参时能看见被调的页面）；内容区用 `ElScrollbar` 承载，把第一层语义 token 全部变成可实时调整的控件——分组与条目由 `dist/tokens.json` 驱动，不手工维护清单；控件类型按**解析出来的值**判定（颜色→取色器、纯 px→滑块、其余→文本框），滑块区间必须包住当前值，远超常规区间的哨兵值（`--radius-full` 9999px）降级为文本框，避免 `el-slider` 钳值回吐造成无声改写；改动写在 `:root` 的 inline style 上，整站（含所有 Element Plus 组件，其圆角 / 边框经 `--el-*` 映射自 `--radius-*` / `--border-w` / `--color-border-*`）实时联动；支持关键词筛选、单项点值恢复、全部重置、「复制为 tokens.css」输出改动过的 `:root` 片段；顶栏主色取色器并入同一套覆盖机制；断点类 token 不进清单（媒体查询无法响应变量）。`category: ux` `status: verified`
 
 - [x] `R-053` 需求文档里有菜单或路由时，原型必须有可切换的路由：一级导航原样搬进 `DATA.menu`（含对应需求章节号），按 `state.route` 分支渲染，本轮未实现的菜单渲染明确占位（`ui-state` empty + 章节号），不允许点了没反应或所有菜单停在同一页面。`category: functional` `status: verified`
+- [x] `R-056` 表格操作列规范：列上写 `class-name="is-actions"`，`skins/table.css` 让单元格按不换行的一行排布、间距取 `--space-component-gap`；**行内动作最多 2 个**（「详情 / 查看」+ 一个状态相关动作），其余动作放进详情抽屉或弹窗；按钮用 `link type="primary" size="small"`。`check-prototype.js` 新增 `actions-column` 规则：缺 `is-actions` 或按钮多于 2 个即报错（`v-else` / `v-else-if` 是同一位置的分支，不重复计数）。原型模板、五套页面模板与 `apps/web` 正式页同步。`category: ux` `status: verified`
 - [x] `R-054` 调参面板下沉为第二层组件 `UiTuner`：原型（第三层）禁止 `<style>` 与 inline style，调参面板必须有自己的样式，只能住在允许写样式的第二层；展示页与任意原型均以 `<ui-tuner>` 接入，token 清单由 `dist/tokens.js` 驱动（页面需引入该脚本）。`category: ux` `status: verified`
 
 ### 文档
@@ -162,6 +164,7 @@ updated: "2026-09-05"
 | R-038 | 直达 `#/<key>` 高亮对应菜单；点击菜单改 hash；后退恢复；原型模板 `#/reports` 高亮「报表」；十条路由（含 `#/custom/<key>`、`#/page/<key>`）循环无运行时报错，空 `<sub>` 落到首项并补全 hash | 用户输入（补充路由概念） | R-012, R-016 | RV-004 | C-014, C-038 | F-005, F-011, F-008 |
 | R-050 | 1440×1200 下 `#/page/stat-table`：页面高 = 外壳内容区高，模块 / 表格逐层吃满，分页贴底且无外层滚动；压到 420 高时表体 `clientHeight < scrollHeight`（内滚生效）且仍无外层滚动；不加 `--fill` 的 01 统计页仍为外层滚动；`el-table` 全程不传 `height`；**且 1920 宽下 `.l-page` 宽度必须等于外壳内容区宽度**（填充链不得反过来压缩宽度，见 C-042） | 用户输入（表格高度应受父级限制、默认占满） | R-009, R-012, R-042, R-043 | RV-016 | C-040 | F-001, F-002, F-003, F-004, F-005, F-006 |
 | R-052 | 打开抽屉不碰任何控件时 `:root` 的 inline style 必须为空、「已改」计数为 0（钳值回写会当场暴露）；浮窗可按标题栏拖动、收起为 183×34 的标题栏、展开复原 420×735，拖到底部仍整体在视口内；82 行控件（85 语义 token 去掉 3 个断点 / 密度）含 41 滑块 / 24 取色器 / 17 文本框；改 `--radius-lg` 与 `--border-w` 后模块圆角 12→13、边框 1→2，改 `--radius-md` 后 Element Plus 输入框圆角 6→18；滑块推到上限后控件形态与区间**不得变化**（形态与区间只由首次覆盖时冻结的基线值决定）；值格可直接打字改精确值、清空即恢复默认；复制得到只含改动项的 `:root` 片段；全部重置后 inline 清空且视觉复原 | 用户输入（控制项应更丰富） | R-037, R-030 | RV-016 | C-043 | F-011 |
+| R-056 | 三个文字按钮的操作列在 176px 列宽下折成两行（改前实测单元格高 > 行高）；改后单元格单行、行高恒为 `--layout-row-h`；`check-prototype.js` 对 3 个按钮或缺 `is-actions` 的操作列报错并非零退出 | 用户输入（操作按钮这里需要修改下） | R-019, R-042, R-044 | RV-021 | C-053 | F-003, F-005, F-007 |
 | R-055 | `node scripts/check-ledger.mjs` 对当前台账 0 错误、退出码 0；注入人为故障（把 verified 需求取消勾选、头部 iteration 改成正文没有的编号、从功能清单删掉一条需求编号）后逐条命中并退出码非零 | 用户输入（当前会话任何修改都需要同步到台账） | R-023, R-026 | RV-019 | C-051 | F-007 |
 | R-051 | 点开高级搜索前后，筛选条 / 表格 / 页面高度三项数值完全相同；浮窗渲染在 body（teleport）且含全部展开项；无 `#advanced` 插槽时仍只触发 `toggle` | 用户输入（高级搜索激活应该是浮窗 不影响高度） | R-041 | RV-016 | C-040 | F-003, F-005, F-011 |
 
@@ -182,7 +185,7 @@ updated: "2026-09-05"
 | F-002 | 布局与基础样式层（layout.css、base.css） | active | R-009, R-010, R-050 |
 | F-003 | 基础组件层（Element Plus 白名单 + 自研组件 + 皮肤层） | active | R-011, R-014, R-015, R-029, R-040～R-043, R-047, R-048, R-051, R-054 |
 | F-004 | 页面外壳组件（UiShell / UiShellMenu） | active | R-012, R-043, R-050 |
-| F-005 | 原型工作流（prototypes/、模板、检查脚本） | active | R-016～R-019, R-053 |
+| F-005 | 原型工作流（prototypes/、模板、检查脚本） | active | R-016～R-019, R-053, R-056 |
 | F-006 | 正式功能开发层（Vue 3 + Vite 8 + Tailwind 4） | active | R-020～R-022, R-031 |
 | F-007 | AI 约束机制（CLAUDE.md、ESLint、依赖检查、hooks/CI、台账一致性检查） | active | R-023～R-026, R-055 |
 | F-008 | 原型→正式转换视觉回归与第二层变异验证 | active | R-027, R-049 |
@@ -192,7 +195,16 @@ updated: "2026-09-05"
 
 ## 当前迭代
 
-### IT-020 · 菜单图标对齐与二三级菜单重做
+### IT-021 · 把操作列问题修在规则层
+
+- 目标：用户问「你是直接改原型还是改生成原型的规则，这代表我二次生成时是否还会遇到」——本轮的操作列问题必须落在规则与门禁上，改单个原型不算完
+- 范围：`skins/table.css`（`.is-actions`）、`scripts/check-prototype.js`（`actions-column` 规则）、`CLAUDE.md` §2、README 皮肤层、`showcase.data.js`（TABLE_MODULE）、`apps/prototypes/{_template,alarms}.html`、`apps/web/src/features/orders/Page.vue`；本台账
+- 包含变更：`C-053`
+- 对应需求版本：`RV-021`
+- 退出条件：R-056 verified（注入 3 个按钮的操作列必须被 check 拦下）；原型模板、五套模板、正式页同步；门禁全绿
+- 说明：本轮同时复盘了此前各条反馈的落点——凡是能落在第一、二层或 check 脚本上的都已落下（见 `C-053` 的「落点复盘」）
+
+### IT-020 · 菜单图标对齐与二三级菜单重做（已完成）
 
 - 目标：按评审截图修三处——图标看着没对齐、徽标去掉、二三级菜单观感差
 - 范围：`ui/UiShellMenu.vue`（图标集重画 + `popper-class`）、`skins/menu.css`（分组标题对齐、竖导轨、飞出层、嵌套选中态）、`apps/prototypes/alarms.html`（去掉 badge）、README（菜单层级与图标网格两行）；本台账
@@ -285,6 +297,18 @@ updated: "2026-09-05"
 - 退出条件：R-045 verified；R-041 / R-044 重新 verified；代码已提交
 
 ## 当前变更
+
+### C-053 · 表格操作列规范与机械检查
+
+- 类型：`add`
+- 原因：用户截图——操作列三个文字按钮在 176px 列宽里折成两行，行与行的按钮位置还对不齐；并追问「改的是原型还是生成原型的规则」
+- 之前：操作列没有任何约束，宽度与按钮数全凭写原型时随手定；Element Plus 默认让单元格内容跟着列宽换行，固定行高装不下就露馅
+- 之后：`R-056`。第二层 `skins/table.css` 加 `.el-table .is-actions .cell`（不换行的一行排布 + `--space-component-gap` 间距，并清掉 EP 的 `.el-button + .el-button` 左边距）；`check-prototype.js` 加 `actions-column` 规则（缺 `is-actions` 或按钮 > 2 即报错，`v-else` 分支不重复计数）；CLAUDE.md §2 与 README 各加一条；`showcase.data.js` 的 TABLE_MODULE、`_template.html`、`orders/Page.vue` 同步打上 `is-actions`
+- 原型侧：`alarms.html` 行内动作由「详情 + 确认/派发 + 关联事件」减为「详情 + 确认/派发」，关联事件走详情抽屉底部已有的「关联 / 升级事件」入口（本来就在），列宽 176 → 120
+- 落点复盘（回答「二次生成还会不会再遇到」）：**会自动继承的**——菜单图标网格 / 对齐 / 竖导轨 / 折叠飞出层（第二层皮肤与组件）、高度填充三件套（第一层 `.l-page--fill`）、高级搜索浮窗（`UiFilterBar`）、操作列排布（本变更）；**靠规则 + 机械检查兜住的**——原型必须有可切换路由（`R-053`，CLAUDE.md §3 + prototype 技能）、操作列动作数（本变更的 `actions-column`）、第三层禁止写样式 / 裸值 / 非白名单标签（`check-prototype.js` 既有规则）；**仍属逐个原型的数据选择**——菜单是否挂徽标、菜单文案与分组、mock 数据（README 注明徽标默认不用，但不做机械限制）
+- 关联需求：`R-056`、`R-019`、`R-042`、`R-044`
+- 覆盖关系：—
+- 影响功能：`F-003 direct`、`F-005 direct`、`F-007 direct`、`F-006 indirect`、`F-011 indirect`
 
 ### C-052 · 菜单图标统一光学网格、子菜单竖导轨与折叠飞出层接管
 
@@ -578,6 +602,10 @@ updated: "2026-09-05"
 | C-052 | F-004 | direct | 菜单图标网格、层级表达与折叠飞出层观感改变 | 图标 bbox 一致；层级缩进收敛；飞出层与展开态一致 |
 | C-052 | F-003 | direct | `skins/menu.css` 改写 | check-layer2 0 错误；变异验证 UiShell 通过 |
 | C-052 | F-005 | indirect | 原型菜单数据去掉徽标 | check-prototype 通过 |
+| C-053 | F-003 | direct | `skins/table.css` 新增 `.is-actions` | 单元格单行、行高恒定 |
+| C-053 | F-005 | direct | 操作列写法进入模板与检查脚本 | 注入 3 个按钮必失败 |
+| C-053 | F-007 | direct | check-prototype 新增 actions-column 规则 | 故障注入退出码非零 |
+| C-053 | F-006 | indirect | 正式页同步 `is-actions` | 视觉回归 0.00% |
 | C-012 | F-011 | direct | 展示页位置与内容改变 | 打开即渲染；token 数量对账；切换联动 |
 | C-012 | F-003 | indirect | build 增加 tokens.js 产物 | `pnpm build:ds` 产出三文件 |
 | C-013 | F-011 | direct | 排版与内容范围改变 | 与画板核对；组件覆盖清单核对 |
@@ -655,6 +683,7 @@ updated: "2026-09-05"
 | R-050 | `layout.css`（`.l-page--fill` / `.l-fill` / `.l-module.l-fill`）、`ui/UiShell.vue`（`view-class="ui-shell__view"` + `height: 100%` 纵向 flex）、`ui/UiState.vue`（`.ui-state.l-fill`）、`skins/table.css`（`.el-table.l-fill`）、`showcase.data.js`（`TABLE_MODULE` / `pageClass`）、`apps/prototypes/_template.html`、`apps/web/src/features/orders/Page.vue`、README「高度填充」、CLAUDE.md §2 | verified | E-28 |
 | R-051 | `ui/composites/UiFilterBar.vue`（`ElPopover` + `#advanced` 插槽 + `.ui-filter-bar__adv`）、`showcase.data.js`（CUSTOM 与 `TABLE_MODULE`）、README UiFilterBar 节、CLAUDE.md §2 | verified | E-28 |
 | R-038（两段式） | `showcase.html`（`parseHash` / `go(key, sub)` / `defaultSub` / `syncAnchor`） | verified | E-26 |
+| R-056 | `skins/table.css`（`.is-actions`）、`scripts/check-prototype.js`（`actions-column`）、`CLAUDE.md` §2、README 皮肤层、`showcase.data.js`（TABLE_MODULE）、`apps/prototypes/{_template,alarms}.html`、`apps/web/src/features/orders/Page.vue` | verified | E-37 |
 | R-012（菜单视觉） | `ui/UiShellMenu.vue`（ICONS 重画 + `popper-class`）、`skins/menu.css`（分组对齐 / 竖导轨 / 飞出层 / 嵌套选中）、`apps/prototypes/alarms.html`（去 badge）、README | verified | E-36 |
 | R-055 | `scripts/check-ledger.mjs`、根 `package.json`（`check:ledger` + lint-staged `doc/*.rai.md`）、`.github/workflows/ci.yml`（第五步）、`CLAUDE.md` §6 | verified | E-35 |
 | R-048（键排序） | `scripts/check-layer2.mjs`（`sortedEntries`） | verified | E-29 |
@@ -737,6 +766,7 @@ updated: "2026-09-05"
 | E-34 | R-005, R-007, R-012, R-042 | 风格升级与菜单重做实测：卡片 `border-radius: 8px` / `box-shadow: none`（改为靠边框分层）；`.l-page` padding 8px；折叠侧栏 66px 下 10 项**全部有图标**（修复前 `innerText` 为空、10 行空白）；三级菜单可逐层展开（告警中心 → 规则与推送 → 阈值规则 / 推送渠道 / 审批流配置），父级徽标由 `sumBadge` 汇总为 6；徽标由 22×40 的椭圆修正为 22×22 正圆；分页与表格间距由「上 0 / 下 20」修正为对称。四处返工：子项默认图标渲染成横杠（改按 depth 判定）、折叠态子菜单图标被 EP 的 `.el-menu--collapse … span` 规则隐藏（图标标签改 `<i>`）、折叠分组分隔线实测仅 16px 宽（去横向留白）、嵌套选中项竖线画在侧栏最左边离文字很远（改底色 + 主色文字）。加动画时误删 `:collapse-transition="false"` 导致 EP 过渡与侧栏宽度过渡打架（侧栏 class 与内联宽度已是折叠值、实测宽度仍 230px），已改回。八项门禁全绿，视觉回归 0.00%，变异测试 8 组件全过 | pass | 2026-09-05 |
 | E-35 | R-055, R-026, R-023 | `node scripts/check-ledger.mjs` 对当前台账：`✔ doc/frontend-layered-design.md.rai.md · 53 条需求 · 24 条变更`，退出码 0。故障注入复核（证明脚本不是空过）：把 `R-001` 的勾选去掉、头部 iteration 改成正文没有的 `IT-099`、从功能清单 F-003 删掉 `R-054`，脚本报出四条——「头部 iteration IT-099 与摘要 IT-019 不一致」「iteration IT-099 在正文没有对应小节」「R-001 是 verified 但勾选框未打勾」「以下需求未挂到任何功能：R-054」，退出码 1；还原后恢复 0。lint-staged 规则 `doc/*.rai.md` 与 CI 第五步（`check:prototype` 之后、`build:web` 之前）已就位 | pass | 2026-09-05 |
 | E-36 | R-012, R-042 | 改前实测（`getBBox()`）：事件指挥 x2 w20、企业监管 x4 w14 cx11、数据质量 cx13.5 cy13.5、设备接入 x5 w14、地图 x3 w18——而十个 `.el-icon` 的 left 全是 28px，说明是字形网格问题不是布局问题。改后十二个图标 cx 全为 12.0、x∈[4, 4.5]、w∈[15, 16]、cy∈[11.5, 12.5]。层级：一级子项文字 x=57（与父项标签同一 x）、行高 32；三级子项 x 由 89 → 70（每级 +13）；三级路由 `#/rule-threshold` 下 阈值规则 为 bg subtle + 主色文字 + 导轨点亮。折叠态飞出层由默认 48px 行改为 32px 行 + `--radius-lg` + `--shadow-md`，与展开态一致；折叠轨道上父级仍为 accent 底 + 主色图标。深色模式下菜单与导轨对比正常。第二轮（对齐）实测：展开态 10 个顶层图标中线由 40 → **32**，与顶栏汉堡图标中线 32 一致；分组标签 x=24 与汉堡图标字形左边缘 24 一致；一级子项文字 x=49 = 父项标签 x，三级 61（每级 +12）；折叠态（侧栏 66，轨道中线 33）10 个图标中线由「普通项 40 / 子菜单项 32 各一半」统一为 32（内容区中线，右侧 1px 边框之内）。门禁：`lint` / `typecheck` 0 错误、`build:ds`（check-layer2）0 错误 1 条既有警告、`check:prototype` 2 个原型通过、`check:ledger` 通过、`test:visual` 三用例 0.00%、`test:mutation` 8 组件全过（UiShell 21 通过 + 2 已核实例外） | pass | 2026-09-05 |
+| E-37 | R-056, R-019, R-042 | 改前：`alarms.html` 操作列 3 个文字按钮 / 列宽 176，截图可见折成两行且行与行按钮位置不齐。改后实测：`.is-actions .cell` 为 `display: flex` / `gap: 12px` / `white-space: nowrap`，六行单元格高 17～18px、表格行高恒为 44px，按钮数分别为 [详情, 确认] / [详情] / [详情, 派发]。机械检查：`node scripts/check-prototype.js` 两个原型通过；注入第三个按钮（关联事件）后报 `actions-column (line 126): 操作列有 3 个按钮，行内动作最多 2 个…` 且退出码 1，还原后恢复通过。门禁：`lint` / `typecheck` 0 错误、`build:ds` 0 错误 1 条既有警告、`check:ledger` 通过、`test:visual` 三用例 0.00%（原型模板与正式页同步改动）、`test:mutation` 8 组件全过 | pass | 2026-09-05 |
 | E-08 | R-028 | `doc/frontend-layered-design.md` §1～§10 与 RV-002 逐节核对；IT-003 同步 §3 目录树与 §9 展示页（RV-003）；IT-004 同步 §6 路由与 §9 方向 A（RV-004）：Vue 3 + Element Plus、Vite 8 + Tailwind 4、monorepo 目录、CDN 原型形态、插件三技能、展示页面、实施状态 | pass | 2026-09-02 |
 
 ## 历史索引
@@ -749,6 +779,7 @@ updated: "2026-09-05"
 | RV-016 | IT-016 | C-039 | modify | R-005 | `--layout-content-max` 1440px → none | F-001, F-002 |
 | RV-016 | IT-016 | C-040 | add | R-050, R-051, R-009, R-041, R-042 | 无 → 高度填充布局与高级搜索浮窗 | F-001～F-006 |
 | RV-016 | IT-016 | C-041 | implementation_correction | R-048, R-026 | dist 可复现：键排序 + 去掉生成时间 | F-003, F-007 |
+| RV-021 | IT-021 | C-053 | add | R-056, R-019, R-042, R-044 | 无 → 操作列 is-actions 皮肤 + 行内动作 ≤ 2 + actions-column 检查 | F-003, F-005, F-007 |
 | RV-020 | IT-020 | C-052 | modify | R-012, R-042 | 图标统一光学网格；二三级菜单改竖导轨；折叠飞出层接管；原型去徽标 | F-004, F-003 |
 | RV-019 | IT-019 | C-051 | add | R-055, R-026, R-023 | 无 → 台账一致性门禁；CI 八步 → 九步 | F-007, F-009 |
 | RV-019 | IT-019 | C-050 | implementation_correction | R-023, R-026, R-034 | 台账七处不一致修正（迭代小节 / 摘要 / 证据 / 阻塞 / 功能清单 / 勾选 / 历史索引） | F-007, F-009 |

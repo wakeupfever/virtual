@@ -24,6 +24,7 @@
 - 组件内部间距不在第三层设置；第三层可用的间距只有 `--space-page-*`、`--space-module-*`、`--space-component-gap`
 - **表格页用高度填充写法**：`<div class="l-page l-page--fill">` + 承载表格的模块加 `.l-fill` + `<el-table class="l-fill">`，表格由父级剩余高度决定高度、表体内滚、分页贴底；**不要给 `el-table` 传 `height` / `max-height`**。统计、表单等自然流页面不加 `--fill`
 - 高级搜索放 `UiFilterBar` 的 `#advanced` 插槽（组件内部弹浮窗），不要在筛选条下方用 `v-if` 写展开区——那会改变高度、把表格推下去
+- **表格操作列**：列上写 `class-name="is-actions"`（`skins/table.css` 保证一行排布、间距统一），**行内动作最多 2 个**——「详情 / 查看」加一个状态相关动作，其余放进详情抽屉或弹窗；按钮用 `link type="primary" size="small"`。三个以上会在固定行高里折行，`check-prototype.js` 的 `actions-column` 规则会拦
 - 表格行高 / 表头高由第一层 `--layout-row-h` `--layout-thead-h` 经 `skins/table.css` 生效，第三层不设 `row-style` / `header-row-style`；页面级线性页签用 `<el-tabs class="is-tabbar">`（`skins/tabs.css`），筛选条用 `UiFilterBar` 的「label + 控件」写法
 - 同一 UI 模式在 features 内出现第二次 → 下沉为该模块 `components/` 下的业务组件，不复制
 

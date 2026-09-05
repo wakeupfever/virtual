@@ -115,7 +115,7 @@ app.use(ElementPlus).use(DesignSystemUI)
 
 ## 第二层 · 皮肤层（`skins/`）
 
-样式级偏差的唯一落点：结构与行为不变、只是长得不一样时，在 `skins/<component>.css` 用 `--el-<component>-*` 变量或 Element Plus BEM 类覆盖，值只引用 token。`skins/index.css` 负责 `@import`。当前：`table.css`（表头 `--layout-thead-h` 40 / 行 `--layout-row-h` 44、表头 subtle 底 12/500、外框圆角、hover 用 accent）、`input.css`（圆角与聚焦描边跟随 token）、`menu.css`（UiShell 侧栏菜单圆角胶囊高亮）、`tabs.css`（`<el-tabs class="is-tabbar">` 胶囊页签条：白卡内 pill，active 用 accent，仅做页面级线性导航，不渲染面板内容）、`tree.css`（节点行高 32、圆角，`highlight-current` 当前节点 accent）。第三层禁止出现任何皮肤写法。
+样式级偏差的唯一落点：结构与行为不变、只是长得不一样时，在 `skins/<component>.css` 用 `--el-<component>-*` 变量或 Element Plus BEM 类覆盖，值只引用 token。`skins/index.css` 负责 `@import`。当前：`table.css`（表头 `--layout-thead-h` 40 / 行 `--layout-row-h` 44、表头 subtle 底 12/500、外框圆角、hover 用 accent；操作列加 `class-name="is-actions"` 后单元格按不换行的一行排布、间距取 `--space-component-gap`，行内动作最多 2 个由 `check-prototype.js` 的 `actions-column` 规则保证）、`input.css`（圆角与聚焦描边跟随 token）、`menu.css`（UiShell 侧栏菜单圆角胶囊高亮）、`tabs.css`（`<el-tabs class="is-tabbar">` 胶囊页签条：白卡内 pill，active 用 accent，仅做页面级线性导航，不渲染面板内容）、`tree.css`（节点行高 32、圆角，`highlight-current` 当前节点 accent）。第三层禁止出现任何皮肤写法。
 
 ## 原型 UI 不满足物料时（三级偏差）
 
