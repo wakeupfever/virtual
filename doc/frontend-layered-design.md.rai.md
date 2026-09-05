@@ -3,11 +3,10 @@ rai-schema-version: 2
 task: "前端三层分层设计需求基线"
 task-key: "frontend-layered-design"
 primary-target: "doc/frontend-layered-design.md"
-requirement-version: "RV-019"
-iteration: "IT-019"
+requirement-version: "RV-020"
+iteration: "IT-020"
 current-changes:
-  - "C-050"
-  - "C-051"
+  - "C-052"
 status: "active"
 updated: "2026-09-05"
 ---
@@ -16,12 +15,13 @@ updated: "2026-09-05"
 
 ## 快速摘要
 
-- 当前需求版本：`RV-019`
-- 当前工作迭代：`IT-019`
-- 当前变更：`C-051` 台账一致性检查进门禁（add R-055，CI 八步 → 九步）；`C-050` 修复台账七处不一致
-- 本轮目标：把「先更新台账再改实现」从人工自觉变成机械门禁——人眼对不出来的不一致由脚本兜住
+- 当前需求版本：`RV-020`
+- 当前工作迭代：`IT-020`
+- 当前变更：`C-052` 菜单图标统一光学网格、子菜单竖导轨与折叠飞出层接管、原型去掉徽标
+- 本轮目标：按评审截图修菜单——图标看着没对齐、徽标去掉、二三级菜单的观感重做
 - 上一轮结论：**IT-018 完成**（R-053 / R-054 verified；R-005 / R-007 / R-012 / R-042 / R-048 重新 verified）。**分步进度：第一步、第二步 A / B / C / D 全部交付**；52 条需求现为 51 verified / 1 implemented，唯一未闭环的是 `R-034`——`promote` 技能已就位，`apps/prototypes/alarms.html` 这个真实业务原型也已存在，缺的是**拿它跑一次 promote**。历史迭代结论见「当前迭代」与「历史索引」两节
-- 当前结论：**IT-019 完成**（`R-055` verified）。53 条需求 = 52 verified + 1 implemented；`pnpm check:ledger` 已进 lint-staged 与 CI（第五步），CI 由八步扩为九步
+- 上一轮结论：**IT-019 完成**（`R-055` verified）。`pnpm check:ledger` 已进 lint-staged 与 CI（第五步），CI 由八步扩为九步
+- 当前结论：**IT-020 完成**（`R-012` 澄清后重新 verified）。53 条需求 = 52 verified + 1 implemented，未闭环的仍只有 `R-034`
 
 ## 当前需求清单
 
@@ -51,7 +51,7 @@ updated: "2026-09-05"
 ### 第二层：基础组件与外壳
 
 - [x] `R-011` 第二层由两部分构成：Element Plus 允许使用的组件白名单（初始：ElButton、ElInput、ElSelect、ElCheckbox、ElSwitch、ElForm/ElFormItem、ElTable、ElDialog、ElDrawer、ElMessage/ElNotification、ElTabs、ElPagination），以及自研复合组件清单（仅限 Element Plus 未覆盖的外壳与页面级组件）；两份清单均写入 README。`category: maintainability` `status: verified`
-- [x] `R-012` 外壳组件 `UiShell` 实现侧边栏折叠、路由高亮、响应式抽屉，所有尺寸取自 `--layout-*`，自身不写数值；外壳固定为视口高，侧栏与主内容区各自在 `ElScrollbar` 内滚动，页面（window）不滚动；顶栏带品牌色块，侧栏菜单经 `skins/menu.css` 呈现圆角胶囊高亮。`category: functional` `status: verified`
+- [x] `R-012` 外壳组件 `UiShell` 实现侧边栏折叠、路由高亮、响应式抽屉，所有尺寸取自 `--layout-*`，自身不写数值；外壳固定为视口高，侧栏与主内容区各自在 `ElScrollbar` 内滚动，页面（window）不滚动；顶栏带品牌色块。侧栏菜单经 `skins/menu.css` 呈现：顶层选中为浅灰底 + 主色竖线；**内置图标画在同一光学网格上**（可见范围 x/y ∈ [4, 20]、中心 (12, 12)），分组标题与图标列左对齐；**子菜单层级用竖导轨表达**（第一条导轨对齐顶层图标中线，一级子项文字落在父项标签起点，更深层每级只多缩进一个 `--space-component-gap`，层数不限），子项行高 `--layout-control-h`，选中时点亮该行那截导轨；折叠态飞出的子菜单经 `popper-class="ui-shell__popper"` 接管，与展开态同一套观感。徽标（`badge`）保留为可选能力，默认不用。`category: functional` `status: verified`
 - [x] `R-029` 第二层技术形态：正式项目通过 npm 引入 Element Plus 2.14.x；原型通过 CDN 引入 Vue 3 全局构建与**同一版本** Element Plus；自研复合组件用 Vite 库模式打包为 `dist/ui.iife.js`（Vue、ElementPlus 设为 external 全局），原型与正式项目共用同一份源码。`category: maintainability` `status: verified`
 - [x] `R-014` `design-system/README.md` 作为组件索引，列出白名单组件、自研组件、props 与用法示例；AI 开发第三层前必须先读。`category: delivery` `status: verified`
 - [x] `R-015` 第二层建成后冻结；新增或修改须经"提议 → 判定通用/业务 → 单独提交 + 更新 README"流程。`category: maintainability` `status: verified`
@@ -124,7 +124,7 @@ updated: "2026-09-05"
 | R-009 | layout.css 无 JS；两端引用同一文件 | 用户输入 | R-003, R-005 | RV-001 | C-001 | F-002 |
 | R-010 | base.css 被原型模板与正式入口同时引用 | 对话结论 | — | RV-001 | C-001 | F-002 |
 | R-011 | README 含白名单与自研清单；check 脚本与 ESLint 按白名单拦截 | 用户输入（Element Plus） | R-029 | RV-001 | C-004 | F-003 |
-| R-012 | UiShell 尺寸全部为 `var(--layout-*)`；折叠/高亮/抽屉可操作 | 用户输入 | R-005 | RV-001 | C-001 | F-004 |
+| R-012 | UiShell 尺寸全部为 `var(--layout-*)`；折叠/高亮/抽屉可操作；菜单图标 `getBBox()` 均为 cx≈12 / x≈4；一级子项文字 x 与父项标签 x 相同、每深一级只多缩进 `--space-component-gap`；折叠态飞出层行高与展开态子项一致 | 用户输入 | R-005 | RV-001 | C-052 | F-004 |
 | R-014 | README 组件数与实际一致；CLAUDE.md 要求开发前先读 | 对话结论 | R-011 | RV-001 | C-001 | F-003, F-007 |
 | R-015 | CLAUDE.md 含冻结与提议流程 | 对话结论 | R-011 | RV-001 | C-001 | F-003 |
 | R-016 | `_template.html` 含四区块；原型单文件可直接打开并渲染 Element Plus 组件 | 用户输入（原型为可交互 HTML） | R-009, R-029 | RV-001 | C-006 | F-005 |
@@ -192,7 +192,16 @@ updated: "2026-09-05"
 
 ## 当前迭代
 
-### IT-019 · 台账一致性从人工自觉变成机械门禁
+### IT-020 · 菜单图标对齐与二三级菜单重做
+
+- 目标：按评审截图修三处——图标看着没对齐、徽标去掉、二三级菜单观感差
+- 范围：`ui/UiShellMenu.vue`（图标集重画 + `popper-class`）、`skins/menu.css`（分组标题对齐、竖导轨、飞出层、嵌套选中态）、`apps/prototypes/alarms.html`（去掉 badge）、README（菜单层级与图标网格两行）；本台账
+- 包含变更：`C-052`
+- 对应需求版本：`RV-020`
+- 退出条件：图标 bbox 复核一致；一级子项与父项标签左对齐、层级缩进收敛；折叠飞出层观感与展开态一致；门禁全绿
+- 说明：图标「没对齐」不是布局问题——所有 `.el-icon` 的几何左边缘都在同一 x，是字形没画在同一网格上，只能改 path
+
+### IT-019 · 台账一致性从人工自觉变成机械门禁（已完成）
 
 - 目标：上一轮审计一次查出七处不一致，其中四处是脚本发现的、人眼通读没看出来——把这套对账固化成可重复执行的门禁，让「台账与实现同步」不再依赖记性
 - 范围：新增 `scripts/check-ledger.mjs`；根 `package.json`（`check:ledger` 脚本 + lint-staged 的 `doc/*.rai.md` 规则）；`.github/workflows/ci.yml`（第五步）；`CLAUDE.md` §6 命令表与门禁句；本台账（R-055 与本轮记录）
@@ -276,6 +285,19 @@ updated: "2026-09-05"
 - 退出条件：R-045 verified；R-041 / R-044 重新 verified；代码已提交
 
 ## 当前变更
+
+### C-052 · 菜单图标统一光学网格、子菜单竖导轨与折叠飞出层接管
+
+- 类型：`modify`
+- 原因：用户截图三点——「icon 需要同步对齐」「徽标可以去掉」「优化下二级菜单和三级菜单的 UI」
+- 图标：先把「没对齐」证伪成布局问题——十个 `.el-icon` 的 left 实测全是 28px。真因是字形没画在同一网格：`getBBox()` 显示 事件指挥 x2..22、企业监管 cx=11、数据质量 cx=13.5 / cy=13.5、设备接入 x5..19。十二个 path 全部重画到 x/y ∈ [4, 20]、中心 (12, 12)；`settings` 的齿轮改为滑杆造型（齿轮很难在这个网格里保持匀称），`default` 由一条横线改为圆点
+- 分组标题：padding-inline 由 `--space-component-pad-x`(16) 改为 `--space-module-pad`(20)，与图标列（28px）对齐
+- 二三级菜单：弃用 Element Plus 逐级 +20px 的行内 padding（三级已缩进到 89px，一级子项还落在父项标签左边），改为每层一条竖导轨——第一条对齐顶层图标中线（`module-pad + component-gap`），子项 padding 收回 `--space-component-pad-x`，一级子项文字 x=57 与父项标签**完全对齐**，更深层每级只多缩进 12px（三级由 89 → 70）；子项行高 `--layout-control-h`(32) 比顶层 40 矮一档；选中态由整块 accent 底改为「点亮该行那截导轨 + 浅底 + 主色文字」（整块底会把导轨打断）
+- 折叠飞出层：Element Plus 把弹出菜单挂到 body，此前完全没接管——48px 的默认行、方角、无阴影层次。`ElSubMenu` 挂 `popper-class="ui-shell__popper"` 后收回样式，行高 / 圆角 / 悬停 / 选中与展开态一致
+- 徽标：从原型菜单数据去掉（告警中心与告警列表两处）；`UiShellMenu` 的 `badge` 与 `sumBadge` 保留为可选能力，README 注明默认不用
+- 关联需求：`R-012`、`R-042`
+- 覆盖关系：`clarify R-012`（补菜单视觉规则：图标网格、导轨层级、飞出层；原文「圆角胶囊高亮」在 C-048 已被浅灰底 + 主色竖线取代）
+- 影响功能：`F-004 direct`、`F-003 direct`、`F-005 indirect`
 
 ### C-051 · 台账一致性检查进门禁
 
@@ -552,6 +574,9 @@ updated: "2026-09-05"
 | C-050 | F-007, F-009 | direct | 台账自身七处不一致修正，恢复为可信实施依据 | 脚本对账 0 错误 |
 | C-051 | F-007 | direct | 新增台账一致性门禁，CI 八步扩为九步 | 当前台账通过；注入故障必失败 |
 | C-051 | F-009 | indirect | 台账是文档层的真值来源 | 摘要与正文计数一致 |
+| C-052 | F-004 | direct | 菜单图标网格、层级表达与折叠飞出层观感改变 | 图标 bbox 一致；层级缩进收敛；飞出层与展开态一致 |
+| C-052 | F-003 | direct | `skins/menu.css` 改写 | check-layer2 0 错误；变异验证 UiShell 通过 |
+| C-052 | F-005 | indirect | 原型菜单数据去掉徽标 | check-prototype 通过 |
 | C-012 | F-011 | direct | 展示页位置与内容改变 | 打开即渲染；token 数量对账；切换联动 |
 | C-012 | F-003 | indirect | build 增加 tokens.js 产物 | `pnpm build:ds` 产出三文件 |
 | C-013 | F-011 | direct | 排版与内容范围改变 | 与画板核对；组件覆盖清单核对 |
@@ -629,6 +654,7 @@ updated: "2026-09-05"
 | R-050 | `layout.css`（`.l-page--fill` / `.l-fill` / `.l-module.l-fill`）、`ui/UiShell.vue`（`view-class="ui-shell__view"` + `height: 100%` 纵向 flex）、`ui/UiState.vue`（`.ui-state.l-fill`）、`skins/table.css`（`.el-table.l-fill`）、`showcase.data.js`（`TABLE_MODULE` / `pageClass`）、`apps/prototypes/_template.html`、`apps/web/src/features/orders/Page.vue`、README「高度填充」、CLAUDE.md §2 | verified | E-28 |
 | R-051 | `ui/composites/UiFilterBar.vue`（`ElPopover` + `#advanced` 插槽 + `.ui-filter-bar__adv`）、`showcase.data.js`（CUSTOM 与 `TABLE_MODULE`）、README UiFilterBar 节、CLAUDE.md §2 | verified | E-28 |
 | R-038（两段式） | `showcase.html`（`parseHash` / `go(key, sub)` / `defaultSub` / `syncAnchor`） | verified | E-26 |
+| R-012（菜单视觉） | `ui/UiShellMenu.vue`（ICONS 重画 + `popper-class`）、`skins/menu.css`（分组对齐 / 竖导轨 / 飞出层 / 嵌套选中）、`apps/prototypes/alarms.html`（去 badge）、README | verified | E-36 |
 | R-055 | `scripts/check-ledger.mjs`、根 `package.json`（`check:ledger` + lint-staged `doc/*.rai.md`）、`.github/workflows/ci.yml`（第五步）、`CLAUDE.md` §6 | verified | E-35 |
 | R-048（键排序） | `scripts/check-layer2.mjs`（`sortedEntries`） | verified | E-29 |
 
@@ -709,6 +735,7 @@ updated: "2026-09-05"
 | E-33 | R-053, R-054, R-016, R-018 | `node scripts/check-prototype.js` 两个原型全过；浏览器实测：点「在线监测」→ hash 变 `#/monitor`、内容切为占位并显示「对应 PRD §8.3」、点回告警中心表格恢复；`FR-ALM-005` 关联对话框候选只列同企业在办事件（3 个事件里排除了另一家企业的），四项未填全时「确认关联」禁用并提示「推荐分不代表自动关联，必须人工判定」；`UiTuner` 在原型内 82 行控件 / 8 分组，改 `--radius-lg` 12→24px 模块圆角实时联动；筛选条由两行 100px 收回一行 56px；`pnpm lint` / `typecheck` 0 错误、`check-layer2` 0 错误、`test:visual` 三用例 0.00%、`test:mutation` 8 组件全过（UiTuner 29 项无例外） | pass | 2026-09-05 |
 | E-34 | R-005, R-007, R-012, R-042 | 风格升级与菜单重做实测：卡片 `border-radius: 8px` / `box-shadow: none`（改为靠边框分层）；`.l-page` padding 8px；折叠侧栏 66px 下 10 项**全部有图标**（修复前 `innerText` 为空、10 行空白）；三级菜单可逐层展开（告警中心 → 规则与推送 → 阈值规则 / 推送渠道 / 审批流配置），父级徽标由 `sumBadge` 汇总为 6；徽标由 22×40 的椭圆修正为 22×22 正圆；分页与表格间距由「上 0 / 下 20」修正为对称。四处返工：子项默认图标渲染成横杠（改按 depth 判定）、折叠态子菜单图标被 EP 的 `.el-menu--collapse … span` 规则隐藏（图标标签改 `<i>`）、折叠分组分隔线实测仅 16px 宽（去横向留白）、嵌套选中项竖线画在侧栏最左边离文字很远（改底色 + 主色文字）。加动画时误删 `:collapse-transition="false"` 导致 EP 过渡与侧栏宽度过渡打架（侧栏 class 与内联宽度已是折叠值、实测宽度仍 230px），已改回。八项门禁全绿，视觉回归 0.00%，变异测试 8 组件全过 | pass | 2026-09-05 |
 | E-35 | R-055, R-026, R-023 | `node scripts/check-ledger.mjs` 对当前台账：`✔ doc/frontend-layered-design.md.rai.md · 53 条需求 · 24 条变更`，退出码 0。故障注入复核（证明脚本不是空过）：把 `R-001` 的勾选去掉、头部 iteration 改成正文没有的 `IT-099`、从功能清单 F-003 删掉 `R-054`，脚本报出四条——「头部 iteration IT-099 与摘要 IT-019 不一致」「iteration IT-099 在正文没有对应小节」「R-001 是 verified 但勾选框未打勾」「以下需求未挂到任何功能：R-054」，退出码 1；还原后恢复 0。lint-staged 规则 `doc/*.rai.md` 与 CI 第五步（`check:prototype` 之后、`build:web` 之前）已就位 | pass | 2026-09-05 |
+| E-36 | R-012, R-042 | 改前实测（`getBBox()`）：事件指挥 x2 w20、企业监管 x4 w14 cx11、数据质量 cx13.5 cy13.5、设备接入 x5 w14、地图 x3 w18——而十个 `.el-icon` 的 left 全是 28px，说明是字形网格问题不是布局问题。改后十二个图标 cx 全为 12.0、x∈[4, 4.5]、w∈[15, 16]、cy∈[11.5, 12.5]。层级：一级子项文字 x=57（与父项标签同一 x）、行高 32；三级子项 x 由 89 → 70（每级 +13）；三级路由 `#/rule-threshold` 下 阈值规则 为 bg subtle + 主色文字 + 导轨点亮。折叠态飞出层由默认 48px 行改为 32px 行 + `--radius-lg` + `--shadow-md`，与展开态一致；折叠轨道上父级仍为 accent 底 + 主色图标。深色模式下菜单与导轨对比正常。门禁：`lint` / `typecheck` 0 错误、`build:ds`（check-layer2）0 错误 1 条既有警告、`check:prototype` 2 个原型通过、`check:ledger` 通过、`test:visual` 三用例 0.00%、`test:mutation` 8 组件全过（UiShell 21 通过 + 2 已核实例外） | pass | 2026-09-05 |
 | E-08 | R-028 | `doc/frontend-layered-design.md` §1～§10 与 RV-002 逐节核对；IT-003 同步 §3 目录树与 §9 展示页（RV-003）；IT-004 同步 §6 路由与 §9 方向 A（RV-004）：Vue 3 + Element Plus、Vite 8 + Tailwind 4、monorepo 目录、CDN 原型形态、插件三技能、展示页面、实施状态 | pass | 2026-09-02 |
 
 ## 历史索引
@@ -721,6 +748,7 @@ updated: "2026-09-05"
 | RV-016 | IT-016 | C-039 | modify | R-005 | `--layout-content-max` 1440px → none | F-001, F-002 |
 | RV-016 | IT-016 | C-040 | add | R-050, R-051, R-009, R-041, R-042 | 无 → 高度填充布局与高级搜索浮窗 | F-001～F-006 |
 | RV-016 | IT-016 | C-041 | implementation_correction | R-048, R-026 | dist 可复现：键排序 + 去掉生成时间 | F-003, F-007 |
+| RV-020 | IT-020 | C-052 | modify | R-012, R-042 | 图标统一光学网格；二三级菜单改竖导轨；折叠飞出层接管；原型去徽标 | F-004, F-003 |
 | RV-019 | IT-019 | C-051 | add | R-055, R-026, R-023 | 无 → 台账一致性门禁；CI 八步 → 九步 | F-007, F-009 |
 | RV-019 | IT-019 | C-050 | implementation_correction | R-023, R-026, R-034 | 台账七处不一致修正（迭代小节 / 摘要 / 证据 / 阻塞 / 功能清单 / 勾选 / 历史索引） | F-007, F-009 |
 | RV-018 | IT-018 | C-049 | modify | R-012, R-042, R-048 | 无限层级菜单 + 折叠态 + 动画；徽标与分页间距 | F-004, F-003 |

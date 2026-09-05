@@ -34,7 +34,7 @@
 
 /* 分组标题：折叠时隐藏，只留图标列 */
 .ui-shell__group {
-  padding: var(--space-component-gap) var(--space-component-pad-x) var(--space-inline-pad);
+  padding: var(--space-component-gap) var(--space-module-pad) var(--space-inline-pad);
   font-size: var(--font-size-micro);
   color: var(--color-text-placeholder);
   letter-spacing: var(--border-w);
@@ -70,10 +70,34 @@
   color: var(--color-text-default);
   font-weight: var(--font-weight-medium);
 }
-/* 层级缩进靠 Element Plus 计算的 padding-left，这里只补每层的视觉降级 */
-.ui-shell__menu .el-menu--inline { background: transparent; }
+/* 展开箭头：与图标同色、收小一档，不跟标签抢视线 */
+.ui-shell__menu .el-sub-menu__icon-arrow {
+  right: var(--space-module-pad);
+  color: var(--color-icon-muted);
+  font-size: var(--font-size-micro);
+}
+
+/* 层级用「竖导轨」表达，不用 Element Plus 那套逐级递增的 padding：
+   第一条导轨对齐顶层图标中线（module-pad + 图标半宽），子项文字正好落在父项标签的起点；
+   更深的层级各自再挂一条导轨，每层只多缩进一个 component-gap，所以层数不限也不会越缩越宽。
+   EP 把层级 padding 写成行内样式，只能用 !important 收回。 */
+.ui-shell__menu .el-menu--inline {
+  background: transparent;
+  margin-left: calc(var(--space-module-pad) + var(--space-component-gap));
+  margin-right: var(--space-inline-gap);
+  border-left: var(--border-w) solid var(--color-border-muted);
+}
+.ui-shell__menu .el-menu--inline .el-menu--inline { margin-left: var(--space-component-gap); margin-right: 0; }
 .ui-shell__menu .el-menu--inline .el-menu-item,
-.ui-shell__menu .el-menu--inline .el-sub-menu__title { font-size: var(--font-size-caption); }
+.ui-shell__menu .el-menu--inline .el-sub-menu__title {
+  height: var(--layout-control-h);
+  line-height: var(--layout-control-h);
+  min-width: 0;
+  padding-left: var(--space-component-pad-x) !important;
+  padding-right: var(--space-component-gap);
+  font-size: var(--font-size-caption);
+}
+.ui-shell__menu .el-menu--inline .el-sub-menu__icon-arrow { right: var(--space-component-gap); }
 .ui-shell__text { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 
 /* ---- 折叠态 ---- */
@@ -95,9 +119,42 @@
 }
 .ui-shell__sidebar.is-collapsed .ui-shell__menu .el-sub-menu.is-active > .el-sub-menu__title .el-icon { color: var(--color-primary); }
 
-/* 嵌套项：竖线画在侧栏最左边、离缩进后的文字很远，改用底色 + 主色文字表达选中 */
-.ui-shell__menu .el-menu--inline .el-menu-item.is-active::before { display: none; }
-.ui-shell__menu .el-menu--inline .el-menu-item.is-active {
-  background: var(--color-bg-accent);
+/* 折叠态飞出的子菜单：Element Plus 把它挂到 body 上，靠 ElSubMenu 的 popper-class 把样式收回来
+   （不接管的话是一屏 48px 高的默认行，和收起前的菜单完全不像同一套） */
+.ui-shell__popper .el-menu--popup {
+  padding: var(--space-inline-gap);
+  border-radius: var(--radius-lg);
+  background: var(--color-bg-surface);
+  box-shadow: var(--shadow-md);
+}
+.ui-shell__popper .el-menu--popup .el-menu-item,
+.ui-shell__popper .el-menu--popup .el-sub-menu__title {
+  height: var(--layout-control-h);
+  line-height: var(--layout-control-h);
+  border-radius: var(--radius-md);
+  padding-left: var(--space-component-pad-x) !important;
+  padding-right: var(--space-module-pad);
+  font-size: var(--font-size-caption);
+  color: var(--color-text-secondary);
+}
+.ui-shell__popper .el-menu--popup .el-menu-item:hover,
+.ui-shell__popper .el-menu--popup .el-sub-menu__title:hover { background: var(--color-bg-subtle); }
+.ui-shell__popper .el-menu--popup .el-menu-item.is-active {
+  background: var(--color-bg-subtle);
   color: var(--color-primary);
+  font-weight: var(--font-weight-medium);
+}
+.ui-shell__popper .el-sub-menu__icon-arrow { right: var(--space-component-gap); color: var(--color-icon-muted); }
+
+/* 嵌套项选中：点亮该行对应的那截导轨 + 浅底 + 主色文字。
+   顶层那根竖线画在侧栏最左边，对缩进后的子项太远；整块 accent 底则会把导轨打断，两者都不用 */
+.ui-shell__menu .el-menu--inline .el-menu-item.is-active {
+  background: var(--color-bg-subtle);
+  color: var(--color-primary);
+  font-weight: var(--font-weight-medium);
+}
+.ui-shell__menu .el-menu--inline .el-menu-item.is-active::before {
+  left: calc(var(--border-w) * -1);
+  top: 0;
+  bottom: 0;
 }

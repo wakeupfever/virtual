@@ -56,6 +56,7 @@
       "--border-w-thick",
       "--color-bg-accent",
       "--color-bg-subtle",
+      "--color-bg-surface",
       "--color-border-muted",
       "--color-danger",
       "--color-icon-muted",
@@ -68,14 +69,18 @@
       "--font-size-caption",
       "--font-size-micro",
       "--font-weight-medium",
+      "--layout-control-h",
       "--layout-icon-sm",
       "--layout-menu-item-h",
       "--radius-full",
+      "--radius-lg",
       "--radius-md",
+      "--shadow-md",
       "--space-component-gap",
       "--space-component-pad-x",
       "--space-inline-gap",
-      "--space-inline-pad"
+      "--space-inline-pad",
+      "--space-module-pad"
     ],
     "skins/table.css": [
       "--border-w",
@@ -430,6 +435,7 @@
     ],
     "--color-bg-surface": [
       "layout.css",
+      "skins/menu.css",
       "skins/table.css",
       "skins/tabs.css",
       "ui/UiShell.vue",
@@ -574,6 +580,7 @@
     ],
     "--space-module-pad": [
       "layout.css",
+      "skins/menu.css",
       "ui/UiShell.vue (via .l-page)",
       "ui/UiState.vue (via .l-state)",
       "ui/UiTuner.vue",
@@ -667,6 +674,7 @@
       "skins/table.css"
     ],
     "--layout-control-h": [
+      "skins/menu.css",
       "skins/tree.css"
     ],
     "--layout-menu-item-h": [
@@ -800,6 +808,7 @@
     ],
     "--radius-lg": [
       "layout.css",
+      "skins/menu.css",
       "ui/UiTuner.vue",
       "ui/composites/UiStatCard.vue (via .l-module)"
     ],
@@ -810,6 +819,7 @@
     ],
     "--shadow-sm": [],
     "--shadow-md": [
+      "skins/menu.css",
       "ui/composites/UiStatCard.vue"
     ],
     "--shadow-lg": [
