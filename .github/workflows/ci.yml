@@ -25,6 +25,8 @@ jobs:
         run: git diff --exit-code -- packages/design-system/dist
       - name: check prototypes
         run: pnpm check:prototype
+      - name: check ledger
+        run: pnpm check:ledger
       - name: build web
         run: pnpm build:web
       - name: playwright chromium

@@ -20,7 +20,8 @@
     "build:web": "pnpm --filter @virtual/web build",
     "prepare": "husky || true",
     "test:visual": "node tests/visual/compare.mjs",
-    "test:mutation": "node tests/visual/mutate.mjs"
+    "test:mutation": "node tests/visual/mutate.mjs",
+    "check:ledger": "node scripts/check-ledger.mjs"
   },
   "devDependencies": {
     "eslint": "^10.9.1",
@@ -41,6 +42,7 @@
     "apps/web/src/**/*.{ts,vue}": "eslint --max-warnings=0",
     "packages/design-system/ui/**/*.{ts,vue}": "eslint --max-warnings=0",
     "packages/design-system/{tokens.css,layout.css,base.css,skins/*.css,ui/**/*.vue}": "node packages/design-system/scripts/check-layer2.mjs",
-    "apps/prototypes/*.html": "node scripts/check-prototype.js"
+    "apps/prototypes/*.html": "node scripts/check-prototype.js",
+    "doc/*.rai.md": "node scripts/check-ledger.mjs"
   }
 }

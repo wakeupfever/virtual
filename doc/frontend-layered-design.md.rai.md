@@ -3,12 +3,11 @@ rai-schema-version: 2
 task: "前端三层分层设计需求基线"
 task-key: "frontend-layered-design"
 primary-target: "doc/frontend-layered-design.md"
-requirement-version: "RV-018"
-iteration: "IT-018"
+requirement-version: "RV-019"
+iteration: "IT-019"
 current-changes:
-  - "C-047"
-  - "C-048"
-  - "C-049"
+  - "C-050"
+  - "C-051"
 status: "active"
 updated: "2026-09-05"
 ---
@@ -17,11 +16,12 @@ updated: "2026-09-05"
 
 ## 快速摘要
 
-- 当前需求版本：`RV-018`
-- 当前工作迭代：`IT-018`
-- 当前变更：`C-049` 无限层级菜单、折叠态与动画、徽标与分页间距；`C-048` 克制轻量风格升级与菜单重做；`C-047` 首个业务原型与两条新规则（add R-053 / R-054）
-- 本轮目标：用一份真实 PRD 检验这套底层能否正确还原需求；把模板整体风格升级为「克制轻量」，把侧栏菜单做成可用的信息架构
-- 当前结论：**IT-018 完成**（R-053 / R-054 verified；R-005 / R-007 / R-012 / R-042 / R-048 重新 verified）。**分步进度：第一步、第二步 A / B / C / D 全部交付**；52 条需求现为 51 verified / 1 implemented，唯一未闭环的是 `R-034`——`promote` 技能已就位，`apps/prototypes/alarms.html` 这个真实业务原型也已存在，缺的是**拿它跑一次 promote**。历史迭代结论见「当前迭代」与「历史索引」两节
+- 当前需求版本：`RV-019`
+- 当前工作迭代：`IT-019`
+- 当前变更：`C-051` 台账一致性检查进门禁（add R-055，CI 八步 → 九步）；`C-050` 修复台账七处不一致
+- 本轮目标：把「先更新台账再改实现」从人工自觉变成机械门禁——人眼对不出来的不一致由脚本兜住
+- 上一轮结论：**IT-018 完成**（R-053 / R-054 verified；R-005 / R-007 / R-012 / R-042 / R-048 重新 verified）。**分步进度：第一步、第二步 A / B / C / D 全部交付**；52 条需求现为 51 verified / 1 implemented，唯一未闭环的是 `R-034`——`promote` 技能已就位，`apps/prototypes/alarms.html` 这个真实业务原型也已存在，缺的是**拿它跑一次 promote**。历史迭代结论见「当前迭代」与「历史索引」两节
+- 当前结论：**IT-019 完成**（`R-055` verified）。53 条需求 = 52 verified + 1 implemented；`pnpm check:ledger` 已进 lint-staged 与 CI（第五步），CI 由八步扩为九步
 
 ## 当前需求清单
 
@@ -73,7 +73,8 @@ updated: "2026-09-05"
 - [x] `R-023` 项目根 `CLAUDE.md` 包含分层说明、硬性规则、原型规则、开发流程四节。`category: delivery` `status: verified`
 - [x] `R-024` ESLint（`eslint-plugin-vue` flat config）：`features/**` 禁止原生表单/表格元素（`vue/no-restricted-html-elements`）、inline style（`vue/no-static-inline-styles`）、Tailwind 任意值与布局类、非白名单 `El*` 组件；`ui/**` 禁止 import `features/*`。落地：根目录 `eslint.config.js` 一份配置覆盖 `apps/web/src` 与 `packages/design-system/ui`，白名单从 `whitelist.json` 读取（`vue/restricted-component-names`），另禁 `<style>` 块（`vue/no-restricted-block`）与 Tailwind 布局 / 间距 / 尺寸 / 定位 / 响应式前缀 / 任意值类（`vue/no-restricted-class`）。`category: quality` `status: verified`
 - [x] `R-025` 使用 `eslint-plugin-boundaries`（v7 `boundaries/dependencies`，`checkAllOrigins` + `checkUnknownLocals`）强制单向依赖：feature → 自身 / vue / vue-router / element-plus / `@virtual/design-system`；app → feature / app；ui → ui / vue / element-plus；其余（跨 feature、feature → app、ui → feature、未登记的外部包）一律报错。`category: quality` `status: verified`
-- [x] `R-026` `.husky/pre-commit` 跑 lint-staged：改动的 `apps/web/src` / `design-system/ui` 文件跑 ESLint（0 警告），改动第一、二层样式跑 `check-layer2`，改动原型跑 `check-prototype`；CI（GitHub Actions，Node 22 + pnpm）依次 lint → typecheck → build:ds 并校验 `dist/` 无 diff → check:prototype → build:web → 视觉回归 → 变异验证，失败时上传 `tests/visual/__output__`。`category: delivery` `status: verified`
+- [x] `R-026` `.husky/pre-commit` 跑 lint-staged：改动的 `apps/web/src` / `design-system/ui` 文件跑 ESLint（0 警告），改动第一、二层样式跑 `check-layer2`，改动原型跑 `check-prototype`；CI（GitHub Actions，Node 22 + pnpm）依次 lint → typecheck → build:ds 并校验 `dist/` 无 diff → check:prototype → check:ledger → build:web → 视觉回归 → 变异验证（九步），失败时上传 `tests/visual/__output__`。`category: delivery` `status: verified`
+- [x] `R-055` 台账一致性由脚本机械校验（`scripts/check-ledger.mjs`）：头部 `requirement-version` / `iteration` 与摘要一致、`current-changes` 每条在正文有 `### C-xxx` 条目、`iteration` 在正文有小节、勾选框与 `status` 一致（仅 verified 打勾）、`status` 取值在允许集合内、R / E / C 编号不重复、每条需求至少被「功能清单」某个 F 覆盖、每个变更条目都进「历史索引」、变更条目字段（类型 / 关联需求 / 影响功能）齐全。校验只判定能机械判定的结构，不判断需求内容对错；接入 lint-staged（改台账即跑）与 CI 第五步。`category: quality` `status: verified`
 - [x] `R-027` `tests/visual/compare.mjs`：自动起原型与正式页面两个 dev server（jsdelivr 依赖用本地 node_modules 顶替，离线可跑），对 `CASES` 里每个用例喂同一份 mock（`?dataset=`）、同一视口，只截 `.l-page` 内容区做 pixelmatch，差异 > 1%（`--threshold` 可调）即失败并输出 `__output__/<name>-{proto,web,diff}.png` 与差异清单；`PROTO_URL` / `WEB_URL` 可复用已起的服务；纳入 CI。`category: quality` `status: verified`
 - [x] `R-031` 工具链：Vite 8.x（Rolldown 打包）+ Tailwind CSS 4.x 通过 `@tailwindcss/vite` 插件接入，入口 CSS `@import "tailwindcss"`，Tailwind `@theme` 只引用 `tokens.css` 变量；关闭或隔离 Tailwind preflight 以免覆盖 Element Plus 样式；Node ≥ 20.19。落地：`tailwind.css` 只引 `theme.css` + `utilities.css`，`@theme` 先清空默认再映射 token（颜色 / 字号 / 字重 / 圆角 / 阴影）；根 `pnpm build:web` = vue-tsc + vite build。`category: delivery` `status: verified`
 
@@ -161,6 +162,7 @@ updated: "2026-09-05"
 | R-038 | 直达 `#/<key>` 高亮对应菜单；点击菜单改 hash；后退恢复；原型模板 `#/reports` 高亮「报表」；十条路由（含 `#/custom/<key>`、`#/page/<key>`）循环无运行时报错，空 `<sub>` 落到首项并补全 hash | 用户输入（补充路由概念） | R-012, R-016 | RV-004 | C-014, C-038 | F-005, F-011, F-008 |
 | R-050 | 1440×1200 下 `#/page/stat-table`：页面高 = 外壳内容区高，模块 / 表格逐层吃满，分页贴底且无外层滚动；压到 420 高时表体 `clientHeight < scrollHeight`（内滚生效）且仍无外层滚动；不加 `--fill` 的 01 统计页仍为外层滚动；`el-table` 全程不传 `height`；**且 1920 宽下 `.l-page` 宽度必须等于外壳内容区宽度**（填充链不得反过来压缩宽度，见 C-042） | 用户输入（表格高度应受父级限制、默认占满） | R-009, R-012, R-042, R-043 | RV-016 | C-040 | F-001, F-002, F-003, F-004, F-005, F-006 |
 | R-052 | 打开抽屉不碰任何控件时 `:root` 的 inline style 必须为空、「已改」计数为 0（钳值回写会当场暴露）；浮窗可按标题栏拖动、收起为 183×34 的标题栏、展开复原 420×735，拖到底部仍整体在视口内；82 行控件（85 语义 token 去掉 3 个断点 / 密度）含 41 滑块 / 24 取色器 / 17 文本框；改 `--radius-lg` 与 `--border-w` 后模块圆角 12→13、边框 1→2，改 `--radius-md` 后 Element Plus 输入框圆角 6→18；滑块推到上限后控件形态与区间**不得变化**（形态与区间只由首次覆盖时冻结的基线值决定）；值格可直接打字改精确值、清空即恢复默认；复制得到只含改动项的 `:root` 片段；全部重置后 inline 清空且视觉复原 | 用户输入（控制项应更丰富） | R-037, R-030 | RV-016 | C-043 | F-011 |
+| R-055 | `node scripts/check-ledger.mjs` 对当前台账 0 错误、退出码 0；注入人为故障（把 verified 需求取消勾选、头部 iteration 改成正文没有的编号、从功能清单删掉一条需求编号）后逐条命中并退出码非零 | 用户输入（当前会话任何修改都需要同步到台账） | R-023, R-026 | RV-019 | C-051 | F-007 |
 | R-051 | 点开高级搜索前后，筛选条 / 表格 / 页面高度三项数值完全相同；浮窗渲染在 body（teleport）且含全部展开项；无 `#advanced` 插槽时仍只触发 `toggle` | 用户输入（高级搜索激活应该是浮窗 不影响高度） | R-041 | RV-016 | C-040 | F-003, F-005, F-011 |
 
 ## 不变量
@@ -182,7 +184,7 @@ updated: "2026-09-05"
 | F-004 | 页面外壳组件（UiShell / UiShellMenu） | active | R-012, R-043, R-050 |
 | F-005 | 原型工作流（prototypes/、模板、检查脚本） | active | R-016～R-019, R-053 |
 | F-006 | 正式功能开发层（Vue 3 + Vite 8 + Tailwind 4） | active | R-020～R-022, R-031 |
-| F-007 | AI 约束机制（CLAUDE.md、ESLint、依赖检查、hooks/CI） | active | R-023～R-026 |
+| F-007 | AI 约束机制（CLAUDE.md、ESLint、依赖检查、hooks/CI、台账一致性检查） | active | R-023～R-026, R-055 |
 | F-008 | 原型→正式转换视觉回归与第二层变异验证 | active | R-027, R-049 |
 | F-009 | 项目文档（doc/） | active | R-028 |
 | F-010 | Claude 插件（prototype / promote / layer-rules 技能） | active | R-032～R-035 |
@@ -190,7 +192,16 @@ updated: "2026-09-05"
 
 ## 当前迭代
 
-### IT-018 · 首个业务原型、风格升级与菜单重做
+### IT-019 · 台账一致性从人工自觉变成机械门禁
+
+- 目标：上一轮审计一次查出七处不一致，其中四处是脚本发现的、人眼通读没看出来——把这套对账固化成可重复执行的门禁，让「台账与实现同步」不再依赖记性
+- 范围：新增 `scripts/check-ledger.mjs`；根 `package.json`（`check:ledger` 脚本 + lint-staged 的 `doc/*.rai.md` 规则）；`.github/workflows/ci.yml`（第五步）；`CLAUDE.md` §6 命令表与门禁句；本台账（R-055 与本轮记录）
+- 包含变更：`C-050`、`C-051`
+- 对应需求版本：`RV-019`
+- 退出条件：R-055 verified（当前台账 0 错误，且注入故障能被逐条命中）；lint-staged 与 CI 均已接入；本轮改动自身已回填台账
+- 说明：`C-050` 是对台账本身的实现修正（上一轮已提交但未记录），`C-051` 是把该修正的成因固化为约束——先有病例，再有疫苗
+
+### IT-018 · 首个业务原型、风格升级与菜单重做（已完成）
 
 - 目标：用一份真实 PRD（《巴中新环保系统》）检验这套三层底层能否正确还原需求；按评审意见把模板整体风格升级为「克制轻量」，并把侧栏菜单做成可用的信息架构
 - 范围：`tokens.css`（圆角 / 阴影 / 边框 / 灰阶 / 间距值）、`skins/{menu,table}.css`、`ui/{UiShell,UiShellMenu,UiState,UiTuner}.vue`、`ui/index.ts`、`whitelist.json`、`scripts/check-layer2.mjs`、`apps/prototypes/{_template,alarms}.html`、`tests/visual/mutate.mjs`、`CLAUDE.md` §3、插件 `prototype` 技能、README；git commit
@@ -265,6 +276,26 @@ updated: "2026-09-05"
 - 退出条件：R-045 verified；R-041 / R-044 重新 verified；代码已提交
 
 ## 当前变更
+
+### C-051 · 台账一致性检查进门禁
+
+- 类型：`add`
+- 原因：用户提出「当前会话任何修改，都需要同步到台账才对」。这条规则此前只写在 CLAUDE.md 开头靠自觉执行，而 `C-050` 证明自觉不够用
+- 之前：台账是纯 Markdown，唯一的校验是人通读；实际漏了功能清单十二条未挂、两处勾选与状态不符、三条变更未进历史索引
+- 之后：`R-055`；`scripts/check-ledger.mjs` 九项机械检查（缺省扫 `doc/*.rai.md` 与 `.rai/*.md`，也可指定路径）；根 `package.json` 加 `check:ledger` 与 lint-staged 规则 `"doc/*.rai.md"`；CI 在 `check:prototype` 之后插入第五步，八步扩为九步（`R-026` 同步修订）；CLAUDE.md §6 命令表与门禁句同步
+- 边界：只校验结构，不校验内容——需求写得对不对、证据是否真实，脚本判断不了，仍靠 `/rai:rai` 流程与人工验收
+- 关联需求：`R-055`、`R-026`、`R-023`
+- 覆盖关系：—
+- 影响功能：`F-007 direct`、`F-009 indirect`
+
+### C-050 · 修复台账七处不一致
+
+- 类型：`implementation_correction`
+- 原因：用户要求「修复台账里面的有问题的地方」。审计（含脚本对账）查出七处
+- 之前 → 之后：① 头部声明 IT-018 但正文无该小节、IT-017 未标完成 → 补 IT-018 小节并标记 IT-017 完成；② 摘要「本轮目标」仍停在 IT-017 的插件目标 → 改为本轮目标；③ 摘要结论与计数错（写 50 条 / 49 verified，实为 52 条 / 51 verified + 1 implemented）→ 更正；④ 当前变更混入属于 IT-017 的 `C-046` → 删去；⑤ `C-048` / `C-049` 无验收证据 → 补 `E-34`；⑥ 待确认与阻塞过时且有缺漏 → `R-034` 前提改为「拿 alarms.html 跑一次 promote」、`compiler-30` 改为「当前无法复现」，补登三条实际存在的阻塞（el-tree 等不在白名单、PRD §14 单文件离线要求与工作区规范冲突）；⑦ 功能清单自 `R-043` 起未维护、`R-024` / `R-031` 状态 verified 却未勾选、`C-028` / `C-029` / `C-030` 有正文条目但不在历史索引 → 全部补齐
+- 关联需求：`R-023`、`R-026`、`R-034`
+- 覆盖关系：—
+- 影响功能：`F-007 direct`、`F-009 direct`
 
 ### C-049 · 无限层级菜单、折叠态优化与两处间距修正
 
@@ -518,6 +549,9 @@ updated: "2026-09-05"
 | C-009 | F-011 | direct | 新建页面 | 页面渲染且 lint 通过 |
 | C-010 | F-007 | verification_only | 规则实现方式 | 违规样例报错 |
 | C-011 | F-009 | direct | 文档回退待更新 | 逐节核对 |
+| C-050 | F-007, F-009 | direct | 台账自身七处不一致修正，恢复为可信实施依据 | 脚本对账 0 错误 |
+| C-051 | F-007 | direct | 新增台账一致性门禁，CI 八步扩为九步 | 当前台账通过；注入故障必失败 |
+| C-051 | F-009 | indirect | 台账是文档层的真值来源 | 摘要与正文计数一致 |
 | C-012 | F-011 | direct | 展示页位置与内容改变 | 打开即渲染；token 数量对账；切换联动 |
 | C-012 | F-003 | indirect | build 增加 tokens.js 产物 | `pnpm build:ds` 产出三文件 |
 | C-013 | F-011 | direct | 排版与内容范围改变 | 与画板核对；组件覆盖清单核对 |
@@ -595,6 +629,7 @@ updated: "2026-09-05"
 | R-050 | `layout.css`（`.l-page--fill` / `.l-fill` / `.l-module.l-fill`）、`ui/UiShell.vue`（`view-class="ui-shell__view"` + `height: 100%` 纵向 flex）、`ui/UiState.vue`（`.ui-state.l-fill`）、`skins/table.css`（`.el-table.l-fill`）、`showcase.data.js`（`TABLE_MODULE` / `pageClass`）、`apps/prototypes/_template.html`、`apps/web/src/features/orders/Page.vue`、README「高度填充」、CLAUDE.md §2 | verified | E-28 |
 | R-051 | `ui/composites/UiFilterBar.vue`（`ElPopover` + `#advanced` 插槽 + `.ui-filter-bar__adv`）、`showcase.data.js`（CUSTOM 与 `TABLE_MODULE`）、README UiFilterBar 节、CLAUDE.md §2 | verified | E-28 |
 | R-038（两段式） | `showcase.html`（`parseHash` / `go(key, sub)` / `defaultSub` / `syncAnchor`） | verified | E-26 |
+| R-055 | `scripts/check-ledger.mjs`、根 `package.json`（`check:ledger` + lint-staged `doc/*.rai.md`）、`.github/workflows/ci.yml`（第五步）、`CLAUDE.md` §6 | verified | E-35 |
 | R-048（键排序） | `scripts/check-layer2.mjs`（`sortedEntries`） | verified | E-29 |
 
 ## 决策与假设
@@ -673,6 +708,7 @@ updated: "2026-09-05"
 | E-32 | R-032, R-033, R-034, R-035 | `claude plugin validate packages/claude-plugin` 与 `claude plugin validate .`（市场）均 `Validation passed`（首轮有 author 缺失警告，补 author / homepage / keywords 后归零）；`claude plugin marketplace add D:git-projectirtual` → `Successfully added marketplace: virtual`；`claude plugin install virtual@virtual` → `Successfully installed`，`installed_plugins.json` 记录 installPath 与 gitCommitSha；缓存目录 `skills/{layer-rules,prototype,promote}/SKILL.md` 三个技能齐备，frontmatter 的 name / description / disable-model-invocation 均被正确读入。`I-006` 核对：三个 SKILL.md 均无规则原文，只引用 `CLAUDE.md` / `README.md` / `whitelist.json` / 台账 | pass | 2026-09-05 |
 | E-33 | R-053, R-054, R-016, R-018 | `node scripts/check-prototype.js` 两个原型全过；浏览器实测：点「在线监测」→ hash 变 `#/monitor`、内容切为占位并显示「对应 PRD §8.3」、点回告警中心表格恢复；`FR-ALM-005` 关联对话框候选只列同企业在办事件（3 个事件里排除了另一家企业的），四项未填全时「确认关联」禁用并提示「推荐分不代表自动关联，必须人工判定」；`UiTuner` 在原型内 82 行控件 / 8 分组，改 `--radius-lg` 12→24px 模块圆角实时联动；筛选条由两行 100px 收回一行 56px；`pnpm lint` / `typecheck` 0 错误、`check-layer2` 0 错误、`test:visual` 三用例 0.00%、`test:mutation` 8 组件全过（UiTuner 29 项无例外） | pass | 2026-09-05 |
 | E-34 | R-005, R-007, R-012, R-042 | 风格升级与菜单重做实测：卡片 `border-radius: 8px` / `box-shadow: none`（改为靠边框分层）；`.l-page` padding 8px；折叠侧栏 66px 下 10 项**全部有图标**（修复前 `innerText` 为空、10 行空白）；三级菜单可逐层展开（告警中心 → 规则与推送 → 阈值规则 / 推送渠道 / 审批流配置），父级徽标由 `sumBadge` 汇总为 6；徽标由 22×40 的椭圆修正为 22×22 正圆；分页与表格间距由「上 0 / 下 20」修正为对称。四处返工：子项默认图标渲染成横杠（改按 depth 判定）、折叠态子菜单图标被 EP 的 `.el-menu--collapse … span` 规则隐藏（图标标签改 `<i>`）、折叠分组分隔线实测仅 16px 宽（去横向留白）、嵌套选中项竖线画在侧栏最左边离文字很远（改底色 + 主色文字）。加动画时误删 `:collapse-transition="false"` 导致 EP 过渡与侧栏宽度过渡打架（侧栏 class 与内联宽度已是折叠值、实测宽度仍 230px），已改回。八项门禁全绿，视觉回归 0.00%，变异测试 8 组件全过 | pass | 2026-09-05 |
+| E-35 | R-055, R-026, R-023 | `node scripts/check-ledger.mjs` 对当前台账：`✔ doc/frontend-layered-design.md.rai.md · 53 条需求 · 24 条变更`，退出码 0。故障注入复核（证明脚本不是空过）：把 `R-001` 的勾选去掉、头部 iteration 改成正文没有的 `IT-099`、从功能清单 F-003 删掉 `R-054`，脚本报出四条——「头部 iteration IT-099 与摘要 IT-019 不一致」「iteration IT-099 在正文没有对应小节」「R-001 是 verified 但勾选框未打勾」「以下需求未挂到任何功能：R-054」，退出码 1；还原后恢复 0。lint-staged 规则 `doc/*.rai.md` 与 CI 第五步（`check:prototype` 之后、`build:web` 之前）已就位 | pass | 2026-09-05 |
 | E-08 | R-028 | `doc/frontend-layered-design.md` §1～§10 与 RV-002 逐节核对；IT-003 同步 §3 目录树与 §9 展示页（RV-003）；IT-004 同步 §6 路由与 §9 方向 A（RV-004）：Vue 3 + Element Plus、Vite 8 + Tailwind 4、monorepo 目录、CDN 原型形态、插件三技能、展示页面、实施状态 | pass | 2026-09-02 |
 
 ## 历史索引
@@ -685,6 +721,8 @@ updated: "2026-09-05"
 | RV-016 | IT-016 | C-039 | modify | R-005 | `--layout-content-max` 1440px → none | F-001, F-002 |
 | RV-016 | IT-016 | C-040 | add | R-050, R-051, R-009, R-041, R-042 | 无 → 高度填充布局与高级搜索浮窗 | F-001～F-006 |
 | RV-016 | IT-016 | C-041 | implementation_correction | R-048, R-026 | dist 可复现：键排序 + 去掉生成时间 | F-003, F-007 |
+| RV-019 | IT-019 | C-051 | add | R-055, R-026, R-023 | 无 → 台账一致性门禁；CI 八步 → 九步 | F-007, F-009 |
+| RV-019 | IT-019 | C-050 | implementation_correction | R-023, R-026, R-034 | 台账七处不一致修正（迭代小节 / 摘要 / 证据 / 阻塞 / 功能清单 / 勾选 / 历史索引） | F-007, F-009 |
 | RV-018 | IT-018 | C-049 | modify | R-012, R-042, R-048 | 无限层级菜单 + 折叠态 + 动画；徽标与分页间距 | F-004, F-003 |
 | RV-018 | IT-018 | C-048 | modify | R-005, R-007, R-012, R-042 | 克制轻量风格；菜单加图标/分组/徽标，修折叠空白 | F-001, F-003, F-004 |
 | RV-018 | IT-018 | C-047 | add | R-053, R-054, R-016, R-041 | 无 → 首个业务原型 + 原型路由规则 + UiTuner | F-003, F-005, F-011 |

@@ -80,6 +80,7 @@ pnpm lint                # 根目录 ESLint：apps/web/src 与 packages/design-s
 pnpm typecheck           # 所有包 vue-tsc
 pnpm build:ds            # 抽取 token + 打包第二层 → dist/tokens.js · ui.iife.js · ui.css（原型与展示页引用，需提交）
 pnpm check:prototype     # 原型合规检查
+pnpm check:ledger        # 需求台账一致性（编号 / 状态 / 勾选 / 功能覆盖 / 历史索引）
 pnpm check:layer2        # 第二层 token 约束 + 覆盖度报告（build:ds 已包含）
 pnpm test:visual         # 原型 vs 正式页面 视觉回归（自动起两个 dev server；本机已有 Chromium 可设 PW_CHROMIUM=<路径> 免下载，否则先 pnpm exec playwright install chromium）
 pnpm test:mutation       # 第二层变异验证：逐个 token 改值断言组件真的变了
@@ -87,4 +88,4 @@ pnpm test:mutation       # 第二层变异验证：逐个 token 改值断言组�
 
 展示页与原型都是静态单文件，也可以直接双击打开（需能访问 jsdelivr CDN）；`pnpm dev` 只是起一个静态服务器方便预览与热刷新。
 
-门禁：`git commit` 时 lint-staged 对改动文件跑 ESLint / check-layer2 / check-prototype（`.husky/pre-commit`）；CI（`.github/workflows/ci.yml`）依次 lint → typecheck → build:ds（并校验 `dist/` 已提交）→ check:prototype → build:web → 视觉回归 → 变异验证。新增正式页面时把用例加进 `tests/visual/compare.mjs` 的 `CASES`。
+门禁：`git commit` 时 lint-staged 对改动文件跑 ESLint / check-layer2 / check-prototype / check-ledger（`.husky/pre-commit`）；CI（`.github/workflows/ci.yml`）依次 lint → typecheck → build:ds（并校验 `dist/` 已提交）→ check:prototype → check:ledger → build:web → 视觉回归 → 变异验证。新增正式页面时把用例加进 `tests/visual/compare.mjs` 的 `CASES`。
