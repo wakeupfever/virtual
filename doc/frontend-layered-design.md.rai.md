@@ -7,6 +7,7 @@ requirement-version: "RV-021"
 iteration: "IT-021"
 current-changes:
   - "C-053"
+  - "C-054"
 status: "active"
 updated: "2026-09-05"
 ---
@@ -17,7 +18,7 @@ updated: "2026-09-05"
 
 - 当前需求版本：`RV-021`
 - 当前工作迭代：`IT-021`
-- 当前变更：`C-053` 表格操作列规范（add R-056：`is-actions` 皮肤 + 行内动作 ≤ 2 + 机械检查）
+- 当前变更：`C-054` 填充态空 / 错误态在剩余高度居中；`C-053` 表格操作列规范（add R-056：`is-actions` 皮肤 + 行内动作 ≤ 2 + 机械检查）
 - 本轮目标：把「操作列按钮折行」这类问题修在**规则层**而不是单个原型上——用户明确问「二次生成还会不会再遇到」
 - 上一轮结论：**IT-018 完成**（R-053 / R-054 verified；R-005 / R-007 / R-012 / R-042 / R-048 重新 verified）。**分步进度：第一步、第二步 A / B / C / D 全部交付**；52 条需求现为 51 verified / 1 implemented，唯一未闭环的是 `R-034`——`promote` 技能已就位，`apps/prototypes/alarms.html` 这个真实业务原型也已存在，缺的是**拿它跑一次 promote**。历史迭代结论见「当前迭代」与「历史索引」两节
 - 上一轮结论：**IT-019 完成**（`R-055` verified）。`pnpm check:ledger` 已进 lint-staged 与 CI（第五步），CI 由八步扩为九步
@@ -46,7 +47,7 @@ updated: "2026-09-05"
 - [x] `R-046` 调色板变体：整套配色以 `[data-palette="<key>"]` 块放在 `tokens.css` ⑤ 段（当前 element / indigo / violet，默认科技青不加属性）；品牌 / 功能色（及圆角）在深浅两种模式都生效，中性色（bg / border / text / icon / canvas）只作用于浅色（`:not([data-theme="dark"])`），深色仍由 ④ 段统一重映射；`build-tokens.mjs` 抽取为 `palettes`（key / label / vars）；展示页 `PRESETS` 只登记 key / label，切换即设 `html[data-palette]`；第三层换肤只能切该属性。`category: ux` `status: verified`
 - [x] `R-045` 第一层默认值对齐参考站 `D:\hy-project\hy-compiler\apps\playground\src\style.css`（`--hy-space-*`）与 LayoutTemplateShowcase：间距 page-gap 24 / page-pad 20 / module-gap 16 / module-pad 16 / component-gap 12 / inline 8；布局 header 60 / sidebar 230 / collapsed 66 / 新增 `--layout-aside-w` 320；圆角 4 / 6 / 12；字号新增 `--font-size-micro` 10，display 改 24；新增 `--color-bg-canvas`（应用壳内容区底 #f0f3f4，UiShell 使用）、subtle 改 #f3f5f5；布局新增 `--layout-row-h` 44（表格行高）与 `--layout-thead-h` 40（表头高），经 `skins/table.css` 生效；`layout.css` 新增 `.l-grid--main-aside`、`.l-split--aside`、`.l-tile`、`.l-bars` / `.l-bar`。`category: ux` `status: verified`
 
-- [x] `R-050` 高度填充布局：表格页可让页面撑满外壳内容区、表格由父级剩余高度决定自身高度、表头固定、表体在 Element Plus 自带 `ElScrollbar` 内滚（承 `R-043`）、分页贴底，**不给 `el-table` 传 `height` / `max-height`**。第一层加 `.l-page--fill` / `.l-fill` / `.l-module.l-fill`（见 `R-009`）；第二层配套：`UiShell` 的 `ElScrollbar` 用 `view-class="ui-shell__view"` 置为**确定高度**的纵向 flex（百分比 `min-height` 需要父级确定高度才生效，这是链路成立的前提），`UiState` 加 `.ui-state.l-fill` 纵向排布（否则填充链断在它的包裹 div），`skins/table.css` 加 `.el-table.l-fill` 让表格填充并保底一行 `--layout-row-h`。不加 `--fill` 的页面行为不变：`.l-page` 的 `min-height` 为 auto 不会被压缩，内容更高照常由外壳内滚。第三层写法 `.l-page--fill` + 承载模块 `.l-fill` + `<el-table class="l-fill">`。`category: ux` `status: verified`
+- [x] `R-050` 高度填充布局：表格页可让页面撑满外壳内容区、表格由父级剩余高度决定自身高度、表头固定、表体在 Element Plus 自带 `ElScrollbar` 内滚（承 `R-043`）、分页贴底，**不给 `el-table` 传 `height` / `max-height`**。第一层加 `.l-page--fill` / `.l-fill` / `.l-module.l-fill`（见 `R-009`）；第二层配套：`UiShell` 的 `ElScrollbar` 用 `view-class="ui-shell__view"` 置为**确定高度**的纵向 flex（百分比 `min-height` 需要父级确定高度才生效，这是链路成立的前提），`UiState` 加 `.ui-state.l-fill` 纵向排布（否则填充链断在它的包裹 div），`skins/table.css` 加 `.el-table.l-fill` 让表格填充并保底一行 `--layout-row-h`。不加 `--fill` 的页面行为不变：`.l-page` 的 `min-height` 为 auto 不会被压缩，内容更高照常由外壳内滚。第三层写法 `.l-page--fill` + 承载模块 `.l-fill` + `<el-table class="l-fill">`。填充态下 `UiState` 的空 / 错误态在剩余高度里**垂直居中**（`margin-block: auto`），loading 的骨架屏保持顶对齐（它模拟的是内容）。`category: ux` `status: verified`
 - [x] `R-051` 高级搜索用浮窗承载：`UiFilterBar` 新增 `#advanced` 插槽，内部用 `ElPopover`（`popper-class="ui-filter-bar__adv"`，值只引用 token）弹出，展开**不改变**筛选条与页面高度，下方表格不被推下去；`@toggle(open)` 带出展开状态；不给 `#advanced` 插槽时退化为纯文字链接并只 `emit('toggle')`，向后兼容。`ElPopover` 只在第二层内部使用，不进第三层白名单。`category: ux` `status: verified`
 
 ### 第二层：基础组件与外壳
@@ -199,7 +200,7 @@ updated: "2026-09-05"
 
 - 目标：用户问「你是直接改原型还是改生成原型的规则，这代表我二次生成时是否还会遇到」——本轮的操作列问题必须落在规则与门禁上，改单个原型不算完
 - 范围：`skins/table.css`（`.is-actions`）、`scripts/check-prototype.js`（`actions-column` 规则）、`CLAUDE.md` §2、README 皮肤层、`showcase.data.js`（TABLE_MODULE）、`apps/prototypes/{_template,alarms}.html`、`apps/web/src/features/orders/Page.vue`；本台账
-- 包含变更：`C-053`
+- 包含变更：`C-053`、`C-054`
 - 对应需求版本：`RV-021`
 - 退出条件：R-056 verified（注入 3 个按钮的操作列必须被 check 拦下）；原型模板、五套模板、正式页同步；门禁全绿
 - 说明：本轮同时复盘了此前各条反馈的落点——凡是能落在第一、二层或 check 脚本上的都已落下（见 `C-053` 的「落点复盘」）
@@ -297,6 +298,16 @@ updated: "2026-09-05"
 - 退出条件：R-045 verified；R-041 / R-044 重新 verified；代码已提交
 
 ## 当前变更
+
+### C-054 · 填充态空 / 错误态在剩余高度居中
+
+- 类型：`modify`
+- 原因：用户截图——占位页的空态贴在一张撑满整页的白卡顶部，下方一大片空白
+- 之前：`.ui-state.l-fill` 是纵向 flex，子项从顶部开始排；ready 态的表格靠 `.l-fill` 吃掉余量，空 / 错误态没有余量消费者，于是全部堆在顶部
+- 之后：`.ui-state.l-fill > .el-empty` 与 `> .ui-state__error` 加 `margin-block: auto`（实测上下留白各 229px，完全对称）；loading 的骨架屏**不居中**——它模拟的是即将出现的内容，顶对齐才不会跳
+- 关联需求：`R-050`、`R-018`
+- 覆盖关系：`clarify R-050`（补空 / 错误态的垂直居中）
+- 影响功能：`F-003 direct`、`F-005 indirect`、`F-006 indirect`
 
 ### C-053 · 表格操作列规范与机械检查
 
@@ -606,6 +617,7 @@ updated: "2026-09-05"
 | C-053 | F-005 | direct | 操作列写法进入模板与检查脚本 | 注入 3 个按钮必失败 |
 | C-053 | F-007 | direct | check-prototype 新增 actions-column 规则 | 故障注入退出码非零 |
 | C-053 | F-006 | indirect | 正式页同步 `is-actions` | 视觉回归 0.00% |
+| C-054 | F-003 | direct | UiState 填充态空 / 错误态居中 | 上下留白对称；骨架屏仍顶对齐 |
 | C-012 | F-011 | direct | 展示页位置与内容改变 | 打开即渲染；token 数量对账；切换联动 |
 | C-012 | F-003 | indirect | build 增加 tokens.js 产物 | `pnpm build:ds` 产出三文件 |
 | C-013 | F-011 | direct | 排版与内容范围改变 | 与画板核对；组件覆盖清单核对 |
@@ -680,6 +692,7 @@ updated: "2026-09-05"
 | R-053 | `CLAUDE.md` §3、`packages/claude-plugin/skills/prototype/SKILL.md`、`apps/prototypes/alarms.html`（路由分支 + 占位） | verified | E-33 |
 | R-054 | `ui/UiTuner.vue`、`ui/index.ts`、`whitelist.json`（custom）、`README.md`、`showcase.data.js`（CUSTOM）、`apps/prototypes/{_template,alarms}.html`（引入 dist/tokens.js + `<ui-tuner>`）、`tests/visual/mutate.mjs`（PREP + PROPS 补定位属性） | verified | E-33 |
 | R-052 | `showcase.html`（TUNER_GROUPS / kindOf / rangeOf / onSlide / setOverride 等 + 调参抽屉 + 顶栏与 FAB 入口） | verified | E-31 |
+| R-050（空态居中） | `ui/UiState.vue`（`.ui-state.l-fill > .el-empty` / `> .ui-state__error` 的 `margin-block: auto`） | verified | E-38 |
 | R-050 | `layout.css`（`.l-page--fill` / `.l-fill` / `.l-module.l-fill`）、`ui/UiShell.vue`（`view-class="ui-shell__view"` + `height: 100%` 纵向 flex）、`ui/UiState.vue`（`.ui-state.l-fill`）、`skins/table.css`（`.el-table.l-fill`）、`showcase.data.js`（`TABLE_MODULE` / `pageClass`）、`apps/prototypes/_template.html`、`apps/web/src/features/orders/Page.vue`、README「高度填充」、CLAUDE.md §2 | verified | E-28 |
 | R-051 | `ui/composites/UiFilterBar.vue`（`ElPopover` + `#advanced` 插槽 + `.ui-filter-bar__adv`）、`showcase.data.js`（CUSTOM 与 `TABLE_MODULE`）、README UiFilterBar 节、CLAUDE.md §2 | verified | E-28 |
 | R-038（两段式） | `showcase.html`（`parseHash` / `go(key, sub)` / `defaultSub` / `syncAnchor`） | verified | E-26 |
@@ -767,6 +780,7 @@ updated: "2026-09-05"
 | E-35 | R-055, R-026, R-023 | `node scripts/check-ledger.mjs` 对当前台账：`✔ doc/frontend-layered-design.md.rai.md · 53 条需求 · 24 条变更`，退出码 0。故障注入复核（证明脚本不是空过）：把 `R-001` 的勾选去掉、头部 iteration 改成正文没有的 `IT-099`、从功能清单 F-003 删掉 `R-054`，脚本报出四条——「头部 iteration IT-099 与摘要 IT-019 不一致」「iteration IT-099 在正文没有对应小节」「R-001 是 verified 但勾选框未打勾」「以下需求未挂到任何功能：R-054」，退出码 1；还原后恢复 0。lint-staged 规则 `doc/*.rai.md` 与 CI 第五步（`check:prototype` 之后、`build:web` 之前）已就位 | pass | 2026-09-05 |
 | E-36 | R-012, R-042 | 改前实测（`getBBox()`）：事件指挥 x2 w20、企业监管 x4 w14 cx11、数据质量 cx13.5 cy13.5、设备接入 x5 w14、地图 x3 w18——而十个 `.el-icon` 的 left 全是 28px，说明是字形网格问题不是布局问题。改后十二个图标 cx 全为 12.0、x∈[4, 4.5]、w∈[15, 16]、cy∈[11.5, 12.5]。层级：一级子项文字 x=57（与父项标签同一 x）、行高 32；三级子项 x 由 89 → 70（每级 +13）；三级路由 `#/rule-threshold` 下 阈值规则 为 bg subtle + 主色文字 + 导轨点亮。折叠态飞出层由默认 48px 行改为 32px 行 + `--radius-lg` + `--shadow-md`，与展开态一致；折叠轨道上父级仍为 accent 底 + 主色图标。深色模式下菜单与导轨对比正常。第二轮（对齐）实测：展开态 10 个顶层图标中线由 40 → **32**，与顶栏汉堡图标中线 32 一致；分组标签 x=24 与汉堡图标字形左边缘 24 一致；一级子项文字 x=49 = 父项标签 x，三级 61（每级 +12）；折叠态（侧栏 66，轨道中线 33）10 个图标中线由「普通项 40 / 子菜单项 32 各一半」统一为 32（内容区中线，右侧 1px 边框之内）。门禁：`lint` / `typecheck` 0 错误、`build:ds`（check-layer2）0 错误 1 条既有警告、`check:prototype` 2 个原型通过、`check:ledger` 通过、`test:visual` 三用例 0.00%、`test:mutation` 8 组件全过（UiShell 21 通过 + 2 已核实例外） | pass | 2026-09-05 |
 | E-37 | R-056, R-019, R-042 | 改前：`alarms.html` 操作列 3 个文字按钮 / 列宽 176，截图可见折成两行且行与行按钮位置不齐。改后实测：`.is-actions .cell` 为 `display: flex` / `gap: 12px` / `white-space: nowrap`，六行单元格高 17～18px、表格行高恒为 44px，按钮数分别为 [详情, 确认] / [详情] / [详情, 派发]。机械检查：`node scripts/check-prototype.js` 两个原型通过；注入第三个按钮（关联事件）后报 `actions-column (line 126): 操作列有 3 个按钮，行内动作最多 2 个…` 且退出码 1，还原后恢复通过。门禁：`lint` / `typecheck` 0 错误、`build:ds` 0 错误 1 条既有警告、`check:ledger` 通过、`test:visual` 三用例 0.00%（原型模板与正式页同步改动）、`test:mutation` 8 组件全过 | pass | 2026-09-05 |
+| E-38 | R-050, R-018 | `#/monitor-realtime` 占位页 1440×860：改前空态贴容器顶部；改后容器高 742、空态高 284，上方留白 229 / 下方留白 229（对称居中）。loading 态骨架屏仍从顶部开始。门禁：`lint` / `check:prototype` / `build:ds`（check-layer2 0 错误）通过，`test:visual` 三用例 0.00%，`test:mutation` 8 组件全过（UiState 12 项） | pass | 2026-09-05 |
 | E-08 | R-028 | `doc/frontend-layered-design.md` §1～§10 与 RV-002 逐节核对；IT-003 同步 §3 目录树与 §9 展示页（RV-003）；IT-004 同步 §6 路由与 §9 方向 A（RV-004）：Vue 3 + Element Plus、Vite 8 + Tailwind 4、monorepo 目录、CDN 原型形态、插件三技能、展示页面、实施状态 | pass | 2026-09-02 |
 
 ## 历史索引
@@ -779,6 +793,7 @@ updated: "2026-09-05"
 | RV-016 | IT-016 | C-039 | modify | R-005 | `--layout-content-max` 1440px → none | F-001, F-002 |
 | RV-016 | IT-016 | C-040 | add | R-050, R-051, R-009, R-041, R-042 | 无 → 高度填充布局与高级搜索浮窗 | F-001～F-006 |
 | RV-016 | IT-016 | C-041 | implementation_correction | R-048, R-026 | dist 可复现：键排序 + 去掉生成时间 | F-003, F-007 |
+| RV-021 | IT-021 | C-054 | modify | R-050, R-018 | 填充态空 / 错误态贴顶 → 在剩余高度居中 | F-003 |
 | RV-021 | IT-021 | C-053 | add | R-056, R-019, R-042, R-044 | 无 → 操作列 is-actions 皮肤 + 行内动作 ≤ 2 + actions-column 检查 | F-003, F-005, F-007 |
 | RV-020 | IT-020 | C-052 | modify | R-012, R-042 | 图标统一光学网格；二三级菜单改竖导轨；折叠飞出层接管；原型去徽标 | F-004, F-003 |
 | RV-019 | IT-019 | C-051 | add | R-055, R-026, R-023 | 无 → 台账一致性门禁；CI 八步 → 九步 | F-007, F-009 |

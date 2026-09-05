@@ -72,6 +72,11 @@
 /* 加 .l-fill 时容器自身纵向排布，ready 态的表格 / 列表才能继续吃掉剩余高度 */
 .ui-state.l-fill { display: flex; flex-direction: column; gap: var(--space-component-gap);
 }
+/* 填充态下的空 / 错误态在剩余高度里居中：不居中的话内容贴在一张撑满整页的白卡顶部，
+   下方一大片空白（loading 的骨架屏例外，它模拟的是内容，要保持顶对齐） */
+.ui-state.l-fill > .el-empty,
+.ui-state.l-fill > .ui-state__error { margin-block: auto;
+}
 .ui-state__error { gap: var(--space-inline-gap);
 }
 .ui-state__error-icon { display: inline-grid; place-items: center; width: var(--layout-icon-lg); height: var(--layout-icon-lg); border-radius: var(--radius-full); background: color-mix(in srgb, var(--color-danger) 12%, var(--color-bg-surface)); color: var(--color-danger); margin-bottom: var(--space-inline-pad);
