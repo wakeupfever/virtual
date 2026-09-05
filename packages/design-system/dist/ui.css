@@ -31,6 +31,7 @@
 .ui-shell__toggle { --el-button-text-color: var(--color-icon-default); color: var(--color-icon-default);
 }
 .ui-shell__sidebar {
+  transition: width 0.22s ease;
   grid-area: sidebar;
   z-index: var(--z-sidebar);
   min-height: 0;
@@ -69,7 +70,7 @@
 }
 
 /* 加 .l-fill 时容器自身纵向排布，ready 态的表格 / 列表才能继续吃掉剩余高度 */
-.ui-state.l-fill { display: flex; flex-direction: column;
+.ui-state.l-fill { display: flex; flex-direction: column; gap: var(--space-component-gap);
 }
 .ui-state__error { gap: var(--space-inline-gap);
 }

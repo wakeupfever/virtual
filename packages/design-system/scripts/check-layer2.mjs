@@ -118,10 +118,16 @@ for (const file of files) {
 /** 纯文字复合组件：不要求覆盖 bg / border */
 const TEXT_ONLY = new Set(['UiModuleHeader'])
 const categoryOf = t => t.startsWith('--color-bg') ? 'bg' : t.startsWith('--color-text') ? 'text' : t.startsWith('--color-border') ? 'border' : /^--space-/.test(t) ? 'space' : null
+/** 公开组件 = ui/index.ts 的 components 映射；其余（如 UiShellMenu 这类内部递归组件）不进物料清单，
+ *  否则展示页与变异测试会去找一张本来就不该存在的配置卡。它们的 token 仍计入 files 级覆盖。 */
+const PUBLIC = new Set(
+  (readFileSync(resolve(PKG, 'ui/index.ts'), 'utf8').match(/export const components = \{([^}]*)\}/)?.[1] ?? '')
+    .split(',').map(s => s.trim()).filter(Boolean),
+)
 const components = {}
 for (const [file, set] of Object.entries(usage)) {
   const m = file.match(/^ui\/(?:composites\/)?(Ui\w+)\.vue$/)
-  if (!m) continue
+  if (!m || !PUBLIC.has(m[1])) continue
   components[m[1]] = [...set].sort()
   if (file.includes('composites/') && !TEXT_ONLY.has(m[1])) {
     const cats = new Set([...set].map(categoryOf).filter(Boolean))

@@ -147,7 +147,7 @@ app.use(ElementPlus).use(DesignSystemUI)
 | prop / event | 类型 | 说明 |
 |---|---|---|
 | `title` | `string` | 产品名 |
-| `menu` | `{ key, label, icon?, group?, badge?, disabled? }[]` | 侧栏菜单。`icon` 取内置图标名（dashboard / map / monitor / alarm / incident / enterprise / emergency / device / quality / stats / settings），**折叠态只剩图标，不给 icon 折叠后就是空白行**；`group` 在该项前插一条分组标题（折叠时隐藏）；`badge` 为数字徽标（如告警待办数） |
+| `menu` | `{ key, label, icon?, group?, badge?, children?, disabled? }[]` | 侧栏菜单，**层级不限**（`children` 递归，内部由 `UiShellMenu.vue` 渲染；父项徽标自动汇总子级）。`icon` 取内置图标名（dashboard / map / monitor / alarm / incident / enterprise / emergency / device / quality / stats / settings），**折叠态只剩图标，不给 icon 折叠后就是空白行**；`group` 在该项前插一条分组标题（折叠时隐藏）；`badge` 为数字徽标（如告警待办数） |
 | `activeKey` | `string` | 当前高亮；正式项目由路由驱动，原型由 state 驱动 |
 | `v-model:collapsed` | `boolean` | 侧栏折叠 |
 | `@select` | `(key) => void` | 点击菜单 |

@@ -45,6 +45,8 @@
 .ui-shell__badge {
   margin-left: auto;
   min-width: var(--layout-icon-sm);
+  height: var(--layout-icon-sm);
+  line-height: var(--layout-icon-sm);
   padding-inline: var(--space-inline-pad);
   border-radius: var(--radius-full);
   background: var(--color-danger);
@@ -54,3 +56,41 @@
   text-align: center;
 }
 .ui-shell__menu.el-menu--collapse .ui-shell__badge { display: none; }
+
+/* ---- 子菜单（无限层级）---- */
+.ui-shell__menu .el-sub-menu__title {
+  border-radius: var(--radius-md);
+  color: var(--color-text-secondary);
+  font-size: var(--font-size-body);
+}
+.ui-shell__menu .el-sub-menu__title:hover { background: var(--color-bg-subtle); }
+.ui-shell__menu .el-sub-menu .el-icon { color: var(--color-icon-muted); }
+/* 含当前项的父级：文字加重但不抢选中项的强调 */
+.ui-shell__menu .el-sub-menu.is-active > .el-sub-menu__title {
+  color: var(--color-text-default);
+  font-weight: var(--font-weight-medium);
+}
+/* 层级缩进靠 Element Plus 计算的 padding-left，这里只补每层的视觉降级 */
+.ui-shell__menu .el-menu--inline { background: transparent; }
+.ui-shell__menu .el-menu--inline .el-menu-item,
+.ui-shell__menu .el-menu--inline .el-sub-menu__title { font-size: var(--font-size-caption); }
+.ui-shell__text { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+
+/* ---- 折叠态 ---- */
+/* 分组标题收成一条分隔线，保住分组的节奏 */
+.ui-shell__sidebar.is-collapsed .ui-shell__group {
+  display: block;
+  height: var(--border-w);
+  margin: var(--space-component-gap) var(--space-component-pad-x);
+  padding: 0;
+  background: var(--color-border-muted);
+}
+.ui-shell__sidebar.is-collapsed .ui-shell__group span { display: none; }
+/* 折叠后竖线离图标太远，改为整块浅底 + 主色图标 */
+.ui-shell__sidebar.is-collapsed .ui-shell__menu .el-menu-item.is-active::before { display: none; }
+/* 当前项可能落在子菜单里，此时折叠轨道上高亮的是父级 el-sub-menu 的标题 */
+.ui-shell__sidebar.is-collapsed .ui-shell__menu .el-menu-item.is-active,
+.ui-shell__sidebar.is-collapsed .ui-shell__menu .el-sub-menu.is-active > .el-sub-menu__title {
+  background: var(--color-bg-accent);
+}
+.ui-shell__sidebar.is-collapsed .ui-shell__menu .el-sub-menu.is-active > .el-sub-menu__title .el-icon { color: var(--color-primary); }

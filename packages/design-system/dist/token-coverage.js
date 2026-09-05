@@ -55,7 +55,9 @@ window.DS_COVERAGE = {
     "skins/menu.css": [
       "--border-w",
       "--border-w-thick",
+      "--color-bg-accent",
       "--color-bg-subtle",
+      "--color-border-muted",
       "--color-danger",
       "--color-icon-muted",
       "--color-primary",
@@ -64,6 +66,7 @@ window.DS_COVERAGE = {
       "--color-text-placeholder",
       "--color-text-secondary",
       "--font-size-body",
+      "--font-size-caption",
       "--font-size-micro",
       "--font-weight-medium",
       "--layout-icon-sm",
@@ -145,6 +148,7 @@ window.DS_COVERAGE = {
       "--z-header",
       "--z-sidebar"
     ],
+    "ui/UiShellMenu.vue": [],
     "ui/UiState.vue": [
       "--color-bg-surface",
       "--color-danger",
@@ -452,6 +456,7 @@ window.DS_COVERAGE = {
       "ui/UiShell.vue"
     ],
     "--color-bg-accent": [
+      "skins/menu.css",
       "skins/tabs.css",
       "skins/tree.css",
       "ui/composites/UiListItem.vue",
@@ -503,6 +508,7 @@ window.DS_COVERAGE = {
     ],
     "--color-border-muted": [
       "layout.css",
+      "skins/menu.css",
       "skins/table.css",
       "skins/tabs.css",
       "ui/UiShell.vue",
@@ -587,6 +593,7 @@ window.DS_COVERAGE = {
       "ui/UiPageHeader.vue (via .l-cluster)",
       "ui/UiPageHeader.vue (via .l-page-header)",
       "ui/UiShell.vue (via .l-cluster)",
+      "ui/UiState.vue",
       "ui/UiState.vue (via .l-state)",
       "ui/UiTuner.vue",
       "ui/composites/UiFilterBar.vue",
@@ -736,6 +743,7 @@ window.DS_COVERAGE = {
     ],
     "--font-size-caption": [
       "base.css",
+      "skins/menu.css",
       "skins/table.css",
       "skins/tabs.css",
       "ui/UiTuner.vue",
