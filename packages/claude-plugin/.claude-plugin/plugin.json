@@ -1,0 +1,10 @@
+{
+  "name": "virtual",
+  "version": "1.0.0",
+  "description": "virtual 三层前端规范与工作流：注入分层约束（layer-rules）、由需求生成可交互原型（prototype）、把原型机械转换为正式页面（promote）。",
+  "author": {
+    "name": "xl"
+  },
+  "homepage": "https://github.com/wakeupfever/virtual",
+  "keywords": ["design-system", "vue", "element-plus", "prototype", "layered-architecture"]
+}

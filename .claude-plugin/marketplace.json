@@ -1,0 +1,18 @@
+{
+  "name": "virtual",
+  "owner": {
+    "name": "xl"
+  },
+  "metadata": {
+    "description": "virtual 三层前端工作区自带的插件市场：提示词 → 可交互原型 → 正式页面",
+    "version": "1.0.0"
+  },
+  "plugins": [
+    {
+      "name": "virtual",
+      "source": "./packages/claude-plugin",
+      "description": "把 virtual 的三层分层规范注入 AI，并把「需求 → 原型」「原型 → 正式页面」两条流程固化为技能。",
+      "version": "1.0.0"
+    }
+  ]
+}

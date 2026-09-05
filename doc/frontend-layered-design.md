@@ -156,6 +156,10 @@ reset、字体、页面底色。正式项目关闭 Tailwind preflight，全局 r
 2. **`promote`**：读取指定原型 → `DATA` 转 `api.ts` 接口定义与 mock → `state` 转 composable → 模板逐一映射为 `Page.vue`（`<el-*>` → `<El*>`，`<ui-*>` → `<Ui*>`）→ 输出到 `features/<名>/` → 生成"原型与实现差异清单"。
 3. **`layer-rules`**：向 AI 注入三层规范，作为前两步的前置约束，也可单独调用检阅。
 
+插件形态：仓库根 `.claude-plugin/marketplace.json` 让**本仓库自身就是插件市场**，`packages/claude-plugin/` 是插件本体（`.claude-plugin/plugin.json` + `skills/`）。安装 `/plugin marketplace add <仓库路径>` 后 `/plugin install virtual@virtual`，技能以 `/virtual:<skill>` 调用——当前 Claude Code 里技能本身就是 slash 命令，不再另建 `commands/` 目录。`prototype` 与 `promote` 设 `disable-model-invocation: true`（会成批写文件，只在显式调用时执行），`layer-rules` 允许自动触发（只读不写）。
+
+关键约束：技能文件**不复制**任何规则文本，只写"去哪读、怎么用"，真值永远是 `CLAUDE.md`、`design-system/README.md`、`whitelist.json` 与需求台账那几份（台账不变量 `I-006`）。改了 `CLAUDE.md`，插件行为自动跟着变，不存在两份规范互相漂移的问题；代价是本插件只对 virtual 工作区有意义，装到别的仓库会因读不到这些文件而停下。
+
 一比一的验收是测量而非假设：`tests/visual/compare.mjs` 自动起原型与正式页面两个 dev server（CDN 依赖用本地 node_modules 顶替，离线可跑），对每个用例喂同一份 mock（`?dataset=`）、同一视口，只截 `.l-page` 内容区（外壳由 UiShell 统一）做 pixelmatch，像素差异阈值 1%（初始值），超出即输出 `__output__/<name>-diff.png` 与差异清单。首次实测 orders 三个用例（常规 / 长文本 / 1024 宽）差异 0.00%。同一套基建还跑第二层变异验证 `tests/visual/mutate.mjs`：按 `token-coverage.json` 对每个自研组件声明的 token 逐个改成显著值，断言组件内 computed style 变化，变异前先把舞台切到 error / hover 态；观察不到且已核实的例外必须在 `KNOWN` 里写原因。它第一次运行就抓到两个真问题：展示页滑块把 `--radius-full` 9999px 钳成 32px 无声覆盖了舞台；UiShell 折叠按钮的 `--color-icon-default` 被 Element Plus 按钮自身的文字色盖住。底层共用保证**组件级与布局级**一致；页面级差异只剩真实数据形态、异步状态与真实 API 接入，由原型的三类样本与四态要求、以及视觉回归覆盖。
 
 ## 9. 展示页面
@@ -169,6 +173,6 @@ reset、字体、页面底色。正式项目关闭 Tailwind preflight，全局 r
 | 第一步 | design-system（第一、二层）、原型模板、检查脚本、`CLAUDE.md`、本文档 | 已完成，见台账验收证据 |
 | 展示页 | `packages/design-system/showcase.html`（设计变量 / 组件物料 / 布局范式，方向 A） | 已完成（IT-004） |
 | 第二步 · A | `apps/web` 工具链（Vite 8 + Tailwind 4 + vue-router）、根 `eslint.config.js`（vue 规则 + boundaries）、首个正式页面 `features/orders` | 已完成（IT-014） |
-| 第二步 · B | Claude 插件（prototype / promote / layer-rules） | 待排期 |
+| 第二步 · B | Claude 插件（prototype / promote / layer-rules） | 已完成（IT-017）；`promote` 待一个真实业务原型端到端验收 |
 | 第二步 · C | husky + lint-staged pre-commit、GitHub Actions CI（lint / typecheck / build:ds + dist 一致性 / check:prototype / build:web / 视觉回归 / 变异验证） | 已完成（IT-015） |
 | 第二步 · D | `tests/visual/compare.mjs` 视觉回归、`tests/visual/mutate.mjs` 变异验证 | 已完成（IT-015） |

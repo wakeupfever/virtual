@@ -3,18 +3,10 @@ rai-schema-version: 2
 task: "前端三层分层设计需求基线"
 task-key: "frontend-layered-design"
 primary-target: "doc/frontend-layered-design.md"
-requirement-version: "RV-016"
-iteration: "IT-016"
+requirement-version: "RV-017"
+iteration: "IT-017"
 current-changes:
-  - "C-037"
-  - "C-038"
-  - "C-039"
-  - "C-040"
-  - "C-041"
-  - "C-042"
-  - "C-043"
-  - "C-044"
-  - "C-045"
+  - "C-046"
 status: "active"
 updated: "2026-09-05"
 ---
@@ -23,11 +15,11 @@ updated: "2026-09-05"
 
 ## 快速摘要
 
-- 当前需求版本：`RV-016`
-- 当前工作迭代：`IT-016`
-- 当前变更：`C-037` 展示页三页视觉重排、`C-038` 去重叠：自研组件单组件详情 + 布局配置整页路由、`C-039` 内容区取消限宽、`C-040` 高度填充布局与高级搜索浮窗（add R-050 / R-051）、`C-041` dist 产物可复现、`C-042` 修复填充链把页面收成 max-content 宽、`C-043` 展示页全局调参面板、`C-044` 调参值格可输入 / 控件不变形 / 控制条可拖动、`C-045` 第一层与模板用户验收
-- 本轮目标：展示页从「文档里的缩略预览」变成「能整屏打开的真实页面」，并补上表格页最缺的一块能力——页面撑满、表格随父级高度流动、表体内滚、分页贴底
-- 当前结论：**IT-016 完成**（R-050 / R-051 verified；R-005 / R-009 / R-037 / R-038 / R-041 / R-042 / R-044 / R-048 / R-049 重新 verified）；IT-015 完成（R-026 / R-027 / R-049 verified）；IT-014 完成（R-020 / R-021 / R-024 / R-025 / R-031 verified）；IT-013 完成（R-047 / R-048 verified，R-049 ready；R-005 / R-037 重新 verified）；IT-012 完成（R-046 verified，R-037 重新 verified）；IT-011 完成（R-042 / R-045 / R-044 / R-041 重新 verified）；IT-010 完成（R-045 verified；R-041 / R-044 重新 verified）；IT-009 完成（R-044 verified，R-037 重新 verified，代码已提交）；IT-008 完成（R-037 / R-041 / R-012 / R-007 / R-042 重新 verified，代码已提交）；展示页按方向 A 重做并验证（R-037），hash 路由落地并验证（R-038）。**分步进度：第一步（第一、二层 + 原型模板 + CLAUDE.md）已交付并验收；第二步 A（apps/web 工具链与 ESLint 三层约束）、C（pre-commit / CI 门禁）、D（视觉回归与变异验证）已完成；第二步 B（Claude 插件 R-032～R-035）尚未开工，等授权。** 2026-09-05 用户验收第一层配置与五套模板（C-045），六条 `implemented` 转 `verified`；50 条需求现为 46 verified / 4 ready，4 条 ready 即第二步 B
+- 当前需求版本：`RV-017`
+- 当前工作迭代：`IT-017`
+- 当前变更：`C-046` 第二步 B：Claude 插件（implement R-032 / R-033 / R-035，R-034 待真实原型端到端；clarify R-032 的 commands）
+- 本轮目标：把三层策略封装成可安装的 Claude 插件，让「提示词 → 原型 → 正式页面」不再依赖某一次对话里的口头约定
+- 当前结论：**IT-017 完成**（R-032 / R-033 / R-035 verified，R-034 implemented）。**分步进度：第一步、第二步 A / B / C / D 全部交付**；50 条需求现为 49 verified / 1 implemented，唯一未闭环的是 `R-034`——`promote` 技能已就位，但端到端验收需要一个真实业务原型跑一遍，当前 `apps/prototypes/` 只有 `_template.html`。历史迭代结论见「迭代」与「历史索引」两节
 
 ## 当前需求清单
 
@@ -85,10 +77,10 @@ updated: "2026-09-05"
 
 ### Claude 插件
 
-- [ ] `R-032` 提供可安装的 Claude 插件包（`plugin/`，含 `plugin.json` manifest、skills、commands），供产品与开发在 Claude Code / Cowork 中使用。`category: delivery` `status: ready`
-- [ ] `R-033` 插件技能 `prototype`：输入自然语言需求，读取 `design-system/README.md` 与 `_template.html`，生成符合 R-016～R-018 的原型 HTML 到 `prototypes/`，并运行 `check-prototype.js` 自检。`category: functional` `status: ready`
-- [ ] `R-034` 插件技能 `promote`：读取指定原型，把 DATA 转 `api.ts` 接口定义与 mock、state 转 composable、template 逐一映射为 features 页面，输出到 `apps/web/src/features/<名>/` 并生成"原型与实现差异清单"。`category: functional` `status: ready`
-- [ ] `R-035` 插件技能 `layer-rules`：向 AI 注入三层规范（分层定义、硬性规则、白名单、冻结流程），作为 `prototype` 与 `promote` 的前置约束，也可单独调用检阅。`category: delivery` `status: ready`
+- [x] `R-032` 提供可安装的 Claude 插件包（`packages/claude-plugin/`，含 `.claude-plugin/plugin.json` manifest 与 `skills/`），供产品与开发在 Claude Code / Cowork 中使用；仓库根放 `.claude-plugin/marketplace.json`，本仓库自身即插件市场，`/plugin marketplace add <仓库路径>` 后安装。**澄清**：当前 Claude Code 里技能本身就是 slash 命令（`/virtual:<skill>`），不再另建 `commands/` 目录，避免同一入口维护两份定义。`category: delivery` `status: verified`
+- [x] `R-033` 插件技能 `prototype`：输入自然语言需求，读取 `design-system/README.md` 与 `_template.html`，生成符合 R-016～R-018 的原型 HTML 到 `prototypes/`，并运行 `check-prototype.js` 自检。`category: functional` `status: verified`
+- [ ] `R-034` 插件技能 `promote`：读取指定原型，把 DATA 转 `api.ts` 接口定义与 mock、state 转 composable、template 逐一映射为 features 页面，输出到 `apps/web/src/features/<名>/` 并生成"原型与实现差异清单"。`category: functional` `status: implemented`
+- [x] `R-035` 插件技能 `layer-rules`：向 AI 注入三层规范（分层定义、硬性规则、白名单、冻结流程），作为 `prototype` 与 `promote` 的前置约束，也可单独调用检阅。`category: delivery` `status: verified`
 
 ### 第二层演进机制
 
@@ -188,12 +180,21 @@ updated: "2026-09-05"
 | F-007 | AI 约束机制（CLAUDE.md、ESLint、依赖检查、hooks/CI） | active | R-023～R-026 |
 | F-008 | 原型→正式转换视觉回归与第二层变异验证 | active | R-027, R-049 |
 | F-009 | 项目文档（doc/） | active | R-028 |
-| F-010 | Claude 插件（prototype / promote / layer-rules 技能） | planned | R-032～R-035 |
+| F-010 | Claude 插件（prototype / promote / layer-rules 技能） | active | R-032～R-035 |
 | F-011 | 设计系统展示页（变量 + 物料） | active | R-037 |
 
 ## 当前迭代
 
-### IT-016 · 展示页整页化与高度填充布局
+### IT-017 · 第二步 B：Claude 插件
+
+- 目标：把三层策略封装成可安装的 Claude 插件，让「提示词 → 原型 → 正式页面」这条路不依赖某一次对话里的口头约定
+- 范围：仓库根 `.claude-plugin/marketplace.json`（新）、`packages/claude-plugin/**`（新：manifest + README + 三个技能）、`doc/` 说明文档插件一节；git commit
+- 包含变更：`C-046`
+- 对应需求版本：`RV-017`
+- 退出条件：R-032 / R-033 / R-035 verified；R-034 至少 implemented（需要一个真实原型才能端到端验收）；`claude plugin validate` 通过；代码已提交
+- 关键约束：`I-006` —— 技能内容不得复制 `CLAUDE.md` 的规则文本，只能引用；规则真值永远只有仓库里那一份
+
+### IT-016 · 展示页整页化与高度填充布局（已完成）
 
 - 目标：展示页从「文档里的缩略预览」变成「能整屏打开的真实页面」；补上表格页最缺的能力——页面撑满、表格随父级高度流动、表体内滚、分页贴底；高级搜索不再挤压表格
 - 范围：`tokens.css`（content-max）、`layout.css`（填充三件套）、`ui/UiShell.vue`、`ui/UiState.vue`、`ui/composites/UiFilterBar.vue`、`skins/table.css`、`scripts/check-layer2.mjs`、`showcase.html`、`showcase.data.js`、`apps/prototypes/_template.html`、`apps/web/src/features/orders/Page.vue`、`tests/visual/mutate.mjs`、README / CLAUDE.md §2；git commit（第一二层与第三层回填分两次提交）
@@ -250,6 +251,19 @@ updated: "2026-09-05"
 - 退出条件：R-045 verified；R-041 / R-044 重新 verified；代码已提交
 
 ## 当前变更
+
+### C-046 · 第二步 B：Claude 插件
+
+- 类型：`implement`
+- 原因：用户授权开工第二步 B（并默认接受 `H-003` 的插件形态）
+- 之前：`R-032`～`R-035` 停在 `ready`，`packages/claude-plugin/` 只是实现映射里的一个预留路径，目录并不存在
+- 之后：仓库根 `.claude-plugin/marketplace.json` 让本仓库自身成为插件市场；`packages/claude-plugin/` 含 manifest、README 与三个技能。`claude plugin validate` 对插件与市场两个 manifest 均通过；`claude plugin marketplace add` + `claude plugin install virtual@virtual` 实测安装成功，缓存目录下三个 `SKILL.md` 的 frontmatter 被正确读入
+- **`R-032` 澄清**：当前 Claude Code 里技能本身就是 slash 命令（`/virtual:<skill>`），原文里的 `commands` 不再单独建目录——同一入口维护两份定义违背 `I-006` 的精神。`prototype` / `promote` 设 `disable-model-invocation: true`（会成批写文件，只在显式调用时执行），`layer-rules` 允许模型自动触发（只读不写）
+- **`I-006` 的落实方式**：三个 `SKILL.md` 不含任何规则原文，只写「去哪读、怎么用」，并明确要求每次执行都实际读取 `CLAUDE.md` / `README.md` / `whitelist.json` / 台账，读不到就停下而不是按通用最佳实践继续。代价是插件只对本工作区有意义，已写进 README
+- `R-034` 留在 `implemented`：`promote` 技能已就位，但端到端验收需要一个**真实业务原型**跑一遍，当前 `apps/prototypes/` 只有 `_template.html`
+- 关联需求：`R-032`、`R-033`、`R-034`、`R-035`、`R-023`
+- 覆盖关系：—
+- 影响功能：`F-010 direct`、`F-005 indirect`、`F-008 indirect`
 
 ### C-037 · 展示页三页视觉重排
 
@@ -483,6 +497,7 @@ updated: "2026-09-05"
 | C-039 | F-001, F-002 | direct | 第一层 token 值改变 | 1920 下 `.l-page` 宽 = 内容区宽；无横向滚动 |
 | C-040 | F-001, F-002, F-003, F-004, F-005, F-006 | direct | 新增布局能力与组件行为 | 逐层高度实测；矮视口内滚；浮窗前后高度不变；视觉回归 0.00% |
 | C-041 | F-003, F-007 | direct | 构建产物确定性 | 连续两次生成一致；`git diff --exit-code -- dist` 返回 0 |
+| C-046 | F-010 | direct | 新增可安装插件与三个技能 | validate 通过；实测安装并列出技能 |
 | C-045 | F-001, F-002, F-003, F-005 | verification_only | 六条需求转 verified | main.ts 引入链、ESLint 白名单、像素差 0.00% |
 | C-044 | F-011 | direct | 调参控件形态与浮层交互 | 拉满不变形；打字不被弹回；控制条可拖 |
 | C-043 | F-011 | direct | 展示页新增全局调参能力 | 空开抽屉零写入；三类控件联动；复制与重置闭环 |
@@ -514,7 +529,8 @@ updated: "2026-09-05"
 | R-024, R-025 | 根 `eslint.config.js`（vue 规则 + boundaries/dependencies） | verified | E-24 |
 | R-026 | `.husky/pre-commit`、根 `package.json`（lint-staged / prepare / test:*）、`.github/workflows/ci.yml` | verified | E-25 |
 | R-027 | `tests/visual/compare.mjs`、`tests/visual/_lib.mjs`、`.gitignore`（`__output__`） | verified | E-25 |
-| R-032～R-035 | `packages/claude-plugin/.claude-plugin/plugin.json`、`skills/{prototype,promote,layer-rules}/SKILL.md` | planned（第二步） | — |
+| R-032, R-033, R-035 | 仓库根 `.claude-plugin/marketplace.json`、`packages/claude-plugin/{.claude-plugin/plugin.json,README.md,skills/{layer-rules,prototype,promote}/SKILL.md}` | verified | E-32 |
+| R-034 | 同上（`skills/promote/SKILL.md`） | implemented | E-32（端到端待真实原型） |
 | R-037 | `packages/design-system/showcase.html`、`scripts/build-tokens.mjs`、`dist/tokens.js`(.json)、`package.json` build 脚本 | verified | E-09, E-26 |
 | R-052 | `showcase.html`（TUNER_GROUPS / kindOf / rangeOf / onSlide / setOverride 等 + 调参抽屉 + 顶栏与 FAB 入口） | verified | E-31 |
 | R-050 | `layout.css`（`.l-page--fill` / `.l-fill` / `.l-module.l-fill`）、`ui/UiShell.vue`（`view-class="ui-shell__view"` + `height: 100%` 纵向 flex）、`ui/UiState.vue`（`.ui-state.l-fill`）、`skins/table.css`（`.el-table.l-fill`）、`showcase.data.js`（`TABLE_MODULE` / `pageClass`）、`apps/prototypes/_template.html`、`apps/web/src/features/orders/Page.vue`、README「高度填充」、CLAUDE.md §2 | verified | E-28 |
@@ -552,9 +568,8 @@ updated: "2026-09-05"
 
 | 事项 | 关联需求 | 影响 |
 |---|---|---|
-| 插件形态（H-003）是否符合预期 | R-032 | 第二步实现位置 |
 | 原型 CDN 是否需要离线副本（H-004） | R-016 | 模板依赖引入方式 |
-| 第二步 B 实施授权：Claude 插件（唯一未开工项） | R-032～R-035 | 是否进入下一迭代 |
+| `promote` 端到端验收：需要一个真实业务原型跑通「原型 → 正式页面」 | R-034 | R-034 转 verified 的前提 |
 | 展示页控制台既有 `compiler-30` 报错与两条 404 未定位（`git show HEAD` 版本同样存在，105 个字符串模板逐个 `Vue.compile` 均通过，非本轮引入） | R-037 | 不影响渲染与门禁，待单独排查 |
 | 超宽屏（24 寸以上）纯文本页面行长偏长（`--layout-content-max: none` 的代价） | R-005 | 需要时改回具体值 |
 
@@ -594,6 +609,7 @@ updated: "2026-09-05"
 | E-29 | R-048, R-049, R-026, R-027 | `check-layer2` 输出键排序后与改前内容逐项等价（脚本比对 `equal: true`）；再去掉两个生成脚本的 `generatedAt` 后，连续两次 `build:ds` 之间 `git diff --exit-code -- packages/design-system/dist` 返回 0——CI 第四步此前因时间戳每次必失败，现已可过；八项门禁全绿——`lint` / `typecheck` 0 错误，`build:ds` 0 错误 1 条既有警告（未消费 2），`check:prototype` 通过，`test:visual` 三用例均 0.00%，`test:mutation` 7 组件全过。变异测试抓到真信号：新增的 `--space-module-pad` / `--space-module-gap` 在 UiFilterBar 上观察不到，核实为 `ElPopover` teleport 到 body 不在快照范围 + `.l-stack` 基类被 `--tight` 覆盖（与 UiListItem 已有例外同因），写入 `KNOWN` 并注明原因，未放宽断言 | pass | 2026-09-05 |
 | E-30 | R-050, R-005, R-012 | 用户发现宽屏两侧又出现留白。复现：1920×1000 `#/page/stat-table` 下 `--layout-content-max` 与 `max-width` 均解析为 `none`，但 `.l-page` 仅 x=538 / w=1075（内容区 1690）——`.ui-shell__view` 的 `display: flex` 让 `.l-page` 的 `margin-inline: auto` 在交叉轴压过 `stretch`，收缩成 max-content 宽。视图改回块级 + `.l-page--fill` 自带 `height: 100%` 后三种情形同时成立：1920×1000 填充页 `.l-page` x=230 / w=1690 / h=940 = 视图，模块 720 / 表格 574 / 分页贴底 / 无外层滚动；1280×420 表体 client 45 vs scroll 132（内滚生效）、分页仍在视野；1920×500 非填充页 `.l-page` w=1690 / h=817、视图 440、外层可滚且滚动条存在；原型模板 1920 下同样 w=1690、表格 1616 | pass | 2026-09-05 |
 | E-31 | R-052, R-037 | 新标签页打开抽屉、不做任何操作：`:root` inline style 为空、计数 0（修复前会被 el-slider 钳值回写成 4 项）；分组 颜色24 / 间距13 / 圆角4 / 边框2 / 阴影3 / 字体13 / 布局尺寸20 / 层级5，共 82 行 = 41 滑块 + 24 取色器 + 17 文本框，`--radius-full` 为文本框；`#/page/table` 整页视图经 FAB 打开抽屉同样可用，键盘步进 `--radius-lg` / `--border-w` 后模块 borderRadius 12→13px、borderTopWidth 1→2px、计数 2；`--radius-md` 6→18px 时 Element Plus 输入框圆角同步 6→18px（small 按钮走 `--radius-sm`，已在提示文案中写明）；复制输出 `:root {  --radius-lg: 13px;  --border-w: 2px; }`；全部重置后 inline 清空、模块复原 12px/1px、计数归零；新标签页无控制台报错。二轮修正后复验：`--radius-lg` 打字 30px 全程不被弹回、提交后模块圆角 30px 且控件仍是滑块（上限稳定在 48）；`--radius-full` 设为 20px 后仍是文本框（基线冻结在 9999px）；清空输入框即恢复默认（inline 移除、圆角回 12px）；`--space-module-gap` 用 End 推到上限 64px 控件不变形；`--color-primary` 打字 `#c2410c` 后截图确认搜索按钮 / 高级搜索链接 / 侧栏选中项 / 面板按钮全部转为橙色（注：自动化的 getComputedStyle 读数会滞后，以截图为准）；整页控制条按把手从 (20,893) 拖到 (440,333) | pass | 2026-09-05 |
+| E-32 | R-032, R-033, R-034, R-035 | `claude plugin validate packages/claude-plugin` 与 `claude plugin validate .`（市场）均 `Validation passed`（首轮有 author 缺失警告，补 author / homepage / keywords 后归零）；`claude plugin marketplace add D:git-projectirtual` → `Successfully added marketplace: virtual`；`claude plugin install virtual@virtual` → `Successfully installed`，`installed_plugins.json` 记录 installPath 与 gitCommitSha；缓存目录 `skills/{layer-rules,prototype,promote}/SKILL.md` 三个技能齐备，frontmatter 的 name / description / disable-model-invocation 均被正确读入。`I-006` 核对：三个 SKILL.md 均无规则原文，只引用 `CLAUDE.md` / `README.md` / `whitelist.json` / 台账 | pass | 2026-09-05 |
 | E-08 | R-028 | `doc/frontend-layered-design.md` §1～§10 与 RV-002 逐节核对；IT-003 同步 §3 目录树与 §9 展示页（RV-003）；IT-004 同步 §6 路由与 §9 方向 A（RV-004）：Vue 3 + Element Plus、Vite 8 + Tailwind 4、monorepo 目录、CDN 原型形态、插件三技能、展示页面、实施状态 | pass | 2026-09-02 |
 
 ## 历史索引
@@ -606,6 +622,7 @@ updated: "2026-09-05"
 | RV-016 | IT-016 | C-039 | modify | R-005 | `--layout-content-max` 1440px → none | F-001, F-002 |
 | RV-016 | IT-016 | C-040 | add | R-050, R-051, R-009, R-041, R-042 | 无 → 高度填充布局与高级搜索浮窗 | F-001～F-006 |
 | RV-016 | IT-016 | C-041 | implementation_correction | R-048, R-026 | dist 可复现：键排序 + 去掉生成时间 | F-003, F-007 |
+| RV-017 | IT-017 | C-046 | implement | R-032, R-033, R-034, R-035 | ready → 插件可安装；R-032 澄清 commands | F-010 |
 | RV-016 | IT-016 | C-045 | implement | R-004, R-009, R-010, R-011, R-017, R-029 | implemented → verified（用户验收 + 第二步阻塞已清） | F-001, F-002, F-003, F-005 |
 | RV-016 | IT-016 | C-044 | implementation_correction | R-052, R-044 | 值格可输入、控件不变形、控制条可拖 | F-011 |
 | RV-016 | IT-016 | C-043 | add | R-052, R-037 | 四个开关 → 覆盖 82 个 token 的调参面板 | F-011 |
