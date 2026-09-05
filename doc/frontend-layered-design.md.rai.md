@@ -3,10 +3,10 @@ rai-schema-version: 2
 task: "前端三层分层设计需求基线"
 task-key: "frontend-layered-design"
 primary-target: "doc/frontend-layered-design.md"
-requirement-version: "RV-022"
-iteration: "IT-022"
+requirement-version: "RV-023"
+iteration: "IT-023"
 current-changes:
-  - "C-055"
+  - "C-056"
 status: "active"
 updated: "2026-09-05"
 ---
@@ -15,15 +15,16 @@ updated: "2026-09-05"
 
 ## 快速摘要
 
-- 当前需求版本：`RV-022`
-- 当前工作迭代：`IT-022`
-- 当前变更：`C-055` 重新生成验证：新增 `incidents.html`、修复骨架不可粘贴（add R-057）
-- 本轮目标：用一次真正的**重新生成**验证「修的是规则还是原型」——从模板起步造一个全新原型，看此前的修复是自动继承还是要重来一遍
+- 当前需求版本：`RV-023`
+- 当前工作迭代：`IT-023`
+- 当前变更：`C-056` `.l-*` 类名必须真实存在（add R-058）；第一层补 `.l-cluster--center`
+- 本轮目标：堵掉「凭空写一个不存在的布局类，浏览器不报错、检查也放行、页面安静地不对齐」这条口子
 - 上一轮结论：**IT-018 完成**（R-053 / R-054 verified；R-005 / R-007 / R-012 / R-042 / R-048 重新 verified）。**分步进度：第一步、第二步 A / B / C / D 全部交付**；52 条需求现为 51 verified / 1 implemented，唯一未闭环的是 `R-034`——`promote` 技能已就位，`apps/prototypes/alarms.html` 这个真实业务原型也已存在，缺的是**拿它跑一次 promote**。历史迭代结论见「当前迭代」与「历史索引」两节
 - 上一轮结论：**IT-019 完成**（`R-055` verified）。`pnpm check:ledger` 已进 lint-staged 与 CI（第五步），CI 由八步扩为九步
 - 上一轮结论：**IT-020 完成**（`R-012` 澄清后重新 verified）
 - 上一轮结论：**IT-021 完成**（`R-056` verified）
-- 当前结论：**IT-022 完成**（`R-057` verified）。55 条需求 = 54 verified + 1 implemented。重新生成实验结论见 `C-055`：第一、二层的修复全部自动继承，规则类靠 check 拦住，而**生成源自身有缺陷**（骨架含 13 处 inline style / 7 处非白名单标签 / 大量自闭合，照抄必被拦），已修复并加机械门禁
+- 上一轮结论：**IT-022 完成**（`R-057` verified）。重新生成实验结论见 `C-055`：第一、二层的修复全部自动继承，规则类靠 check 拦住，而**生成源自身有缺陷**（骨架含 13 处 inline style / 7 处非白名单标签 / 大量自闭合，照抄必被拦），已修复并加机械门禁
+- 当前结论：**IT-023 完成**（`R-058` verified）。56 条需求 = 55 verified + 1 implemented，未闭环的仍只有 `R-034`
 
 ## 当前需求清单
 
@@ -107,6 +108,7 @@ updated: "2026-09-05"
 - [x] `R-053` 需求文档里有菜单或路由时，原型必须有可切换的路由：一级导航原样搬进 `DATA.menu`（含对应需求章节号），按 `state.route` 分支渲染，本轮未实现的菜单渲染明确占位（`ui-state` empty + 章节号），不允许点了没反应或所有菜单停在同一页面。`category: functional` `status: verified`
 - [x] `R-056` 表格操作列规范：列上写 `class-name="is-actions"`，`skins/table.css` 让单元格按不换行的一行排布、间距取 `--space-component-gap`；**行内动作最多 2 个**（「详情 / 查看」+ 一个状态相关动作），其余动作放进详情抽屉或弹窗；按钮用 `link type="primary" size="small"`。`check-prototype.js` 新增 `actions-column` 规则：缺 `is-actions` 或按钮多于 2 个即报错（`v-else` / `v-else-if` 是同一位置的分支，不重复计数）。原型模板、五套页面模板与 `apps/web` 正式页同步。`category: ux` `status: verified`
 - [x] `R-057` 展示页「布局配置」的五套骨架必须是**可直接粘进原型的合法内容**：显式闭合自定义标签、无 inline style、只用白名单标签——CLAUDE.md §3 让原型从「复制页面骨架」起步，骨架自己违规就等于规则骗人。`check-prototype.js` 默认扫描时一并校验骨架（沙箱执行 `showcase.data.js` 取 `TEMPLATES[].skeleton`，套用与原型完全相同的 RULES 与白名单）；`el-progress` / `el-tree` 属已登记的白名单缺口，按 PENDING 显式提示而不是静默放行。`category: quality` `status: verified`
+- [x] `R-058` 第三层用到的 `.l-*` 布局类必须在第一层真实定义：`check-prototype.js` 从 `layout.css` / `base.css` 扫出实际类名集合，原型里出现集合外的 `l-` 开头类即报错（`unknown-layout-class`）。写错或凭空发明类名时浏览器不报错、样式静默失效，页面只是「有点不对齐」，是最难靠肉眼发现的一类错。配套在第一层补 `.l-cluster--center`（`--end` / `--between` 早有，居中这档一直缺，正是被发明出来的那个）。`category: quality` `status: verified`
 - [x] `R-054` 调参面板下沉为第二层组件 `UiTuner`：原型（第三层）禁止 `<style>` 与 inline style，调参面板必须有自己的样式，只能住在允许写样式的第二层；展示页与任意原型均以 `<ui-tuner>` 接入，token 清单由 `dist/tokens.js` 驱动（页面需引入该脚本）。`category: ux` `status: verified`
 
 ### 文档
@@ -166,6 +168,7 @@ updated: "2026-09-05"
 | R-038 | 直达 `#/<key>` 高亮对应菜单；点击菜单改 hash；后退恢复；原型模板 `#/reports` 高亮「报表」；十条路由（含 `#/custom/<key>`、`#/page/<key>`）循环无运行时报错，空 `<sub>` 落到首项并补全 hash | 用户输入（补充路由概念） | R-012, R-016 | RV-004 | C-014, C-038 | F-005, F-011, F-008 |
 | R-050 | 1440×1200 下 `#/page/stat-table`：页面高 = 外壳内容区高，模块 / 表格逐层吃满，分页贴底且无外层滚动；压到 420 高时表体 `clientHeight < scrollHeight`（内滚生效）且仍无外层滚动；不加 `--fill` 的 01 统计页仍为外层滚动；`el-table` 全程不传 `height`；**且 1920 宽下 `.l-page` 宽度必须等于外壳内容区宽度**（填充链不得反过来压缩宽度，见 C-042） | 用户输入（表格高度应受父级限制、默认占满） | R-009, R-012, R-042, R-043 | RV-016 | C-040 | F-001, F-002, F-003, F-004, F-005, F-006 |
 | R-052 | 打开抽屉不碰任何控件时 `:root` 的 inline style 必须为空、「已改」计数为 0（钳值回写会当场暴露）；浮窗可按标题栏拖动、收起为 183×34 的标题栏、展开复原 420×735，拖到底部仍整体在视口内；82 行控件（85 语义 token 去掉 3 个断点 / 密度）含 41 滑块 / 24 取色器 / 17 文本框；改 `--radius-lg` 与 `--border-w` 后模块圆角 12→13、边框 1→2，改 `--radius-md` 后 Element Plus 输入框圆角 6→18；滑块推到上限后控件形态与区间**不得变化**（形态与区间只由首次覆盖时冻结的基线值决定）；值格可直接打字改精确值、清空即恢复默认；复制得到只含改动项的 `:root` 片段；全部重置后 inline 清空且视觉复原 | 用户输入（控制项应更丰富） | R-037, R-030 | RV-016 | C-043 | F-011 |
+| R-058 | `check:prototype` 对当前三个原型 0 错误；把某个 `.l-*` 类改成不存在的名字（如 `l-cluster--middle`）后报 `unknown-layout-class (line N)` 并非零退出；`.l-cluster--center` 在 layout.css 中存在且空态按钮与说明文字、容器三者中线一致 | 用户输入（这个应该是居中才对） | R-009, R-019 | RV-023 | C-056 | F-001, F-005, F-007 |
 | R-057 | 骨架扫描 0 错误；人为把某套骨架改回自闭合或加 inline style 后 `check:prototype` 报 `skeleton [编号 名称] …` 并非零退出；PENDING 白名单缺口以警告列出且指向台账阻塞项 | 用户输入（是否构成重新生成、修的是原型还是规则） | R-019, R-044, R-053 | RV-022 | C-055 | F-005, F-007, F-011 |
 | R-056 | 三个文字按钮的操作列在 176px 列宽下折成两行（改前实测单元格高 > 行高）；改后单元格单行、行高恒为 `--layout-row-h`；`check-prototype.js` 对 3 个按钮或缺 `is-actions` 的操作列报错并非零退出 | 用户输入（操作按钮这里需要修改下） | R-019, R-042, R-044 | RV-021 | C-053 | F-003, F-005, F-007 |
 | R-055 | `node scripts/check-ledger.mjs` 对当前台账 0 错误、退出码 0；注入人为故障（把 verified 需求取消勾选、头部 iteration 改成正文没有的编号、从功能清单删掉一条需求编号）后逐条命中并退出码非零 | 用户输入（当前会话任何修改都需要同步到台账） | R-023, R-026 | RV-019 | C-051 | F-007 |
@@ -184,7 +187,7 @@ updated: "2026-09-05"
 
 | 功能 | 名称 | 当前状态 | 对应需求 |
 |---|---|---|---|
-| F-001 | 设计 token 层（tokens.css，含 Element Plus 主题映射） | active | R-001～R-008, R-030, R-039, R-045, R-046 |
+| F-001 | 设计 token 层（tokens.css，含 Element Plus 主题映射） | active | R-001～R-008, R-030, R-039, R-045, R-046, R-058 |
 | F-002 | 布局与基础样式层（layout.css、base.css） | active | R-009, R-010, R-050 |
 | F-003 | 基础组件层（Element Plus 白名单 + 自研组件 + 皮肤层） | active | R-011, R-014, R-015, R-029, R-040～R-043, R-047, R-048, R-051, R-054 |
 | F-004 | 页面外壳组件（UiShell / UiShellMenu） | active | R-012, R-043, R-050 |
@@ -198,7 +201,16 @@ updated: "2026-09-05"
 
 ## 当前迭代
 
-### IT-022 · 重新生成验证：修的是规则还是原型
+### IT-023 · 堵掉「不存在的布局类」这条口子
+
+- 目标：新原型里空态按钮没居中，根因是我写了一个第一层并不存在的 `.l-cluster--center`——浏览器不报错、check 也放行。这类错必须机械可查
+- 范围：`layout.css`（补 `.l-cluster--center`）、`scripts/check-prototype.js`（`unknown-layout-class` 规则）、本台账
+- 包含变更：`C-056`
+- 对应需求版本：`RV-023`
+- 退出条件：空态按钮与说明、容器三者中线一致；把类名改成不存在的值必须被拦下；门禁全绿
+- 说明：这是重新生成实验的**第四个发现**，而且是三个发现里最隐蔽的一个——前三个要么被检查拦住、要么一眼看得出，这个只是「有点歪」
+
+### IT-022 · 重新生成验证：修的是规则还是原型（已完成）
 
 - 目标：用户问「现在是否构成重新生成，验证以上问题是你修复的还是修复规则」——不靠嘴说，从 `_template.html` 起步按文档造一个全新原型（PRD §8.5 事件指挥），逐条量它是否自动继承
 - 范围：新增 `apps/prototypes/incidents.html`；`showcase.data.js`（五套骨架去 inline style / 去非白名单标签 / 显式闭合）；`scripts/check-prototype.js`（骨架校验段）；`_template.html` 与 `orders/Page.vue`（行内动作按钮 `text` → `link`，与 CLAUDE.md §2 对齐）；本台账
@@ -309,6 +321,17 @@ updated: "2026-09-05"
 - 退出条件：R-045 verified；R-041 / R-044 重新 verified；代码已提交
 
 ## 当前变更
+
+### C-056 · `.l-*` 类名必须真实存在
+
+- 类型：`add`
+- 原因：用户指出新原型占位页的「前往事件列表」按钮没有居中
+- 定位：按钮外层写的是 `class="l-cluster l-cluster--center"`，而第一层只有 `.l-cluster--end` 与 `.l-cluster--between`——`--center` 是我凭空发明的。CSS 里不存在的类不会报错，flex 默认 `flex-start`，于是按钮左对齐、说明文字居中，两者错开
+- 之后：`R-058`。第一层补 `.l-cluster--center`（补齐 `--end` / `--between` / `--center` 三档）；`check-prototype.js` 从 `layout.css` / `base.css` 扫出真实类名集合，原型里出现集合外的 `l-` 类即 `unknown-layout-class` 报错
+- 验证：改前实测 说明文字中线 1075 / 按钮中线偏左；改后 容器 / 说明 / 提示 / 按钮四者中线均为 1075。故障注入：把类名改成 `l-cluster--middle` 后报 `unknown-layout-class (line 145)` 并非零退出
+- 关联需求：`R-058`、`R-009`、`R-019`
+- 覆盖关系：`clarify R-009`（第一层布局类补 `.l-cluster--center`）
+- 影响功能：`F-001 direct`、`F-005 direct`、`F-007 direct`
 
 ### C-055 · 重新生成验证与骨架可粘贴性修复
 
@@ -648,6 +671,8 @@ updated: "2026-09-05"
 | C-055 | F-007 | direct | check-prototype 增加骨架校验段 | 注入违规骨架必失败 |
 | C-055 | F-011 | direct | 五套骨架去 inline style / 非白名单标签 | 展示页 01～05 仍正常渲染 |
 | C-055 | F-006 | indirect | 正式页按钮改 link 与规则对齐 | 视觉回归 0.00% |
+| C-056 | F-001 | direct | 第一层补 `.l-cluster--center` | 空态按钮与说明中线一致 |
+| C-056 | F-005, F-007 | direct | 原型不得使用不存在的 `.l-*` 类 | 注入不存在类名必失败 |
 | C-012 | F-011 | direct | 展示页位置与内容改变 | 打开即渲染；token 数量对账；切换联动 |
 | C-012 | F-003 | indirect | build 增加 tokens.js 产物 | `pnpm build:ds` 产出三文件 |
 | C-013 | F-011 | direct | 排版与内容范围改变 | 与画板核对；组件覆盖清单核对 |
@@ -726,6 +751,7 @@ updated: "2026-09-05"
 | R-050 | `layout.css`（`.l-page--fill` / `.l-fill` / `.l-module.l-fill`）、`ui/UiShell.vue`（`view-class="ui-shell__view"` + `height: 100%` 纵向 flex）、`ui/UiState.vue`（`.ui-state.l-fill`）、`skins/table.css`（`.el-table.l-fill`）、`showcase.data.js`（`TABLE_MODULE` / `pageClass`）、`apps/prototypes/_template.html`、`apps/web/src/features/orders/Page.vue`、README「高度填充」、CLAUDE.md §2 | verified | E-28 |
 | R-051 | `ui/composites/UiFilterBar.vue`（`ElPopover` + `#advanced` 插槽 + `.ui-filter-bar__adv`）、`showcase.data.js`（CUSTOM 与 `TABLE_MODULE`）、README UiFilterBar 节、CLAUDE.md §2 | verified | E-28 |
 | R-038（两段式） | `showcase.html`（`parseHash` / `go(key, sub)` / `defaultSub` / `syncAnchor`） | verified | E-26 |
+| R-058 | `packages/design-system/layout.css`（`.l-cluster--center`）、`scripts/check-prototype.js`（`LAYOUT_CLASSES` / `unknown-layout-class`） | verified | E-40 |
 | R-057 | `scripts/check-prototype.js`（`checkSkeletons` / `PENDING_WHITELIST`）、`packages/design-system/showcase.data.js`（CRUMB / STAT_ROW / TABLE_MODULE 与五套 skeleton） | verified | E-39 |
 | R-016（第二个业务原型） | `apps/prototypes/incidents.html` | verified | E-39 |
 | R-056 | `skins/table.css`（`.is-actions`）、`scripts/check-prototype.js`（`actions-column`）、`CLAUDE.md` §2、README 皮肤层、`showcase.data.js`（TABLE_MODULE）、`apps/prototypes/{_template,alarms}.html`、`apps/web/src/features/orders/Page.vue` | verified | E-37 |
@@ -814,6 +840,7 @@ updated: "2026-09-05"
 | E-37 | R-056, R-019, R-042 | 改前：`alarms.html` 操作列 3 个文字按钮 / 列宽 176，截图可见折成两行且行与行按钮位置不齐。改后实测：`.is-actions .cell` 为 `display: flex` / `gap: 12px` / `white-space: nowrap`，六行单元格高 17～18px、表格行高恒为 44px，按钮数分别为 [详情, 确认] / [详情] / [详情, 派发]。机械检查：`node scripts/check-prototype.js` 两个原型通过；注入第三个按钮（关联事件）后报 `actions-column (line 126): 操作列有 3 个按钮，行内动作最多 2 个…` 且退出码 1，还原后恢复通过。门禁：`lint` / `typecheck` 0 错误、`build:ds` 0 错误 1 条既有警告、`check:ledger` 通过、`test:visual` 三用例 0.00%（原型模板与正式页同步改动）、`test:mutation` 8 组件全过 | pass | 2026-09-05 |
 | E-38 | R-050, R-018 | `#/monitor-realtime` 占位页 1440×860：改前空态贴容器顶部；改后容器高 742、空态高 284，上方留白 229 / 下方留白 229（对称居中）。loading 态骨架屏仍从顶部开始。门禁：`lint` / `check:prototype` / `build:ds`（check-layer2 0 错误）通过，`test:visual` 三用例 0.00%，`test:mutation` 8 组件全过（UiState 12 项） | pass | 2026-09-05 |
 | E-39 | R-057, R-016, R-012, R-050, R-056 | 重新生成实验：按 PRD §8.5 从 `_template.html` 起步新建 `incidents.html`（不参考 `alarms.html`），`check:prototype` **一次通过**。1440×860 实测继承情况：菜单图标中线 32（顶栏汉堡 32）、分组标签 x=24、一级子项 x=49 = 父项标签、三级 x=61、操作列 cell `nowrap` / 高 17～18 / 行高 44、`.l-page` 800 = 外壳视图 800、占位页空态上下留白 229/229、控制台无报错。骨架体检：改前 `TEMPLATES` 骨架含 13 处 `style="…"`、7 处非白名单标签（`el-icon` / `Plus` / `HomeFilled`）及大量自闭合；改后 `check:prototype` 输出「✔ 布局配置骨架 5 套（可直接粘进原型）」，并对 `el-progress`（01）/ `el-tree`（04）给出 PENDING 警告。展示页 `#/page/stat` 与 `#/page/tree-table` 改后渲染正常、无控制台报错。门禁：`lint` / `typecheck` 0 错误、`check:ledger` 通过、`test:visual` 三用例 0.00%（`_template` 与 `orders` 同步改 `link`） | pass | 2026-09-05 |
+| E-40 | R-058, R-009, R-019 | 1920×900 `incidents.html#/map` 占位页：改前按钮左对齐（外层 `.l-cluster--center` 在第一层不存在，flex 落回 `flex-start`），说明文字中线 1075 而按钮偏左；改后 外壳视图 / 说明 / 提示 / 按钮 四者中线均为 **1075**。故障注入：把类名改成 `l-cluster--middle`，`check:prototype` 报 `unknown-layout-class (line 145): .l-cluster--middle 在第一层不存在…` 并退出 1，还原后三个原型全部通过。门禁：`lint` / `build:ds`（check-layer2 0 错误）/ `check:ledger` 通过，`test:visual` 三用例 0.00%，`test:mutation` 8 组件全过 | pass | 2026-09-05 |
 | E-08 | R-028 | `doc/frontend-layered-design.md` §1～§10 与 RV-002 逐节核对；IT-003 同步 §3 目录树与 §9 展示页（RV-003）；IT-004 同步 §6 路由与 §9 方向 A（RV-004）：Vue 3 + Element Plus、Vite 8 + Tailwind 4、monorepo 目录、CDN 原型形态、插件三技能、展示页面、实施状态 | pass | 2026-09-02 |
 
 ## 历史索引
@@ -826,6 +853,7 @@ updated: "2026-09-05"
 | RV-016 | IT-016 | C-039 | modify | R-005 | `--layout-content-max` 1440px → none | F-001, F-002 |
 | RV-016 | IT-016 | C-040 | add | R-050, R-051, R-009, R-041, R-042 | 无 → 高度填充布局与高级搜索浮窗 | F-001～F-006 |
 | RV-016 | IT-016 | C-041 | implementation_correction | R-048, R-026 | dist 可复现：键排序 + 去掉生成时间 | F-003, F-007 |
+| RV-023 | IT-023 | C-056 | add | R-058, R-009, R-019 | 无 → `.l-*` 类名真实性检查；第一层补 `.l-cluster--center` | F-001, F-005, F-007 |
 | RV-022 | IT-022 | C-055 | add | R-057, R-019, R-044, R-053, R-016 | 无 → 第二个业务原型 + 骨架可粘贴性修复与校验 | F-005, F-007, F-011 |
 | RV-021 | IT-021 | C-054 | modify | R-050, R-018 | 填充态空 / 错误态贴顶 → 在剩余高度居中 | F-003 |
 | RV-021 | IT-021 | C-053 | add | R-056, R-019, R-042, R-044 | 无 → 操作列 is-actions 皮肤 + 行内动作 ≤ 2 + actions-column 检查 | F-003, F-005, F-007 |

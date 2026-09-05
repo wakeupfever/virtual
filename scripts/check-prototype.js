@@ -39,6 +39,13 @@ function stripScripts(html) {
   return html.replace(/<script\b[\s\S]*?<\/script>/gi, keep => keep.replace(/[^\n]/g, ''))
 }
 
+/** 第一层真实存在的 .l-* 类：写错或凭空发明一个类名时，浏览器不会报错、检查也曾放行，
+ *  页面只是安静地不对齐（.l-cluster--center 就这么混进过原型）。这里按 layout.css / base.css 的实际定义校验。 */
+const LAYOUT_CLASSES = new Set(
+  ['layout.css', 'base.css']
+    .flatMap(f => [...readFileSync(join(ROOT, 'packages/design-system', f), 'utf8').matchAll(/\.(l-[a-z0-9-]+)/g)].map(m => m[1])),
+)
+
 const composites = new Map()   // 候选结构名 → [文件...]
 const placeholders = []        // { file, name, line }
 
@@ -76,6 +83,18 @@ function checkFile(file, strict) {
       const hint = tag.startsWith('el-') ? '不在 Element Plus 白名单，先提议' : '原生元素被禁止或未登记，用白名单组件替代'
       errors.push(`tag-not-allowed (line ${line}): <${tag}> ${hint}`)
     }
+  }
+
+  // .l-* 类必须在第一层真实定义（R-058）
+  const unknownClasses = new Map()
+  for (const m of markup.matchAll(/class="([^"]*)"/g)) {
+    for (const cls of m[1].split(/\s+/)) {
+      if (!cls.startsWith('l-') || LAYOUT_CLASSES.has(cls)) continue
+      if (!unknownClasses.has(cls)) unknownClasses.set(cls, markup.slice(0, m.index).split('\n').length)
+    }
+  }
+  for (const [cls, line] of unknownClasses) {
+    errors.push(`unknown-layout-class (line ${line}): .${cls} 在第一层不存在（layout.css / base.css），写错类名浏览器不会报错，页面只会安静地不对齐`)
   }
 
   // 操作列（R-056）：行内动作最多两个、必须打 is-actions，否则窄列里会折行、间距也不齐

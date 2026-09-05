@@ -113,6 +113,7 @@
   gap: var(--space-component-gap);
 }
 .l-cluster--end { justify-content: flex-end; }
+.l-cluster--center { justify-content: center; }
 .l-cluster--between { justify-content: space-between; }
 
 /* 工具条：左侧筛选 / 右侧操作 */
