@@ -81,7 +81,7 @@
 .ui-shell__sidebar.is-collapsed .ui-shell__group {
   display: block;
   height: var(--border-w);
-  margin: var(--space-component-gap) var(--space-component-pad-x);
+  margin: var(--space-component-gap) 0;
   padding: 0;
   background: var(--color-border-muted);
 }
@@ -94,3 +94,10 @@
   background: var(--color-bg-accent);
 }
 .ui-shell__sidebar.is-collapsed .ui-shell__menu .el-sub-menu.is-active > .el-sub-menu__title .el-icon { color: var(--color-primary); }
+
+/* 嵌套项：竖线画在侧栏最左边、离缩进后的文字很远，改用底色 + 主色文字表达选中 */
+.ui-shell__menu .el-menu--inline .el-menu-item.is-active::before { display: none; }
+.ui-shell__menu .el-menu--inline .el-menu-item.is-active {
+  background: var(--color-bg-accent);
+  color: var(--color-primary);
+}

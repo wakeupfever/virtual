@@ -266,6 +266,7 @@ updated: "2026-09-05"
 - 无限层级：新增第二层内部组件 `ui/UiShellMenu.vue` 自引用递归（`ElSubMenu` + `ElMenuItem`），`UiShellMenuItem` 增加 `children`；父项徽标由 `sumBadge` 汇总子级。原型菜单落地三级（告警中心 → 规则与推送 → 阈值规则 / 推送渠道 / 审批流配置），`currentMenu` 改递归查找
 - 折叠态：分组标题收成 1px 分隔线保住节奏；当前项落在子菜单里时折叠轨道上高亮的是父级 `el-sub-menu__title`，补上该选择器
 - 动画：**走了一次弯路**——为加动画去掉了 `:collapse-transition="false"`，结果 Element Plus 自带的横向折叠过渡与侧栏宽度过渡打架，侧栏 class 与内联宽度都已是折叠值、实测宽度却仍是 230px。改回关闭 EP 过渡，动画只由 `.ui-shell__sidebar` 的 `transition: width` 负责。原代码那行注释是有原因的
+- 菜单细节返工（用户两轮截图反馈）：① 子项没给 `icon` 时会渲染默认图标——那是一条横线，看着像多余的横杠；改为按 `depth` 判定，只有顶层才回退默认图标（折叠态要靠它辨认）。② 折叠态子菜单图标不显示：Element Plus 用 `.el-menu--collapse … span { width: 0; visibility: hidden }` 隐藏文字，而我的图标用的是 `<span class="el-icon">` 一并被藏；EP 自己的 `<el-icon>` 渲染成 `<i>` 所以不受影响——图标标签改 `<i>` 后恢复。③ 折叠态分组分隔线实测只有 16px 宽，像一截碎线；去掉横向留白。④ 选中的嵌套项竖线画在侧栏最左边（`2px × 34px at left: 0`），离缩进后的文字很远；嵌套层改用底色 + 主色文字
 - 连带修正：`check-layer2` 的组件清单改为只收 `ui/index.ts` 中公开注册的组件——`UiShellMenu` 是内部组件，否则展示页与变异测试会去找一张本不该存在的配置卡
 - 关联需求：`R-012`、`R-042`、`R-048`
 - 覆盖关系：—

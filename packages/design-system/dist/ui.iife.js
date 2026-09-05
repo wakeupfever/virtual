@@ -9,6 +9,7 @@ var DesignSystemUI = (function(exports, vue, element_plus) {
 		class: "ui-shell__group"
 	};
 	var _hoisted_2$8 = {
+		key: 0,
 		class: "el-icon",
 		"aria-hidden": "true"
 	};
@@ -23,10 +24,11 @@ var DesignSystemUI = (function(exports, vue, element_plus) {
 	var _hoisted_4$8 = ["d"];
 	var _hoisted_5$7 = { class: "ui-shell__text" };
 	var _hoisted_6$4 = {
-		key: 0,
+		key: 1,
 		class: "ui-shell__badge"
 	};
 	var _hoisted_7$2 = {
+		key: 0,
 		class: "el-icon",
 		"aria-hidden": "true"
 	};
@@ -68,12 +70,18 @@ var DesignSystemUI = (function(exports, vue, element_plus) {
 	//#region ui/UiShellMenu.vue
 	var UiShellMenu_default = /* @__PURE__ */ (0, vue.defineComponent)({
 		__name: "UiShellMenu",
-		props: { items: {} },
+		props: {
+			items: {},
+			depth: { default: 0 }
+		},
 		setup(__props) {
 			/**
 			* UiShellMenu · 第二层 · UiShell 内部使用的递归菜单
 			* 单独成文件是为了自引用递归（层级不限）；不对外导出，第三层只通过 UiShell 的 menu prop 使用。
 			*/
+			const props = __props;
+			/** 顶层没给 icon 时回退到默认图标（折叠态要靠它辨认）；子层不给就不渲染，避免出现一条横杠 */
+			const showIcon = (item) => !!item.icon || props.depth === 0;
 			const iconPath = (item) => ICONS[item.icon ?? "default"] ?? ICONS.default;
 			return (_ctx, _cache) => {
 				const _component_UiShellMenu = (0, vue.resolveComponent)("UiShellMenu", true);
@@ -84,11 +92,14 @@ var DesignSystemUI = (function(exports, vue, element_plus) {
 						disabled: item.disabled
 					}, {
 						title: (0, vue.withCtx)(() => [
-							(0, vue.createElementVNode)("span", _hoisted_2$8, [((0, vue.openBlock)(), (0, vue.createElementBlock)("svg", _hoisted_3$8, [(0, vue.createElementVNode)("path", { d: iconPath(item) }, null, 8, _hoisted_4$8)]))]),
+							showIcon(item) ? ((0, vue.openBlock)(), (0, vue.createElementBlock)("i", _hoisted_2$8, [((0, vue.openBlock)(), (0, vue.createElementBlock)("svg", _hoisted_3$8, [(0, vue.createElementVNode)("path", { d: iconPath(item) }, null, 8, _hoisted_4$8)]))])) : (0, vue.createCommentVNode)("", true),
 							(0, vue.createElementVNode)("span", _hoisted_5$7, (0, vue.toDisplayString)(item.label), 1),
 							sumBadge(item) ? ((0, vue.openBlock)(), (0, vue.createElementBlock)("span", _hoisted_6$4, (0, vue.toDisplayString)(sumBadge(item)), 1)) : (0, vue.createCommentVNode)("", true)
 						]),
-						default: (0, vue.withCtx)(() => [(0, vue.createVNode)(_component_UiShellMenu, { items: item.children }, null, 8, ["items"])]),
+						default: (0, vue.withCtx)(() => [(0, vue.createVNode)(_component_UiShellMenu, {
+							items: item.children,
+							depth: __props.depth + 1
+						}, null, 8, ["items", "depth"])]),
 						_: 2
 					}, 1032, ["index", "disabled"])) : ((0, vue.openBlock)(), (0, vue.createBlock)((0, vue.unref)(element_plus.ElMenuItem), {
 						key: 2,
@@ -96,7 +107,7 @@ var DesignSystemUI = (function(exports, vue, element_plus) {
 						disabled: item.disabled
 					}, {
 						title: (0, vue.withCtx)(() => [(0, vue.createElementVNode)("span", _hoisted_10$1, (0, vue.toDisplayString)(item.label), 1), item.badge ? ((0, vue.openBlock)(), (0, vue.createElementBlock)("span", _hoisted_11$1, (0, vue.toDisplayString)(item.badge), 1)) : (0, vue.createCommentVNode)("", true)]),
-						default: (0, vue.withCtx)(() => [(0, vue.createElementVNode)("span", _hoisted_7$2, [((0, vue.openBlock)(), (0, vue.createElementBlock)("svg", _hoisted_8$2, [(0, vue.createElementVNode)("path", { d: iconPath(item) }, null, 8, _hoisted_9$1)]))])]),
+						default: (0, vue.withCtx)(() => [showIcon(item) ? ((0, vue.openBlock)(), (0, vue.createElementBlock)("i", _hoisted_7$2, [((0, vue.openBlock)(), (0, vue.createElementBlock)("svg", _hoisted_8$2, [(0, vue.createElementVNode)("path", { d: iconPath(item) }, null, 8, _hoisted_9$1)]))])) : (0, vue.createCommentVNode)("", true)]),
 						_: 2
 					}, 1032, ["index", "disabled"]))], 64);
 				}), 128);

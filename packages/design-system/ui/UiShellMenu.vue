@@ -43,7 +43,10 @@ export function sumBadge(item: UiShellMenuItem): number {
  */
 import { ElMenuItem, ElSubMenu } from 'element-plus'
 
-defineProps<{ items: UiShellMenuItem[] }>()
+const props = withDefaults(defineProps<{ items: UiShellMenuItem[]; depth?: number }>(), { depth: 0 })
+
+/** 顶层没给 icon 时回退到默认图标（折叠态要靠它辨认）；子层不给就不渲染，避免出现一条横杠 */
+const showIcon = (item: UiShellMenuItem) => !!item.icon || props.depth === 0
 
 const iconPath = (item: UiShellMenuItem) => ICONS[item.icon ?? 'default'] ?? ICONS.default
 </script>
@@ -54,23 +57,23 @@ const iconPath = (item: UiShellMenuItem) => ICONS[item.icon ?? 'default'] ?? ICO
 
     <ElSubMenu v-if="item.children && item.children.length" :index="item.key" :disabled="item.disabled">
       <template #title>
-        <span class="el-icon" aria-hidden="true">
+        <i v-if="showIcon(item)" class="el-icon" aria-hidden="true">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
             <path :d="iconPath(item)"></path>
           </svg>
-        </span>
+        </i>
         <span class="ui-shell__text">{{ item.label }}</span>
         <span v-if="sumBadge(item)" class="ui-shell__badge">{{ sumBadge(item) }}</span>
       </template>
-      <UiShellMenu :items="item.children" />
+      <UiShellMenu :items="item.children" :depth="depth + 1" />
     </ElSubMenu>
 
     <ElMenuItem v-else :index="item.key" :disabled="item.disabled">
-      <span class="el-icon" aria-hidden="true">
+      <i v-if="showIcon(item)" class="el-icon" aria-hidden="true">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
           <path :d="iconPath(item)"></path>
         </svg>
-      </span>
+      </i>
       <template #title>
         <span class="ui-shell__text">{{ item.label }}</span>
         <span v-if="item.badge" class="ui-shell__badge">{{ item.badge }}</span>
