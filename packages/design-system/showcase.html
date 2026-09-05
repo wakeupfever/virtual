@@ -196,6 +196,32 @@
     .ds-tk { border-top: var(--border-w) solid var(--color-bg-subtle); }
   }
 
+  /* 调参浮窗：全局改写第一层 token（写在 :root 的 inline style 上，压过 data-theme / data-palette）。
+   * 做成可拖动、可收起的浮窗而不是抽屉——调参时要能看见被调的页面。 */
+  .ds-controls .el-button .ds-badge { margin-left: var(--space-inline-pad); }
+  .ds-tuner { position: fixed; z-index: var(--z-dialog); width: 420px; max-width: calc(100vw - var(--space-page-gap)); max-height: calc(100vh - var(--space-page-gap)); display: flex; flex-direction: column; background: var(--color-bg-surface); border: var(--border-w) solid var(--color-border-muted); border-radius: var(--radius-lg); box-shadow: var(--shadow-lg); overflow: hidden; }
+  .ds-tuner__bar, .ds-tuner__head, .ds-tuner__foot { flex: none; }
+  .ds-tuner.is-min { width: max-content; }
+  .ds-tuner__bar { display: flex; align-items: center; gap: var(--space-inline-gap); padding: var(--space-inline-pad) var(--space-inline-pad) var(--space-inline-pad) var(--space-component-pad-x); background: var(--color-bg-subtle); cursor: grab; user-select: none; touch-action: none; }
+  .ds-tuner:not(.is-min) .ds-tuner__bar { border-bottom: var(--border-w) solid var(--color-border-muted); }
+  .ds-tuner.is-dragging .ds-tuner__bar { cursor: grabbing; }
+  .ds-tuner__grip { display: inline-flex; color: var(--color-icon-muted); }
+  .ds-tuner__label { font-size: var(--font-size-caption); font-weight: var(--font-weight-medium); white-space: nowrap; }
+  .ds-tuner__n { font-size: 11px; font-family: var(--font-family-mono); color: var(--color-primary); }
+  .ds-tuner__acts { margin-left: auto; display: flex; align-items: center; }
+  .ds-tuner__scroll { --ds-tuner-max: 52vh; flex: 1 1 auto; min-height: 0; }
+  .ds-tuner__head { padding: var(--space-4) var(--space-5); display: flex; flex-direction: column; gap: var(--space-3); border-bottom: var(--border-w) solid var(--color-bg-muted); }
+  .ds-tuner__hint { font-size: 11px; color: var(--color-text-muted); line-height: var(--line-height-body); }
+  .ds-tuner__body { padding: var(--space-4) var(--space-5) var(--space-6); display: flex; flex-direction: column; gap: var(--space-5); }
+  .ds-tuner__group { display: flex; flex-direction: column; gap: var(--space-1); }
+  .ds-tuner__title { display: flex; align-items: baseline; justify-content: space-between; margin-bottom: var(--space-2); font-size: var(--font-size-caption); font-weight: var(--font-weight-medium); }
+  .ds-tuner__title span { font-size: 11px; color: var(--color-text-placeholder); font-weight: var(--font-weight-regular); }
+  .ds-tuner__empty { font-size: 11px; color: var(--color-text-placeholder); }
+  .ds-tuner .ds-tk.is-text { grid-template-columns: minmax(0, 1fr); gap: 2px; padding-block: var(--space-1); }
+  .ds-tuner .ds-tk__val.is-tweaked { cursor: pointer; }
+  .ds-tuner__foot { display: flex; align-items: center; gap: var(--space-2); padding: var(--space-3) var(--space-5); border-top: var(--border-w) solid var(--color-bg-muted); background: var(--color-bg-subtle); }
+  .ds-tuner__foot .ds-label { margin-right: auto; }
+
   /* 整页模板视图（#/page/<key>）：UiShell 撑满视口，控制条浮在右下角 */
   .ds-full { height: 100vh; height: 100dvh; }
   .ds-full > .ui-shell { height: 100%; }
@@ -291,15 +317,16 @@
   <div v-if="state.route === 'page'" class="ds-full">
     <component :is="demoComp(currentTemplate)" :key="currentTemplate.key"></component>
     <div class="ds-fab">
-      <el-button size="small" text @click="go('templates')"><el-icon class="el-icon--left"><ArrowLeft /></el-icon>返回</el-button>
+      <el-button size="small" text @click="go('templates')"><el-icon class="el-icon--left"><ArrowLeft></ArrowLeft></el-icon>返回</el-button>
       <span class="ds-fab__sep"></span>
-      <el-button size="small" text circle :title="'上一套'" @click="stepTemplate(-1)"><el-icon><CaretLeft /></el-icon></el-button>
+      <el-button size="small" text circle :title="'上一套'" @click="stepTemplate(-1)"><el-icon><CaretLeft></CaretLeft></el-icon></el-button>
       <span class="ds-fab__name">{{ currentTemplate.no }} {{ currentTemplate.label }}</span>
-      <el-button size="small" text circle :title="'下一套'" @click="stepTemplate(1)"><el-icon><CaretRight /></el-icon></el-button>
+      <el-button size="small" text circle :title="'下一套'" @click="stepTemplate(1)"><el-icon><CaretRight></CaretRight></el-icon></el-button>
       <span class="ds-fab__sep"></span>
       <div class="ds-seg"><div class="ds-seg__item" :class="{ 'is-active': !state.dark }" @click="state.dark = false; applyMode()">浅色</div><div class="ds-seg__item" :class="{ 'is-active': state.dark }" @click="state.dark = true; applyMode()">深色</div></div>
       <div class="ds-seg"><div v-for="d in ['compact','default','loose']" :key="d" class="ds-seg__item" :class="{ 'is-active': state.density === d }" @click="state.density = d; applyMode()">{{ { compact: '紧', default: '中', loose: '松' }[d] }}</div></div>
       <span class="ds-fab__sep"></span>
+      <el-button size="small" @click="openTuner()">调参<span v-if="overrideCount" class="ds-badge ds-badge--wl">{{ overrideCount }}</span></el-button>
       <el-button size="small" @click="copy(currentTemplate.skeleton)">复制骨架</el-button>
     </div>
   </div>
@@ -315,6 +342,7 @@
       <div class="ds-seg"><div v-for="d in ['compact','default','loose']" :key="d" class="ds-seg__item" :class="{ 'is-active': state.density === d }" @click="state.density = d; applyMode()">{{ { compact: '紧凑', default: '默认', loose: '宽松' }[d] }}</div></div>
       <el-select v-model="state.preset" size="small" style="width: 128px;" @change="applyPreset"><el-option v-for="p in PRESETS" :key="p.key" :label="p.label" :value="p.key"></el-option></el-select>
       <div class="ds-primary"><el-color-picker v-model="state.primary" size="small" @change="applyPrimary"></el-color-picker><span>{{ state.primary }}</span></div>
+      <el-button size="small" @click="openTuner()"><el-icon class="el-icon--left"><Setting></Setting></el-icon>调参<span v-if="overrideCount" class="ds-badge ds-badge--wl">{{ overrideCount }}</span></el-button>
     </div>
   </header>
 
@@ -548,7 +576,7 @@
                 <div class="ds-tplcard__desc">{{ t.desc }}</div>
                 <div class="ds-cfg__anatomy"><span>结构</span><span v-for="a in t.anatomy" :key="a" class="ds-pill">{{ a }}</span></div>
               </div>
-              <div class="ds-tplcard__open"><el-icon><Right /></el-icon></div>
+              <div class="ds-tplcard__open"><el-icon><Right></Right></el-icon></div>
             </div>
             <div class="ds-tplcard__foot" @click.stop>
               <span class="ds-label">整屏打开后可切换模板、深浅与密度</span>
@@ -582,6 +610,48 @@
     </main>
     </el-scrollbar>
   </div>
+  <!-- ===================== 调参浮窗：全局改写第一层 token；可拖动、可收起 ===================== -->
+  <div v-if="state.tuner" class="ds-tuner" :class="{ 'is-min': state.tunerMin, 'is-dragging': state.tunerDrag }" :style="tunerStyle">
+    <div class="ds-tuner__bar" @pointerdown="dragStart">
+      <span class="ds-tuner__grip"><el-icon><Rank></Rank></el-icon></span>
+      <span class="ds-tuner__label">调参 · 第一层</span>
+      <span v-if="overrideCount" class="ds-tuner__n">{{ overrideCount }} 项已改</span>
+      <span class="ds-tuner__acts">
+        <el-button text circle size="small" :title="state.tunerMin ? '展开' : '收起'" @click="state.tunerMin = !state.tunerMin"><el-icon><Plus v-if="state.tunerMin"></Plus><Minus v-else></Minus></el-icon></el-button>
+        <el-button text circle size="small" title="关闭" @click="state.tuner = false"><el-icon><Close></Close></el-icon></el-button>
+      </span>
+    </div>
+    <div v-show="!state.tunerMin" class="ds-tuner__head">
+      <el-input v-model="state.tunerQ" size="small" placeholder="筛选 token，如 radius / module / border" clearable></el-input>
+      <div class="ds-tuner__hint">改动直接写在 <span class="ds-mono">:root</span> 的 inline style 上，整站实时联动。Element Plus 组件不需要单独配：圆角走 <span class="ds-mono">--radius-md</span>（常规控件）与 <span class="ds-mono">--radius-sm</span>（small 尺寸）、胶囊走 <span class="ds-mono">--radius-full</span>，边框走 <span class="ds-mono">--border-w</span> 与 <span class="ds-mono">--color-border-default/-muted</span>，全部经 <span class="ds-mono">--el-*</span> 映射驱动。inline 值会压过深浅模式与配色预设，看完记得「全部重置」。</div>
+    </div>
+    <el-scrollbar v-show="!state.tunerMin" class="ds-tuner__scroll" max-height="var(--ds-tuner-max)">
+      <div class="ds-tuner__body">
+        <div v-for="g in tunerGroups" :key="g.id" class="ds-tuner__group">
+          <div class="ds-tuner__title">{{ g.label }}<span>{{ g.tokens.length }}</span></div>
+          <div v-for="n in g.tokens" :key="n" class="ds-tk" :class="{ 'is-text': kindOf(g.id, n) === 'text' }">
+            <span class="ds-tk__name" :title="describe(n) || n" @click="copy(n)">{{ n }}</span>
+            <template v-if="kindOf(g.id, n) === 'color'">
+              <span class="ds-tk__ctl"><el-color-picker :model-value="overrideValue(n)" size="small" show-alpha @update:model-value="v => v ? (setOverride(n, v), state.tick++) : resetOverride(n)"></el-color-picker></span>
+              <span class="ds-tk__val" :class="{ 'is-tweaked': isOverridden(n) }" :title="isOverridden(n) ? '点击恢复默认' : ''" @click="isOverridden(n) && resetOverride(n)">{{ shortColor(overrideValue(n)) }}</span>
+            </template>
+            <template v-else-if="kindOf(g.id, n) === 'length'">
+              <span class="ds-tk__ctl"><el-slider :model-value="pxOf(overrideValue(n))" :min="rangeOf(g.id, n)[0]" :max="rangeOf(g.id, n)[1]" :step="1" :show-tooltip="false" size="small" @input="v => onSlide(n, v)" @change="state.tick++"></el-slider></span>
+              <span class="ds-tk__val" :class="{ 'is-tweaked': isOverridden(n) }" :title="isOverridden(n) ? '点击恢复默认' : ''" @click="isOverridden(n) && resetOverride(n)">{{ overrideValue(n) }}</span>
+            </template>
+            <span v-else class="ds-tk__ctl"><el-input :model-value="overrideValue(n)" size="small" @change="v => v ? (setOverride(n, v), state.tick++) : resetOverride(n)"></el-input></span>
+          </div>
+        </div>
+        <div v-if="!tunerGroups.length" class="ds-tuner__empty">没有匹配「{{ state.tunerQ }}」的 token。</div>
+      </div>
+    </el-scrollbar>
+    <div v-show="!state.tunerMin" class="ds-tuner__foot">
+      <span class="ds-label">{{ overrideCount }} 项已改</span>
+      <el-button size="small" :disabled="!overrideCount" @click="resetOverrides">全部重置</el-button>
+      <el-button size="small" type="primary" :disabled="!overrideCount" @click="copy(overrideCss())">复制为 tokens.css</el-button>
+    </div>
+  </div>
+
   <div class="sc-probe" ref="probe"></div>
 </div>
 
@@ -600,7 +670,7 @@ const app = Vue.createApp({
       return { key: k === 'page' || ROUTES.some(r => r.key === k) ? k : ROUTES[0].key, sub }
     }
     const first = parseHash()
-    const state = Vue.reactive({ route: first.key, sub: first.sub, anchor: '', dark: false, density: 'default', primary: '', preset: PRESETS[0].key, showRaw: false, showEl: false, tick: 0, tweaks: {} })
+    const state = Vue.reactive({ route: first.key, sub: first.sub, anchor: '', dark: false, density: 'default', primary: '', preset: PRESETS[0].key, showRaw: false, showEl: false, tick: 0, tweaks: {}, tuner: false, tunerMin: false, tunerDrag: false, tunerPos: { x: 0, y: 0 }, tunerQ: '', overrides: {} })
     const probe = Vue.ref(null)
     const currentRoute = Vue.computed(() => ROUTES.find(r => r.key === state.route) || ROUTES[0])
 
@@ -649,6 +719,74 @@ const app = Vue.createApp({
     const resetTweak = c => { delete state.tweaks[c.key] }
     const hasTweak = c => !!state.tweaks[c.key] && Object.keys(state.tweaks[c.key]).length > 0
     const tweakStyle = c => state.tweaks[c.key] || {}
+
+    /* ---------- 调参 · 全局改写第一层 ----------
+     * 与「脱胎第一层」的区别：那个只作用于单张配置卡的舞台，这个直接写在 :root 上，
+     * 整站（含 Element Plus 组件，因为 --el-* 全部映射自第一层）实时联动。
+     * 分组与条目全部来自 dist/tokens.json，不手工维护清单。 */
+    const TUNER_GROUPS = [
+      { id: 'color', label: '颜色' }, { id: 'space', label: '间距' }, { id: 'radius', label: '圆角' },
+      { id: 'border', label: '边框' }, { id: 'shadow', label: '阴影' }, { id: 'font', label: '字体' },
+      { id: 'layout', label: '布局尺寸' }, { id: 'z', label: '层级' },
+    ]
+    const isLen = v => /^-?\d+(?:\.\d+)?px$/.test(v || '')
+    const BASE_RANGE = (gid, n) => gid === 'space' ? [0, 64] : gid === 'radius' ? [0, 32] : gid === 'border' ? [0, 8]
+      : gid === 'font' ? [8, 48] : /^--layout-(header|row|thead|control-h|menu|icon)/.test(n) ? [0, 120] : [0, 480]
+    /** 控件类型由「解析出来的值长什么样」决定，不靠名字猜。
+     * 远超常规区间的哨兵值（--radius-full 的 9999px）降级为文本框：
+     * el-slider 会把越界的 model-value 钳住并回吐，@input 收到后就成了「无声改写」。 */
+    const kindOf = (gid, n) => {
+      if (gid === 'color') return 'color'
+      const v = overrideValue(n)
+      return isLen(v) && pxOf(v) <= BASE_RANGE(gid, n)[1] * 3 ? 'length' : 'text'
+    }
+    /** 区间必须包住当前值，否则渲染的一瞬间就会被钳值回写 */
+    const rangeOf = (gid, n) => {
+      const [lo, hi] = BASE_RANGE(gid, n)
+      const cur = pxOf(overrideValue(n))
+      return [Math.min(lo, cur), Math.max(hi, Math.ceil(cur * 1.5))]
+    }
+    /** 只有真的变了才写，挡住控件回吐同值触发的空写 */
+    const onSlide = (n, v) => { const next = v + 'px'; if (next !== overrideValue(n)) setOverride(n, next) }
+    const overrideValue = n => state.overrides[n] ?? resolved.value[n]
+    const isOverridden = n => n in state.overrides
+    const setOverride = (n, v) => { state.overrides[n] = v; document.documentElement.style.setProperty(n, v) }
+    const resetOverride = n => { delete state.overrides[n]; document.documentElement.style.removeProperty(n); state.tick++ }
+    const resetOverrides = () => {
+      for (const n of Object.keys(state.overrides)) document.documentElement.style.removeProperty(n)
+      state.overrides = {}; state.primary = shortColor(getComputedStyle(document.documentElement).getPropertyValue('--color-primary').trim()); state.tick++
+    }
+    const overrideCount = Vue.computed(() => Object.keys(state.overrides).length)
+    const overrideCss = () => `:root {\n${Object.entries(state.overrides).map(([n, v]) => `  ${n}: ${v};`).join('\n')}\n}`
+    /* 浮窗拖动：只按下标题栏才拖；位置钳在视口内，缩到只剩标题栏时也不会被拖出屏幕 */
+    const TUNER_W = 420
+    const tunerStyle = Vue.computed(() => ({ left: state.tunerPos.x + 'px', top: state.tunerPos.y + 'px' }))
+    /** 按浮窗实际高度钳位，保证整体留在视口内（收起时只有标题栏，能贴到很下面） */
+    const clampPos = (x, y) => {
+      const pad = 8
+      const h = document.querySelector('.ds-tuner')?.getBoundingClientRect().height || 40
+      return { x: Math.min(Math.max(pad, x), Math.max(pad, innerWidth - TUNER_W - pad)), y: Math.min(Math.max(pad, y), Math.max(pad, innerHeight - h - pad)) }
+    }
+    let dragFrom = null
+    const dragMove = e => { if (dragFrom) Object.assign(state.tunerPos, clampPos(e.clientX - dragFrom.dx, e.clientY - dragFrom.dy)) }
+    const dragEnd = () => { dragFrom = null; state.tunerDrag = false; window.removeEventListener('pointermove', dragMove) }
+    function dragStart(e) {
+      if (e.target.closest('.ds-tuner__acts')) return   // 收起 / 关闭按钮不触发拖动
+      dragFrom = { dx: e.clientX - state.tunerPos.x, dy: e.clientY - state.tunerPos.y }
+      state.tunerDrag = true
+      window.addEventListener('pointermove', dragMove)
+      window.addEventListener('pointerup', dragEnd, { once: true })
+    }
+    const openTuner = () => { if (!state.tunerPos.x) Object.assign(state.tunerPos, clampPos(innerWidth - TUNER_W - 24, 72)); state.tuner = true; state.tunerMin = false }
+    window.addEventListener('resize', () => { if (state.tuner) Object.assign(state.tunerPos, clampPos(state.tunerPos.x, state.tunerPos.y)) })
+
+    const tunerGroups = Vue.computed(() => {
+      const q = state.tunerQ.trim().toLowerCase()
+      return TUNER_GROUPS
+        // 断点是媒体查询用的，改变量不会实时生效，不放进可调清单
+        .map(g => ({ ...g, tokens: group(g.id).map(t => t.name).filter(n => !/^--breakpoint-/.test(n) && (!q || n.includes(q))) }))
+        .filter(g => g.tokens.length)
+    })
 
     /* ---------- 布局配置 · 页面排版模板 ---------- */
     const currentTemplate = Vue.computed(() => TEMPLATES.find(t => t.key === state.sub) || TEMPLATES[0])
@@ -745,10 +883,13 @@ const app = Vue.createApp({
      *  要改默认配色，改 tokens.css ② 段的值即可。 */
     function applyPreset(key) {
       const html = document.documentElement
+      // 主色若被调参覆盖会压过 data-palette，切预设时先撤掉它，否则看不出变化
+      if (isOverridden('--color-primary')) resetOverride('--color-primary')
       if (key === PRESETS[0].key) delete html.dataset.palette; else html.dataset.palette = key
       Vue.nextTick(() => { state.primary = shortColor(getComputedStyle(html).getPropertyValue('--color-primary').trim()); state.tick++ })
     }
-    function applyPrimary(v) { if (v) document.documentElement.style.setProperty('--color-primary', v); else document.documentElement.style.removeProperty('--color-primary'); Vue.nextTick(() => state.tick++) }
+    /** 顶栏主色取色器走同一套覆盖机制，避免与调参面板各写各的 */
+    function applyPrimary(v) { if (v) setOverride('--color-primary', v); else resetOverride('--color-primary'); Vue.nextTick(() => state.tick++) }
 
     async function copy(text) {
       try { await navigator.clipboard.writeText(text) } catch { const ta = document.createElement('textarea'); ta.value = text; document.body.appendChild(ta); ta.select(); document.execCommand('copy'); ta.remove() }
@@ -764,7 +905,8 @@ const app = Vue.createApp({
       state.tick++
     })
 
-    return { T, ROUTES, CATEGORIES, CUSTOM_GROUPS, COMPONENTS, CUSTOM, LAYOUTS, PRESETS, state, probe, mainScroll, onScroll, customOf, tokenKind, sliderRange, pxOf, tweakValue, setTweak, resetTweak, hasTweak, tweakStyle, TEMPLATES, currentTemplate, currentCustom, tplIndex, stepTemplate, layoutMeta, currentRoute, anchors, resolved, group, colorGroup, functionalColors, colorsByScope, spaceTokens, fontSizes, fontOthers, fontWeightFor, fontSampleText, describe, shortColor, isWhite, compsOf, demoComp, jump, go, applyMode, applyPrimary, applyPreset, copy }
+    return { T, ROUTES, CATEGORIES, CUSTOM_GROUPS, COMPONENTS, CUSTOM, LAYOUTS, PRESETS, state, probe, mainScroll, onScroll, customOf, tokenKind, sliderRange, pxOf, tweakValue, setTweak, resetTweak, hasTweak, tweakStyle,
+      tunerGroups, kindOf, rangeOf, onSlide, tunerStyle, dragStart, openTuner, overrideValue, isOverridden, setOverride, resetOverride, resetOverrides, overrideCount, overrideCss, TEMPLATES, currentTemplate, currentCustom, tplIndex, stepTemplate, layoutMeta, currentRoute, anchors, resolved, group, colorGroup, functionalColors, colorsByScope, spaceTokens, fontSizes, fontOthers, fontWeightFor, fontSampleText, describe, shortColor, isWhite, compsOf, demoComp, jump, go, applyMode, applyPrimary, applyPreset, copy }
   },
 })
 app.use(ElementPlus, { locale: ElementPlusLocaleZhCn }).use(DesignSystemUI)

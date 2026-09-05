@@ -12,6 +12,7 @@ current-changes:
   - "C-040"
   - "C-041"
   - "C-042"
+  - "C-043"
 status: "active"
 updated: "2026-09-05"
 ---
@@ -22,7 +23,7 @@ updated: "2026-09-05"
 
 - 当前需求版本：`RV-016`
 - 当前工作迭代：`IT-016`
-- 当前变更：`C-037` 展示页三页视觉重排、`C-038` 去重叠：自研组件单组件详情 + 布局配置整页路由、`C-039` 内容区取消限宽、`C-040` 高度填充布局与高级搜索浮窗（add R-050 / R-051）、`C-041` dist 产物可复现、`C-042` 修复填充链把页面收成 max-content 宽
+- 当前变更：`C-037` 展示页三页视觉重排、`C-038` 去重叠：自研组件单组件详情 + 布局配置整页路由、`C-039` 内容区取消限宽、`C-040` 高度填充布局与高级搜索浮窗（add R-050 / R-051）、`C-041` dist 产物可复现、`C-042` 修复填充链把页面收成 max-content 宽、`C-043` 展示页全局调参面板
 - 本轮目标：展示页从「文档里的缩略预览」变成「能整屏打开的真实页面」，并补上表格页最缺的一块能力——页面撑满、表格随父级高度流动、表体内滚、分页贴底
 - 当前结论：**IT-016 完成**（R-050 / R-051 verified；R-005 / R-009 / R-037 / R-038 / R-041 / R-042 / R-044 / R-048 / R-049 重新 verified）；IT-015 完成（R-026 / R-027 / R-049 verified）；IT-014 完成（R-020 / R-021 / R-024 / R-025 / R-031 verified）；IT-013 完成（R-047 / R-048 verified，R-049 ready；R-005 / R-037 重新 verified）；IT-012 完成（R-046 verified，R-037 重新 verified）；IT-011 完成（R-042 / R-045 / R-044 / R-041 重新 verified）；IT-010 完成（R-045 verified；R-041 / R-044 重新 verified）；IT-009 完成（R-044 verified，R-037 重新 verified，代码已提交）；IT-008 完成（R-037 / R-041 / R-012 / R-007 / R-042 重新 verified，代码已提交）；展示页按方向 A 重做并验证（R-037），hash 路由落地并验证（R-038）；第一步成果保持——第一、二层（F-001～F-004）、原型模板与检查脚本（F-005）、`CLAUDE.md`、说明文档已实现并通过验收，17 条 `verified`、6 条 `implemented`（其余验收条件依赖第二步的 apps/web）；4 条 `ready` 属于第二步 B（Claude 插件 R-032～R-035），待用户验收第一步后授权
 
@@ -102,6 +103,8 @@ updated: "2026-09-05"
 
 - [x] `R-037` 展示页面从 `packages/design-system/` 目录直接产出（`showcase.html`，零构建，CDN + `dist/ui.iife.js` + `dist/tokens.js`），采用「方向 A · 文档站式」排版：顶栏路由页签（设计变量 / 组件物料 / 布局范式）+ 左侧分组锚点 + 内容限宽 + 右侧本页目录。设计变量页：功能色色卡网格、bg/text/border/icon 分列、间距作用域×关系阶梯尺（条宽取真实解析值）、字体样张、圆角/阴影/边框实物、布局尺寸；原始刻度与 `--el-*` 映射默认折叠。组件物料页：**Element Plus 全部组件**按官方分类（Basic / Form / Data / Navigation / Feedback / Others）逐一渲染，每张卡片含舞台区、白名单/需提议标记、驱动 token 注脚、复制用法；主题 / 密度 / 主色实时切换。**响应式**：内容流式限宽（设计变量 ≤1200、组件物料 ≤1560），卡片按 `auto-fill(minmax(440px, 1fr))` 自动分栏；≤1400 隐藏右目录，≤960 左锚点变为顶部横向滚动条，≤720 色卡/表格降列，≤560 顶栏精简；任何宽度无横向滚动。**自研组件页**（`#/custom/<组件 key>`，位于组件物料之后）：侧栏按 外壳 / 页面级 / 复合组件 分组列出全部组件，主区**一次只渲染选中的那一个**——舞台（真实渲染 + 结构标签，内容垂直居中）、「脱胎第一层」面板（该组件消费的 token 以「名称 | 控件 | 值」单行三列排布，外套 `ElScrollbar` 限高，滑块 / 取色只作用于本页舞台，可恢复默认）、Props / Slots / Events、用法与源码链接；窄屏面板落到舞台下方时 token 行自动多列。**布局范式页**示意块用中性槽位（surface 底 + `--color-border-default` 虚线），整卡统一灰画布、token 脚注并入同一块底。**布局配置页**见 `R-044`。`category: ux` `status: verified`
 
+- [x] `R-052` 展示页全局调参面板：顶栏与整页控制条均可打开「调参」**浮窗**——按标题栏拖动、可收起为一条标题栏、可关闭，位置按浮窗实际高度钳在视口内，整体高度不超过视口（做成浮窗而不是抽屉，是为了调参时能看见被调的页面）；内容区用 `ElScrollbar` 承载，把第一层语义 token 全部变成可实时调整的控件——分组与条目由 `dist/tokens.json` 驱动，不手工维护清单；控件类型按**解析出来的值**判定（颜色→取色器、纯 px→滑块、其余→文本框），滑块区间必须包住当前值，远超常规区间的哨兵值（`--radius-full` 9999px）降级为文本框，避免 `el-slider` 钳值回吐造成无声改写；改动写在 `:root` 的 inline style 上，整站（含所有 Element Plus 组件，其圆角 / 边框经 `--el-*` 映射自 `--radius-*` / `--border-w` / `--color-border-*`）实时联动；支持关键词筛选、单项点值恢复、全部重置、「复制为 tokens.css」输出改动过的 `:root` 片段；顶栏主色取色器并入同一套覆盖机制；断点类 token 不进清单（媒体查询无法响应变量）。`category: ux` `status: verified`
+
 ### 文档
 
 - [x] `R-028` `doc/frontend-layered-design.md` 与当前基线一致：技术栈 Vue 3 + Element Plus、Vite 8 + Tailwind 4、原型 CDN 形态、插件构成、展示页面，覆盖三层定义、细则、约束、promote 流程、目录总览与待确认项。`category: delivery` `status: verified`
@@ -158,6 +161,7 @@ updated: "2026-09-05"
 | R-044 | 五个页签各自渲染：01 含 4 张 UiStatCard，02～05 含表格与分页，04 含 ElTree，05 含 ElTabs；侧栏高亮与面包屑随模板切换；芯片值与 tokens 一致；`复制页面骨架` 得到的内容可放入 `_template.html` 的 `.l-page` 并通过 check | 用户输入（127.0.0.1:5173/#/materials/layout 五个菜单） | R-012, R-041, R-009 | RV-011 | C-026, C-030, C-032 | F-011, F-005 |
 | R-038 | 直达 `#/<key>` 高亮对应菜单；点击菜单改 hash；后退恢复；原型模板 `#/reports` 高亮「报表」；十条路由（含 `#/custom/<key>`、`#/page/<key>`）循环无运行时报错，空 `<sub>` 落到首项并补全 hash | 用户输入（补充路由概念） | R-012, R-016 | RV-004 | C-014, C-038 | F-005, F-011, F-008 |
 | R-050 | 1440×1200 下 `#/page/stat-table`：页面高 = 外壳内容区高，模块 / 表格逐层吃满，分页贴底且无外层滚动；压到 420 高时表体 `clientHeight < scrollHeight`（内滚生效）且仍无外层滚动；不加 `--fill` 的 01 统计页仍为外层滚动；`el-table` 全程不传 `height`；**且 1920 宽下 `.l-page` 宽度必须等于外壳内容区宽度**（填充链不得反过来压缩宽度，见 C-042） | 用户输入（表格高度应受父级限制、默认占满） | R-009, R-012, R-042, R-043 | RV-016 | C-040 | F-001, F-002, F-003, F-004, F-005, F-006 |
+| R-052 | 打开抽屉不碰任何控件时 `:root` 的 inline style 必须为空、「已改」计数为 0（钳值回写会当场暴露）；浮窗可按标题栏拖动、收起为 183×34 的标题栏、展开复原 420×735，拖到底部仍整体在视口内；82 行控件（85 语义 token 去掉 3 个断点 / 密度）含 41 滑块 / 24 取色器 / 17 文本框；改 `--radius-lg` 与 `--border-w` 后模块圆角 12→13、边框 1→2，改 `--radius-md` 后 Element Plus 输入框圆角 6→18；复制得到只含改动项的 `:root` 片段；全部重置后 inline 清空且视觉复原 | 用户输入（控制项应更丰富） | R-037, R-030 | RV-016 | C-043 | F-011 |
 | R-051 | 点开高级搜索前后，筛选条 / 表格 / 页面高度三项数值完全相同；浮窗渲染在 body（teleport）且含全部展开项；无 `#advanced` 插槽时仍只触发 `toggle` | 用户输入（高级搜索激活应该是浮窗 不影响高度） | R-041 | RV-016 | C-040 | F-003, F-005, F-011 |
 
 ## 不变量
@@ -191,7 +195,7 @@ updated: "2026-09-05"
 
 - 目标：展示页从「文档里的缩略预览」变成「能整屏打开的真实页面」；补上表格页最缺的能力——页面撑满、表格随父级高度流动、表体内滚、分页贴底；高级搜索不再挤压表格
 - 范围：`tokens.css`（content-max）、`layout.css`（填充三件套）、`ui/UiShell.vue`、`ui/UiState.vue`、`ui/composites/UiFilterBar.vue`、`skins/table.css`、`scripts/check-layer2.mjs`、`showcase.html`、`showcase.data.js`、`apps/prototypes/_template.html`、`apps/web/src/features/orders/Page.vue`、`tests/visual/mutate.mjs`、README / CLAUDE.md §2；git commit（第一二层与第三层回填分两次提交）
-- 包含变更：`C-037`、`C-038`、`C-039`、`C-040`、`C-041`、`C-042`
+- 包含变更：`C-037`、`C-038`、`C-039`、`C-040`、`C-041`、`C-042`、`C-043`
 - 对应需求版本：`RV-016`
 - 退出条件：R-050 / R-051 verified；R-005 / R-009 / R-037 / R-038 / R-041 / R-042 / R-044 / R-048 / R-049 重新 verified；八项门禁全绿；代码已提交
 
@@ -284,6 +288,18 @@ updated: "2026-09-05"
 - 关联需求：`R-050`、`R-051`、`R-009`、`R-012`、`R-041`、`R-042`
 - 覆盖关系：—
 - 影响功能：`F-001 direct`、`F-002 direct`、`F-003 direct`、`F-004 direct`、`F-005 direct`、`F-006 direct`
+
+### C-043 · 展示页全局调参面板
+
+- 类型：`add`
+- 原因：用户「控制深浅、密度、主题色这块应该更加丰富，模块的圆角 / 边框 / 阴影、模块之间的间距、所有 Element Plus 组件的圆角和边框都应该可以自由控制」
+- 之前：顶栏只有 深浅 / 密度三档 / 配色预设 / 主色取色器四个开关；能改单个 token 的地方只有自研组件配置卡，且只作用于那一张卡的舞台
+- 之后：R-052。实施中复现了 `C-036` 记录过的同一类缺陷并做了通用修复——抽屉一渲染，`el-slider` 就把越界的 `model-value` 钳住回吐，`@input` 当成用户编辑写进覆盖表，**未经任何操作就无声改写了 4 个 token**（`--radius-full` 9999→32、`--layout-control-w` 200→120、`--breakpoint-md` 768→480、`--breakpoint-lg` 1200→480）。修法不再是单点排除，而是：区间恒包住当前值、哨兵值降级文本框、写入前比对同值。另外核实 small 尺寸的 Element Plus 组件走 `--radius-sm` 而非 `--radius-md`，面板提示文案据此改写
+- 面板形态：初版做成 `ElDrawer`，用户指出「变成可以缩小的那种拖动浮窗」后改为可拖动 / 可收起的浮窗——抽屉会遮住正在被调的页面
+- 顺带修复：浮窗里给图标写了自闭合的自定义标签（`<Rank />` 等 9 处），in-DOM 模板下整个 `#app` 编译失败、Vue 未挂载（CLAUDE.md §3 已有此规则，是我违反）。全部显式闭合后控制台归零。注意这与之前记在「待确认」里的 `compiler-30` 不是一回事：`HEAD~2` 版本自闭合标签数为 0 却同样报错，那条仍未定位
+- 关联需求：`R-052`、`R-037`、`R-030`、`R-046`
+- 覆盖关系：—
+- 影响功能：`F-011 direct`、`F-001 indirect`
 
 ### C-042 · 修复填充链把页面收成 max-content 宽
 
@@ -445,6 +461,7 @@ updated: "2026-09-05"
 | C-039 | F-001, F-002 | direct | 第一层 token 值改变 | 1920 下 `.l-page` 宽 = 内容区宽；无横向滚动 |
 | C-040 | F-001, F-002, F-003, F-004, F-005, F-006 | direct | 新增布局能力与组件行为 | 逐层高度实测；矮视口内滚；浮窗前后高度不变；视觉回归 0.00% |
 | C-041 | F-003, F-007 | direct | 构建产物确定性 | 连续两次生成一致；`git diff --exit-code -- dist` 返回 0 |
+| C-043 | F-011 | direct | 展示页新增全局调参能力 | 空开抽屉零写入；三类控件联动；复制与重置闭环 |
 | C-042 | F-002, F-004 | direct | 外壳滚动视图的格式化上下文 | 1920 下 `.l-page` 宽 = 内容区宽；矮视口表体仍内滚；非填充页仍外滚 |
 | C-027 | F-011 | direct | 页签顺序与命名 | 路由 |
 
@@ -475,6 +492,7 @@ updated: "2026-09-05"
 | R-027 | `tests/visual/compare.mjs`、`tests/visual/_lib.mjs`、`.gitignore`（`__output__`） | verified | E-25 |
 | R-032～R-035 | `packages/claude-plugin/.claude-plugin/plugin.json`、`skills/{prototype,promote,layer-rules}/SKILL.md` | planned（第二步） | — |
 | R-037 | `packages/design-system/showcase.html`、`scripts/build-tokens.mjs`、`dist/tokens.js`(.json)、`package.json` build 脚本 | verified | E-09, E-26 |
+| R-052 | `showcase.html`（TUNER_GROUPS / kindOf / rangeOf / onSlide / setOverride 等 + 调参抽屉 + 顶栏与 FAB 入口） | verified | E-31 |
 | R-050 | `layout.css`（`.l-page--fill` / `.l-fill` / `.l-module.l-fill`）、`ui/UiShell.vue`（`view-class="ui-shell__view"` + `height: 100%` 纵向 flex）、`ui/UiState.vue`（`.ui-state.l-fill`）、`skins/table.css`（`.el-table.l-fill`）、`showcase.data.js`（`TABLE_MODULE` / `pageClass`）、`apps/prototypes/_template.html`、`apps/web/src/features/orders/Page.vue`、README「高度填充」、CLAUDE.md §2 | verified | E-28 |
 | R-051 | `ui/composites/UiFilterBar.vue`（`ElPopover` + `#advanced` 插槽 + `.ui-filter-bar__adv`）、`showcase.data.js`（CUSTOM 与 `TABLE_MODULE`）、README UiFilterBar 节、CLAUDE.md §2 | verified | E-28 |
 | R-038（两段式） | `showcase.html`（`parseHash` / `go(key, sub)` / `defaultSub` / `syncAnchor`） | verified | E-26 |
@@ -551,6 +569,7 @@ updated: "2026-09-05"
 | E-28 | R-050, R-051, R-009, R-041, R-042 | 1440×1200 `#/page/stat-table`：视图 1140 → 页面 1140 → 模块 920 → 表格 774 → 表体 732，表头 40 固定、分页 32 贴底、无外层滚动；1280×420 `#/page/table`：页面恰好 360、无外层滚动、表体 client 45 / scroll 132（**内滚生效**）、分页仍在视野内；1280×500 `#/page/stat`（不加 `--fill`）：视图 440 / 页面 817 / 外层可滚、滚动条存在——两种模式并存；04 左树穿过 `.l-split` 栅格：split 757、树面板与表格模块同为 757、表格 567；原型模板 1440×900：视图 840 → 页面 840 → 模块 707 → UiState 625 → 表格 593，且 loading / empty / error / ready 四态高度恒定（825→840 不再跳动）。浮窗：点开前后 筛选条 56 / 表格 611 / 页面 840 三项**完全相同**，浮窗 289×109、白底 + 边框 + 阴影、z-index 2011、含 2 个展开项；`el-table` 全程未传 `height` | pass | 2026-09-05 |
 | E-29 | R-048, R-049, R-026, R-027 | `check-layer2` 输出键排序后与改前内容逐项等价（脚本比对 `equal: true`）；再去掉两个生成脚本的 `generatedAt` 后，连续两次 `build:ds` 之间 `git diff --exit-code -- packages/design-system/dist` 返回 0——CI 第四步此前因时间戳每次必失败，现已可过；八项门禁全绿——`lint` / `typecheck` 0 错误，`build:ds` 0 错误 1 条既有警告（未消费 2），`check:prototype` 通过，`test:visual` 三用例均 0.00%，`test:mutation` 7 组件全过。变异测试抓到真信号：新增的 `--space-module-pad` / `--space-module-gap` 在 UiFilterBar 上观察不到，核实为 `ElPopover` teleport 到 body 不在快照范围 + `.l-stack` 基类被 `--tight` 覆盖（与 UiListItem 已有例外同因），写入 `KNOWN` 并注明原因，未放宽断言 | pass | 2026-09-05 |
 | E-30 | R-050, R-005, R-012 | 用户发现宽屏两侧又出现留白。复现：1920×1000 `#/page/stat-table` 下 `--layout-content-max` 与 `max-width` 均解析为 `none`，但 `.l-page` 仅 x=538 / w=1075（内容区 1690）——`.ui-shell__view` 的 `display: flex` 让 `.l-page` 的 `margin-inline: auto` 在交叉轴压过 `stretch`，收缩成 max-content 宽。视图改回块级 + `.l-page--fill` 自带 `height: 100%` 后三种情形同时成立：1920×1000 填充页 `.l-page` x=230 / w=1690 / h=940 = 视图，模块 720 / 表格 574 / 分页贴底 / 无外层滚动；1280×420 表体 client 45 vs scroll 132（内滚生效）、分页仍在视野；1920×500 非填充页 `.l-page` w=1690 / h=817、视图 440、外层可滚且滚动条存在；原型模板 1920 下同样 w=1690、表格 1616 | pass | 2026-09-05 |
+| E-31 | R-052, R-037 | 新标签页打开抽屉、不做任何操作：`:root` inline style 为空、计数 0（修复前会被 el-slider 钳值回写成 4 项）；分组 颜色24 / 间距13 / 圆角4 / 边框2 / 阴影3 / 字体13 / 布局尺寸20 / 层级5，共 82 行 = 41 滑块 + 24 取色器 + 17 文本框，`--radius-full` 为文本框；`#/page/table` 整页视图经 FAB 打开抽屉同样可用，键盘步进 `--radius-lg` / `--border-w` 后模块 borderRadius 12→13px、borderTopWidth 1→2px、计数 2；`--radius-md` 6→18px 时 Element Plus 输入框圆角同步 6→18px（small 按钮走 `--radius-sm`，已在提示文案中写明）；复制输出 `:root {  --radius-lg: 13px;  --border-w: 2px; }`；全部重置后 inline 清空、模块复原 12px/1px、计数归零；新标签页无控制台报错 | pass | 2026-09-05 |
 | E-08 | R-028 | `doc/frontend-layered-design.md` §1～§10 与 RV-002 逐节核对；IT-003 同步 §3 目录树与 §9 展示页（RV-003）；IT-004 同步 §6 路由与 §9 方向 A（RV-004）：Vue 3 + Element Plus、Vite 8 + Tailwind 4、monorepo 目录、CDN 原型形态、插件三技能、展示页面、实施状态 | pass | 2026-09-02 |
 
 ## 历史索引
@@ -563,6 +582,7 @@ updated: "2026-09-05"
 | RV-016 | IT-016 | C-039 | modify | R-005 | `--layout-content-max` 1440px → none | F-001, F-002 |
 | RV-016 | IT-016 | C-040 | add | R-050, R-051, R-009, R-041, R-042 | 无 → 高度填充布局与高级搜索浮窗 | F-001～F-006 |
 | RV-016 | IT-016 | C-041 | implementation_correction | R-048, R-026 | dist 可复现：键排序 + 去掉生成时间 | F-003, F-007 |
+| RV-016 | IT-016 | C-043 | add | R-052, R-037 | 四个开关 → 覆盖 82 个 token 的调参面板 | F-011 |
 | RV-016 | IT-016 | C-042 | implementation_correction | R-050, R-005, R-012 | 外壳视图改回块级，修复填充链把页面收成 max-content 宽 | F-002, F-004 |
 | RV-015 | IT-015 | C-036 | implement | R-026, R-027, R-049, R-037, R-012 | ready → verified；两处缺陷修复 | F-007, F-008 |
 | RV-014 | IT-014 | C-035 | implement | R-020, R-021, R-024, R-025, R-031 | ready → verified；R-021 / R-024 澄清 | F-006, F-007 |
