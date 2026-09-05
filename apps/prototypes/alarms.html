@@ -93,7 +93,7 @@
         </ui-filter-bar>
 
         <ui-state class="l-fill" :state="state.view" empty-text="当前筛选条件下没有告警" @retry="reload">
-          <el-table class="l-fill" :data="pagedRows" stripe @selection-change="rows => state.checked = rows">
+          <el-table class="l-fill" :data="pagedRows" @selection-change="rows => state.checked = rows">
             <el-table-column type="selection" width="44"></el-table-column>
             <el-table-column prop="no" label="告警编号" width="160"></el-table-column>
             <el-table-column label="级别" width="80">
@@ -274,16 +274,16 @@
 const DATA = {
   // PRD §5.2 一级导航（V1.16 起取消「系统管理」）
   menu: [
-    { key: 'overview', label: '综合态势', prd: '§8.1' },
-    { key: 'map', label: '环境应急一张图', prd: '§8.2' },
-    { key: 'monitor', label: '在线监测', prd: '§8.3' },
-    { key: 'alarms', label: '告警中心', prd: '§8.4' },
-    { key: 'incidents', label: '事件指挥', prd: '§8.5' },
-    { key: 'enterprises', label: '企业监管', prd: '§8.7' },
-    { key: 'emergency', label: '应急管理', prd: '§8.8' },
-    { key: 'devices', label: '设备与数据接入', prd: '§8.9' },
-    { key: 'quality', label: '数据质量', prd: '§8.10' },
-    { key: 'stats', label: '统计分析', prd: '§8.11' },
+    { key: 'overview', label: '综合态势', prd: '§8.1', icon: 'dashboard', group: '态势' },
+    { key: 'map', label: '环境应急一张图', prd: '§8.2', icon: 'map' },
+    { key: 'monitor', label: '在线监测', prd: '§8.3', icon: 'monitor', group: '处置' },
+    { key: 'alarms', label: '告警中心', prd: '§8.4', icon: 'alarm', badge: 3 },
+    { key: 'incidents', label: '事件指挥', prd: '§8.5', icon: 'incident' },
+    { key: 'enterprises', label: '企业监管', prd: '§8.7', icon: 'enterprise', group: '基础' },
+    { key: 'emergency', label: '应急管理', prd: '§8.8', icon: 'emergency' },
+    { key: 'devices', label: '设备与数据接入', prd: '§8.9', icon: 'device' },
+    { key: 'quality', label: '数据质量', prd: '§8.10', icon: 'quality' },
+    { key: 'stats', label: '统计分析', prd: '§8.11', icon: 'stats' },
   ],
   // FR-ALM-003 处置阶段
   tabs: [

@@ -1,17 +1,56 @@
-/* skins/menu.css · 侧栏菜单皮肤：圆角胶囊高亮，间距与颜色跟随 token（UiShell 内部使用） */
+/* skins/menu.css · 侧栏菜单皮肤（克制轻量）：透明底 + 选中项浅灰底 + 主色竖线，间距与颜色跟随 token（UiShell 内部使用） */
 .ui-shell__menu.el-menu {
   --el-menu-item-height: var(--layout-menu-item-h);
   --el-menu-hover-bg-color: var(--color-bg-subtle);
-  --el-menu-active-color: var(--color-primary);
-  padding: var(--space-component-gap) var(--space-inline-gap);
+  --el-menu-active-color: var(--color-text-default);
+  padding: var(--space-inline-gap) var(--space-inline-gap) var(--space-component-gap);
 }
 .ui-shell__menu .el-menu-item {
+  position: relative;
   border-radius: var(--radius-md);
-  margin-bottom: calc(var(--space-inline-pad) / 2);
+  margin-bottom: var(--space-inline-pad);
   font-size: var(--font-size-body);
+  color: var(--color-text-secondary);
 }
 .ui-shell__menu .el-menu-item.is-active {
-  background: var(--color-bg-accent);
+  background: var(--color-bg-subtle);
+  color: var(--color-text-default);
   font-weight: var(--font-weight-medium);
 }
+/* 主色竖线：选中态的唯一强调，取代原来的整块 accent 底 */
+.ui-shell__menu .el-menu-item.is-active::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: var(--space-inline-gap);
+  bottom: var(--space-inline-gap);
+  width: var(--border-w-thick);
+  border-radius: var(--radius-full);
+  background: var(--color-primary);
+}
+.ui-shell__menu .el-menu-item .el-icon { color: var(--color-icon-muted); }
+.ui-shell__menu .el-menu-item.is-active .el-icon { color: var(--color-primary); }
 .ui-shell__menu.el-menu--collapse .el-menu-item { justify-content: center; }
+
+/* 分组标题：折叠时隐藏，只留图标列 */
+.ui-shell__group {
+  padding: var(--space-component-gap) var(--space-component-pad-x) var(--space-inline-pad);
+  font-size: var(--font-size-micro);
+  color: var(--color-text-placeholder);
+  letter-spacing: var(--border-w);
+}
+.ui-shell__sidebar.is-collapsed .ui-shell__group { display: none; }
+
+/* 菜单项右侧徽标：告警待办数一类 */
+.ui-shell__badge {
+  margin-left: auto;
+  min-width: var(--layout-icon-sm);
+  padding-inline: var(--space-inline-pad);
+  border-radius: var(--radius-full);
+  background: var(--color-danger);
+  color: var(--color-text-inverse);
+  font-size: var(--font-size-micro);
+  font-weight: var(--font-weight-medium);
+  text-align: center;
+}
+.ui-shell__menu.el-menu--collapse .ui-shell__badge { display: none; }

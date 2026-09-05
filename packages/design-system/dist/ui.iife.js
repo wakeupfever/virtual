@@ -8,7 +8,49 @@ var DesignSystemUI = (function(exports, vue, element_plus) {
 	var _hoisted_2$7 = { class: "ui-shell__header-left l-inline" };
 	var _hoisted_3$7 = { class: "ui-shell__title" };
 	var _hoisted_4$7 = { class: "ui-shell__header-right l-cluster" };
-	var _hoisted_5$6 = { class: "ui-shell__main" };
+	var _hoisted_5$6 = {
+		key: 0,
+		class: "ui-shell__group"
+	};
+	var _hoisted_6$4 = {
+		class: "el-icon",
+		"aria-hidden": "true"
+	};
+	var _hoisted_7$2 = {
+		viewBox: "0 0 24 24",
+		fill: "none",
+		stroke: "currentColor",
+		"stroke-width": "1.6",
+		"stroke-linecap": "round",
+		"stroke-linejoin": "round"
+	};
+	var _hoisted_8$2 = ["d"];
+	var _hoisted_9$1 = {
+		key: 0,
+		class: "ui-shell__badge"
+	};
+	var _hoisted_10$1 = {
+		key: 0,
+		class: "ui-shell__group"
+	};
+	var _hoisted_11$1 = {
+		class: "el-icon",
+		"aria-hidden": "true"
+	};
+	var _hoisted_12$1 = {
+		viewBox: "0 0 24 24",
+		fill: "none",
+		stroke: "currentColor",
+		"stroke-width": "1.6",
+		"stroke-linecap": "round",
+		"stroke-linejoin": "round"
+	};
+	var _hoisted_13 = ["d"];
+	var _hoisted_14 = {
+		key: 0,
+		class: "ui-shell__badge"
+	};
+	var _hoisted_15 = { class: "ui-shell__main" };
 	//#endregion
 	//#region ui/UiShell.vue
 	var UiShell_default = /* @__PURE__ */ (0, vue.defineComponent)({
@@ -34,6 +76,21 @@ var DesignSystemUI = (function(exports, vue, element_plus) {
 			* 滚动模型（R-043）：外壳固定为视口高，侧栏与主内容区各自在 ElScrollbar 内滚动，window 不滚动。
 			* 所有尺寸取自 tokens.css 的 --layout-*，本文件不写任何数值。
 			*/
+			const ICONS = {
+				dashboard: "M4 13h7V4H4v9Zm0 7h7v-5H4v5Zm9 0h7v-9h-7v9Zm0-16v5h7V4h-7Z",
+				map: "M9 4 3 6v14l6-2 6 2 6-2V4l-6 2-6-2Zm0 0v14m6-12v14",
+				monitor: "M3 12h4l2-6 3 12 3-9 2 3h4",
+				alarm: "M12 3a6 6 0 0 0-6 6v4l-2 3h16l-2-3V9a6 6 0 0 0-6-6Zm-2 16a2 2 0 0 0 4 0",
+				incident: "M12 3 2 20h20L12 3Zm0 6v5m0 3h.01",
+				enterprise: "M4 21V7l7-4 7 4v14M9 21v-5h6v5M8 10h.01M12 10h.01M16 10h.01",
+				emergency: "M12 2 4 6v6c0 5 3.5 8.5 8 10 4.5-1.5 8-5 8-10V6l-8-4Zm0 6v5m0 3h.01",
+				device: "M5 4h14v10H5V4Zm3 14h8m-4-4v4M9 8h6",
+				quality: "M4 7h16M4 12h10M4 17h7m6 1 2 2 4-4",
+				stats: "M4 20V10m5 10V4m5 16v-7m5 7V8",
+				settings: "M12 15a3 3 0 1 0 0-6 3 3 0 0 0 0 6Zm8-3a8 8 0 0 1-.1 1.2l2 1.6-2 3.4-2.4-1a8 8 0 0 1-2 1.2l-.4 2.6h-4l-.4-2.6a8 8 0 0 1-2-1.2l-2.4 1-2-3.4 2-1.6A8 8 0 0 1 4 12c0-.4 0-.8.1-1.2l-2-1.6 2-3.4 2.4 1a8 8 0 0 1 2-1.2L8.9 3h4l.4 2.6a8 8 0 0 1 2 1.2l2.4-1 2 3.4-2 1.6c.1.4.1.8.1 1.2Z",
+				default: "M5 12h14"
+			};
+			const iconPath = (item) => ICONS[item.icon ?? "default"] ?? ICONS.default;
 			const props = __props;
 			const emit = __emit;
 			const isMobile = (0, vue.ref)(false);
@@ -94,7 +151,7 @@ var DesignSystemUI = (function(exports, vue, element_plus) {
 					}), (0, vue.renderSlot)(_ctx.$slots, "logo", {}, () => [_cache[3] || (_cache[3] = (0, vue.createElementVNode)("span", { class: "ui-shell__mark" }, null, -1)), (0, vue.createElementVNode)("span", _hoisted_3$7, (0, vue.toDisplayString)(__props.title), 1)])]), (0, vue.createElementVNode)("div", _hoisted_4$7, [(0, vue.renderSlot)(_ctx.$slots, "header-actions")])]),
 					!isMobile.value ? ((0, vue.openBlock)(), (0, vue.createElementBlock)("aside", {
 						key: 0,
-						class: "ui-shell__sidebar",
+						class: (0, vue.normalizeClass)(["ui-shell__sidebar", { "is-collapsed": __props.collapsed }]),
 						style: (0, vue.normalizeStyle)({ width: sidebarWidth.value })
 					}, [(0, vue.createVNode)((0, vue.unref)(element_plus.ElScrollbar), null, {
 						default: (0, vue.withCtx)(() => [(0, vue.createVNode)((0, vue.unref)(element_plus.ElMenu), {
@@ -105,19 +162,19 @@ var DesignSystemUI = (function(exports, vue, element_plus) {
 							onSelect
 						}, {
 							default: (0, vue.withCtx)(() => [((0, vue.openBlock)(true), (0, vue.createElementBlock)(vue.Fragment, null, (0, vue.renderList)(__props.menu, (item) => {
-								return (0, vue.openBlock)(), (0, vue.createBlock)((0, vue.unref)(element_plus.ElMenuItem), {
-									key: item.key,
+								return (0, vue.openBlock)(), (0, vue.createElementBlock)(vue.Fragment, { key: item.key }, [item.group ? ((0, vue.openBlock)(), (0, vue.createElementBlock)("div", _hoisted_5$6, (0, vue.toDisplayString)(item.group), 1)) : (0, vue.createCommentVNode)("", true), (0, vue.createVNode)((0, vue.unref)(element_plus.ElMenuItem), {
 									index: item.key,
 									disabled: item.disabled
 								}, {
-									default: (0, vue.withCtx)(() => [(0, vue.createElementVNode)("span", null, (0, vue.toDisplayString)(item.label), 1)]),
+									title: (0, vue.withCtx)(() => [(0, vue.createElementVNode)("span", null, (0, vue.toDisplayString)(item.label), 1), item.badge ? ((0, vue.openBlock)(), (0, vue.createElementBlock)("span", _hoisted_9$1, (0, vue.toDisplayString)(item.badge), 1)) : (0, vue.createCommentVNode)("", true)]),
+									default: (0, vue.withCtx)(() => [(0, vue.createElementVNode)("span", _hoisted_6$4, [((0, vue.openBlock)(), (0, vue.createElementBlock)("svg", _hoisted_7$2, [(0, vue.createElementVNode)("path", { d: iconPath(item) }, null, 8, _hoisted_8$2)]))])]),
 									_: 2
-								}, 1032, ["index", "disabled"]);
+								}, 1032, ["index", "disabled"])], 64);
 							}), 128))]),
 							_: 1
 						}, 8, ["default-active", "collapse"])]),
 						_: 1
-					})], 4)) : ((0, vue.openBlock)(), (0, vue.createBlock)((0, vue.unref)(element_plus.ElDrawer), {
+					})], 6)) : ((0, vue.openBlock)(), (0, vue.createBlock)((0, vue.unref)(element_plus.ElDrawer), {
 						key: 1,
 						modelValue: drawerOpen.value,
 						"onUpdate:modelValue": _cache[0] || (_cache[0] = ($event) => drawerOpen.value = $event),
@@ -133,14 +190,14 @@ var DesignSystemUI = (function(exports, vue, element_plus) {
 								onSelect
 							}, {
 								default: (0, vue.withCtx)(() => [((0, vue.openBlock)(true), (0, vue.createElementBlock)(vue.Fragment, null, (0, vue.renderList)(__props.menu, (item) => {
-									return (0, vue.openBlock)(), (0, vue.createBlock)((0, vue.unref)(element_plus.ElMenuItem), {
-										key: item.key,
+									return (0, vue.openBlock)(), (0, vue.createElementBlock)(vue.Fragment, { key: item.key }, [item.group ? ((0, vue.openBlock)(), (0, vue.createElementBlock)("div", _hoisted_10$1, (0, vue.toDisplayString)(item.group), 1)) : (0, vue.createCommentVNode)("", true), (0, vue.createVNode)((0, vue.unref)(element_plus.ElMenuItem), {
 										index: item.key,
 										disabled: item.disabled
 									}, {
-										default: (0, vue.withCtx)(() => [(0, vue.createElementVNode)("span", null, (0, vue.toDisplayString)(item.label), 1)]),
+										title: (0, vue.withCtx)(() => [(0, vue.createElementVNode)("span", null, (0, vue.toDisplayString)(item.label), 1), item.badge ? ((0, vue.openBlock)(), (0, vue.createElementBlock)("span", _hoisted_14, (0, vue.toDisplayString)(item.badge), 1)) : (0, vue.createCommentVNode)("", true)]),
+										default: (0, vue.withCtx)(() => [(0, vue.createElementVNode)("span", _hoisted_11$1, [((0, vue.openBlock)(), (0, vue.createElementBlock)("svg", _hoisted_12$1, [(0, vue.createElementVNode)("path", { d: iconPath(item) }, null, 8, _hoisted_13)]))])]),
 										_: 2
-									}, 1032, ["index", "disabled"]);
+									}, 1032, ["index", "disabled"])], 64);
 								}), 128))]),
 								_: 1
 							}, 8, ["default-active"])]),
@@ -148,7 +205,7 @@ var DesignSystemUI = (function(exports, vue, element_plus) {
 						})]),
 						_: 1
 					}, 8, ["modelValue"])),
-					(0, vue.createElementVNode)("main", _hoisted_5$6, [(0, vue.createVNode)((0, vue.unref)(element_plus.ElScrollbar), {
+					(0, vue.createElementVNode)("main", _hoisted_15, [(0, vue.createVNode)((0, vue.unref)(element_plus.ElScrollbar), {
 						ref_key: "mainScroll",
 						ref: mainScroll,
 						class: "ui-shell__scroll",

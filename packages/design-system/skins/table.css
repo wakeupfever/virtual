@@ -2,7 +2,7 @@
 .el-table {
   --el-table-header-bg-color: var(--color-bg-subtle);
   --el-table-header-text-color: var(--color-text-secondary);
-  --el-table-row-hover-bg-color: var(--color-bg-accent);
+  --el-table-row-hover-bg-color: var(--color-bg-subtle);
   --el-table-border-color: var(--color-border-muted);
   --el-table-text-color: var(--color-text-default);
   border: var(--border-w) solid var(--color-border-muted);

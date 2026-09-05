@@ -168,13 +168,13 @@ window.DS_TOKENS = {
         },
         {
           "name": "--space-page-pad-x",
-          "value": "calc(var(--space-5) * var(--density))",
+          "value": "calc(var(--space-2) * var(--density))",
           "comment": "",
           "dark": null
         },
         {
           "name": "--space-page-pad-y",
-          "value": "calc(var(--space-5) * var(--density))",
+          "value": "calc(var(--space-2) * var(--density))",
           "comment": "",
           "dark": null
         },
@@ -192,7 +192,7 @@ window.DS_TOKENS = {
         },
         {
           "name": "--space-module-pad",
-          "value": "calc(var(--space-4) * var(--density))",
+          "value": "calc(var(--space-5) * var(--density))",
           "comment": "",
           "dark": null
         },
@@ -512,7 +512,7 @@ window.DS_TOKENS = {
         },
         {
           "name": "--radius-lg",
-          "value": "12px",
+          "value": "8px",
           "comment": "",
           "dark": null
         },
@@ -532,19 +532,19 @@ window.DS_TOKENS = {
       "tokens": [
         {
           "name": "--shadow-sm",
-          "value": "0 1px 3px rgba(48, 72, 83, 0.08)",
+          "value": "0 1px 2px rgba(48, 72, 83, 0.04)",
           "comment": "",
           "dark": "0 1px 2px rgba(0, 0, 0, 0.4)"
         },
         {
           "name": "--shadow-md",
-          "value": "0 6px 16px rgba(48, 72, 83, 0.08)",
+          "value": "0 4px 12px rgba(48, 72, 83, 0.06)",
           "comment": "",
           "dark": "0 6px 16px rgba(0, 0, 0, 0.5)"
         },
         {
           "name": "--shadow-lg",
-          "value": "0 12px 32px rgba(48, 72, 83, 0.12)",
+          "value": "0 8px 28px rgba(48, 72, 83, 0.10)",
           "comment": "",
           "dark": "0 12px 32px rgba(0, 0, 0, 0.6)"
         }
@@ -666,25 +666,25 @@ window.DS_TOKENS = {
         },
         {
           "name": "--palette-gray-50",
-          "value": "#f3f5f5",
+          "value": "#f6f8f8",
           "comment": "",
           "dark": null
         },
         {
           "name": "--palette-gray-100",
-          "value": "#f0f3f4",
+          "value": "#f2f5f6",
           "comment": "",
           "dark": null
         },
         {
           "name": "--palette-gray-200",
-          "value": "#e6e8e8",
+          "value": "#e8eaec",
           "comment": "",
           "dark": null
         },
         {
           "name": "--palette-gray-300",
-          "value": "#d5dcdf",
+          "value": "#dce0e3",
           "comment": "",
           "dark": null
         },

@@ -53,20 +53,30 @@ window.DS_COVERAGE = {
       "--radius-md"
     ],
     "skins/menu.css": [
-      "--color-bg-accent",
+      "--border-w",
+      "--border-w-thick",
       "--color-bg-subtle",
+      "--color-danger",
+      "--color-icon-muted",
       "--color-primary",
+      "--color-text-default",
+      "--color-text-inverse",
+      "--color-text-placeholder",
+      "--color-text-secondary",
       "--font-size-body",
+      "--font-size-micro",
       "--font-weight-medium",
+      "--layout-icon-sm",
       "--layout-menu-item-h",
+      "--radius-full",
       "--radius-md",
       "--space-component-gap",
+      "--space-component-pad-x",
       "--space-inline-gap",
       "--space-inline-pad"
     ],
     "skins/table.css": [
       "--border-w",
-      "--color-bg-accent",
       "--color-bg-subtle",
       "--color-bg-surface",
       "--color-border-muted",
@@ -442,8 +452,6 @@ window.DS_COVERAGE = {
       "ui/UiShell.vue"
     ],
     "--color-bg-accent": [
-      "skins/menu.css",
-      "skins/table.css",
       "skins/tabs.css",
       "skins/tree.css",
       "ui/composites/UiListItem.vue",
@@ -453,6 +461,7 @@ window.DS_COVERAGE = {
     "--color-bg-mask": [],
     "--color-text-default": [
       "base.css",
+      "skins/menu.css",
       "skins/table.css",
       "ui/UiShell.vue",
       "ui/UiState.vue",
@@ -460,6 +469,7 @@ window.DS_COVERAGE = {
       "ui/composites/UiStatCard.vue"
     ],
     "--color-text-secondary": [
+      "skins/menu.css",
       "skins/table.css",
       "skins/tabs.css",
       "ui/UiPageHeader.vue",
@@ -480,10 +490,12 @@ window.DS_COVERAGE = {
       "ui/composites/UiStatCard.vue"
     ],
     "--color-text-placeholder": [
+      "skins/menu.css",
       "ui/UiPageHeader.vue",
       "ui/UiTuner.vue"
     ],
     "--color-text-inverse": [
+      "skins/menu.css",
       "ui/composites/UiListItem.vue"
     ],
     "--color-border-default": [
@@ -502,6 +514,7 @@ window.DS_COVERAGE = {
       "ui/UiShell.vue"
     ],
     "--color-icon-muted": [
+      "skins/menu.css",
       "ui/composites/UiListItem.vue"
     ],
     "--color-primary": [
@@ -525,6 +538,7 @@ window.DS_COVERAGE = {
     ],
     "--color-warning": [],
     "--color-danger": [
+      "skins/menu.css",
       "ui/UiState.vue",
       "ui/composites/UiStatCard.vue"
     ],
@@ -587,6 +601,7 @@ window.DS_COVERAGE = {
       "ui/composites/UiStatCard.vue"
     ],
     "--space-component-pad-x": [
+      "skins/menu.css",
       "skins/tabs.css",
       "ui/UiShell.vue",
       "ui/UiTuner.vue",
@@ -652,6 +667,7 @@ window.DS_COVERAGE = {
       "skins/menu.css"
     ],
     "--layout-icon-sm": [
+      "skins/menu.css",
       "ui/UiShell.vue",
       "ui/UiTuner.vue"
     ],
@@ -728,6 +744,7 @@ window.DS_COVERAGE = {
       "ui/composites/UiStatCard.vue"
     ],
     "--font-size-micro": [
+      "skins/menu.css",
       "ui/UiTuner.vue",
       "ui/composites/UiStatCard.vue"
     ],
@@ -780,6 +797,7 @@ window.DS_COVERAGE = {
       "ui/composites/UiStatCard.vue (via .l-module)"
     ],
     "--radius-full": [
+      "skins/menu.css",
       "ui/UiState.vue",
       "ui/composites/UiStatCard.vue"
     ],
@@ -792,6 +810,7 @@ window.DS_COVERAGE = {
     ],
     "--border-w": [
       "layout.css",
+      "skins/menu.css",
       "skins/table.css",
       "skins/tabs.css",
       "ui/UiShell.vue",
@@ -799,7 +818,9 @@ window.DS_COVERAGE = {
       "ui/composites/UiListItem.vue",
       "ui/composites/UiStatCard.vue (via .l-module)"
     ],
-    "--border-w-thick": []
+    "--border-w-thick": [
+      "skins/menu.css"
+    ]
   },
   "elOnly": [
     "--color-bg-overlay",
@@ -811,7 +832,6 @@ window.DS_COVERAGE = {
     "--shadow-sm"
   ],
   "dead": [
-    "--layout-content-pad",
-    "--border-w-thick"
+    "--layout-content-pad"
   ]
 };

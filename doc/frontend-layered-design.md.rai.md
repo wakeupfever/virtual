@@ -7,6 +7,7 @@ requirement-version: "RV-018"
 iteration: "IT-018"
 current-changes:
   - "C-047"
+  - "C-048"
 status: "active"
 updated: "2026-09-05"
 ---
@@ -17,7 +18,7 @@ updated: "2026-09-05"
 
 - 当前需求版本：`RV-018`
 - 当前工作迭代：`IT-018`
-- 当前变更：`C-047` 首个业务原型与两条新规则（add R-053 / R-054）；`C-046` 第二步 B：Claude 插件（implement R-032 / R-033 / R-035，R-034 待真实原型端到端；clarify R-032 的 commands）
+- 当前变更：`C-048` 克制轻量风格升级与菜单重做；`C-047` 首个业务原型与两条新规则（add R-053 / R-054）；`C-046` 第二步 B：Claude 插件（implement R-032 / R-033 / R-035，R-034 待真实原型端到端；clarify R-032 的 commands）
 - 本轮目标：把三层策略封装成可安装的 Claude 插件，让「提示词 → 原型 → 正式页面」不再依赖某一次对话里的口头约定
 - 当前结论：**IT-017 完成**（R-032 / R-033 / R-035 verified，R-034 implemented）。**分步进度：第一步、第二步 A / B / C / D 全部交付**；50 条需求现为 49 verified / 1 implemented，唯一未闭环的是 `R-034`——`promote` 技能已就位，但端到端验收需要一个真实业务原型跑一遍，当前 `apps/prototypes/` 只有 `_template.html`。历史迭代结论见「迭代」与「历史索引」两节
 
@@ -254,6 +255,19 @@ updated: "2026-09-05"
 - 退出条件：R-045 verified；R-041 / R-044 重新 verified；代码已提交
 
 ## 当前变更
+
+### C-048 · 克制轻量风格升级与菜单重做
+
+- 类型：`modify`
+- 原因：用户「把模板整体风格变得更现代化」，方向选定「克制轻量（Linear / Vercel 路子）」；菜单选「图标 + 分组 + 徽标」
+- 先发现的缺陷：侧栏折叠后是 **10 行空白**——菜单项只渲染 `<span>{{ label }}</span>`，Element Plus 折叠态隐藏文字只留图标位，而 `UiShellMenuItem` 没有图标字段（实测 `innerText` 为空）
+- 第一层（只改值，一处生效）：卡片圆角 12 → 8；阴影三档整体减淡（卡片改为靠边框分层）；边框与灰阶调浅（gray-200 #e6e8e8 → #e8eaec 等）；模块内边距 16 → 20；**页面内边距 20 → 8**（用户指定）
+- 第二层：`skins/menu.css` 由圆角胶囊改为「浅灰底 + 2px 主色竖线」并补图标/分组/徽标样式；`skins/table.css` 的 hover 由 accent 改浅灰；`UiShell` 的 `UiShellMenuItem` 增加 `icon` / `group` / `badge`，图标用**组件内置的 12 个线性 SVG**（放第二层是为了让原型不必再引图标 CDN，也不用改白名单）
+- 第三层：原型菜单按「态势 / 处置 / 基础」分组并挂图标，告警中心带徽标；表格去掉 `stripe`
+- 徽标一处返工：初版放在默认插槽，渲染成了图标与文字之间；移进 `#title` 插槽后靠 `margin-left: auto` 右对齐
+- 关联需求：`R-005`、`R-007`、`R-012`、`R-042`
+- 覆盖关系：—
+- 影响功能：`F-001 direct`、`F-003 direct`、`F-004 direct`、`F-005 indirect`
 
 ### C-047 · 首个业务原型与两条新规则
 
@@ -512,6 +526,7 @@ updated: "2026-09-05"
 | C-039 | F-001, F-002 | direct | 第一层 token 值改变 | 1920 下 `.l-page` 宽 = 内容区宽；无横向滚动 |
 | C-040 | F-001, F-002, F-003, F-004, F-005, F-006 | direct | 新增布局能力与组件行为 | 逐层高度实测；矮视口内滚；浮窗前后高度不变；视觉回归 0.00% |
 | C-041 | F-003, F-007 | direct | 构建产物确定性 | 连续两次生成一致；`git diff --exit-code -- dist` 返回 0 |
+| C-048 | F-001, F-003, F-004 | direct | 全局 token 值与外壳菜单改版 | 折叠后 10 项均有图标；八项门禁全绿 |
 | C-047 | F-005, F-003, F-011 | direct | 首个业务原型、第二层新增组件、原型路由规则 | check-prototype 通过；八组件变异全过；lint / typecheck 0 错误 |
 | C-046 | F-010 | direct | 新增可安装插件与三个技能 | validate 通过；实测安装并列出技能 |
 | C-045 | F-001, F-002, F-003, F-005 | verification_only | 六条需求转 verified | main.ts 引入链、ESLint 白名单、像素差 0.00% |
@@ -641,6 +656,7 @@ updated: "2026-09-05"
 | RV-016 | IT-016 | C-039 | modify | R-005 | `--layout-content-max` 1440px → none | F-001, F-002 |
 | RV-016 | IT-016 | C-040 | add | R-050, R-051, R-009, R-041, R-042 | 无 → 高度填充布局与高级搜索浮窗 | F-001～F-006 |
 | RV-016 | IT-016 | C-041 | implementation_correction | R-048, R-026 | dist 可复现：键排序 + 去掉生成时间 | F-003, F-007 |
+| RV-018 | IT-018 | C-048 | modify | R-005, R-007, R-012, R-042 | 克制轻量风格；菜单加图标/分组/徽标，修折叠空白 | F-001, F-003, F-004 |
 | RV-018 | IT-018 | C-047 | add | R-053, R-054, R-016, R-041 | 无 → 首个业务原型 + 原型路由规则 + UiTuner | F-003, F-005, F-011 |
 | RV-017 | IT-017 | C-046 | implement | R-032, R-033, R-034, R-035 | ready → 插件可安装；R-032 澄清 commands | F-010 |
 | RV-016 | IT-016 | C-045 | implement | R-004, R-009, R-010, R-011, R-017, R-029 | implemented → verified（用户验收 + 第二步阻塞已清） | F-001, F-002, F-003, F-005 |

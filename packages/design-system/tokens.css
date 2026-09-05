@@ -25,10 +25,10 @@
   --space-16: 64px;
 
   --palette-white: #ffffff;
-  --palette-gray-50: #f3f5f5;
-  --palette-gray-100: #f0f3f4;
-  --palette-gray-200: #e6e8e8;
-  --palette-gray-300: #d5dcdf;
+  --palette-gray-50: #f6f8f8;
+  --palette-gray-100: #f2f5f6;
+  --palette-gray-200: #e8eaec;
+  --palette-gray-300: #dce0e3;
   --palette-gray-400: #b9c7cc;
   --palette-gray-500: #7c858a;
   --palette-gray-600: #4e6d7b;
@@ -89,13 +89,13 @@
 
   /* 间距 · page（内容区与外壳、页面主要区块之间） */
   --space-page-gap: calc(var(--space-6) * var(--density));
-  --space-page-pad-x: calc(var(--space-5) * var(--density));
-  --space-page-pad-y: calc(var(--space-5) * var(--density));
+  --space-page-pad-x: calc(var(--space-2) * var(--density));
+  --space-page-pad-y: calc(var(--space-2) * var(--density));
   --space-page-title: calc(var(--space-4) * var(--density));
 
   /* 间距 · module（卡片、面板、表单区块） */
   --space-module-gap: calc(var(--space-4) * var(--density));
-  --space-module-pad: calc(var(--space-4) * var(--density));
+  --space-module-pad: calc(var(--space-5) * var(--density));
   --space-module-title: calc(var(--space-4) * var(--density));
 
   /* 间距 · component（组件之间与组件内部） */
@@ -156,13 +156,13 @@
   /* 圆角 */
   --radius-sm: 4px;
   --radius-md: 6px;
-  --radius-lg: 12px;
+  --radius-lg: 8px;
   --radius-full: 9999px;
 
   /* 阴影 */
-  --shadow-sm: 0 1px 3px rgba(48, 72, 83, 0.08);
-  --shadow-md: 0 6px 16px rgba(48, 72, 83, 0.08);
-  --shadow-lg: 0 12px 32px rgba(48, 72, 83, 0.12);
+  --shadow-sm: 0 1px 2px rgba(48, 72, 83, 0.04);
+  --shadow-md: 0 4px 12px rgba(48, 72, 83, 0.06);
+  --shadow-lg: 0 8px 28px rgba(48, 72, 83, 0.10);
 
   /* 边框 */
   --border-w: 1px;
