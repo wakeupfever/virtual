@@ -149,6 +149,7 @@ app.use(ElementPlus).use(DesignSystemUI)
 | `title` | `string` | 产品名 |
 | `menu` | `{ key, label, icon?, group?, badge?, children?, disabled? }[]` | 侧栏菜单，**层级不限**（`children` 递归，内部由 `UiShellMenu.vue` 渲染；父项徽标自动汇总子级）。`icon` 取内置图标名（dashboard / map / monitor / alarm / incident / enterprise / emergency / device / quality / stats / settings），**折叠态只剩图标，不给 icon 折叠后就是空白行**；`group` 在该项前插一条分组标题（折叠时隐藏，与图标列左对齐）；`badge` 为数字徽标（如告警待办数），默认不用，只在确实需要计数提示时给 |
 | 菜单层级观感 | | 子菜单靠**竖导轨**表达层级（不用 Element Plus 逐级递增的 padding）：第一条导轨对齐顶层图标中线，一级子项文字正好落在父项标签起点，再深一层只多缩进一个 `--space-component-gap`，因此层数不限也不会越缩越宽；子项行高 `--layout-control-h`，选中时点亮该行对应的那截导轨。折叠态飞出的子菜单由 `popper-class="ui-shell__popper"` 收回样式，与展开态同一套观感 |
+| 左侧对齐 | | 菜单图标中线与顶栏汉堡图标中线同列（x=32），分组标签、菜单图标字形、汉堡字形左边缘同列（x=24）；折叠态图标中线落在轨道中线——EP 会给普通菜单项外面再包一层 `.el-menu-tooltip__trigger`，折叠时那 20px 内边距来自这一层，只清菜单项自己的 padding 会出现「一半居中一半偏右」 |
 | 图标网格 | | 内置图标都画在同一光学网格上：可见范围 x/y ∈ [4, 20]、中心 (12, 12)。网格不统一时侧栏虽然几何左对齐，字形却会一格左一格右看着像没对齐；新增图标后用 `getBBox()` 复核再提交 |
 | `activeKey` | `string` | 当前高亮；正式项目由路由驱动，原型由 state 驱动 |
 | `v-model:collapsed` | `boolean` | 侧栏折叠 |

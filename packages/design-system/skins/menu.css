@@ -12,6 +12,11 @@
   font-size: var(--font-size-body);
   color: var(--color-text-secondary);
 }
+/* 顶层左内边距收回：Element Plus 默认 20px 会把图标中线推到 x=40，而顶栏汉堡图标中线在 32，
+   一眼就是「侧栏比顶栏往右挪了一点」。改成 component-gap 后两者同一列，分组标题、图标字形、
+   汉堡字形的左边缘也一起落在 x=24。EP 把层级 padding 写成行内样式，只能 !important。 */
+.ui-shell__menu > .el-menu-item,
+.ui-shell__menu > .el-sub-menu > .el-sub-menu__title { padding-left: var(--space-component-gap) !important; }
 .ui-shell__menu .el-menu-item.is-active {
   background: var(--color-bg-subtle);
   color: var(--color-text-default);
@@ -30,11 +35,24 @@
 }
 .ui-shell__menu .el-menu-item .el-icon { color: var(--color-icon-muted); }
 .ui-shell__menu .el-menu-item.is-active .el-icon { color: var(--color-primary); }
-.ui-shell__menu.el-menu--collapse .el-menu-item { justify-content: center; }
+/* 折叠态：EP 仍按展开态留着左右 20px 内边距，图标会偏出轨道中线 8px；
+   连 .el-icon 的右外边距也要清掉，否则图标会被那几像素顶得偏左 */
+.ui-shell__menu.el-menu--collapse > .el-menu-item,
+.ui-shell__menu.el-menu--collapse > .el-sub-menu > .el-sub-menu__title {
+  justify-content: center;
+  padding-inline: 0 !important;
+}
+.ui-shell__menu.el-menu--collapse .el-icon { margin-right: 0; }
+/* 折叠态的普通菜单项被 EP 再包一层 tooltip 触发器，20px 内边距是从这层来的，
+   只清菜单项自己的 padding 不够——含子菜单的项没有这层，所以当时只有一半的图标居中 */
+.ui-shell__menu.el-menu--collapse .el-menu-tooltip__trigger {
+  justify-content: center;
+  padding-inline: 0;
+}
 
 /* 分组标题：折叠时隐藏，只留图标列 */
 .ui-shell__group {
-  padding: var(--space-component-gap) var(--space-module-pad) var(--space-inline-pad);
+  padding: var(--space-component-gap) var(--space-component-pad-x) var(--space-inline-pad);
   font-size: var(--font-size-micro);
   color: var(--color-text-placeholder);
   letter-spacing: var(--border-w);
@@ -83,7 +101,7 @@
    EP 把层级 padding 写成行内样式，只能用 !important 收回。 */
 .ui-shell__menu .el-menu--inline {
   background: transparent;
-  margin-left: calc(var(--space-module-pad) + var(--space-component-gap));
+  margin-left: calc(var(--space-component-gap) * 2);
   margin-right: var(--space-inline-gap);
   border-left: var(--border-w) solid var(--color-border-muted);
 }
