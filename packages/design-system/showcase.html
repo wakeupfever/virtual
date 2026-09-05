@@ -243,7 +243,8 @@
   @media (max-width: 720px) { .ds-fab { right: var(--space-page-pad-x); flex-wrap: wrap; justify-content: center; border-radius: var(--radius-lg); } .ds-fab__sep { display: none; } }
 
   /* 布局配置 · 模板索引卡 */
-  .ds-tplcard { cursor: pointer; transition: border-color .15s, box-shadow .15s; }
+  /* overflow: hidden 把带底色的直角卡脚裁回卡片圆角内（同 .ds-cfg / .ds-comp 的做法） */
+  .ds-tplcard { cursor: pointer; overflow: hidden; transition: border-color .15s, box-shadow .15s; }
   .ds-tplcard:hover { border-color: var(--color-primary); box-shadow: var(--shadow-md); }
   .ds-tplcard__main { display: flex; align-items: flex-start; gap: var(--space-6); padding: var(--space-6); }
   .ds-tplcard__no { flex: none; width: var(--layout-icon-lg); height: var(--layout-icon-lg); display: flex; align-items: center; justify-content: center; border-radius: var(--radius-md); background: var(--color-bg-accent); color: var(--color-primary); font-family: var(--font-family-mono); font-weight: var(--font-weight-bold); }
